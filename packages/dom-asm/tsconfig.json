@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationDir": "dist",
+    "outDir": "dist",
+    "rootDir": "../dom-css/src",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["../dom-css/src/**/*"],
+  "exclude": ["node_modules", "dist", "tests"]
+}
