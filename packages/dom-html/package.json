@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "main": "index.js",
     "bin": {
-      "dom-asm": "cli.js"
+      "dom-asm": "cli.ts"
     },
     "scripts": {
-      "build": "tsc",
+      "build": "rollup -c",
       "test": "jest"
     }
   }
