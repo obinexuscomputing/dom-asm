@@ -8,9 +8,9 @@
     "declaration": true,
     "declarationDir": "dist",
     "outDir": "dist",
-    "rootDir": "../dom-css/src",
+    "rootDir": "src",
     "allowSyntheticDefaultImports": true
   },
-  "include": ["../dom-css/src/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "tests"]
 }
