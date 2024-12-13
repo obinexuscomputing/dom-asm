@@ -1,25 +1,20 @@
 {
-    "compilerOptions": {
-      "target": "ESNext",
-      "module": "ESNext",
-      "moduleResolution": "Node",
-      "strict": true,
-      "declaration": true,
-      "declarationDir": "dist",
-      "outDir": "dist",
-      "rootDir": "src",
-      "removeComments": false,
-      "jsx": "preserve",
-      "esModuleInterop": true,
-      "checkJs": false,
-      "types": []
-    },
-    "include": ["**/*"],
-    "exclude": ["node_modules", "dist"],
-    "moduleResolution": "node",
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "declaration": true,
+    "declarationDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"]
     }
-  }
-  
+  },
+  "include": ["packages/*/src/**/*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
