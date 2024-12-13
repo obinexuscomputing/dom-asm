@@ -1,21 +1,14 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Node",
     "declaration": true,
     "declarationDir": "dist",
     "emitDeclarationOnly": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "Node",
     "outDir": "dist",
-    "sourceMap": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "*": ["node_modules/*"]
-    }
+    "strict": true
   },
-  "include": ["packages/*/src/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

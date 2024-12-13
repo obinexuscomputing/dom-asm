@@ -18,6 +18,15 @@ export default [
         format: 'esm',
         sourcemap: true,
       },
+      {
+        input: 'dist/src/index.d.ts', 
+        output: {
+          file: 'dist/index.d.ts',
+          format: 'es',
+        },
+        plugins: [dts()],
+      }
+      
     ],
     plugins: [
       resolve(),
@@ -25,13 +34,5 @@ export default [
       typescript({ tsconfig: './tsconfig.json' }),
       terser(),
     ],
-  },
-  {
-    input: 'dist/index.d.ts',
-    output: {
-      file: 'dist/index.d.ts',
-      format: 'es',
-    },
-    plugins: [dts()],
   },
 ];

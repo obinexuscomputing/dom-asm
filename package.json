@@ -16,8 +16,7 @@
     "dom-manipulation"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "test": "jest",
+  "build": "tsc --emitDeclarationOnly && rollup -c",
     "lint": "eslint .",
     "prepublishOnly": "npm run build && npm test"
   },
