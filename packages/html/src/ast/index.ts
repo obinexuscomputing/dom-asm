@@ -22,7 +22,7 @@ class AST {
   public buildAST(tokens: Token[]): ASTNode {
     const stack: ASTNode[] = [this.root];
     let currentParent = this.root;
-
+  
     for (const token of tokens) {
       switch (token.type) {
         case "StartTag":
@@ -37,7 +37,7 @@ class AST {
           stack.push(elementNode);
           currentParent = elementNode;
           break;
-
+  
         case "EndTag":
           if (currentParent.name === token.name) {
             stack.pop();
@@ -48,7 +48,7 @@ class AST {
             );
           }
           break;
-
+  
         case "Text":
           const textNode: ASTNode = {
             type: "Text",
@@ -58,7 +58,7 @@ class AST {
           };
           currentParent.children.push(textNode);
           break;
-
+  
         case "Comment":
           const commentNode: ASTNode = {
             type: "Comment",
@@ -68,15 +68,17 @@ class AST {
           };
           currentParent.children.push(commentNode);
           break;
-
+  
         default:
-          throw new Error(`Unsupported token type: ${token.type}`);
+          // This should never happen. Use a `never` check to catch unhandled cases.
+          const exhaustiveCheck: never = token;
+          throw new Error(`Unsupported token type: ${exhaustiveCheck}`);
       }
     }
-
+  
     return this.root;
   }
-
+  
   public getRoot(): ASTNode {
     return this.root;
   }

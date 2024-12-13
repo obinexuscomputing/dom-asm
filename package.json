@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
+  "type": "module",
   "types": "dist/index.d.ts",
   "description": "A unified library for DOM manipulation and compilation with support for asm, css, html, and js.",
   "keywords": [
