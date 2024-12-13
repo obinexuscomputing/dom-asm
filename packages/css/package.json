@@ -1,5 +1,5 @@
 {
-  "name": "@obinexuscomputing/dom-css",
+  "name": "@obinexuscomputing/css",
   "version": "1.0.0",
   "main": "dist/index",
   "scripts": {
