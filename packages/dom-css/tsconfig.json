@@ -10,7 +10,6 @@
     "outDir": "dist",
     "rootDir": "src",
     "allowSyntheticDefaultImports": true
-  },
+../dom-js/src,
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "tests"]
-}
+  "exclude": ["node_modules", "dist", "tes../dom-js/src/**/*
