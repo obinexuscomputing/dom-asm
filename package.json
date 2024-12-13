@@ -3,15 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "workspaces": [
-    "dom-asm",
-    "dom-css",
-    "dom-html",
-    "dom-js"
+    "packages/dom-asm",
+    "packages/dom-css",
+    "packages/dom-html",
+    "packages/dom-js"
   ],
   "scripts": {
     "build": "npm run build --workspaces",
     "test": "npm run test --workspaces",
-    "start": "npm run start --workspace=dom-asm"
+    "start": "npm run start --workspace=packages/dom-asm"
   },
   "keywords": [],
   "author": "",
