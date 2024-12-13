@@ -1,0 +1,13 @@
+{
+    "name": "@obinexuscomputing/dom-asm",
+    "version": "1.0.0",
+    "main": "index.js",
+    "bin": {
+      "dom-asm": "cli.js"
+    },
+    "scripts": {
+      "build": "tsc",
+      "test": "jest"
+    }
+  }
+  

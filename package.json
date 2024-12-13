@@ -1,0 +1,55 @@
+{
+ 
+  "name": "@obinexuscomputing/dom-asm",
+ 
+  "version": "1.0.0",
+ 
+  "private": true,
+ 
+  "workspaces": [
+ 
+   
+  "dom-asm",
+ 
+   
+  "dom-css",
+ 
+   
+  "dom-html",
+ 
+   
+  "dom-js"
+ 
+  ],
+ 
+  "scripts": {
+ 
+   
+  "build": "npm run build --workspaces",
+ 
+   
+  "test": "npm run test --workspaces",
+ 
+   
+  "start": "npm run start --workspace=dom-asm"
+ 
+  },
+ 
+  "keywords": [],
+ 
+  "author": "",
+ 
+  "license": "ISC",
+ 
+  "description": "",
+ 
+  "devDependencies": {
+ 
+   
+  "eslint": "^9.16.0",
+ 
+   
+  "jest": "^29.7.0"
+ 
+  }
+}
