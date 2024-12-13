@@ -4,34 +4,7 @@ type Token =
   | { type: 'Text'; value: string }
   | { type: 'Comment'; value: string };
 
-/**
- * import { HTMLTokenizer } from "./tokenizer/index";
-import { AST } from "./ast/index";
 
-const htmlInput = `
-<html:html>
-  <html:head>
-    <html:title>Sample HTML6 Document</html:title>
-  </html:head>
-  <html:body>
-    <html:media type="image" src="logo.png" />
-    <html:p>This is a sample document.</html:p>
-  </html:body>
-</html:html>
-`;
-
-const tokenizer = new HTMLTokenizer(htmlInput);
-const tokens = tokenizer.tokenize();
-
-console.log("Tokens:", tokens);
-
-const astBuilder = new AST();
-const ast = astBuilder.buildAST(tokens);
-
-console.log("AST:");
-astBuilder.printAST();
-
- */
 class HTMLTokenizer {
   private input: string;
   private position: number = 0;
