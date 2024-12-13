@@ -1,9 +1,6 @@
-import { ASTNode } from "../ast/";
 
-type ValidationResult = {
-  valid: boolean;
-  errors: string[];
-};
+import { ASTNode } from "../ast";
+
 
 /**
  * import { HTMLTokenizer } from "./tokenizer/index";
@@ -40,9 +37,17 @@ if (validationResult.valid) {
 }
 
  */
+
+
+
+type ValidationResult = {
+  valid: boolean;
+  errors: string[];
+};
+
 class Validator {
   private namespaceRules: Record<string, string[]> = {
-    "html": ["html", "head", "body", "title", "meta", "link", "p", "div", "a", "img"],
+    "html": ["html", "head", "body", "title", "meta", "link", "p", "div", "a", "img", "media"],
   };
 
   private attributeRules: Record<string, string[]> = {
@@ -51,10 +56,28 @@ class Validator {
     "html:media": ["src", "type", "controls", "autostart"],
   };
 
+  private validationCache: Map<string, ValidationResult> = new Map();
+
+  public registerNamespace(namespace: string, tags: string[]): void {
+    this.namespaceRules[namespace] = tags;
+  }
+
+  public registerAttributes(tag: string, attributes: string[]): void {
+    this.attributeRules[tag] = attributes;
+  }
+
   public validateAST(ast: ASTNode): ValidationResult {
+    const cacheKey = this.getCacheKey(ast);
+    if (this.validationCache.has(cacheKey)) {
+      return this.validationCache.get(cacheKey)!;
+    }
+
     const errors: string[] = [];
     this.traverseAST(ast, errors);
-    return { valid: errors.length === 0, errors };
+
+    const result = { valid: errors.length === 0, errors };
+    this.validationCache.set(cacheKey, result);
+    return result;
   }
 
   private traverseAST(node: ASTNode, errors: string[]): void {
@@ -85,6 +108,12 @@ class Validator {
         }
       }
     }
+  }
+
+  private getCacheKey(node: ASTNode): string {
+    return JSON.stringify(node, (key, value) =>
+      key === "parent" ? undefined : value // Exclude parent references to avoid circular structure
+    );
   }
 }
 
