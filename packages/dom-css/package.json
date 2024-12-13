@@ -1,7 +1,7 @@
 {
-  "name": "dom-css",
+  "name": "@obinexuscomputing/dom-css",
   "version": "1.0.0",
-  "main": "rollup.config.js",
+  "main": "dist/index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
