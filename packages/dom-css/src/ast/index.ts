@@ -1,4 +1,3 @@
-// dom-css/packages/dom-css/src/ast/index.ts
 
 import { Token } from "../tokenizer";
 
@@ -8,6 +7,18 @@ export type ASTNode = {
   children: ASTNode[]; // Child nodes for nested structures
 };
 
+// Example usage:
+// import { Tokenizer } from "../tokenizer";
+
+// const cssInput = `/* Example CSS */
+// body {
+//   background: white;
+//   color: black;
+// }`;
+// const tokenizer = new Tokenizer(cssInput);
+// const tokens = tokenizer.tokenize();
+// const astBuilder = new ASTBuilder(tokens);
+// console.log(JSON.stringify(astBuilder.buildAST(), null, 2));
 
 export class ASTBuilder {
   private tokens: Token[];
