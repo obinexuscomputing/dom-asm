@@ -1,40 +1,15 @@
-import {Token ,  HTMLTokenizer } from "../tokenizer/index";
+import { Token, HTMLTokenizer } from "../tokenizer/index";
 import { AST, ASTNode } from "../ast/index";
 import { ValidationResult, Validator } from "../validator/index";
+import { ParserError } from "./ParserError";
 
-/**
- * import { Parser } from "./parser/index";
+type ErrorHandler = (error: ParserError) => void;
 
-const htmlInput = `
-<html:html>
-  <html:head>
-    <html:title>Sample HTML6 Document</html:title>
-  </html:head>
-  <html:body>
-    <custom:widget id="main-widget" type="interactive"></custom:widget>
-  </html:body>
-</html:html>
-`;
-
-const parser = new Parser();
-const { ast, validationResult } = parser.parse(htmlInput);
-
-if (validationResult.valid) {
-  console.log("Valid HTML6 Document.");
-} else {
-  console.error("Validation Errors:");
-  validationResult.errors.forEach((error) => console.error(error));
-}
-
-// Optionally, visualize the AST
-const astBuilder = new AST();
-astBuilder.printAST(ast);
-
- */
 export class Parser {
   private tokenizer: HTMLTokenizer;
   private astBuilder: AST;
   private validator: Validator;
+  private errorHandler: ErrorHandler | null = null;
 
   constructor() {
     this.tokenizer = new HTMLTokenizer("");
@@ -42,17 +17,24 @@ export class Parser {
     this.validator = new Validator();
   }
 
+  setErrorHandler(handler: ErrorHandler): void {
+    this.errorHandler = handler;
+  }
+
+  private handleError(error: ParserError): void {
+    if (this.errorHandler) {
+      this.errorHandler(error);
+    } else {
+      console.error(`Error at position ${error.position}: ${error.message}`);
+      console.error(`Problematic token: ${JSON.stringify(error.token)}`);
+    }
+  }
+
   public parse(input: string): { ast: ASTNode; validationResult: ValidationResult } {
-    // Step 1: Tokenize the input
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
-
-    // Step 2: Build the AST with error recovery
     const ast = this.buildASTWithRecovery(tokens);
-
-    // Step 3: Validate the AST
     const validationResult = this.validator.validateAST(ast);
-
     return { ast, validationResult };
   }
 
@@ -61,7 +43,8 @@ export class Parser {
     let root = this.astBuilder.getRoot();
     let currentParent = root;
 
-    for (const token of tokens) {
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
       try {
         switch (token.type) {
           case "StartTag":
@@ -82,7 +65,11 @@ export class Parser {
               stack.pop();
               currentParent = stack.length > 0 ? stack[stack.length - 1] : root;
             } else {
-              throw new Error(`Unmatched end tag: </${token.name}>`);
+              throw new ParserError(
+                `Unmatched end tag: </${token.name}>. Expected </${currentParent.name}>.`,
+                token,
+                i
+              );
             }
             break;
 
@@ -107,15 +94,17 @@ export class Parser {
             break;
 
           default:
-            throw new Error(`Unsupported token type: ${token.type}`);
+            throw new ParserError(`Unsupported token type: ${token.type}`, token, i);
         }
       } catch (error) {
-        console.error("Error during AST construction:", error.message);
-        console.error("Skipping malformed token and continuing...");
+        if (error instanceof ParserError) {
+          this.handleError(error);
+        } else {
+          console.error("Unexpected error during AST construction:", error);
+        }
       }
     }
 
     return root;
   }
 }
-
