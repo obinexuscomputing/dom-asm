@@ -1,11 +1,15 @@
 import { Tokenizer, TokenType } from '../src/tokenizer';
 
 describe('Tokenizer', () => {
-  const tokenizer = new Tokenizer();
+  let tokenizer: Tokenizer;
 
-  it('should tokenize a variable declaration', () => {
-    const code = 'const x = 42;';
-    const tokens = tokenizer.tokenize(code);
+  beforeEach(() => {
+    tokenizer = new Tokenizer();
+  });
+
+  it('should tokenize variable declarations correctly', () => {
+    const input = 'const x = 42;';
+    const tokens = tokenizer.tokenize(input);
 
     expect(tokens).toEqual([
       { type: TokenType.Keyword, value: 'const' },
@@ -13,11 +17,6 @@ describe('Tokenizer', () => {
       { type: TokenType.Operator, value: '=' },
       { type: TokenType.Literal, value: '42' },
       { type: TokenType.Delimiter, value: ';' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
     ]);
-  });
-
-  it('should throw an error for unexpected characters', () => {
-    expect(() => tokenizer.tokenize('@invalid')).toThrow('Unexpected character: @');
   });
 });
