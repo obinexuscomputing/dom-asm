@@ -25,21 +25,6 @@ type ASTNode = {
     value?: string;
     children: ASTNode[];
 };
-declare class ASTBuilder {
-    private tokens;
-    private position;
-    constructor(tokens: Token[]);
-    private currentToken;
-    private consumeToken;
-    private parseStylesheet;
-    private parseRule;
-    private parseSelector;
-    private parseDeclarations;
-    private parseDeclaration;
-    private parseProperty;
-    private parseValue;
-    buildAST(): ASTNode;
-}
 
 declare class Validator {
     private ast;
@@ -51,7 +36,7 @@ declare class Validator {
     validate(): string[];
 }
 
-declare class Optimizer {
+declare class ASTOptimizer {
     private ast;
     constructor(ast: ASTNode);
     private removeDuplicateDeclarations;
@@ -101,4 +86,20 @@ declare class Parser {
     parse(): ASTNode;
 }
 
-export { ASTBuilder, type ASTNode, CodeGenerator, Optimizer, Parser, Tokenizer, Validator };
+declare global {
+    interface Window {
+        DOMCSS?: any;
+        DOMHTML?: any;
+        DOMJS?: any;
+    }
+    namespace NodeJS {
+        interface Global {
+            DOMCSS?: any;
+            DOMHTML?: any;
+            DOMJS?: any;
+        }
+    }
+}
+//# sourceMappingURL=index.d.ts.map
+
+export { type ASTNode, ASTOptimizer, CodeGenerator, Parser, Tokenizer, Validator };

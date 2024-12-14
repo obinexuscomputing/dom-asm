@@ -1,11 +1,11 @@
-type Token = 
+ type Token = 
   | { type: 'StartTag'; name: string; attributes: Record<string, string> }
   | { type: 'EndTag'; name: string }
   | { type: 'Text'; value: string }
   | { type: 'Comment'; value: string };
 
 
-class HTMLTokenizer {
+ class HTMLTokenizer {
   private input: string;
   private position: number = 0;
 

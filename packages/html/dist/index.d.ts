@@ -43,21 +43,6 @@ declare class AST {
 }
 //# sourceMappingURL=index.d.ts.map
 
-declare class CodeGenerator {
-    generateHTML(node: ASTNode): string;
-    private generateAttributes;
-    private isSelfClosingTag;
-}
-//# sourceMappingURL=index.d.ts.map
-
-declare class ASTOptimizer {
-    optimize(node: ASTNode): ASTNode;
-    private removeEmptyNodes;
-    private mergeTextNodes;
-    private isSelfClosingTag;
-}
-//# sourceMappingURL=index.d.ts.map
-
 /**
  * import { HTMLTokenizer } from "./tokenizer/index";
 import { AST } from "./ast/index";
@@ -96,7 +81,34 @@ if (validationResult.valid) {
 type ValidationResult = {
     valid: boolean;
     errors: string[];
-};//# sourceMappingURL=index.d.ts.map
+};
+declare class Validator {
+    private namespaceRules;
+    private attributeRules;
+    private validationCache;
+    registerNamespace(namespace: string, tags: string[]): void;
+    registerAttributes(tag: string, attributes: string[]): void;
+    validateAST(ast: ASTNode): ValidationResult;
+    private traverseAST;
+    private validateElement;
+    private getCacheKey;
+}
+//# sourceMappingURL=index.d.ts.map
+
+declare class ASTOptimizer {
+    optimize(node: ASTNode): ASTNode;
+    private removeEmptyNodes;
+    private mergeTextNodes;
+    private isSelfClosingTag;
+}
+//# sourceMappingURL=index.d.ts.map
+
+declare class CodeGenerator {
+    generateHTML(node: ASTNode): string;
+    private generateAttributes;
+    private isSelfClosingTag;
+}
+//# sourceMappingURL=index.d.ts.map
 
 /**
  * import { Parser } from "./parser/index";
@@ -139,4 +151,20 @@ declare class Parser {
 }
 //# sourceMappingURL=index.d.ts.map
 
-export { AST, type ASTNode, ASTOptimizer, CodeGenerator, HTMLTokenizer, Parser, type Token };
+declare global {
+    interface Window {
+        DOMCSS?: any;
+        DOMHTML?: any;
+        DOMJS?: any;
+    }
+    namespace NodeJS {
+        interface Global {
+            DOMCSS?: any;
+            DOMHTML?: any;
+            DOMJS?: any;
+        }
+    }
+}
+//# sourceMappingURL=index.d.ts.map
+
+export { AST, type ASTNode, CodeGenerator, HTMLTokenizer, ASTOptimizer as Optimizer, Parser, Validator };
