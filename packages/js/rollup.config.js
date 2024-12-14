@@ -1,49 +1,37 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import vue from 'rollup-plugin-vue'; 
+import vue from 'rollup-plugin-vue';
 import dts from 'rollup-plugin-dts';
 import { terser } from 'rollup-plugin-terser';
 
 export default [
-  // Main build configuration for JavaScript
   {
-    input: 'src/index.ts', // Entry point for your library
+    input: 'src/index.ts',
     output: [
       {
-        file: 'dist/index.cjs', // CommonJS output
+        file: 'dist/index.cjs',
         format: 'cjs',
         sourcemap: true,
         exports: 'auto',
       },
       {
-        file: 'dist/index.js', // ES Module output
+        file: 'dist/index.js',
         format: 'esm',
-        sourcemap: true,
-      },
-      {
-        file: 'dist/index.umd.js', // UMD output for browsers
-        format: 'umd',
-        name: 'DOMJS', // Replace with 'DOMCSS', 'DOMJS', or 'DOMHTML' based on the package
-        globals: {
-          vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
-        },
         sourcemap: true,
       },
     ],
     plugins: [
-      vue(), // Handles .vue files
-      resolve(), // Resolves node_modules imports
-      commonjs(), // Converts CommonJS modules to ES Modules
-      typescript({ tsconfig: './tsconfig.json' }), // TypeScript support
-      terser(), // Minifies the output for production
+      resolve(),
+      commonjs(),
+      typescript({ tsconfig: './tsconfig.json' }),
+      vue(),
+      terser(),
     ],
-    external: ['vue'], // Treat Vue as an external dependency
+    external: ['vue'], // Mark Vue as external to avoid bundling
   },
-
-  // Configuration for TypeScript declarations
   {
-    input: 'dist/index.d.ts', // Adjust based on tsconfig.json declarationDir
+    input: 'dist/types/index.d.ts',
     output: {
       file: 'dist/index.d.ts',
       format: 'es',

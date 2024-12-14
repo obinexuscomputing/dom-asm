@@ -3,7 +3,7 @@
 > rollup -c
 
 [1G[0K[36m
-[1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js, dist/index.umd.js[22m...[39m
+[1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js[22m...[39m
 [1m[31m[!] [1m(plugin typescript) RollupError: [plugin typescript] src/index.ts (1:15): @rollup/plugin-typescript TS2306: File '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js/src/ast/index.ts' is not a module.[22m[1m[39m[22m
 src/index.ts (1:15)
 [2m
