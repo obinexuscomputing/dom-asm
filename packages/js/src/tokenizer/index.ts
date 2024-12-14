@@ -34,14 +34,20 @@ export class Tokenizer {
     while (current < input.length) {
       let char = input[current];
 
-      // Handle Whitespace
-      if (/\s/.test(char)) {
-        if (char === '\n' && this.previousToken && this.previousToken.type !== TokenType.Delimiter && this.previousToken.type !== TokenType.Comment) {
-          addToken(TokenType.Delimiter, ';');
-        }
-        current++;
-        continue;
-      }
+    // Handle Whitespace
+if (/\s/.test(char)) {
+  if (
+    char === '\n' &&
+    this.previousToken &&
+    this.previousToken.type !== TokenType.Delimiter &&
+    this.previousToken.type !== TokenType.Comment &&
+    this.previousToken.type !== TokenType.TemplateLiteral
+  ) {
+    addToken(TokenType.Delimiter, ';'); // Treat newline as semicolon only for valid statements
+  }
+  current++;
+  continue;
+}
 
       // Handle Comments
       if (char === '/') {

@@ -76,12 +76,13 @@ comment */ const x = 42;`;
   it('should tokenize template literals with interpolation', () => {
     const input = '`Hello, ${name}!`';
     const tokens = tokenizer.tokenize(input);
-
+  
     expect(tokens).toEqual([
       { type: TokenType.TemplateLiteral, value: 'Hello, ${name}!' },
       { type: TokenType.EndOfStatement, value: 'EOF' },
     ]);
   });
+  
 
   it('should tokenize expressions with operators', () => {
     const input = 'x = 42 + 24;';
