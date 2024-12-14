@@ -13,6 +13,9 @@ export interface Token {
   type: TokenType;
   value: string;
 }
+
+
+
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
@@ -32,21 +35,35 @@ export class Tokenizer {
     while (current < input.length) {
       let char = input[current];
 
-   // Handle Whitespace and ASI
-if (/\s/.test(char)) {
-  if (
-    char === '\n' &&
-    this.previousToken &&
-    this.previousToken.type !== TokenType.Delimiter &&
-    this.previousToken.type !== TokenType.Comment &&
-    this.previousToken.type !== TokenType.TemplateLiteral // Skip ASI for TemplateLiteral
-  ) {
-    addToken(TokenType.Delimiter, ';');
-  }
-  current++;
-  continue;
-}
+      // Handle Whitespace and ASI
+      if (/\s/.test(char)) {
+        if (
+          char === '\n' &&
+          this.previousToken &&
+          this.previousToken.type !== TokenType.Delimiter &&
+          this.previousToken.type !== TokenType.Comment &&
+          this.previousToken.type !== TokenType.TemplateLiteral
+        ) {
+          addToken(TokenType.Delimiter, ';');
+        }
+        current++;
+        continue;
+      }
 
+      // Handle Multi-Line Comments
+      if (char === '/' && input[current + 1] === '*') {
+        let comment = '';
+        current += 2; // Skip `/*`
+        while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
+          comment += input[current++];
+          if (current >= input.length) {
+            throw new Error('Unexpected character: EOF'); // Error for unterminated comment
+          }
+        }
+        current += 2; // Skip closing `*/`
+        addToken(TokenType.Comment, comment);
+        continue;
+      }
 
       // Handle Template Literals
       if (char === '`') {

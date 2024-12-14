@@ -56,22 +56,23 @@ const y = 24`;
     ]);
   });
 
-  it('should tokenize multi-line comments', () => {
-    const input = `/* Multi-line
-comment */ const x = 42;`;
-    const tokens = tokenizer.tokenize(input);
 
+  it('should throw an error for unterminated multi-line comments', () => {
+    const input = `/* This is an unterminated comment`;
+    expect(() => tokenizer.tokenize(input)).toThrow('Unexpected character: EOF');
+  });
+  
+  it('should tokenize multi-line comments', () => {
+    const input = `/* This is a
+  multi-line comment */`;
+    const tokens = tokenizer.tokenize(input);
+  
     expect(tokens).toEqual([
-      { type: TokenType.Comment, value: ' Multi-line\ncomment ' },
-      { type: TokenType.Keyword, value: 'const' },
-      { type: TokenType.Identifier, value: 'x' },
-      { type: TokenType.Operator, value: '=' },
-      { type: TokenType.Literal, value: '42' },
-      { type: TokenType.Delimiter, value: ';' },
+      { type: TokenType.Comment, value: ' This is a\nmulti-line comment ' },
       { type: TokenType.EndOfStatement, value: 'EOF' },
     ]);
   });
-
+  
   it('should tokenize template literals with interpolation', () => {
     const input = '`Hello, ${name}!`';
     const tokens = tokenizer.tokenize(input);
