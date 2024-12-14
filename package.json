@@ -2,6 +2,7 @@
   "name": "@obinexuscomputing/dom",
   "version": "1.0.0",
   "private": true,
+  
   "workspaces": [
     "packages/asm",
     "packages/css",
