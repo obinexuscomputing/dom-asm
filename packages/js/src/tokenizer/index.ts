@@ -22,6 +22,10 @@ export class Tokenizer {
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private previousToken: Token | null = null;
 
+  private isNumericStart(char: string): boolean {
+    return /[0-9]/.test(char);
+  }
+
   tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let current = 0;
@@ -48,43 +52,53 @@ export class Tokenizer {
     const readNumber = () => {
       let number = '';
       let hasDot = false;
-      let hasE = false;
 
-      const peek = (offset = 0) => input[current + offset];
-
-      if (peek() === '.') {
-        if (!/[0-9]/.test(peek(1))) {
-          throw new Error('Invalid number format');
+      // Handle leading decimal point
+      if (input[current] === '.') {
+        if (!/[0-9]/.test(input[current + 1])) {
+          throw new Error(`Unexpected character: ${input[current]}`);
         }
-        number = '0';
-        hasDot = true;
-      }
-
-      while (current < input.length) {
-        const char = peek();
-        const nextChar = peek(1);
-
-        if (/[0-9]/.test(char)) {
-          number += char;
-        } else if (char === '.' && !hasDot && !hasE) {
-          hasDot = true;
-          number += char;
-        } else if ((char === 'e' || char === 'E') && !hasE && number.length > 0) {
-          hasE = true;
-          number += char;
-          if (nextChar === '+' || nextChar === '-') {
-            number += nextChar;
-            current++;
-          }
-        } else if (char === '.' && hasDot) {
-          throw new Error('Invalid number format');
-        } else {
-          break;
-        }
+        number = '.';
         current++;
       }
 
-      if (/[eE][+-]?$/.test(number) || number.endsWith('.')) {
+      // Read digits before decimal point
+      while (current < input.length && /[0-9]/.test(input[current])) {
+        number += input[current++];
+      }
+
+      // Handle decimal point if not already handled
+      if (current < input.length && input[current] === '.' && !hasDot) {
+        hasDot = true;
+        number += input[current++];
+        
+        // Read digits after decimal point
+        while (current < input.length && /[0-9]/.test(input[current])) {
+          number += input[current++];
+        }
+      }
+
+      // Handle scientific notation
+      if (current < input.length && (input[current] === 'e' || input[current] === 'E')) {
+        number += input[current++];
+        
+        if (current < input.length && (input[current] === '+' || input[current] === '-')) {
+          number += input[current++];
+        }
+        
+        let hasDigitsAfterE = false;
+        while (current < input.length && /[0-9]/.test(input[current])) {
+          hasDigitsAfterE = true;
+          number += input[current++];
+        }
+        
+        if (!hasDigitsAfterE) {
+          throw new Error('Invalid number format');
+        }
+      }
+
+      // Additional validation
+      if (number.endsWith('.')) {
         throw new Error('Invalid number format');
       }
 
@@ -107,9 +121,16 @@ export class Tokenizer {
       if (char === '/' && input[current + 1] === '/') {
         let value = '';
         current += 2; // Skip //
+        
         while (current < input.length && input[current] !== '\n') {
           value += input[current++];
         }
+        
+        // Remove any trailing \r
+        if (value.endsWith('\r')) {
+          value = value.slice(0, -1);
+        }
+        
         addToken(TokenType.Comment, value);
         continue;
       }
@@ -119,8 +140,7 @@ export class Tokenizer {
         let value = '';
         current += 2; // Skip /*
         let depth = 1;
-
-        const initialDepth = depth;
+        
         while (current < input.length && depth > 0) {
           if (input[current] === '/' && input[current + 1] === '*') {
             depth++;
@@ -137,7 +157,7 @@ export class Tokenizer {
           }
         }
 
-        if (depth === initialDepth) {
+        if (depth > 0) {
           throw new Error('Unexpected character: EOF');
         }
 
@@ -176,13 +196,14 @@ export class Tokenizer {
         if (current >= input.length) {
           throw new Error('Unterminated template literal');
         }
+        
         current++; // Skip closing backtick
         addToken(TokenType.TemplateLiteral, value);
         continue;
       }
 
       // Handle Numbers
-      if (/[0-9.]/.test(char)) {
+      if (this.isNumericStart(char) || (char === '.' && this.isNumericStart(input[current + 1]))) {
         const number = readNumber();
         addToken(TokenType.Literal, number);
         continue;
@@ -224,10 +245,9 @@ export class Tokenizer {
         while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
           identifier += input[current++];
         }
-        addToken(
-          this.keywords.has(identifier) ? TokenType.Keyword : TokenType.Identifier,
-          identifier
-        );
+        
+        const type = this.keywords.has(identifier) ? TokenType.Keyword : TokenType.Identifier;
+        addToken(type, identifier);
         continue;
       }
 
