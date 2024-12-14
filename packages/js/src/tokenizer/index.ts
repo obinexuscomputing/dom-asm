@@ -35,10 +35,10 @@ export class Tokenizer {
     if (/[eE]/.test(value)) {
       const parts = value.split(/[eE]/);
       if (parts.length !== 2) return false;
-      
+
       const [base, exponent] = parts;
       if (!this.isValidNumber(base)) return false;
-      
+
       const cleanExponent = exponent.replace(/^[+-]/, '');
       if (!/^\d+$/.test(cleanExponent)) return false;
     }
@@ -61,9 +61,9 @@ export class Tokenizer {
         this.previousToken.type !== TokenType.Delimiter &&
         this.previousToken.type !== TokenType.Comment &&
         this.previousToken.type !== TokenType.TemplateLiteral &&
-        !tokens.some(token => 
-          token.type === TokenType.Delimiter && 
-          token.value === ';' && 
+        !tokens.some(token =>
+          token.type === TokenType.Delimiter &&
+          token.value === ';' &&
           tokens.indexOf(token) === tokens.length - 1
         )
       );
@@ -130,16 +130,16 @@ export class Tokenizer {
       if (char === '/' && input[current + 1] === '/') {
         let value = '';
         current += 2; // Skip //
-        
+
         while (current < input.length && input[current] !== '\n') {
           value += input[current++];
         }
-        
+
         // Remove any trailing \r
         if (value.endsWith('\r')) {
           value = value.slice(0, -1);
         }
-        
+
         addToken(TokenType.Comment, value);
         continue;
       }
@@ -149,7 +149,7 @@ export class Tokenizer {
         let value = '';
         current += 2; // Skip /*
         let depth = 1;
-        
+
         while (current < input.length && depth > 0) {
           if (input[current] === '/' && input[current + 1] === '*') {
             depth++;
@@ -178,7 +178,7 @@ export class Tokenizer {
       if (char === '`') {
         let value = '';
         current++; // Skip opening backtick
-        
+
         while (current < input.length && input[current] !== '`') {
           if (input[current] === '\\') {
             const nextChar = input[current + 1];
@@ -205,7 +205,7 @@ export class Tokenizer {
         if (current >= input.length) {
           throw new Error('Unterminated template literal');
         }
-        
+
         current++; // Skip closing backtick
         addToken(TokenType.TemplateLiteral, value);
         continue;
@@ -229,7 +229,7 @@ export class Tokenizer {
       let operator = '';
       let maxOperator = '';
       let tempCurrent = current;
-      
+
       while (tempCurrent < input.length && /[=!<>&|+\-*/%?.]/.test(input[tempCurrent])) {
         operator += input[tempCurrent];
         if (this.operators.has(operator)) {
@@ -237,11 +237,11 @@ export class Tokenizer {
         }
         tempCurrent++;
       }
-      
+
       if (operator.includes('=>') && !this.operators.has(operator)) {
         throw new Error('Unexpected character: >');
       }
-      
+
       if (maxOperator) {
         current += maxOperator.length;
         addToken(TokenType.Operator, maxOperator);
