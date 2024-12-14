@@ -1,4 +1,3 @@
-// dom-css/packages/dom-css/src/parser/index.ts
 
 import { Tokenizer } from "../tokenizer";
 import { ASTBuilder } from "../ast";
