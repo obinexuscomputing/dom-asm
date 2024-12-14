@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "strict": true,
     "outDir": "dist",                      // Ensure all compiled files go to "dist"
     "declaration": true,                   // Generate declaration files
     "declarationMap": true,                // Enable declaration maps
