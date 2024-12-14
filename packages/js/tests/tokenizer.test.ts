@@ -83,7 +83,6 @@ comment */ const x = 42;`;
     ]);
   });
   
-  
 
   it('should tokenize expressions with operators', () => {
     const input = 'x = 42 + 24;';

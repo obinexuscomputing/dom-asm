@@ -71,31 +71,31 @@ if (/\s/.test(char)) {
           continue;
         }
       }
-
-      // Handle Template Literals
-      if (char === '`') {
-        let template = '';
-        current++; // Skip the opening backtick
-        while (current < input.length && input[current] !== '`') {
-          if (input[current] === '$' && input[current + 1] === '{') {
-            template += '${';
-            current += 2; // Skip `${`
-            while (current < input.length && input[current] !== '}') {
-              template += input[current++];
-            }
-            template += '}';
-            current++; // Skip `}`
-          } else {
-            template += input[current++];
-          }
-        }
-        if (current >= input.length) {
-          throw new Error('Unterminated template literal');
-        }
-        current++; // Skip the closing backtick
-        addToken(TokenType.TemplateLiteral, template);
-        continue;
+// Handle Template Literals
+if (char === '`') {
+  let template = '';
+  current++; // Skip the opening backtick
+  while (current < input.length && input[current] !== '`') {
+    if (input[current] === '$' && input[current + 1] === '{') {
+      template += '${';
+      current += 2; // Skip `${`
+      while (current < input.length && input[current] !== '}') {
+        template += input[current++];
       }
+      template += '}';
+      current++; // Skip `}`
+    } else {
+      template += input[current++];
+    }
+  }
+  if (current >= input.length) {
+    throw new Error('Unterminated template literal');
+  }
+  current++; // Skip the closing backtick
+  addToken(TokenType.TemplateLiteral, template);
+  continue;
+}
+
 
       // Handle Delimiters
       if (this.singleCharDelimiters.has(char)) {
@@ -133,7 +133,7 @@ if (/\s/.test(char)) {
         addToken(TokenType.Literal, number);
         continue;
       }
-      
+
 // Handle Whitespace
 if (/\s/.test(char)) {
   if (
@@ -141,13 +141,14 @@ if (/\s/.test(char)) {
     this.previousToken &&
     this.previousToken.type !== TokenType.Delimiter &&
     this.previousToken.type !== TokenType.Comment &&
-    this.previousToken.type !== TokenType.TemplateLiteral // Avoid adding `;` after TemplateLiteral
+    this.previousToken.type !== TokenType.TemplateLiteral // Prevent ASI after TemplateLiteral
   ) {
     addToken(TokenType.Delimiter, ';');
   }
   current++;
   continue;
 }
+
 
       // Handle Unexpected Characters
       throw new Error(`Unexpected character: ${char}`);
