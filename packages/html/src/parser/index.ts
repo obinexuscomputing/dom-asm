@@ -110,7 +110,7 @@ export class Parser {
               type: "Element",
               name: token.name ?? "unknown",
               attributes: token.attributes || {},
-              children: [], // Ensure children is always initialized
+              children: [],
               parent: currentParent,
             };
             currentParent.children.push(elementNode);
@@ -124,20 +124,25 @@ export class Parser {
               continue;
             }
   
-            const matchingStartIndex = stack.findIndex(node =>
+            const matchingStartIndex = stack.findIndex(node => 
               this.isElementNode(node) && node.name === token.name
             );
   
             if (matchingStartIndex === -1) {
-              throw new ParserError(
-                `Unmatched end tag: </${token.name}>. Expected </${
-                  this.isElementNode(currentParent) ? currentParent.name : "unknown"
-                }>.`,
-                token,
-                i
+              this.handleError(
+                new ParserError(
+                  `Unmatched end tag: </${token.name}>. Expected </${
+                    this.isElementNode(currentParent) ? currentParent.name : "unknown"
+                  }>.`,
+                  token,
+                  i
+                )
               );
+              recoveryMode = true;
+              continue;
             }
   
+            // Pop stack to the matching tag
             while (stack.length > matchingStartIndex) {
               stack.pop();
             }
@@ -145,39 +150,41 @@ export class Parser {
             break;
           }
           case "Text": {
-            const textNode: TextNode = {
-              type: "Text",
-              value: token.value ?? "",
-              children: [], // Ensure children is always initialized
-              parent: currentParent,
-            };
-            currentParent.children.push(textNode);
+            if (!recoveryMode) {
+              const textNode: TextNode = {
+                type: "Text",
+                value: token.value ?? "",
+                children: [],
+                parent: currentParent,
+              };
+              currentParent.children.push(textNode);
+            }
             break;
           }
           case "Comment": {
-            const commentNode: CommentNode = {
-              type: "Comment",
-              value: token.value ?? "",
-              children: [], // Ensure children is always initialized
-              parent: currentParent,
-            };
-            currentParent.children.push(commentNode);
+            if (!recoveryMode) {
+              const commentNode: CommentNode = {
+                type: "Comment",
+                value: token.value ?? "",
+                children: [],
+                parent: currentParent,
+              };
+              currentParent.children.push(commentNode);
+            }
             break;
           }
         }
       } catch (error) {
         if (error instanceof ParserError) {
           this.handleError(error);
-          if (!this.shouldThrow) {
-            recoveryMode = true;
-            continue;
-          }
-          throw error;
+          recoveryMode = true;
+          continue;
         }
         throw error;
       }
     }
   
+    // Handle unclosed tags
     while (stack.length > 1) {
       const unclosedNode = stack.pop()!;
       if (this.isElementNode(unclosedNode)) {
@@ -193,5 +200,6 @@ export class Parser {
   
     return root;
   }
+  
   
 }
