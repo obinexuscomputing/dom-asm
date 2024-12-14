@@ -15,7 +15,6 @@ export interface Token {
 }
 
 
-
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
@@ -50,6 +49,17 @@ export class Tokenizer {
         continue;
       }
 
+      // Handle Single-Line Comments
+      if (char === '/' && input[current + 1] === '/') {
+        let comment = '';
+        current += 2; // Skip `//`
+        while (current < input.length && input[current] !== '\n') {
+          comment += input[current++];
+        }
+        addToken(TokenType.Comment, comment);
+        continue;
+      }
+
       // Handle Multi-Line Comments
       if (char === '/' && input[current + 1] === '*') {
         let comment = '';
@@ -57,10 +67,10 @@ export class Tokenizer {
         while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
           comment += input[current++];
           if (current >= input.length) {
-            throw new Error('Unexpected character: EOF'); // Error for unterminated comment
+            throw new Error('Unexpected character: EOF');
           }
         }
-        current += 2; // Skip closing `*/`
+        current += 2; // Skip `*/`
         addToken(TokenType.Comment, comment);
         continue;
       }
@@ -93,7 +103,7 @@ export class Tokenizer {
       // Handle Delimiters
       if (this.singleCharDelimiters.has(char)) {
         if (char === ';' && this.previousToken?.type === TokenType.TemplateLiteral) {
-          current++; // Skip duplicate semicolon after TemplateLiteral
+          current++; // Skip redundant semicolon
           continue;
         }
         addToken(TokenType.Delimiter, char);
