@@ -2,11 +2,11 @@
   "name": "@obinexuscomputing/js",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "A package for JavaScript parsing and validation.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
     "build": "rollup -c",
     "test": "jest",

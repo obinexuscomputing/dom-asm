@@ -2,6 +2,7 @@
   "name": "@obinexuscomputing/dom-asm",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "A unified library for DOM manipulation and compilation.",
   "workspaces": [
     "packages/asm",

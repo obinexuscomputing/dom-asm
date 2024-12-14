@@ -2,6 +2,7 @@
   "name": "@obinexuscomputing/html",
   "version": "1.0.0",
   "private": true,
+  
   "description": "A package for HTML parsing, validation, and rendering.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
