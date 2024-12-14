@@ -1,6 +1,8 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testMatch: ['<rootDir>/src/**/*.test.ts'], // Adjust this to match your test file paths
+  testPathIgnorePatterns: ['/node_modules/'],
   rootDir: '.',
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1', // Support path aliases for src
