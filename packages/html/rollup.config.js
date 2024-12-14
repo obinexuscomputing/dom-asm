@@ -9,12 +9,12 @@ export default [
     input: 'src/index.ts',
     output: [
       {
-        file: 'dist/index.cjs.js',
+        file: 'dist/index.cjs',
         format: 'cjs',
         sourcemap: true,
       },
       {
-        file: 'dist/index.esm.js',
+        file: 'dist/index.js',
         format: 'esm',
         sourcemap: true,
       },
@@ -29,7 +29,7 @@ export default [
   {
     input: 'dist/index.d.ts',
     output: {
-      file: 'dist/index.d.ts',
+      file: 'dist/types/index.d.ts',
       format: 'es',
     },
     plugins: [dts()],
