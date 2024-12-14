@@ -46,14 +46,18 @@ export class Parser {
   }
 
   public parse(input: string): {
-    children: any; ast: ASTNode; validationResult: ValidationResult 
-} {
+    children: any;
+    ast: ASTNode;
+    validationResult: ValidationResult;
+  } {
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
     const ast = this.buildASTWithRecovery(tokens);
     const validationResult = this.validator.validateAST(ast);
-    return { ast, validationResult };
+    const children = ast.children || []; // Ensure `children` is defined
+    return { children, ast, validationResult };
   }
+  
 
   private buildASTWithRecovery(tokens: Token[]): ASTNode {
     const stack: ASTNode[] = [];
