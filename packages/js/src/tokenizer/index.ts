@@ -32,20 +32,21 @@ export class Tokenizer {
     while (current < input.length) {
       let char = input[current];
 
-      // Handle Whitespace and ASI
-      if (/\s/.test(char)) {
-        if (
-          char === '\n' &&
-          this.previousToken &&
-          this.previousToken.type !== TokenType.Delimiter &&
-          this.previousToken.type !== TokenType.Comment &&
-          this.previousToken.type !== TokenType.TemplateLiteral // Skip ASI for TemplateLiteral
-        ) {
-          addToken(TokenType.Delimiter, ';');
-        }
-        current++;
-        continue;
-      }
+   // Handle Whitespace and ASI
+if (/\s/.test(char)) {
+  if (
+    char === '\n' &&
+    this.previousToken &&
+    this.previousToken.type !== TokenType.Delimiter &&
+    this.previousToken.type !== TokenType.Comment &&
+    this.previousToken.type !== TokenType.TemplateLiteral // Skip ASI for TemplateLiteral
+  ) {
+    addToken(TokenType.Delimiter, ';');
+  }
+  current++;
+  continue;
+}
+
 
       // Handle Template Literals
       if (char === '`') {
