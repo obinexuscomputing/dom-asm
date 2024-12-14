@@ -1,8 +1,5 @@
-import * as JS from "@obinexuscomputing/js";
+import { notImplemented } from "../utils";
 
-export function parseJS(jsString: string) {
-  if (!JS.parser) {
-    throw new Error("JS parser is not implemented yet.");
-  }
-  return JS.parser.parse(jsString);
+export function parseJS(jsString: string): never {
+  notImplemented("js", "parser");
 }
