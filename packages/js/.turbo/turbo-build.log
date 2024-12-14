@@ -4,11 +4,11 @@
 
 [1G[0K[36m
 [1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js[22m...[39m
-[1m[31m[!] [1m(plugin typescript) RollupError: [plugin typescript] src/index.ts (1:15): @rollup/plugin-typescript TS2306: File '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js/src/ast/index.ts' is not a module.[22m[1m[39m[22m
-src/index.ts (1:15)
+[1m[31m[!] [1m(plugin typescript) RollupError: [plugin typescript] src/index.ts (2:15): @rollup/plugin-typescript TS2306: File '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js/src/tokenizer/index.ts' is not a module.[22m[1m[39m[22m
+src/index.ts (2:15)
 [2m
-[7m1[0m export * from './ast';
-[7m [0m [91m              ~~~~~~~[0m
+[7m2[0m export * from './tokenizer';
+[7m [0m [91m              ~~~~~~~~~~~~~[0m
 [22m
 [2m    at getRollupError (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:285:41)
     at Object.error (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:281:42)

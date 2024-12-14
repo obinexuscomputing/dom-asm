@@ -7776,3 +7776,23 @@
 2024-12-14T14:01:01.209843Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
 2024-12-14T14:01:01.311790Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf(".gitignore")}
 2024-12-14T14:01:01.311836Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Root, path: AnchoredSystemPathBuf("") }}))
+2024-12-14T14:02:34.910270Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/ast/index.ts")}
+2024-12-14T14:02:34.910324Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:02:35.009737Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/ast/index.ts")}
+2024-12-14T14:02:35.009807Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:02:35.009866Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-12-14T14:02:43.410584Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/tokenizer/index.ts")}
+2024-12-14T14:02:43.410626Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:02:43.410668Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-12-14T14:02:46.209636Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/validator/index.ts")}
+2024-12-14T14:02:46.209676Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:02:46.209718Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-12-14T14:02:49.510526Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/index.ts")}
+2024-12-14T14:02:49.510568Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:02:49.510619Z  WARN turborepo_lib::package_changes_watcher: hashes are the same, no need to rerun
+2024-12-14T14:03:10.311375Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/tokenizer/index.ts")}
+2024-12-14T14:03:10.311625Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:03:13.910663Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/validator/index.ts")}
+2024-12-14T14:03:13.910741Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:03:19.010015Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/optimizer/index.ts")}
+2024-12-14T14:03:19.010065Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
