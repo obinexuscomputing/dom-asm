@@ -2,12 +2,7 @@
   "name": "@obinexuscomputing/dom",
   "version": "1.0.0",
   "private": true,
-  "workspaces": [
-    "packages/dom-asm",
-    "packages/dom-css",
-    "packages/dom-html",
-    "packages/dom-js"
-  ],
+  "workspaces": ["packages/*"],
   "description": "A unified library for DOM manipulation and compilation with support for asm, css, html, and js.",
   "keywords": [
     "dom",
