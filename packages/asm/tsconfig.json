@@ -1,14 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",                      // Ensures compiled files go to "dist"
-    "declaration": true,                   // Generates declaration files
-    "declarationMap": true,                // Generates declaration maps for better debugging
-    "declarationDir": "dist/types",        // Places declaration files in a dedicated folder
-    "sourceMap": true,                     // Generates source maps for easier debugging
-    "noEmitOnError": true,                 // Stops emitting files if there are errors
-    "rootDir": "src"                       // Ensures all paths are relative to "src"
+    "outDir": "dist",                      // Ensure all compiled files go to "dist"
+    "declaration": true,                   // Generate declaration files
+    "declarationMap": true,                // Enable declaration maps
+    "declarationDir": "dist",              // Align declarationDir with Rollup's output
+    "sourceMap": true,                     // Generate source maps for debugging
+    "noEmitOnError": true,                 // Prevent emitting files on errors
+    "rootDir": "src"                       // Ensure all paths are relative to "src"
   },
-  "include": ["src/**/*.ts"],              // Includes all TypeScript files in "src"
-  "exclude": ["node_modules", "dist"]      // Excludes unnecessary directories
+  "include": ["src/**/*.ts"],              // Include all TypeScript files in "src"
+  "exclude": ["node_modules", "dist"]      // Exclude unnecessary directories
 }
