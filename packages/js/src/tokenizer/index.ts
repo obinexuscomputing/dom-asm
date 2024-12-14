@@ -23,9 +23,11 @@ export class Tokenizer {
   tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let current = 0;
+    let previousToken: Token | null = null;
 
     const addToken = (type: TokenType, value: string) => {
-      tokens.push({ type, value });
+      previousToken = { type, value };
+      tokens.push(previousToken);
     };
 
     while (current < input.length) {
@@ -33,6 +35,10 @@ export class Tokenizer {
 
       // Handle Whitespace
       if (/\s/.test(char)) {
+        if (char === '\n' && previousToken && previousToken.type !== TokenType.Delimiter) {
+          // Treat newline as a semicolon if it's a valid statement boundary
+          addToken(TokenType.Delimiter, ';');
+        }
         current++;
         continue;
       }
@@ -41,7 +47,6 @@ export class Tokenizer {
       if (char === '/') {
         const nextChar = input[current + 1];
         if (nextChar === '/') {
-          // Single-line comment
           let comment = '';
           current += 2; // Skip `//`
           while (current < input.length && input[current] !== '\n') {
@@ -50,7 +55,6 @@ export class Tokenizer {
           addToken(TokenType.Comment, comment);
           continue;
         } else if (nextChar === '*') {
-          // Multi-line comment
           let comment = '';
           current += 2; // Skip `/*`
           while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
@@ -79,29 +83,6 @@ export class Tokenizer {
         continue;
       }
 
-      // Handle Template Literals
-      if (char === '`') {
-        let template = '';
-        current++; // Skip initial `
-        while (current < input.length && input[current] !== '`') {
-          if (input[current] === '$' && input[current + 1] === '{') {
-            // Handle template interpolation
-            template += '${';
-            current += 2; // Skip `${`
-            while (current < input.length && input[current] !== '}') {
-              template += input[current++];
-            }
-            template += '}';
-            current++; // Skip `}`
-          } else {
-            template += input[current++];
-          }
-        }
-        current++; // Skip closing `
-        addToken(TokenType.TemplateLiteral, template);
-        continue;
-      }
-
       // Handle Keywords and Identifiers
       if (/[a-zA-Z_$]/.test(char)) {
         let identifier = '';
@@ -126,8 +107,12 @@ export class Tokenizer {
       throw new Error(`Unexpected character: ${char}`);
     }
 
-    // Handle End of File
+    // Add EOF token
+    if (previousToken && previousToken.type !== TokenType.Delimiter) {
+      addToken(TokenType.Delimiter, ';'); // Add final semicolon if missing
+    }
     addToken(TokenType.EndOfStatement, 'EOF');
+
     return tokens;
   }
 }

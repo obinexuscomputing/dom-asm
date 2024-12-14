@@ -23,9 +23,9 @@ describe('Tokenizer', () => {
 
   it('should tokenize multiple variable declarations without semicolons', () => {
     const input = `const x = 42
-const y = 24`;
+  const y = 24`;
     const tokens = tokenizer.tokenize(input);
-
+  
     expect(tokens).toEqual([
       { type: TokenType.Keyword, value: 'const' },
       { type: TokenType.Identifier, value: 'x' },
@@ -40,6 +40,7 @@ const y = 24`;
       { type: TokenType.EndOfStatement, value: 'EOF' },
     ]);
   });
+  
 
   it('should tokenize single-line comments', () => {
     const input = '// This is a comment\nconst x = 42;';
