@@ -100,7 +100,7 @@ export class Parser {
     const stack: ASTNode[] = [root];
     let currentParent = root;
     let recoveryMode = false;
-
+  
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
       try {
@@ -110,7 +110,7 @@ export class Parser {
               type: "Element",
               name: token.name ?? "unknown",
               attributes: token.attributes || {},
-              children: [],
+              children: [], // Ensure children is always initialized
               parent: currentParent,
             };
             currentParent.children.push(elementNode);
@@ -119,16 +119,15 @@ export class Parser {
             recoveryMode = false;
             break;
           }
-
           case "EndTag": {
             if (recoveryMode) {
               continue;
             }
-
-            const matchingStartIndex = stack.findIndex(node => 
+  
+            const matchingStartIndex = stack.findIndex(node =>
               this.isElementNode(node) && node.name === token.name
             );
-
+  
             if (matchingStartIndex === -1) {
               throw new ParserError(
                 `Unmatched end tag: </${token.name}>. Expected </${
@@ -138,38 +137,31 @@ export class Parser {
                 i
               );
             }
-
-            // Pop up to the matching tag
+  
             while (stack.length > matchingStartIndex) {
               stack.pop();
             }
             currentParent = stack[stack.length - 1];
             break;
           }
-
           case "Text": {
-            if (!recoveryMode) {
-              const textNode: TextNode = {
-                type: "Text",
-                value: token.value ?? "",
-                children: [],
-                parent: currentParent,
-              };
-              currentParent.children.push(textNode);
-            }
+            const textNode: TextNode = {
+              type: "Text",
+              value: token.value ?? "",
+              children: [], // Ensure children is always initialized
+              parent: currentParent,
+            };
+            currentParent.children.push(textNode);
             break;
           }
-
           case "Comment": {
-            if (!recoveryMode) {
-              const commentNode: CommentNode = {
-                type: "Comment",
-                value: token.value ?? "",
-                children: [],
-                parent: currentParent,
-              };
-              currentParent.children.push(commentNode);
-            }
+            const commentNode: CommentNode = {
+              type: "Comment",
+              value: token.value ?? "",
+              children: [], // Ensure children is always initialized
+              parent: currentParent,
+            };
+            currentParent.children.push(commentNode);
             break;
           }
         }
@@ -185,8 +177,7 @@ export class Parser {
         throw error;
       }
     }
-
-    // Handle unclosed tags
+  
     while (stack.length > 1) {
       const unclosedNode = stack.pop()!;
       if (this.isElementNode(unclosedNode)) {
@@ -199,7 +190,8 @@ export class Parser {
         );
       }
     }
-
+  
     return root;
   }
+  
 }
