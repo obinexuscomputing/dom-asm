@@ -4,7 +4,7 @@ describe("Tokenizer", () => {
   test("should tokenize a simple CSS rule", () => {
     const css = "body { color: black; }";
     const tokenizer = new Tokenizer(css);
-    const tokens: Token[] = tokenizer.tokenize();
+    const tokens: Token[] = tokenizer.tokenize(); // Fix: Add type declaration and ensure Token is imported
 
     expect(tokens).toEqual([
       { type: "other", value: "body", position: { line: 1, column: 5 } },
