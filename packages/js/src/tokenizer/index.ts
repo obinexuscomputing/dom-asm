@@ -35,7 +35,7 @@ export class Tokenizer {
       let char = input[current];
 
       
-       * if (
+        if (
   char === '\n' &&
   this.previousToken &&
   this.previousToken.type !== TokenType.Delimiter &&
