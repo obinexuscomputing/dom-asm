@@ -21,6 +21,10 @@ export class Tokenizer {
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private previousToken: Token | null = null;
 
+  private isValidOperatorChar(char: string): boolean {
+    return /[=!<>&|+\-*/%]/.test(char);
+  }
+
   tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let current = 0;
@@ -42,6 +46,27 @@ export class Tokenizer {
           tokens.indexOf(token) === tokens.length - 1
         )
       );
+    };
+
+    const readOperator = () => {
+      let operator = '';
+      let tempCurrent = current;
+      let maxOperator = '';
+
+      while (tempCurrent < input.length && this.isValidOperatorChar(input[tempCurrent])) {
+        operator += input[tempCurrent];
+        if (this.operators.has(operator)) {
+          maxOperator = operator;
+        }
+        tempCurrent++;
+      }
+
+      if (!maxOperator) {
+        throw new Error(`Unexpected character: ${input[current]}`);
+      }
+
+      current += maxOperator.length;
+      return maxOperator;
     };
 
     while (current < input.length) {
@@ -133,32 +158,17 @@ export class Tokenizer {
         continue;
       }
 
-      // Handle Operators
-      let operator = '';
-      let maxOperator = '';
-      let tempCurrent = current;
-      
-      while (tempCurrent < input.length) {
-        const nextOp = operator + input[tempCurrent];
-        if (this.operators.has(nextOp)) {
-          maxOperator = nextOp;
-          tempCurrent++;
-          operator = nextOp;
-        } else {
-          break;
-        }
-      }
-      
-      if (maxOperator) {
-        current += maxOperator.length;
-        addToken(TokenType.Operator, maxOperator);
-        continue;
-      }
-
       // Handle Delimiters
       if (this.singleCharDelimiters.has(char)) {
         addToken(TokenType.Delimiter, char);
         current++;
+        continue;
+      }
+
+      // Handle Operators
+      if (this.isValidOperatorChar(char)) {
+        const operator = readOperator();
+        addToken(TokenType.Operator, operator);
         continue;
       }
 
