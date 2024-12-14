@@ -236,23 +236,23 @@ export class Tokenizer {
         continue;
       }
 
-      if (/[a-zA-Z_$]/.test(char)) {
-        let value = '';
-        while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
-          value += input[current++];
-        }
-        if (value === 'true' || value === 'false') {
-          addToken(TokenType.Literal, value);
-        } else {
-          const type = this.keywords.has(value) ? TokenType.Keyword : TokenType.Identifier;
-          addToken(type, value);
-        }
-        continue;
-      }
+    // Handle Keywords and Identifiers
+if (/[a-zA-Z_$]/.test(char)) {
+  let value = '';
+  while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
+    value += input[current++];
+  }
 
-      throw new Error(`Unexpected character: ${char}`);
+  if (value === 'true' || value === 'false') {
+    // Treat boolean literals as literals, not keywords
+    addToken(TokenType.Literal, value);
+  } else {
+    const type = this.keywords.has(value) ? TokenType.Keyword : TokenType.Identifier;
+    addToken(type, value);
+  }
+  continue;
+}
     }
-
     if (shouldAddSemicolon()) {
       addToken(TokenType.Delimiter, ';');
     }
