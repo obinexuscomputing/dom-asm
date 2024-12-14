@@ -1,19 +1,17 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testMatch: ['<rootDir>/tests/**/*.test.ts'], // Test files in the `tests` folder
-  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/dist/'], // Ignore compiled files
   rootDir: '.',
-  moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/src/$1', // Support for path aliases
-  },
+  moduleDirectories: ['node_modules', 'src'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   transform: {
-    '^.+\\.tsx?$': 'ts-jest', // Use ts-jest for TypeScript files
+    '^.+\\.(ts|tsx)$': ['ts-jest', {
+      tsconfig: './tsconfig.json',
+      isolatedModules: true
+    }]
   },
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.json', // Specify the tsconfig
-      diagnostics: true, // Enable TypeScript diagnostics
-    },
-  },
+  testMatch: ['**/tests/**/*.test.ts'],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1'
+  }
 };

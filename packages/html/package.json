@@ -8,9 +8,10 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
-    "build": "rollup -c",
-    "test": "jest",
-    "lint": "eslint ."
+   "test": "jest --no-cache",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean"
   },
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
   "license": "ISC",
