@@ -1,4 +1,4 @@
-import { Parser, ParserError } from "../src"
+import { Parser, ParserError } from "../src";
 
 describe("Parser with Error Handler", () => {
   it("should invoke custom error handler for unmatched end tags", () => {
@@ -25,7 +25,7 @@ describe("Parser with Error Handler", () => {
     `;
     const parser = new Parser({ throwOnError: false });
     const ast = parser.parse(input);
-    
+   
     // Verify the valid parts of the AST are preserved
     const divNode = ast.children[0];
     expect(divNode.name).toBe("div");
