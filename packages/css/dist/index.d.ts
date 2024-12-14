@@ -41,14 +41,6 @@ declare class ASTBuilder {
     buildAST(): ASTNode;
 }
 
-declare class Optimizer {
-    private ast;
-    constructor(ast: ASTNode);
-    private removeDuplicateDeclarations;
-    private mergeAdjacentRules;
-    optimize(): ASTNode;
-}
-
 declare class Validator {
     private ast;
     private errors;
@@ -57,6 +49,14 @@ declare class Validator {
     private validateRule;
     private validateDeclaration;
     validate(): string[];
+}
+
+declare class Optimizer {
+    private ast;
+    constructor(ast: ASTNode);
+    private removeDuplicateDeclarations;
+    private mergeAdjacentRules;
+    optimize(): ASTNode;
 }
 
 /**
@@ -101,4 +101,4 @@ declare class Parser {
     parse(): ASTNode;
 }
 
-export { ASTBuilder, type ASTNode, CodeGenerator, Optimizer, Parser, type Token, Tokenizer, Validator };
+export { ASTBuilder, type ASTNode, CodeGenerator, Optimizer, Parser, Tokenizer, Validator };
