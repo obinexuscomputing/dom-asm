@@ -1,4 +1,4 @@
-import * as JS from "@obinexuscomputing/js"; // Assuming the `js` package is published
+import * as JS from "@obinexuscomputing/js"
 
 /**
  * Parses a JavaScript string into an Abstract Syntax Tree (AST).
