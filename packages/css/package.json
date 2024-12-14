@@ -19,6 +19,7 @@
     "vue": "^3.0.0"            
   },
   "devDependencies": {
+    
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rollup/plugin-typescript": "^10.0.0",
