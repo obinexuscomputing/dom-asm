@@ -28,10 +28,10 @@ export default [
       vue(),
       terser(),
     ],
-    external: ['vue'], // Mark Vue as external to avoid bundling
+    external: ['vue'], 
   },
   {
-    input: 'dist/types/index.d.ts',
+    input: 'dist/index.d.ts',
     output: {
       file: 'dist/index.d.ts',
       format: 'es',

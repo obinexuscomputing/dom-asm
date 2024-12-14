@@ -7796,3 +7796,11 @@
 2024-12-14T14:03:13.910741Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
 2024-12-14T14:03:19.010015Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/src/optimizer/index.ts")}
 2024-12-14T14:03:19.010065Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:04:35.309968Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/rollup.config.js")}
+2024-12-14T14:04:35.310234Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:04:38.210086Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/rollup.config.js")}
+2024-12-14T14:04:38.210178Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:04:39.610506Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/rollup.config.js")}
+2024-12-14T14:04:39.610589Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
+2024-12-14T14:04:43.209925Z  WARN turborepo_lib::package_changes_watcher: changed_files: {AnchoredSystemPathBuf("packages/js/rollup.config.js")}
+2024-12-14T14:04:43.210007Z  WARN turborepo_lib::package_changes_watcher: changed_packages: Ok(Some({WorkspacePackage { name: Other("@obinexuscomputing/js"), path: AnchoredSystemPathBuf("packages/js") }}))
