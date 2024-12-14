@@ -65,10 +65,30 @@ export class Parser {
     }
   }
 
+  private isWhitespace(str: string): boolean {
+    return /^\s*$/.test(str);
+  }
+
   public parse(input: string): ASTNode {
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
-    return this.buildASTWithRecovery(tokens);
+    const ast = this.buildASTWithRecovery(tokens);
+    
+    // Clean up whitespace text nodes
+    this.cleanWhitespace(ast);
+    return ast;
+  }
+
+  private cleanWhitespace(node: ASTNode): void {
+    if (node.children) {
+      // Remove pure whitespace text nodes
+      node.children = node.children.filter(child => 
+        !(child.type === "Text" && this.isWhitespace(child.value))
+      );
+      
+      // Clean remaining children
+      node.children.forEach(child => this.cleanWhitespace(child));
+    }
   }
 
   private isElementNode(node: ASTNode): node is ElementNode {
@@ -76,8 +96,10 @@ export class Parser {
   }
 
   private buildASTWithRecovery(tokens: Token[]): ASTNode {
-    const stack: ASTNode[] = [this.astBuilder.getRoot()];
-    let currentParent = stack[0];
+    const root = this.astBuilder.getRoot();
+    const stack: ASTNode[] = [root];
+    let currentParent = root;
+    let recoveryMode = false;
 
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
@@ -94,10 +116,15 @@ export class Parser {
             currentParent.children.push(elementNode);
             stack.push(elementNode);
             currentParent = elementNode;
+            recoveryMode = false;
             break;
           }
           
           case "EndTag": {
+            if (recoveryMode) {
+              continue;
+            }
+
             const matchingStartIndex = stack.findIndex(node => 
               this.isElementNode(node) && node.name === token.name
             );
@@ -112,6 +139,7 @@ export class Parser {
               );
             }
 
+            // Pop up to the matching tag
             while (stack.length > matchingStartIndex) {
               stack.pop();
             }
@@ -120,24 +148,28 @@ export class Parser {
           }
 
           case "Text": {
-            const textNode: TextNode = {
-              type: "Text",
-              value: token.value,
-              children: [],
-              parent: currentParent
-            };
-            currentParent.children.push(textNode);
+            if (!recoveryMode) {
+              const textNode: TextNode = {
+                type: "Text",
+                value: token.value,
+                children: [],
+                parent: currentParent
+              };
+              currentParent.children.push(textNode);
+            }
             break;
           }
 
           case "Comment": {
-            const commentNode: CommentNode = {
-              type: "Comment",
-              value: token.value,
-              children: [],
-              parent: currentParent
-            };
-            currentParent.children.push(commentNode);
+            if (!recoveryMode) {
+              const commentNode: CommentNode = {
+                type: "Comment",
+                value: token.value,
+                children: [],
+                parent: currentParent
+              };
+              currentParent.children.push(commentNode);
+            }
             break;
           }
         }
@@ -145,14 +177,16 @@ export class Parser {
         if (error instanceof ParserError) {
           this.handleError(error);
           if (!this.shouldThrow) {
+            recoveryMode = true;
             continue;
           }
+          throw error;
         }
         throw error;
       }
     }
 
-    // Handle any unclosed tags at the end
+    // Handle unclosed tags
     while (stack.length > 1) {
       const unclosedNode = stack.pop()!;
       if (this.isElementNode(unclosedNode)) {
@@ -166,6 +200,6 @@ export class Parser {
       }
     }
 
-    return stack[0];
+    return root;
   }
 }

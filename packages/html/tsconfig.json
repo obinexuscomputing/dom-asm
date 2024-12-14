@@ -1,27 +1,19 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2018",
-    "module": "commonjs",
-    "lib": ["es2018", "dom"],
-    "declaration": true,
-    "outDir": "dist",
-    "rootDir": ".",
+    "outDir": "dist",                      // Ensure all compiled files go to "dist"
+    "declaration": true,                   // Generate declaration files
+    "declarationMap": true,                // Enable declaration maps
+    "declarationDir": "dist",              // Align declarationDir with Rollup's output
+    "sourceMap": true,                     // Generate source maps for debugging
+    "noEmitOnError": true,                 // Prevent emitting files on errors
+    "rootDir": "src"       ,                // Ensure all paths are relative to "src"
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"]
-    }
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*.ts"],              // Include all TypeScript files in "src"
+  "exclude": ["node_modules", "dist"]      // Exclude unnecessary directories
 }
