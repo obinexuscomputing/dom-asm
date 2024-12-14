@@ -4,24 +4,12 @@
 
 [1G[0K[36m
 [1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js[22m...[39m
-[1m[31m[!] [1m(plugin typescript) RollupError: [plugin typescript] @rollup/plugin-typescript: Path of Typescript compiler option 'declarationDir' must be located inside the same directory as the Rollup 'file' option.[22m[1m[39m[22m
-[2m    at getRollupError (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:285:41)
-    at Object.error (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:281:42)
-    at Object.error (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/rollup.js:902:32)
-    at validatePaths (file:///home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/@rollup/plugin-typescript/dist/es/index.js:407:29)
-    at Object.renderStart (file:///home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/@rollup/plugin-typescript/dist/es/index.js:829:13)
-    at /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/rollup.js:1087:40
-    at async Promise.all (index 0)
-    at PluginDriver.hookParallel (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/rollup.js:1015:9)
-    at Bundle.generate (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/rollup.js:20484:13)
-    at /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/rollup.js:22174:27[22m
-
-
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/js@1.0.0
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c rollup -c
+[1m[33m(!) Generated empty chunks[39m[22m
+"index" and "index"
+[32mcreated [1mdist/index.cjs, dist/index.js[22m in [1m2.6s[22m[39m
+[36m
+[1mdist/index.d.ts[22m → [1mdist/index.d.ts[22m...[39m
+[1m[33m(!) Generated an empty chunk[39m[22m
+"index.d"
+[32mcreated [1mdist/index.d.ts[22m in [1m94ms[22m[39m
 [1G[0K⠙[1G[0K

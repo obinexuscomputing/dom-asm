@@ -4,7 +4,7 @@
     "outDir": "dist",
     "declaration": true,
     "declarationMap": true,
-    "declarationDir": "dist/types",
+    "declarationDir": "dist",
     "sourceMap": true,
     "noEmitOnError": true,
     "rootDir": "src"
