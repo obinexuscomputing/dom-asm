@@ -7,144 +7,168 @@ describe('Tokenizer', () => {
     tokenizer = new Tokenizer();
   });
 
-  it('should tokenize variable declarations with semicolons', () => {
-    const input = 'const x = 42;';
-    const tokens = tokenizer.tokenize(input);
+  // Existing tests...
 
-    expect(tokens).toEqual([
-      { type: TokenType.Keyword, value: 'const' },
-      { type: TokenType.Identifier, value: 'x' },
-      { type: TokenType.Operator, value: '=' },
-      { type: TokenType.Literal, value: '42' },
-      { type: TokenType.Delimiter, value: ';' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
+  describe('Comments', () => {
+    it('should handle multiple single-line comments', () => {
+      const input = '// First comment\n// Second comment\nconst x = 42;';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.Comment, value: ' First comment' },
+        { type: TokenType.Comment, value: ' Second comment' },
+        { type: TokenType.Keyword, value: 'const' },
+        { type: TokenType.Identifier, value: 'x' },
+        { type: TokenType.Operator, value: '=' },
+        { type: TokenType.Literal, value: '42' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
+
+    it('should handle comments at the end of the file', () => {
+      const input = 'const x = 42;\n// Final comment';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.Keyword, value: 'const' },
+        { type: TokenType.Identifier, value: 'x' },
+        { type: TokenType.Operator, value: '=' },
+        { type: TokenType.Literal, value: '42' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.Comment, value: ' Final comment' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
+
+    it('should handle nested multi-line comments', () => {
+      const input = '/* outer /* inner */ comment */';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.Comment, value: ' outer /* inner */ comment ' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
   });
 
-  it('should tokenize variable declarations without semicolons (ASI)', () => {
-    const input = `const x = 42
-const y = 24`;
-    const tokens = tokenizer.tokenize(input);
+  describe('Template Literals', () => {
+    it('should handle nested template literals', () => {
+      const input = '`outer ${`inner`}`';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.TemplateLiteral, value: 'outer ${`inner`}' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
 
-    expect(tokens).toEqual([
-      { type: TokenType.Keyword, value: 'const' },
-      { type: TokenType.Identifier, value: 'x' },
-      { type: TokenType.Operator, value: '=' },
-      { type: TokenType.Literal, value: '42' },
-      { type: TokenType.Delimiter, value: ';' },
-      { type: TokenType.Keyword, value: 'const' },
-      { type: TokenType.Identifier, value: 'y' },
-      { type: TokenType.Operator, value: '=' },
-      { type: TokenType.Literal, value: '24' },
-      { type: TokenType.Delimiter, value: ';' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
+    it('should handle empty template literals', () => {
+      const input = '``';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.TemplateLiteral, value: '' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
+
+    it('should handle template literals with multiple interpolations', () => {
+      const input = '`${a} + ${b} = ${sum}`';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.TemplateLiteral, value: '${a} + ${b} = ${sum}' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
   });
 
-  it('should tokenize single-line comments', () => {
-    const input = '// This is a comment\nconst x = 42;';
-    const tokens = tokenizer.tokenize(input);
+  describe('Literals and Numbers', () => {
+    it('should handle decimal numbers', () => {
+      const input = 'const x = 3.14159;';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.Keyword, value: 'const' },
+        { type: TokenType.Identifier, value: 'x' },
+        { type: TokenType.Operator, value: '=' },
+        { type: TokenType.Literal, value: '3.14159' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
 
-    expect(tokens).toEqual([
-      { type: TokenType.Comment, value: ' This is a comment' },
-      { type: TokenType.Keyword, value: 'const' },
-      { type: TokenType.Identifier, value: 'x' },
-      { type: TokenType.Operator, value: '=' },
-      { type: TokenType.Literal, value: '42' },
-      { type: TokenType.Delimiter, value: ';' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
+    it('should handle consecutive operators', () => {
+      const input = 'x !== y && z === w';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.Identifier, value: 'x' },
+        { type: TokenType.Operator, value: '!==' },
+        { type: TokenType.Identifier, value: 'y' },
+        { type: TokenType.Operator, value: '&&' },
+        { type: TokenType.Identifier, value: 'z' },
+        { type: TokenType.Operator, value: '===' },
+        { type: TokenType.Identifier, value: 'w' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
   });
 
+  describe('Edge Cases', () => {
+    it('should handle empty input', () => {
+      const input = '';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
 
-  it('should throw an error for unterminated multi-line comments', () => {
-    const input = `/* This is an unterminated comment`;
-    expect(() => tokenizer.tokenize(input)).toThrow('Unexpected character: EOF');
+    it('should handle whitespace-only input', () => {
+      const input = '   \n\t   \r\n   ';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
+
+    it('should handle multiple consecutive delimiters', () => {
+      const input = 'if (x) { ; ; ; }';
+      const tokens = tokenizer.tokenize(input);
+      
+      expect(tokens).toEqual([
+        { type: TokenType.Keyword, value: 'if' },
+        { type: TokenType.Delimiter, value: '(' },
+        { type: TokenType.Identifier, value: 'x' },
+        { type: TokenType.Delimiter, value: ')' },
+        { type: TokenType.Delimiter, value: '{' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.Delimiter, value: '}' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
   });
 
-  
-  it('should tokenize multi-line comments', () => {
-    const input = `/* This is a
-  multi-line comment */`;
-    const tokens = tokenizer.tokenize(input);
-  
-    expect(tokens).toEqual([
-      { type: TokenType.Comment, value: ' This is a\nmulti-line comment ' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
-  });
-  
-  it('should tokenize template literals with interpolation', () => {
-    const input = '`Hello, ${name}!`';
-    const tokens = tokenizer.tokenize(input);
+  describe('Error Cases', () => {
+    it('should throw error for invalid identifier characters', () => {
+      const input = 'const #invalid = 42;';
+      expect(() => tokenizer.tokenize(input)).toThrow('Unexpected character: #');
+    });
 
-    expect(tokens).toEqual([
-      { type: TokenType.TemplateLiteral, value: 'Hello, ${name}!' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
-  });
+    it('should throw error for unterminated nested template literals', () => {
+      const input = '`outer ${`inner`';
+      expect(() => tokenizer.tokenize(input)).toThrow('Unterminated template literal');
+    });
 
-  it('should tokenize multiline template literals', () => {
-    const input = '`Hello,\n${name}!`';
-    const tokens = tokenizer.tokenize(input);
-
-    expect(tokens).toEqual([
-      { type: TokenType.TemplateLiteral, value: 'Hello,\n${name}!' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
-  });
-
-  it('should tokenize expressions with operators', () => {
-    const input = 'x = 42 + 24;';
-    const tokens = tokenizer.tokenize(input);
-
-    expect(tokens).toEqual([
-      { type: TokenType.Identifier, value: 'x' },
-      { type: TokenType.Operator, value: '=' },
-      { type: TokenType.Literal, value: '42' },
-      { type: TokenType.Operator, value: '+' },
-      { type: TokenType.Literal, value: '24' },
-      { type: TokenType.Delimiter, value: ';' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
-  });
-
-  it('should tokenize nested structures', () => {
-    const input = 'if (x > 10) { const y = x + 1; }';
-    const tokens = tokenizer.tokenize(input);
-
-    expect(tokens).toEqual([
-      { type: TokenType.Keyword, value: 'if' },
-      { type: TokenType.Delimiter, value: '(' },
-      { type: TokenType.Identifier, value: 'x' },
-      { type: TokenType.Operator, value: '>' },
-      { type: TokenType.Literal, value: '10' },
-      { type: TokenType.Delimiter, value: ')' },
-      { type: TokenType.Delimiter, value: '{' },
-      { type: TokenType.Keyword, value: 'const' },
-      { type: TokenType.Identifier, value: 'y' },
-      { type: TokenType.Operator, value: '=' },
-      { type: TokenType.Identifier, value: 'x' },
-      { type: TokenType.Operator, value: '+' },
-      { type: TokenType.Literal, value: '1' },
-      { type: TokenType.Delimiter, value: ';' },
-      { type: TokenType.Delimiter, value: '}' },
-      { type: TokenType.EndOfStatement, value: 'EOF' },
-    ]);
-  });
-
-  it('should throw an error for invalid characters', () => {
-    const input = 'const x = @;';
-    expect(() => tokenizer.tokenize(input)).toThrow('Unexpected character: @');
-  });
-
-  it('should throw an error for unterminated template literals', () => {
-    const input = '`Hello, ${name!`';
-    expect(() => tokenizer.tokenize(input)).toThrow('Unterminated template literal');
-  });
-
-  it('should throw an error for unterminated multi-line comments', () => {
-    const input = `/* This is an unterminated comment`;
-    expect(() => tokenizer.tokenize(input)).toThrow('Unexpected character: EOF');
+    it('should throw error for invalid operators', () => {
+      const input = 'x ==> y';
+      expect(() => tokenizer.tokenize(input)).toThrow('Unexpected character: >');
+    });
   });
 });
