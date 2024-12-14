@@ -165,6 +165,27 @@ export class Tokenizer {
         addToken(TokenType.Comment, value);
         continue;
       }
+      
+// Handle Keywords and Identifiers
+if (/[a-zA-Z_$]/.test(char)) {
+  let start = current; // Store the starting index of the identifier/keyword
+  while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
+    current++;
+  }
+
+  const value = input.slice(start, current); // Extract the full identifier/keyword
+
+  // Check for boolean literals first
+  if (value === 'true' || value === 'false') {
+    addToken(TokenType.Literal, value); // Add as a Literal
+  } else if (this.keywords.has(value)) {
+    addToken(TokenType.Keyword, value); // Add as a Keyword
+  } else {
+    addToken(TokenType.Identifier, value); // Add as an Identifier
+  }
+  continue; // Move to the next iteration
+}
+
 
       if (char === '`') {
         let value = '';
@@ -236,23 +257,7 @@ export class Tokenizer {
         continue;
       }
 
-    // Handle Keywords and Identifiers
-if (/[a-zA-Z_$]/.test(char)) {
-  let value = '';
-  while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
-    value += input[current++];
-  }
-
-  if (value === 'true' || value === 'false') {
-    // Treat boolean literals as literals, not keywords
-    addToken(TokenType.Literal, value);
-  } else {
-    const type = this.keywords.has(value) ? TokenType.Keyword : TokenType.Identifier;
-    addToken(type, value);
-  }
-  continue;
-}
-    }
+      }
     if (shouldAddSemicolon()) {
       addToken(TokenType.Delimiter, ';');
     }
