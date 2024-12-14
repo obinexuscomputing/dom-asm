@@ -133,6 +133,21 @@ if (/\s/.test(char)) {
         addToken(TokenType.Literal, number);
         continue;
       }
+      
+// Handle Whitespace
+if (/\s/.test(char)) {
+  if (
+    char === '\n' &&
+    this.previousToken &&
+    this.previousToken.type !== TokenType.Delimiter &&
+    this.previousToken.type !== TokenType.Comment &&
+    this.previousToken.type !== TokenType.TemplateLiteral // Avoid adding `;` after TemplateLiteral
+  ) {
+    addToken(TokenType.Delimiter, ';');
+  }
+  current++;
+  continue;
+}
 
       // Handle Unexpected Characters
       throw new Error(`Unexpected character: ${char}`);
