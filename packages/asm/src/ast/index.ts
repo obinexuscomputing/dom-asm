@@ -1,4 +1,4 @@
-import { Token } from "../tokenizer/tokenizer";
+import { Token } from "typescript/lib/typescript";
 
 export interface ASTNode {
   type: string;
