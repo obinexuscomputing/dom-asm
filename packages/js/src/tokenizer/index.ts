@@ -16,7 +16,7 @@ export interface Token {
 
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
-  private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
+  private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!', '==', '=>']);
   private delimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private previousToken: Token | null = null;
@@ -71,25 +71,27 @@ export class Tokenizer {
       if (char === '/' && input[current + 1] === '*') {
         let comment = '';
         current += 2; // Skip `/*`
-        let newlines = 0;
+        let depth = 1;
         
-        while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
-          if (input[current] === '\n') {
-            newlines++;
-            if (newlines === 1) {
-              comment += '\n';
+        while (current < input.length && depth > 0) {
+          if (input[current] === '/' && input[current + 1] === '*') {
+            depth++;
+            comment += '/*';
+            current += 2;
+          } else if (input[current] === '*' && input[current + 1] === '/') {
+            depth--;
+            if (depth > 0) {
+              comment += '*/';
             }
-          } else if (newlines === 0) {
-            comment += input[current];
+            current += 2;
           } else {
-            comment += input[current].trimStart();
+            comment += input[current++];
           }
-          current++;
-          if (current >= input.length) {
+          
+          if (current >= input.length && depth > 0) {
             throw new Error('Unexpected character: EOF');
           }
         }
-        current += 2; // Skip `*/`
         addToken(TokenType.Comment, comment);
         continue;
       }
@@ -98,24 +100,58 @@ export class Tokenizer {
       if (char === '`') {
         let template = '';
         current++; // Skip the opening backtick
-        while (current < input.length && input[current] !== '`') {
-          if (input[current] === '$' && input[current + 1] === '{') {
+        let depth = 1;
+        
+        while (current < input.length && depth > 0) {
+          if (input[current] === '`') {
+            depth--;
+            if (depth > 0) {
+              template += '`';
+            }
+            current++;
+          } else if (input[current] === '$' && input[current + 1] === '{') {
             template += '${';
-            current += 2; // Skip `${`
-            while (current < input.length && input[current] !== '}') {
-              template += input[current++];
+            current += 2;
+            let braceDepth = 1;
+            while (current < input.length && braceDepth > 0) {
+              if (input[current] === '{') braceDepth++;
+              if (input[current] === '}') braceDepth--;
+              if (braceDepth > 0) template += input[current];
+              current++;
             }
             template += '}';
-            current++; // Skip `}`
           } else {
             template += input[current++];
           }
         }
-        if (current >= input.length) {
+        
+        if (depth > 0) {
           throw new Error('Unterminated template literal');
         }
-        current++; // Skip the closing backtick
+        
         addToken(TokenType.TemplateLiteral, template);
+        continue;
+      }
+
+      // Handle Operators
+      let operator = '';
+      let maxOperator = '';
+      let tempCurrent = current;
+      
+      while (tempCurrent < input.length) {
+        const nextOp = operator + input[tempCurrent];
+        if (this.operators.has(nextOp)) {
+          maxOperator = nextOp;
+          tempCurrent++;
+          operator = nextOp;
+        } else {
+          break;
+        }
+      }
+      
+      if (maxOperator) {
+        current += maxOperator.length;
+        addToken(TokenType.Operator, maxOperator);
         continue;
       }
 
@@ -123,16 +159,6 @@ export class Tokenizer {
       if (this.singleCharDelimiters.has(char)) {
         addToken(TokenType.Delimiter, char);
         current++;
-        continue;
-      }
-
-      // Handle Operators
-      let operator = '';
-      while (this.operators.has(operator + input[current])) {
-        operator += input[current++];
-      }
-      if (operator) {
-        addToken(TokenType.Operator, operator);
         continue;
       }
 
