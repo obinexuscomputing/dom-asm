@@ -13,21 +13,21 @@ export interface Token {
   type: TokenType;
   value: string;
 }
-
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
   private delimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
 
+  private previousToken: Token | null = null; // Explicitly type previousToken
+
   tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let current = 0;
-    let previousToken: Token | null = null;
 
     const addToken = (type: TokenType, value: string) => {
-      previousToken = { type, value };
-      tokens.push(previousToken);
+      this.previousToken = { type, value }; // Update previousToken here
+      tokens.push(this.previousToken);
     };
 
     while (current < input.length) {
@@ -35,9 +35,8 @@ export class Tokenizer {
 
       // Handle Whitespace
       if (/\s/.test(char)) {
-        if (char === '\n' && previousToken && previousToken.type !== TokenType.Delimiter) {
-          // Treat newline as a semicolon if it's a valid statement boundary
-          addToken(TokenType.Delimiter, ';');
+        if (char === '\n' && this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
+          addToken(TokenType.Delimiter, ';'); // Treat newline as semicolon
         }
         current++;
         continue;
@@ -108,7 +107,7 @@ export class Tokenizer {
     }
 
     // Add EOF token
-    if (previousToken && previousToken.type !== TokenType.Delimiter) {
+    if (this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
       addToken(TokenType.Delimiter, ';'); // Add final semicolon if missing
     }
     addToken(TokenType.EndOfStatement, 'EOF');
