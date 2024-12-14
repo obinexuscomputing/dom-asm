@@ -9,13 +9,12 @@
     "packages/js"
   ],
   "description": "A unified library for DOM manipulation and compilation with support for asm, css, html, and js.",
-  "scripts": {
-    "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces",
-    "start": "npm run start --workspace=packages/dom-asm",
-    "lint": "eslint .",
-    "prepublishOnly": "npm run build && npm test"
-  },
+"scripts": {
+  "build": "rollup -c",
+  "test": "jest",
+  "lint": "eslint ."
+},
+
   "repository": {
     "type": "git",
     "url": "https://github.com/obinexuscomputing/dom-asm.git"

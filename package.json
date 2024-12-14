@@ -10,11 +10,11 @@
   ],
   "description": "A unified library for DOM manipulation and compilation with support for asm, css, html, and js.",
   "scripts": {
-    "build": "npm run build --workspaces",
-    "test": "npm run test --workspaces",
-    "start": "npm run start --workspace=packages/dom-asm",
-    "lint": "eslint .",
-    "prepublishOnly": "npm run build && npm test"
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev",
+    "clean": "rimraf node_modules && rimraf -rf packages/**/node_modules && rimraf -rf packages/**/dist"
   },
   "repository": {
     "type": "git",

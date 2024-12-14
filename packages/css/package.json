@@ -6,13 +6,12 @@
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
-  "scripts": {
-    "build": "rollup -c",
-    "test": "jest",
-    "start": "node dist/index.cjs",
-    "prepublishOnly": "npm run build && npm test"
-  },
+  "type": "module","scripts": {
+  "build": "rollup -c",
+  "test": "jest",
+  "lint": "eslint ."
+}
+,
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
   "license": "ISC",
   "dependencies": {
