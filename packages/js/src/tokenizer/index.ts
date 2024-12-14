@@ -277,21 +277,21 @@ export class Tokenizer {
         continue;
       }
 
-      // Handle identifiers and keywords
-      if (/[a-zA-Z_$]/.test(char)) {
-        const [value, newCurrent] = this.readIdentifier(input, current);
-        current = newCurrent;
-        
-        if (value === 'true' || value === 'false') {
-          addToken(TokenType.Literal, value);
-        } else if (this.keywords.has(value)) {
-          addToken(TokenType.Keyword, value);
-        } else {
-          addToken(TokenType.Identifier, value);
-        }
-        continue;
-      }
-
+  // Handle identifiers and keywords
+if (/[a-zA-Z_$]/.test(char)) {
+  const [value, newCurrent] = this.readIdentifier(input, current);
+  current = newCurrent;
+  
+  // Change this part - treat 'true' and 'false' as identifiers after operators like ||=
+  if (this.previousToken && this.previousToken.type === TokenType.Operator) {
+    addToken(TokenType.Identifier, value);
+  } else if (this.keywords.has(value)) {
+    addToken(TokenType.Keyword, value);
+  } else {
+    addToken(TokenType.Identifier, value);
+  }
+  continue;
+}
       // If we get here, we encountered an unrecognized character
       throw new Error(`Unexpected character: ${char}`);
     }
