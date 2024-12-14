@@ -8,12 +8,10 @@ describe("Parser with Error Handler", () => {
         </mismatch>
       </div>
     `;
-    const parser = new Parser();
+    const parser = new Parser({ throwOnError: false });
     const mockErrorHandler = jest.fn();
-
     parser.setErrorHandler(mockErrorHandler);
-    parser.parse(input);
-
+    const ast = parser.parse(input);
     expect(mockErrorHandler).toHaveBeenCalled();
     expect(mockErrorHandler.mock.calls[0][0]).toBeInstanceOf(ParserError);
   });
@@ -25,11 +23,12 @@ describe("Parser with Error Handler", () => {
         </mismatch>
       </div>
     `;
-    const parser = new Parser();
-    const { ast } = parser.parse(input);
-
-    // AST should still contain the root <div> and its valid children
-    expect(ast.children[0].name).toBe("div");
-    expect(ast.children[0].children[0].name).toBe("span");
+    const parser = new Parser({ throwOnError: false });
+    const ast = parser.parse(input);
+    
+    // Verify the valid parts of the AST are preserved
+    const divNode = ast.children[0];
+    expect(divNode.name).toBe("div");
+    expect(divNode.children[1].name).toBe("span");
   });
 });
