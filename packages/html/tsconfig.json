@@ -1,9 +1,14 @@
 {
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-      "outDir": "dist"
-    },
-    "include": ["src/**/*.ts"],
-    "exclude": ["node_modules", "dist"]
-  }
-  
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",                      // Ensures compiled files go to "dist"
+    "declaration": true,                   // Generates declaration files
+    "declarationMap": true,                // Generates declaration maps for better debugging
+    "declarationDir": "dist/types",        // Places declaration files in a dedicated folder
+    "sourceMap": true,                     // Generates source maps for easier debugging
+    "noEmitOnError": true,                 // Stops emitting files if there are errors
+    "rootDir": "src"                       // Ensures all paths are relative to "src"
+  },
+  "include": ["src/**/*.ts"],              // Includes all TypeScript files in "src"
+  "exclude": ["node_modules", "dist"]      // Excludes unnecessary directories
+}
