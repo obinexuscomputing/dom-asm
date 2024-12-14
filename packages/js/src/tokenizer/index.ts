@@ -13,6 +13,7 @@ export interface Token {
   type: TokenType;
   value: string;
 }
+
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
@@ -70,8 +71,20 @@ export class Tokenizer {
       if (char === '/' && input[current + 1] === '*') {
         let comment = '';
         current += 2; // Skip `/*`
+        let newlines = 0;
+        
         while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
-          comment += input[current++];
+          if (input[current] === '\n') {
+            newlines++;
+            if (newlines === 1) {
+              comment += '\n';
+            }
+          } else if (newlines === 0) {
+            comment += input[current];
+          } else {
+            comment += input[current].trimStart();
+          }
+          current++;
           if (current >= input.length) {
             throw new Error('Unexpected character: EOF');
           }
