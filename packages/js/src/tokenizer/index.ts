@@ -34,33 +34,34 @@ export class Tokenizer {
     while (current < input.length) {
       let char = input[current];
 
-      
-        if (
-  char === '\n' &&
-  this.previousToken &&
-  this.previousToken.type !== TokenType.Delimiter &&
-  this.previousToken.type !== TokenType.Comment &&
-  this.previousToken.type !== TokenType.TemplateLiteral
-) {
-  console.log('ASI triggered after:', this.previousToken);
-  addToken(TokenType.Delimiter, ';');
-}
 
-      
-// Handle Whitespace
-if (/\s/.test(char)) {
-  if (
-    char === '\n' &&
-    this.previousToken &&
-    this.previousToken.type !== TokenType.Delimiter &&
-    this.previousToken.type !== TokenType.Comment &&
-    this.previousToken.type !== TokenType.TemplateLiteral // Skip ASI after TemplateLiteral
-  ) {
-    addToken(TokenType.Delimiter, ';'); // Treat newline as semicolon
-  }
-  current++;
-  continue;
-}
+      if (
+        char === '\n' &&
+        this.previousToken &&
+        this.previousToken.type !== TokenType.Delimiter &&
+        this.previousToken.type !== TokenType.Comment &&
+        this.previousToken.type !== TokenType.TemplateLiteral
+      ) {
+        console.log('ASI triggered after:', this.previousToken);
+        addToken(TokenType.Delimiter, ';');
+      }
+
+
+      // Handle Whitespace
+      if (/\s/.test(char)) {
+        if (
+          char === '\n' &&
+          this.previousToken &&
+          this.previousToken.type !== TokenType.Delimiter &&
+          this.previousToken.type !== TokenType.Comment &&
+          this.previousToken.type !== TokenType.TemplateLiteral &&
+          this.previousToken.type !== TokenType.Literal // Prevent ASI after Literal in certain contexts
+        ) {
+          addToken(TokenType.Delimiter, ';'); // Trigger ASI for valid statement endings
+        }
+        current++;
+        continue;
+      }
 
 
       // Handle Comments
@@ -85,30 +86,30 @@ if (/\s/.test(char)) {
           continue;
         }
       }
-// Handle Template Literals
-if (char === '`') {
-  let template = '';
-  current++; // Skip the opening backtick
-  while (current < input.length && input[current] !== '`') {
-    if (input[current] === '$' && input[current + 1] === '{') {
-      template += '${';
-      current += 2; // Skip `${`
-      while (current < input.length && input[current] !== '}') {
-        template += input[current++];
+      // Handle Template Literals
+      if (char === '`') {
+        let template = '';
+        current++; // Skip the opening backtick
+        while (current < input.length && input[current] !== '`') {
+          if (input[current] === '$' && input[current + 1] === '{') {
+            template += '${';
+            current += 2; // Skip `${`
+            while (current < input.length && input[current] !== '}') {
+              template += input[current++];
+            }
+            template += '}';
+            current++; // Skip `}`
+          } else {
+            template += input[current++];
+          }
+        }
+        if (current >= input.length) {
+          throw new Error('Unterminated template literal');
+        }
+        current++; // Skip the closing backtick
+        addToken(TokenType.TemplateLiteral, template); // Set `previousToken` to TemplateLiteral
+        continue;
       }
-      template += '}';
-      current++; // Skip `}`
-    } else {
-      template += input[current++];
-    }
-  }
-  if (current >= input.length) {
-    throw new Error('Unterminated template literal');
-  }
-  current++; // Skip the closing backtick
-  addToken(TokenType.TemplateLiteral, template); // Set `previousToken` to TemplateLiteral
-  continue;
-}
 
 
       // Handle Delimiters
