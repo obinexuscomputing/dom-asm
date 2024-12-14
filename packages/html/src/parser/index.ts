@@ -114,8 +114,9 @@ export class Parser {
             currentParent.children.push(commentNode);
             break;
 
-          default:
-            throw new ParserError(`Unsupported token type: ${token.type}`, token, i);
+            default:
+              throw new ParserError(`Unsupported token type: ${(token as any).type}`, token, i);
+            
         }
       } catch (error) {
         if (error instanceof ParserError) {
