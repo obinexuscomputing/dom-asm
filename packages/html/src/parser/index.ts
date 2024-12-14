@@ -4,6 +4,22 @@ import { ValidationResult, Validator } from "../validator/index";
 
 type ErrorHandler = (error: ParserError) => void;
 
+interface ElementNode extends ASTNode {
+  type: "Element";
+  name: string;
+  attributes: Record<string, string>;
+}
+
+interface TextNode extends ASTNode {
+  type: "Text";
+  value: string;
+}
+
+interface CommentNode extends ASTNode {
+  type: "Comment";
+  value: string;
+}
+
 export class ParserError extends Error {
   token: Token;
   position: number;
@@ -34,7 +50,7 @@ export class Parser {
 
   setErrorHandler(handler: ErrorHandler): void {
     this.errorHandler = handler;
-    this.shouldThrow = false; // When error handler is set, don't throw
+    this.shouldThrow = false;
   }
 
   private handleError(error: ParserError): void {
@@ -55,6 +71,10 @@ export class Parser {
     return this.buildASTWithRecovery(tokens);
   }
 
+  private isElementNode(node: ASTNode): node is ElementNode {
+    return node.type === "Element";
+  }
+
   private buildASTWithRecovery(tokens: Token[]): ASTNode {
     const stack: ASTNode[] = [this.astBuilder.getRoot()];
     let currentParent = stack[0];
@@ -64,7 +84,7 @@ export class Parser {
       try {
         switch (token.type) {
           case "StartTag": {
-            const elementNode: ASTNode = {
+            const elementNode: ElementNode = {
               type: "Element",
               name: token.name,
               attributes: token.attributes,
@@ -79,18 +99,19 @@ export class Parser {
           
           case "EndTag": {
             const matchingStartIndex = stack.findIndex(node => 
-              node.type === "Element" && node.name === token.name
+              this.isElementNode(node) && node.name === token.name
             );
 
             if (matchingStartIndex === -1) {
               throw new ParserError(
-                `Unmatched end tag: </${token.name}>. Expected </${currentParent.name}>.`,
+                `Unmatched end tag: </${token.name}>. Expected </${
+                  this.isElementNode(currentParent) ? currentParent.name : "unknown"
+                }>.`,
                 token,
                 i
               );
             }
 
-            // Pop all nodes up to and including the matching start tag
             while (stack.length > matchingStartIndex) {
               stack.pop();
             }
@@ -99,7 +120,7 @@ export class Parser {
           }
 
           case "Text": {
-            const textNode: ASTNode = {
+            const textNode: TextNode = {
               type: "Text",
               value: token.value,
               children: [],
@@ -110,7 +131,7 @@ export class Parser {
           }
 
           case "Comment": {
-            const commentNode: ASTNode = {
+            const commentNode: CommentNode = {
               type: "Comment",
               value: token.value,
               children: [],
@@ -123,7 +144,6 @@ export class Parser {
       } catch (error) {
         if (error instanceof ParserError) {
           this.handleError(error);
-          // Continue parsing after error if not throwing
           if (!this.shouldThrow) {
             continue;
           }
@@ -135,7 +155,7 @@ export class Parser {
     // Handle any unclosed tags at the end
     while (stack.length > 1) {
       const unclosedNode = stack.pop()!;
-      if (unclosedNode.type === "Element") {
+      if (this.isElementNode(unclosedNode)) {
         this.handleError(
           new ParserError(
             `Unclosed tag: <${unclosedNode.name}>`,
