@@ -73,7 +73,7 @@ export class Parser {
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
     const ast = this.buildASTWithRecovery(tokens);
-    
+
     // Clean up whitespace text nodes
     this.cleanWhitespace(ast);
     return ast;
@@ -83,9 +83,9 @@ export class Parser {
     if (node.children) {
       // Remove pure whitespace text nodes
       node.children = node.children.filter(child => 
-        !(child.type === "Text" && this.isWhitespace(child.value))
+        !(child.type === "Text" && this.isWhitespace(child.value ?? ""))
       );
-      
+
       // Clean remaining children
       node.children.forEach(child => this.cleanWhitespace(child));
     }
@@ -108,10 +108,10 @@ export class Parser {
           case "StartTag": {
             const elementNode: ElementNode = {
               type: "Element",
-              name: token.name,
-              attributes: token.attributes,
+              name: token.name ?? "unknown",
+              attributes: token.attributes || {},
               children: [],
-              parent: currentParent
+              parent: currentParent,
             };
             currentParent.children.push(elementNode);
             stack.push(elementNode);
@@ -119,7 +119,7 @@ export class Parser {
             recoveryMode = false;
             break;
           }
-          
+
           case "EndTag": {
             if (recoveryMode) {
               continue;
@@ -151,9 +151,9 @@ export class Parser {
             if (!recoveryMode) {
               const textNode: TextNode = {
                 type: "Text",
-                value: token.value,
+                value: token.value ?? "",
                 children: [],
-                parent: currentParent
+                parent: currentParent,
               };
               currentParent.children.push(textNode);
             }
@@ -164,9 +164,9 @@ export class Parser {
             if (!recoveryMode) {
               const commentNode: CommentNode = {
                 type: "Comment",
-                value: token.value,
+                value: token.value ?? "",
                 children: [],
-                parent: currentParent
+                parent: currentParent,
               };
               currentParent.children.push(commentNode);
             }
