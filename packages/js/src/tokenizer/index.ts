@@ -33,7 +33,7 @@ export class Tokenizer {
     while (current < input.length) {
       let char = input[current];
 
-      // Handle Whitespace
+      // Handle Whitespace and ASI
       if (/\s/.test(char)) {
         if (
           char === '\n' &&
@@ -43,11 +43,33 @@ export class Tokenizer {
           this.previousToken.type !== TokenType.TemplateLiteral &&
           this.previousToken.type !== TokenType.Operator
         ) {
-          console.log('ASI Debug: Adding semicolon after:', this.previousToken);
-          addToken(TokenType.Delimiter, ';');
+          addToken(TokenType.Delimiter, ';'); // ASI logic
         }
         current++;
         continue;
+      }
+
+      // Handle Comments
+      if (char === '/') {
+        const nextChar = input[current + 1];
+        if (nextChar === '/') {
+          let comment = '';
+          current += 2; // Skip `//`
+          while (current < input.length && input[current] !== '\n') {
+            comment += input[current++];
+          }
+          addToken(TokenType.Comment, comment);
+          continue;
+        } else if (nextChar === '*') {
+          let comment = '';
+          current += 2; // Skip `/*`
+          while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
+            comment += input[current++];
+          }
+          current += 2; // Skip `*/`
+          addToken(TokenType.Comment, comment);
+          continue;
+        }
       }
 
       // Handle Template Literals
@@ -116,10 +138,11 @@ export class Tokenizer {
         continue;
       }
 
+      // Throw for Unexpected Characters
       throw new Error(`Unexpected character: ${char}`);
     }
 
-    // Add EOF token
+    // Add EOF Token
     if (this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
       addToken(TokenType.Delimiter, ';');
     }
