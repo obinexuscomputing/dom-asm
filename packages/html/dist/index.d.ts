@@ -151,20 +151,4 @@ declare class Parser {
 }
 //# sourceMappingURL=index.d.ts.map
 
-declare global {
-    interface Window {
-        DOMCSS?: any;
-        DOMHTML?: any;
-        DOMJS?: any;
-    }
-    namespace NodeJS {
-        interface Global {
-            DOMCSS?: any;
-            DOMHTML?: any;
-            DOMJS?: any;
-        }
-    }
-}
-//# sourceMappingURL=index.d.ts.map
-
 export { AST, type ASTNode, CodeGenerator, HTMLTokenizer, ASTOptimizer as Optimizer, Parser, Validator };

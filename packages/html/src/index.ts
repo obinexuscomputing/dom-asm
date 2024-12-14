@@ -12,22 +12,3 @@ export { Validator } from "./validator";
 export { ASTOptimizer as Optimizer } from "./optimizer";
 export { CodeGenerator } from "./generator";
 export { Parser } from "./parser";
-
-// Global type declaration for window or global usage
-declare global {
-  interface Window {
-    DOMCSS?: any;
-    DOMHTML?: any;
-    DOMJS?: any;
-  }
-
-  namespace NodeJS {
-    interface Global {
-      DOMCSS?: any;
-      DOMHTML?: any;
-      DOMJS?: any;
-    }
-  }
-
-}
-
