@@ -1,4 +1,3 @@
-import { Token } from "typescript/lib/typescript";
 
 export interface ASTNode {
   type: string;
