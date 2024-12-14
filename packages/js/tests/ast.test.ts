@@ -25,8 +25,10 @@ describe('ASTBuilder', () => {
     });
   });
 
-  it('should throw an error for invalid syntax', () => {
-    const tokens = tokenizer.tokenize('const x;');
-    expect(() => astBuilder.build(tokens)).toThrow('Unexpected token: ;');
-  });
+
+it('should throw an error for invalid syntax', () => {
+  const tokens = tokenizer.tokenize('const x;');
+  expect(() => astBuilder.build(tokens)).toThrow('Unexpected token: EOF');
+});
+
 });

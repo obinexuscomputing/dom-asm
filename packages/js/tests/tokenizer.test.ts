@@ -17,6 +17,7 @@ describe('Tokenizer', () => {
       { type: TokenType.Operator, value: '=' },
       { type: TokenType.Literal, value: '42' },
       { type: TokenType.Delimiter, value: ';' },
+      { type: TokenType.EndOfStatement, value: 'EOF' }, // Include EOF token
     ]);
   });
 });

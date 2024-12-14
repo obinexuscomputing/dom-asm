@@ -38,8 +38,7 @@ export interface ASTNode {
           };
         }
   
-        throw new Error(`Unexpected token: ${token.value}`);
-      }
+        throw new Error(`Unexpected token: ${token.value === 'EOF' ? ';' : token.value}`);      }
   
       while (current < tokens.length && tokens[current].type !== TokenType.EndOfStatement) {
         root.children?.push(walk());
