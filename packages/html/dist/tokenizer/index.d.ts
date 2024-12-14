@@ -1,21 +1,27 @@
-export type Token = {
-    type: string;
+type Token = {
+    type: 'StartTag';
+    name: string;
+    attributes: Record<string, string>;
+} | {
+    type: 'EndTag';
+    name: string;
+} | {
+    type: 'Text';
     value: string;
-    position: {
-        line: number;
-        column: number;
-    };
+} | {
+    type: 'Comment';
+    value: string;
 };
-export declare class Tokenizer {
+declare class HTMLTokenizer {
     private input;
     private position;
-    private line;
-    private column;
     constructor(input: string);
-    private isWhitespace;
-    private isCommentStart;
-    private consumeWhitespace;
-    private consumeComment;
-    private consumeOther;
     tokenize(): Token[];
+    private readStartTag;
+    private readEndTag;
+    private readComment;
+    private readText;
+    private readUntil;
 }
+export { HTMLTokenizer, Token };
+//# sourceMappingURL=index.d.ts.map

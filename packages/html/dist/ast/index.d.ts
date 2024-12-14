@@ -1,21 +1,19 @@
-import { Token } from "../tokenizer";
-export type ASTNode = {
-    type: string;
+import { Token } from "../tokenizer/index";
+type ASTNodeType = "Element" | "Text" | "Comment";
+interface ASTNode {
+    type: ASTNodeType;
+    name?: string;
     value?: string;
+    attributes?: Record<string, string>;
     children: ASTNode[];
-};
-export declare class ASTBuilder {
-    private tokens;
-    private position;
-    constructor(tokens: Token[]);
-    private currentToken;
-    private consumeToken;
-    private parseStylesheet;
-    private parseRule;
-    private parseSelector;
-    private parseDeclarations;
-    private parseDeclaration;
-    private parseProperty;
-    private parseValue;
-    buildAST(): ASTNode;
+    parent: ASTNode | null;
 }
+declare class AST {
+    private root;
+    constructor();
+    buildAST(tokens: Token[]): ASTNode;
+    getRoot(): ASTNode;
+    printAST(node?: ASTNode, depth?: number): void;
+}
+export { AST, ASTNode };
+//# sourceMappingURL=index.d.ts.map

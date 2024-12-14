@@ -45,7 +45,7 @@ export default [
   {
     input: 'dist/types/index.d.ts', // Adjust based on tsconfig.json declarationDir
     output: {
-      file: 'dist/index.d.ts',
+      file: 'dist/types/index.d.ts',
       format: 'es',
     },
     plugins: [dts()],

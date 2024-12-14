@@ -1,6 +1,6 @@
 export * from './ast';
-export * from './generator';
 export * from './optimizer';
 export * from './tokenizer';
-export * from './parser';
+export * from './validator';
+export * from './generator';
 //# sourceMappingURL=index.d.ts.map
