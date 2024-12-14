@@ -4,7 +4,7 @@
     "outDir": "dist",                      // Ensure all compiled files go to "dist"
     "declaration": true,                   // Generate declaration files
     "declarationMap": true,                // Enable declaration maps
-    "declarationDir": "dist/types",              // Align declarationDir with Rollup's output
+    "declarationDir": "dist",              // Align declarationDir with Rollup's output
     "sourceMap": true,                     // Generate source maps for debugging
     "noEmitOnError": true,                 // Prevent emitting files on errors
     "rootDir": "src"                       // Ensure all paths are relative to "src"
