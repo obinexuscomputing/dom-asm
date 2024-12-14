@@ -26,6 +26,26 @@ export class Tokenizer {
     return /[0-9]/.test(char);
   }
 
+  private isValidNumber(value: string): boolean {
+    // Check for multiple decimal points
+    const decimalPoints = (value.match(/\./g) || []).length;
+    if (decimalPoints > 1) return false;
+
+    // Check scientific notation format
+    if (/[eE]/.test(value)) {
+      const parts = value.split(/[eE]/);
+      if (parts.length !== 2) return false;
+      
+      const [base, exponent] = parts;
+      if (!this.isValidNumber(base)) return false;
+      
+      const cleanExponent = exponent.replace(/^[+-]/, '');
+      if (!/^\d+$/.test(cleanExponent)) return false;
+    }
+
+    return true;
+  }
+
   tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let current = 0;
@@ -52,6 +72,7 @@ export class Tokenizer {
     const readNumber = () => {
       let number = '';
       let hasDot = false;
+      let hasExponent = false;
 
       // Handle leading decimal point
       if (input[current] === '.') {
@@ -62,43 +83,31 @@ export class Tokenizer {
         current++;
       }
 
-      // Read digits before decimal point
-      while (current < input.length && /[0-9]/.test(input[current])) {
-        number += input[current++];
-      }
+      while (current < input.length) {
+        const char = input[current];
+        const nextChar = input[current + 1];
 
-      // Handle decimal point if not already handled
-      if (current < input.length && input[current] === '.' && !hasDot) {
-        hasDot = true;
-        number += input[current++];
-        
-        // Read digits after decimal point
-        while (current < input.length && /[0-9]/.test(input[current])) {
-          number += input[current++];
-        }
-      }
-
-      // Handle scientific notation
-      if (current < input.length && (input[current] === 'e' || input[current] === 'E')) {
-        number += input[current++];
-        
-        if (current < input.length && (input[current] === '+' || input[current] === '-')) {
-          number += input[current++];
-        }
-        
-        let hasDigitsAfterE = false;
-        while (current < input.length && /[0-9]/.test(input[current])) {
-          hasDigitsAfterE = true;
-          number += input[current++];
-        }
-        
-        if (!hasDigitsAfterE) {
+        if (/[0-9]/.test(char)) {
+          number += char;
+        } else if (char === '.' && !hasDot && !hasExponent) {
+          hasDot = true;
+          number += char;
+        } else if ((char === 'e' || char === 'E') && !hasExponent) {
+          hasExponent = true;
+          number += char;
+          if (nextChar === '+' || nextChar === '-') {
+            number += nextChar;
+            current++;
+          }
+        } else if (char === '.' && hasDot) {
           throw new Error('Invalid number format');
+        } else {
+          break;
         }
+        current++;
       }
 
-      // Additional validation
-      if (number.endsWith('.')) {
+      if (!this.isValidNumber(number)) {
         throw new Error('Invalid number format');
       }
 
@@ -241,13 +250,12 @@ export class Tokenizer {
 
       // Handle Keywords and Identifiers
       if (/[a-zA-Z_$]/.test(char)) {
-        let identifier = '';
+        let value = '';
         while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
-          identifier += input[current++];
+          value += input[current++];
         }
-        
-        const type = this.keywords.has(identifier) ? TokenType.Keyword : TokenType.Identifier;
-        addToken(type, identifier);
+        const type = this.keywords.has(value) ? TokenType.Keyword : TokenType.Identifier;
+        addToken(type, value);
         continue;
       }
 
