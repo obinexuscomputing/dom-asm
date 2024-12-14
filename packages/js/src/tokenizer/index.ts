@@ -19,7 +19,6 @@ export class Tokenizer {
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
   private delimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
-
   private previousToken: Token | null = null;
 
   tokenize(input: string): Token[] {
@@ -34,23 +33,6 @@ export class Tokenizer {
     while (current < input.length) {
       let char = input[current];
 
-
-      if (
-        char === '\n' &&
-        this.previousToken &&
-        this.previousToken.type !== TokenType.Delimiter &&
-        this.previousToken.type !== TokenType.Comment &&
-        this.previousToken.type !== TokenType.TemplateLiteral
-      ) {
-        console.log('ASI triggered after:', this.previousToken);
-        addToken(TokenType.Delimiter, ';');
-      }
-
-      console.log('ASI Debug:', {
-        previousToken: this.previousToken,
-        char,
-      });
-      
       // Handle Whitespace
       if (/\s/.test(char)) {
         if (
@@ -59,37 +41,15 @@ export class Tokenizer {
           this.previousToken.type !== TokenType.Delimiter &&
           this.previousToken.type !== TokenType.Comment &&
           this.previousToken.type !== TokenType.TemplateLiteral &&
-          this.previousToken.type !== TokenType.Literal // Prevent ASI after Literal in certain contexts
+          this.previousToken.type !== TokenType.Operator
         ) {
-          addToken(TokenType.Delimiter, ';'); // Trigger ASI for valid statement endings
+          console.log('ASI Debug: Adding semicolon after:', this.previousToken);
+          addToken(TokenType.Delimiter, ';');
         }
         current++;
         continue;
       }
 
-
-      // Handle Comments
-      if (char === '/') {
-        const nextChar = input[current + 1];
-        if (nextChar === '/') {
-          let comment = '';
-          current += 2; // Skip `//`
-          while (current < input.length && input[current] !== '\n') {
-            comment += input[current++];
-          }
-          addToken(TokenType.Comment, comment);
-          continue;
-        } else if (nextChar === '*') {
-          let comment = '';
-          current += 2; // Skip `/*`
-          while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
-            comment += input[current++];
-          }
-          current += 2; // Skip `*/`
-          addToken(TokenType.Comment, comment);
-          continue;
-        }
-      }
       // Handle Template Literals
       if (char === '`') {
         let template = '';
@@ -111,13 +71,16 @@ export class Tokenizer {
           throw new Error('Unterminated template literal');
         }
         current++; // Skip the closing backtick
-        addToken(TokenType.TemplateLiteral, template); // Set `previousToken` to TemplateLiteral
+        addToken(TokenType.TemplateLiteral, template);
         continue;
       }
 
-
       // Handle Delimiters
       if (this.singleCharDelimiters.has(char)) {
+        if (char === ';' && this.previousToken?.type === TokenType.TemplateLiteral) {
+          current++; // Skip duplicate semicolon after TemplateLiteral
+          continue;
+        }
         addToken(TokenType.Delimiter, char);
         current++;
         continue;
@@ -153,13 +116,8 @@ export class Tokenizer {
         continue;
       }
 
-
-
-
-      // Handle Unexpected Characters
       throw new Error(`Unexpected character: ${char}`);
     }
-
 
     // Add EOF token
     if (this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
