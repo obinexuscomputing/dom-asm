@@ -13,7 +13,6 @@ export interface Token {
   type: TokenType;
   value: string;
 }
-
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
@@ -40,36 +39,38 @@ export class Tokenizer {
           this.previousToken &&
           this.previousToken.type !== TokenType.Delimiter &&
           this.previousToken.type !== TokenType.Comment &&
-          this.previousToken.type !== TokenType.TemplateLiteral &&
-          this.previousToken.type !== TokenType.Operator
+          this.previousToken.type !== TokenType.TemplateLiteral // Skip ASI for TemplateLiteral
         ) {
-          addToken(TokenType.Delimiter, ';'); // ASI logic
+          addToken(TokenType.Delimiter, ';');
         }
         current++;
         continue;
       }
 
-      // Handle Comments
-      if (char === '/') {
-        const nextChar = input[current + 1];
-        if (nextChar === '/') {
-          let comment = '';
-          current += 2; // Skip `//`
-          while (current < input.length && input[current] !== '\n') {
-            comment += input[current++];
-          }
-          addToken(TokenType.Comment, comment);
-          continue;
-        } else if (nextChar === '*') {
-          let comment = '';
-          current += 2; // Skip `/*`
-          while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
-            comment += input[current++];
-          }
-          current += 2; // Skip `*/`
-          addToken(TokenType.Comment, comment);
-          continue;
+      // Handle Single-Line Comments
+      if (char === '/' && input[current + 1] === '/') {
+        let comment = '';
+        current += 2; // Skip `//`
+        while (current < input.length && input[current] !== '\n') {
+          comment += input[current++];
         }
+        addToken(TokenType.Comment, comment);
+        continue;
+      }
+
+      // Handle Multi-Line Comments
+      if (char === '/' && input[current + 1] === '*') {
+        let comment = '';
+        current += 2; // Skip `/*`
+        while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
+          comment += input[current++];
+          if (current >= input.length) {
+            throw new Error('Unterminated multi-line comment');
+          }
+        }
+        current += 2; // Skip `*/`
+        addToken(TokenType.Comment, comment);
+        continue;
       }
 
       // Handle Template Literals
@@ -138,7 +139,6 @@ export class Tokenizer {
         continue;
       }
 
-      // Throw for Unexpected Characters
       throw new Error(`Unexpected character: ${char}`);
     }
 
