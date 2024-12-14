@@ -13,7 +13,6 @@ export interface Token {
   type: TokenType;
   value: string;
 }
-
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
@@ -45,32 +44,6 @@ export class Tokenizer {
           addToken(TokenType.Delimiter, ';');
         }
         current++;
-        continue;
-      }
-
-      // Handle Single-Line Comments
-      if (char === '/' && input[current + 1] === '/') {
-        let comment = '';
-        current += 2; // Skip `//`
-        while (current < input.length && input[current] !== '\n') {
-          comment += input[current++];
-        }
-        addToken(TokenType.Comment, comment);
-        continue;
-      }
-
-      // Handle Multi-Line Comments
-      if (char === '/' && input[current + 1] === '*') {
-        let comment = '';
-        current += 2; // Skip `/*`
-        while (current < input.length && !(input[current] === '*' && input[current + 1] === '/')) {
-          comment += input[current++];
-          if (current >= input.length) {
-            throw new Error('Unexpected character: EOF'); // Match test case expectation
-          }
-        }
-        current += 2; // Skip `*/`
-        addToken(TokenType.Comment, comment);
         continue;
       }
 
