@@ -1,5 +1,5 @@
 import { HTMLTokenizer } from "../src/tokenizer/";
-import { Parser } from "../src/parser/";
+import { Parser,ParserError } from "../src/parser/";
 
 describe("Parser with Custom Errors", () => {
   it("should throw ParserError for unmatched end tags", () => {
