@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "*": ["node_modules/*"]
+      "*": ["packages/*"]
     }
   },
   "include": ["packages/*/src/**/*.ts"],
