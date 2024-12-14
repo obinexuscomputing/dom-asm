@@ -14,7 +14,6 @@ export interface Token {
   value: string;
 }
 
-
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
@@ -102,7 +101,10 @@ export class Tokenizer {
 
       // Handle Delimiters
       if (this.singleCharDelimiters.has(char)) {
-        if (char === ';' && this.previousToken?.type === TokenType.TemplateLiteral) {
+        if (
+          (char === ';' && this.previousToken?.type === TokenType.TemplateLiteral) ||
+          (char === ';' && this.previousToken?.type === TokenType.Comment)
+        ) {
           current++; // Skip redundant semicolon
           continue;
         }
