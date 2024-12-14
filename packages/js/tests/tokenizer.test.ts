@@ -335,5 +335,26 @@ describe('Tokenizer', () => {
       const input = '`invalid escape \\z`';
       expect(() => tokenizer.tokenize(input)).toThrow('Invalid escape sequence');
     });
+
+    it('should handle large inputs efficiently', () => {
+      const input = 'const x = 42;'.repeat(500);
+      const tokens = tokenizer.tokenize(input);
+      expect(tokens.length).toBeGreaterThan(0); // Verify output exists
+    });
+    it('should handle line continuation with backslashes', () => {
+      const input = 'const x = 42 \\\n + 1;';
+      const tokens = tokenizer.tokenize(input);
+      expect(tokens).toEqual([
+        { type: TokenType.Keyword, value: 'const' },
+        { type: TokenType.Identifier, value: 'x' },
+        { type: TokenType.Operator, value: '=' },
+        { type: TokenType.Literal, value: '42' },
+        { type: TokenType.Operator, value: '+' },
+        { type: TokenType.Literal, value: '1' },
+        { type: TokenType.Delimiter, value: ';' },
+        { type: TokenType.EndOfStatement, value: 'EOF' },
+      ]);
+    });
+    
   });
 });
