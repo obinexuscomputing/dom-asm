@@ -9,7 +9,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "test": "jest --maxWorkers=2 --testTimeout=60000 ",
+    "test": "NODE_OPTIONS=--max-old-space-size=4096 && jest --maxWorkers=2 --testTimeout=60000 ",
     "lint": "eslint ."
   },
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
