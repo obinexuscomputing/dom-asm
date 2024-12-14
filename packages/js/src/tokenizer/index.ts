@@ -46,7 +46,11 @@ export class Tokenizer {
         addToken(TokenType.Delimiter, ';');
       }
 
-
+      console.log('ASI Debug:', {
+        previousToken: this.previousToken,
+        char,
+      });
+      
       // Handle Whitespace
       if (/\s/.test(char)) {
         if (
