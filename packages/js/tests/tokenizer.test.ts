@@ -61,6 +61,7 @@ const y = 24`;
     const input = `/* This is an unterminated comment`;
     expect(() => tokenizer.tokenize(input)).toThrow('Unexpected character: EOF');
   });
+
   
   it('should tokenize multi-line comments', () => {
     const input = `/* This is a
