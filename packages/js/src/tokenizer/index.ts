@@ -13,7 +13,6 @@ export interface Token {
   type: TokenType;
   value: string;
 }
-
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
@@ -30,18 +29,26 @@ export class Tokenizer {
       tokens.push(this.previousToken);
     };
 
+    const shouldAddSemicolon = () => {
+      return (
+        this.previousToken &&
+        this.previousToken.type !== TokenType.Delimiter &&
+        this.previousToken.type !== TokenType.Comment &&
+        this.previousToken.type !== TokenType.TemplateLiteral &&
+        !tokens.some(token => 
+          token.type === TokenType.Delimiter && 
+          token.value === ';' && 
+          tokens.indexOf(token) === tokens.length - 1
+        )
+      );
+    };
+
     while (current < input.length) {
       let char = input[current];
 
       // Handle Whitespace and ASI
       if (/\s/.test(char)) {
-        if (
-          char === '\n' &&
-          this.previousToken &&
-          this.previousToken.type !== TokenType.Delimiter &&
-          this.previousToken.type !== TokenType.Comment &&
-          this.previousToken.type !== TokenType.TemplateLiteral
-        ) {
+        if (char === '\n' && shouldAddSemicolon()) {
           addToken(TokenType.Delimiter, ';');
         }
         current++;
@@ -101,13 +108,6 @@ export class Tokenizer {
 
       // Handle Delimiters
       if (this.singleCharDelimiters.has(char)) {
-        if (
-          (char === ';' && this.previousToken?.type === TokenType.TemplateLiteral) ||
-          (char === ';' && this.previousToken?.type === TokenType.Comment)
-        ) {
-          current++; // Skip redundant semicolon
-          continue;
-        }
         addToken(TokenType.Delimiter, char);
         current++;
         continue;
@@ -126,7 +126,7 @@ export class Tokenizer {
       // Handle Keywords and Identifiers
       if (/[a-zA-Z_$]/.test(char)) {
         let identifier = '';
-        while (/[a-zA-Z0-9_$]/.test(input[current])) {
+        while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
           identifier += input[current++];
         }
         addToken(this.keywords.has(identifier) ? TokenType.Keyword : TokenType.Identifier, identifier);
@@ -136,7 +136,7 @@ export class Tokenizer {
       // Handle Literals (Numbers)
       if (/[0-9]/.test(char)) {
         let number = '';
-        while (/[0-9.]/.test(input[current])) {
+        while (current < input.length && /[0-9.]/.test(input[current])) {
           number += input[current++];
         }
         addToken(TokenType.Literal, number);
@@ -147,7 +147,7 @@ export class Tokenizer {
     }
 
     // Add EOF Token
-    if (this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
+    if (shouldAddSemicolon()) {
       addToken(TokenType.Delimiter, ';');
     }
     addToken(TokenType.EndOfStatement, 'EOF');
