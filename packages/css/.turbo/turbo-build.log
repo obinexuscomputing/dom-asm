@@ -4,8 +4,34 @@
 
 [1G[0K[36m
 [1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js, dist/index.umd.js[22m...[39m
-[32mcreated [1mdist/index.cjs, dist/index.js, dist/index.umd.js[22m in [1m4.3s[22m[39m
-[36m
-[1mdist/index.d.ts[22m → [1mdist/index.d.ts[22m...[39m
-[32mcreated [1mdist/index.d.ts[22m in [1m102ms[22m[39m
+[1m[31m[!] [1m(plugin typescript) RollupError: [plugin typescript] src/parser/index.ts (5:10): @rollup/plugin-typescript TS2724: '"../optimizer"' has no exported member named 'Optimizer'. Did you mean 'ASTOptimizer'?[22m[1m[39m[22m
+src/parser/index.ts (5:10)
+[2m
+[7m5[0m import { Optimizer } from "../optimizer";
+[7m [0m [91m         ~~~~~~~~~[0m
+
+  [96msrc/optimizer/index.ts[0m:[93m4[0m:[93m14[0m
+    [7m4[0m export class ASTOptimizer {
+    [7m [0m [96m             ~~~~~~~~~~~~[0m
+    'ASTOptimizer' is declared here.
+[22m
+[2m    at getRollupError (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:285:41)
+    at Object.error (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:281:42)
+    at Object.error (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/rollup.js:902:32)
+    at emitDiagnostic (file:///home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/@rollup/plugin-typescript/dist/es/index.js:548:17)
+    at reportDiagnostics (file:///home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/@rollup/plugin-typescript/dist/es/index.js:556:9)
+    at Array.forEach (<anonymous>)
+    at emitFilesAndReportErrors (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/typescript/lib/typescript.js:132276:15)
+    at Object.result.afterProgramCreate (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/typescript/lib/typescript.js:132461:5)
+    at Object.afterProgramCreate (file:///home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/@rollup/plugin-typescript/dist/es/index.js:715:29)
+    at synchronizeProgram (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/typescript/lib/typescript.js:132784:12)[22m
+
+
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/css@1.0.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c rollup -c
 [1G[0K⠙[1G[0K
