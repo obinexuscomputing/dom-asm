@@ -13,20 +13,21 @@ export interface Token {
   type: TokenType;
   value: string;
 }
+
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
   private delimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
 
-  private previousToken: Token | null = null; // Explicitly type previousToken
+  private previousToken: Token | null = null;
 
   tokenize(input: string): Token[] {
     const tokens: Token[] = [];
     let current = 0;
 
     const addToken = (type: TokenType, value: string) => {
-      this.previousToken = { type, value }; // Update previousToken here
+      this.previousToken = { type, value };
       tokens.push(this.previousToken);
     };
 
@@ -35,8 +36,8 @@ export class Tokenizer {
 
       // Handle Whitespace
       if (/\s/.test(char)) {
-        if (char === '\n' && this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
-          addToken(TokenType.Delimiter, ';'); // Treat newline as semicolon
+        if (char === '\n' && this.previousToken && this.previousToken.type !== TokenType.Delimiter && this.previousToken.type !== TokenType.Comment) {
+          addToken(TokenType.Delimiter, ';');
         }
         current++;
         continue;
@@ -63,6 +64,31 @@ export class Tokenizer {
           addToken(TokenType.Comment, comment);
           continue;
         }
+      }
+
+      // Handle Template Literals
+      if (char === '`') {
+        let template = '';
+        current++; // Skip the opening backtick
+        while (current < input.length && input[current] !== '`') {
+          if (input[current] === '$' && input[current + 1] === '{') {
+            template += '${';
+            current += 2; // Skip `${`
+            while (current < input.length && input[current] !== '}') {
+              template += input[current++];
+            }
+            template += '}';
+            current++; // Skip `}`
+          } else {
+            template += input[current++];
+          }
+        }
+        if (current >= input.length) {
+          throw new Error('Unterminated template literal');
+        }
+        current++; // Skip the closing backtick
+        addToken(TokenType.TemplateLiteral, template);
+        continue;
       }
 
       // Handle Delimiters
@@ -108,7 +134,7 @@ export class Tokenizer {
 
     // Add EOF token
     if (this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
-      addToken(TokenType.Delimiter, ';'); // Add final semicolon if missing
+      addToken(TokenType.Delimiter, ';');
     }
     addToken(TokenType.EndOfStatement, 'EOF');
 
