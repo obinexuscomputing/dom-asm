@@ -2,6 +2,8 @@
   "name": "@obinexuscomputing/css",
   "version": "1.0.0",
   "main": "dist/index",
+  "type": "module",
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build":"rollup -c"
