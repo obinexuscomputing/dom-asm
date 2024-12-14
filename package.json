@@ -1,14 +1,11 @@
 {
-  "name": "@obinexuscomputing/dom-asm",
+  "name": "@obinexuscomputing/asm",
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "A unified library for DOM manipulation and compilation.",
   "workspaces": [
-    "packages/asm",
-    "packages/css",
-    "packages/html",
-    "packages/js"
+    "packages/*"
   ],
   "scripts": {
     "build": "turbo build",
@@ -17,10 +14,15 @@
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.5.13",
-    "turbo": "^1.9.0"
+    "turbo": "^1.9.0"  ,
+      "rimraf": "^6.0.1"
+
   },
   "license": "ISC",
   "dependencies": {
-    "rimraf": "^6.0.1"
+    "@obinexuscomputing/dom-css":"*",
+    "@obinexuscomputing/dom-html":"*",
+    "@obinexuscomputing/dom-js":"*"
+
   }
 }
