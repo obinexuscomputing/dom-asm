@@ -2,7 +2,7 @@
 import { Tokenizer } from "../tokenizer";
 import { ASTBuilder } from "../ast";
 import { Validator } from "../validator";
-import { Optimizer } from "../optimizer";
+import { ASTOptimizer } from "../optimizer";
 import { ASTNode } from "../ast";
 
 // Example usage:
@@ -49,7 +49,7 @@ export class Parser {
     }
 
     // Step 4: Optimization
-    const optimizer = new Optimizer(ast);
+    const optimizer = new ASTOptimizer(ast);
     ast = optimizer.optimize();
 
     return ast;
