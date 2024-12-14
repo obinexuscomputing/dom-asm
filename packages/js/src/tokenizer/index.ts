@@ -12,8 +12,7 @@ export enum TokenType {
 export interface Token {
   type: TokenType;
   value: string;
-}
-export class Tokenizer {
+}export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!']);
   private delimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
