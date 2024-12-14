@@ -1,7 +1,7 @@
 
 import { ASTNode } from "../ast";
 
-export class Optimizer {
+export class ASTOptimizer {
   private ast: ASTNode;
 
   constructor(ast: ASTNode) {
@@ -61,3 +61,5 @@ export class Optimizer {
     return this.ast;
   }
 }
+
+export { ASTNode };
