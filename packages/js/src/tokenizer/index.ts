@@ -14,65 +14,13 @@ export interface Token {
   value: string;
 }
 
+
 export class Tokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while', 'true', 'false']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!', '==', '=>', '+=', '-=', '*=', '/=', '||=', '&&=', '??', '?.']);
   private delimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
   private previousToken: Token | null = null;
-
-  private isValidOperatorChar(char: string): boolean {
-    return /[=!<>&|+\-*/%?.]/.test(char);
-  }
-
-  private readNumber(input: string, current: number): [string, number] {
-    let value = '';
-    let hasDot = false;
-    let hasExponent = false;
-
-    // Handle initial state
-    if (input[current] === '.') {
-      if (!/[0-9]/.test(input[current + 1])) {
-        throw new Error('Invalid number format');
-      }
-      value = '.';
-      current++;
-    }
-
-    // Main number parsing loop
-    while (current < input.length) {
-      const char = input[current];
-      
-      if (/[0-9]/.test(char)) {
-        value += char;
-      } else if (char === '.' && !hasDot && !hasExponent) {
-        if (value.length === 0) value = '0';
-        value += char;
-        hasDot = true;
-      } else if ((char === 'e' || char === 'E') && !hasExponent) {
-        if (value.length === 0 || !/[0-9]/.test(value[value.length - 1])) break;
-        value += char;
-        hasExponent = true;
-        if (current + 1 < input.length && (input[current + 1] === '+' || input[current + 1] === '-')) {
-          value += input[++current];
-        }
-      } else {
-        break;
-      }
-      current++;
-    }
-
-    // Validate final number format
-    const hasTrailingE = /[eE][+-]?$/.test(value);
-    const multipleDotsMatch = value.match(/\./g);
-    const multipleDots = multipleDotsMatch && multipleDotsMatch.length > 1;
-    
-    if (hasTrailingE || multipleDots) {
-      throw new Error('Invalid number format');
-    }
-
-    return [value, current];
-  }
 
   tokenize(input: string): Token[] {
     const tokens: Token[] = [];
@@ -83,82 +31,137 @@ export class Tokenizer {
       tokens.push(this.previousToken);
     };
 
-    while (current < input.length) {
-      const char = input[current];
+    const shouldAddSemicolon = () => {
+      return (
+        this.previousToken &&
+        this.previousToken.type !== TokenType.Delimiter &&
+        this.previousToken.type !== TokenType.Comment &&
+        this.previousToken.type !== TokenType.TemplateLiteral &&
+        !tokens.some(token => 
+          token.type === TokenType.Delimiter && 
+          token.value === ';' && 
+          tokens.indexOf(token) === tokens.length - 1
+        )
+      );
+    };
 
-      // Handle Whitespace
+    const readNumber = () => {
+      let number = '';
+      let hasDot = false;
+      let hasE = false;
+
+      const peek = (offset = 0) => input[current + offset];
+
+      if (peek() === '.') {
+        if (!/[0-9]/.test(peek(1))) {
+          throw new Error('Invalid number format');
+        }
+        number = '0';
+        hasDot = true;
+      }
+
+      while (current < input.length) {
+        const char = peek();
+        const nextChar = peek(1);
+
+        if (/[0-9]/.test(char)) {
+          number += char;
+        } else if (char === '.' && !hasDot && !hasE) {
+          hasDot = true;
+          number += char;
+        } else if ((char === 'e' || char === 'E') && !hasE && number.length > 0) {
+          hasE = true;
+          number += char;
+          if (nextChar === '+' || nextChar === '-') {
+            number += nextChar;
+            current++;
+          }
+        } else if (char === '.' && hasDot) {
+          throw new Error('Invalid number format');
+        } else {
+          break;
+        }
+        current++;
+      }
+
+      if (/[eE][+-]?$/.test(number) || number.endsWith('.')) {
+        throw new Error('Invalid number format');
+      }
+
+      return number;
+    };
+
+    while (current < input.length) {
+      let char = input[current];
+
+      // Handle Whitespace and ASI
       if (/\s/.test(char)) {
-        if (char === '\n' && 
-            this.previousToken && 
-            !['Delimiter', 'Comment', 'TemplateLiteral'].includes(TokenType[this.previousToken.type]) &&
-            !(tokens.length > 0 && tokens[tokens.length - 1].type === TokenType.Delimiter && tokens[tokens.length - 1].value === ';')
-        ) {
+        if (char === '\n' && shouldAddSemicolon()) {
           addToken(TokenType.Delimiter, ';');
         }
         current++;
         continue;
       }
 
-      // Handle Operators
-      if (this.isValidOperatorChar(char)) {
-        let op = '';
-        let maxOp = '';
-        let tempCurrent = current;
-
-        while (tempCurrent < input.length && this.isValidOperatorChar(input[tempCurrent])) {
-          op += input[tempCurrent];
-          if (this.operators.has(op)) {
-            maxOp = op;
-          }
-          tempCurrent++;
+      // Handle Single-Line Comments
+      if (char === '/' && input[current + 1] === '/') {
+        let value = '';
+        current += 2; // Skip //
+        while (current < input.length && input[current] !== '\n') {
+          value += input[current++];
         }
-
-        // Special case for arrow syntax
-        if (op.startsWith('=') && op.includes('>')) {
-          throw new Error('Unexpected character: >');
-        }
-
-        if (!maxOp) {
-          throw new Error(`Unexpected character: ${input[current]}`);
-        }
-
-        current += maxOp.length;
-        addToken(TokenType.Operator, maxOp);
+        addToken(TokenType.Comment, value);
         continue;
       }
 
-      // Handle Numbers
-      if (/[0-9.]/.test(char)) {
-        try {
-          const [value, newCurrent] = this.readNumber(input, current);
-          current = newCurrent;
-          addToken(TokenType.Literal, value);
-          continue;
-        } catch (e) {
-          if (char === '.') {
-            throw new Error(`Unexpected character: ${char}`);
+      // Handle Multi-Line Comments
+      if (char === '/' && input[current + 1] === '*') {
+        let value = '';
+        current += 2; // Skip /*
+        let depth = 1;
+
+        const initialDepth = depth;
+        while (current < input.length && depth > 0) {
+          if (input[current] === '/' && input[current + 1] === '*') {
+            depth++;
+            value += '/*';
+            current += 2;
+          } else if (input[current] === '*' && input[current + 1] === '/') {
+            depth--;
+            if (depth > 0) {
+              value += '*/';
+            }
+            current += 2;
+          } else {
+            value += input[current++];
           }
-          throw e;
         }
+
+        if (depth === initialDepth) {
+          throw new Error('Unexpected character: EOF');
+        }
+
+        addToken(TokenType.Comment, value);
+        continue;
       }
 
       // Handle Template Literals
       if (char === '`') {
         let value = '';
         current++; // Skip opening backtick
-
+        
         while (current < input.length && input[current] !== '`') {
           if (input[current] === '\\') {
             const nextChar = input[current + 1];
             if (!['`', '$', '\\'].includes(nextChar)) {
               throw new Error('Invalid escape sequence');
             }
-            value += input.slice(current, current + 2);
+            value += '\\' + nextChar;
             current += 2;
           } else if (input[current] === '$' && input[current + 1] === '{') {
             let braceCount = 1;
             const start = current;
-            current += 2; // Skip ${
+            current += 2;
             while (current < input.length && braceCount > 0) {
               if (input[current] === '{') braceCount++;
               if (input[current] === '}') braceCount--;
@@ -173,47 +176,15 @@ export class Tokenizer {
         if (current >= input.length) {
           throw new Error('Unterminated template literal');
         }
-
         current++; // Skip closing backtick
         addToken(TokenType.TemplateLiteral, value);
         continue;
       }
 
-      // Handle Comments
-      if (char === '/' && input[current + 1] === '/') {
-        let comment = '';
-        current += 2; // Skip //
-        while (current < input.length && input[current] !== '\n') {
-          comment += input[current++];
-        }
-        addToken(TokenType.Comment, comment);
-        continue;
-      }
-
-      if (char === '/' && input[current + 1] === '*') {
-        let comment = '';
-        let depth = 1;
-        current += 2; // Skip /*
-
-        while (current < input.length && depth > 0) {
-          if (input[current] === '/' && input[current + 1] === '*') {
-            comment += '/*';
-            depth++;
-            current += 2;
-          } else if (input[current] === '*' && input[current + 1] === '/') {
-            depth--;
-            if (depth > 0) comment += '*/';
-            current += 2;
-          } else {
-            comment += input[current++];
-          }
-        }
-
-        if (depth > 0) {
-          throw new Error('Unexpected character: EOF');
-        }
-
-        addToken(TokenType.Comment, comment);
+      // Handle Numbers
+      if (/[0-9.]/.test(char)) {
+        const number = readNumber();
+        addToken(TokenType.Literal, number);
         continue;
       }
 
@@ -224,28 +195,50 @@ export class Tokenizer {
         continue;
       }
 
-      // Handle Identifiers and Keywords
-      if (/[a-zA-Z_$]/.test(char)) {
-        let value = '';
-        while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
-          value += input[current++];
+      // Handle Operators
+      let operator = '';
+      let maxOperator = '';
+      let tempCurrent = current;
+      
+      while (tempCurrent < input.length && /[=!<>&|+\-*/%?.]/.test(input[tempCurrent])) {
+        operator += input[tempCurrent];
+        if (this.operators.has(operator)) {
+          maxOperator = operator;
         }
-        const type = this.keywords.has(value) ? TokenType.Keyword : TokenType.Identifier;
-        addToken(type, value);
+        tempCurrent++;
+      }
+      
+      if (operator.includes('=>') && !this.operators.has(operator)) {
+        throw new Error('Unexpected character: >');
+      }
+      
+      if (maxOperator) {
+        current += maxOperator.length;
+        addToken(TokenType.Operator, maxOperator);
+        continue;
+      }
+
+      // Handle Keywords and Identifiers
+      if (/[a-zA-Z_$]/.test(char)) {
+        let identifier = '';
+        while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
+          identifier += input[current++];
+        }
+        addToken(
+          this.keywords.has(identifier) ? TokenType.Keyword : TokenType.Identifier,
+          identifier
+        );
         continue;
       }
 
       throw new Error(`Unexpected character: ${char}`);
     }
 
-    // Add final semicolon if needed
-    if (this.previousToken && 
-        !['Delimiter', 'Comment', 'TemplateLiteral'].includes(TokenType[this.previousToken.type]) &&
-        !(tokens.length > 0 && tokens[tokens.length - 1].type === TokenType.Delimiter && tokens[tokens.length - 1].value === ';')) {
+    if (shouldAddSemicolon()) {
       addToken(TokenType.Delimiter, ';');
     }
-
     addToken(TokenType.EndOfStatement, 'EOF');
+
     return tokens;
   }
 }
