@@ -1,15 +1,23 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "module": "ESNext",
-    "declaration": true,
-    "declarationMap": true,
-    "declarationDir": "dist",
-    "sourceMap": true,
-    "noEmitOnError": true,
-    "rootDir": "src"
+    "target": "ES2020",
+    "module": "CommonJS",       // Ensure compatibility with Node.js and Jest
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "./dist",         // Compile output directory
+    "baseUrl": ".",             // Enable path aliases
+    "paths": {
+      "src/*": ["src/*"]        // Support path aliases for src files
+    },
+    "sourceMap": true           // Enable source maps for debugging
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*",                 // Include source files
+    "tests/**/*"                // Include test files
+  ],
+  "exclude": [
+    "node_modules",             // Exclude dependencies
+    "dist"                      // Exclude compiled output
+  ]
 }

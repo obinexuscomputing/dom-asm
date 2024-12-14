@@ -1,8 +1,19 @@
 module.exports = {
-  preset: 'ts-jest/presets/js-with-ts-esm',
+  preset: 'ts-jest',
   testEnvironment: 'node',
-  transform: {
-    '^.+\\.tsx?$': 'ts-jest',
+  rootDir: '.',
+  moduleNameMapper: {
+    '^src/(.*)$': '<rootDir>/src/$1', // Support path aliases for src
   },
-  extensionsToTreatAsEsm: ['.ts'],
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest', // Transform TypeScript files
+  },
+  testMatch: [
+    '<rootDir>/tests/**/*.test.ts', // Match test files in the `tests` folder
+  ],
+  globals: {
+    'ts-jest': {
+      tsconfig: '<rootDir>/tsconfig.json', // Use the project's tsconfig
+    },
+  },
 };
