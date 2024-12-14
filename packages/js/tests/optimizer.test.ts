@@ -1,4 +1,4 @@
-import { ASTOptimizer } from '../src/ast-optimizer';
+import { ASTOptimizer } from '../src/optimizer';
 
 describe('ASTOptimizer', () => {
   const optimizer = new ASTOptimizer();
