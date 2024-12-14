@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",       // Ensure compatibility with Node.js and Jest
+    "module": "esnext",       // Ensure compatibility with Node.js and Jest
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
