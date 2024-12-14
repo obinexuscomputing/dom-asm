@@ -34,20 +34,34 @@ export class Tokenizer {
     while (current < input.length) {
       let char = input[current];
 
-    // Handle Whitespace
+      
+       * if (
+  char === '\n' &&
+  this.previousToken &&
+  this.previousToken.type !== TokenType.Delimiter &&
+  this.previousToken.type !== TokenType.Comment &&
+  this.previousToken.type !== TokenType.TemplateLiteral
+) {
+  console.log('ASI triggered after:', this.previousToken);
+  addToken(TokenType.Delimiter, ';');
+}
+
+      
+// Handle Whitespace
 if (/\s/.test(char)) {
   if (
     char === '\n' &&
     this.previousToken &&
     this.previousToken.type !== TokenType.Delimiter &&
     this.previousToken.type !== TokenType.Comment &&
-    this.previousToken.type !== TokenType.TemplateLiteral
+    this.previousToken.type !== TokenType.TemplateLiteral // Skip ASI after TemplateLiteral
   ) {
-    addToken(TokenType.Delimiter, ';'); // Treat newline as semicolon only for valid statements
+    addToken(TokenType.Delimiter, ';'); // Treat newline as semicolon
   }
   current++;
   continue;
 }
+
 
       // Handle Comments
       if (char === '/') {
@@ -92,7 +106,7 @@ if (char === '`') {
     throw new Error('Unterminated template literal');
   }
   current++; // Skip the closing backtick
-  addToken(TokenType.TemplateLiteral, template);
+  addToken(TokenType.TemplateLiteral, template); // Set `previousToken` to TemplateLiteral
   continue;
 }
 
@@ -134,25 +148,13 @@ if (char === '`') {
         continue;
       }
 
-// Handle Whitespace
-if (/\s/.test(char)) {
-  if (
-    char === '\n' &&
-    this.previousToken &&
-    this.previousToken.type !== TokenType.Delimiter &&
-    this.previousToken.type !== TokenType.Comment &&
-    this.previousToken.type !== TokenType.TemplateLiteral // Prevent ASI after TemplateLiteral
-  ) {
-    addToken(TokenType.Delimiter, ';');
-  }
-  current++;
-  continue;
-}
+
 
 
       // Handle Unexpected Characters
       throw new Error(`Unexpected character: ${char}`);
     }
+
 
     // Add EOF token
     if (this.previousToken && this.previousToken.type !== TokenType.Delimiter) {
