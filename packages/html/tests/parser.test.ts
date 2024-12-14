@@ -25,10 +25,14 @@ describe("Parser with Error Handler", () => {
     `;
     const parser = new Parser({ throwOnError: false });
     const ast = parser.parse(input);
-   
-    // Verify the valid parts of the AST are preserved
-    const divNode = ast.children[0];
-    expect(divNode.name).toBe("div");
-    expect(divNode.children[1].name).toBe("span");
+
+    // Validate root node
+    const divNode = ast.children?.[0];
+    expect(divNode?.name).toBe("div");
+    expect(divNode?.children?.length).toBe(1); // Only one valid child
+
+    // Validate the valid child
+    const spanNode = divNode?.children?.[0];
+    expect(spanNode?.name).toBe("span");
   });
 });
