@@ -45,7 +45,9 @@ export class Parser {
     }
   }
 
-  public parse(input: string): { ast: ASTNode; validationResult: ValidationResult } {
+  public parse(input: string): {
+    children: any; ast: ASTNode; validationResult: ValidationResult 
+} {
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
     const ast = this.buildASTWithRecovery(tokens);
