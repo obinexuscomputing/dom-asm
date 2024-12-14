@@ -8,3 +8,4 @@ export declare class Validator {
     private validateDeclaration;
     validate(): string[];
 }
+//# sourceMappingURL=index.d.ts.map

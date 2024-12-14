@@ -33,3 +33,4 @@ export declare class CodeGenerator {
     private generateDeclaration;
     generate(): string;
 }
+//# sourceMappingURL=index.d.ts.map

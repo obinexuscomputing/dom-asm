@@ -5,3 +5,4 @@ export declare class Parser {
     constructor(input: string, validate?: boolean);
     parse(): ASTNode;
 }
+//# sourceMappingURL=index.d.ts.map

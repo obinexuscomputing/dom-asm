@@ -15,7 +15,6 @@
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
   "license": "ISC",
   "dependencies": {
-    "@obinexuscomputing/html": "*",
     "tslib": "^2.8.1"
   }
 }

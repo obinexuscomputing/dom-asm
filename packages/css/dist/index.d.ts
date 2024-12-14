@@ -94,4 +94,11 @@ declare class CodeGenerator {
     generate(): string;
 }
 
-export { ASTBuilder, type ASTNode, CodeGenerator, Optimizer, type Token, Tokenizer, Validator };
+declare class Parser {
+    private input;
+    private validate;
+    constructor(input: string, validate?: boolean);
+    parse(): ASTNode;
+}
+
+export { ASTBuilder, type ASTNode, CodeGenerator, Optimizer, Parser, type Token, Tokenizer, Validator };

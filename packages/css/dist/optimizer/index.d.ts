@@ -6,3 +6,4 @@ export declare class Optimizer {
     private mergeAdjacentRules;
     optimize(): ASTNode;
 }
+//# sourceMappingURL=index.d.ts.map

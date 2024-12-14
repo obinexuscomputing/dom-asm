@@ -19,3 +19,4 @@ export declare class Tokenizer {
     private consumeOther;
     tokenize(): Token[];
 }
+//# sourceMappingURL=index.d.ts.map
