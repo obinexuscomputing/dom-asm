@@ -1,5 +1,5 @@
 {
-  "name": "@obinexuscomputing/asm",
+  "name": "@obinexuscomputing/dom-asm",
   "version": "1.0.0",
   "private": true,  "type": "module",
   "workspaces": [

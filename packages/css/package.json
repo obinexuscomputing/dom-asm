@@ -1,5 +1,5 @@
 {
-  "name": "@obinexuscomputing/css",
+  "name": "@obinexuscomputing/dom-css",
   "version": "1.0.0",
   "private": true,
   "description": "A package for JavaScript parsing and validation.",

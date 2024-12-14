@@ -1,2 +1,2 @@
-import * as CSS from "@obinexuscomputing/css"; 
+import * as CSS from "@obinexuscomputing/dom-css"; 
 
