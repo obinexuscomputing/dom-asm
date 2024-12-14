@@ -1,54 +1,21 @@
 {
-  "name": "@obinexuscomputing/dom",
+  "name": "@obinexuscomputing/dom-asm",
   "version": "1.0.0",
   "private": true,
+  "description": "A unified library for DOM manipulation and compilation.",
   "workspaces": [
     "packages/asm",
     "packages/css",
     "packages/html",
     "packages/js"
   ],
-  "description": "A unified library for DOM manipulation and compilation with support for asm, css, html, and js.",
   "scripts": {
-    "build": "turbo run build",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "dev": "turbo run dev",
-    "clean": "rimraf node_modules && rimraf -rf packages/**/node_modules && rimraf -rf packages/**/dist"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/obinexuscomputing/dom-asm.git"
-  },
-  "author": "Nnamdi Michael Okpala <okpalan@protonmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/obinexuscomputing/dom-asm/issues"
-  },
-  "homepage": "https://github.com/obinexuscomputing/dom-asm#readme",
-  "dependencies": {
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-vue": "^6.0.0",
-    "tslib": "^2.8.1",
-    "typescript": "^5.7.2"
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.1",
-    "@rollup/plugin-node-resolve": "^15.3.0",
-    "@rollup/plugin-typescript": "^12.1.1",
-    "@types/jest": "^29.0.0",
-    "eslint": "^9.16.0",
-    "jest": "^29.7.0",
-    "rollup": "^4.28.1",
-    "rollup-plugin-dts": "^6.1.1"
+    "turbo": "^1.9.0"
   },
-  "engines": {
-    "node": ">=16.0.0",
-    "npm": ">=8.0.0"
-  },
-  "files": [
-    "dist/",
-    "src/",
-    "README.md"
-  ]
+  "license": "ISC"
 }
