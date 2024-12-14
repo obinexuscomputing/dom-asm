@@ -100,6 +100,5 @@ declare global {
         }
     }
 }
-//# sourceMappingURL=index.d.ts.map
 
 export { type ASTNode, ASTOptimizer, CodeGenerator, Parser, Tokenizer, Validator };
