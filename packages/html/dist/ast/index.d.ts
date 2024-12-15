@@ -1,6 +1,6 @@
 import { HTMLToken } from "../tokenizer";
 export interface HTMLASTNode {
-    type: "Element" | "Text" | "Comment";
+    type: "Element" | "Text" | "Comment" | "Doctype";
     name?: string;
     value?: string;
     attributes?: Record<string, string>;

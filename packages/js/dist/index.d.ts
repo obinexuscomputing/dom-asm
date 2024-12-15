@@ -21,6 +21,7 @@ declare class JSTokenizer {
     private previousToken;
     constructor();
     private shouldAddSemicolon;
+    private readOperator;
     tokenize(input: string): JSToken[];
 }
 
