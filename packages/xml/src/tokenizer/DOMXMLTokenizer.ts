@@ -10,9 +10,6 @@ export interface DOMXMLToken {
 }
 
 export class DOMXMLTokenizer extends XMLBaseTokenizer {
-  private currentLine: number = 1;
-  private currentColumn: number = 1;
-  
   constructor(input: string) {
     super(input);
   }
@@ -27,20 +24,21 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       const currentPosition = { line: this.line, column: this.column };
 
       if (char === '<') {
-        // Handle accumulated text
+        // Handle accumulated text content before processing tag
         if (textContent) {
           const trimmed = textContent.trim();
           if (trimmed) {
             tokens.push({
               type: 'Text',
               value: trimmed,
-              location: textStart!
+              location: textStart! // Use the original start position of the text
             });
           }
           textContent = '';
           textStart = null;
         }
 
+        // Process tags
         if (this.matches('<!--')) {
           tokens.push(this.readComment(currentPosition));
         } else if (this.matches('<!DOCTYPE')) {
@@ -51,20 +49,24 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
           tokens.push(this.readStartTag(currentPosition));
         }
       } else {
+        // Track the start of text content
         if (!textStart) {
-          textStart = currentPosition;
+          textStart = { ...currentPosition };
         }
         textContent += this.consume();
       }
     }
 
-    // Handle remaining text
-    if (textContent && textContent.trim()) {
-      tokens.push({
-        type: 'Text',
-        value: textContent.trim(),
-        location: textStart!
-      });
+    // Handle any remaining text content
+    if (textContent) {
+      const trimmed = textContent.trim();
+      if (trimmed) {
+        tokens.push({
+          type: 'Text',
+          value: trimmed,
+          location: textStart!
+        });
+      }
     }
 
     return tokens;
@@ -106,6 +108,29 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     return {
       type: 'EndTag',
       name,
+      location: startLocation
+    };
+  }
+
+  private readComment(startLocation: { line: number; column: number }): DOMXMLToken {
+    this.consumeSequence(4); // Skip '<!--'
+    const value = this.readUntil('-->');
+    this.consumeSequence(3); // Skip '-->'
+    return {
+      type: 'Comment',
+      value: value.trim(),
+      location: startLocation
+    };
+  }
+
+  private readDoctype(startLocation: { line: number; column: number }): DOMXMLToken {
+    this.consumeSequence(9); // Skip '<!DOCTYPE'
+    this.skipWhitespace();
+    const value = this.readUntil('>');
+    this.consume(); // Skip '>'
+    return {
+      type: 'Doctype',
+      value: value.trim(),
       location: startLocation
     };
   }
@@ -152,28 +177,5 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       return value;
     }
     return this.readUntil(/[\s>\/]/);
-  }
-
-  private readComment(startLocation: { line: number; column: number }): DOMXMLToken {
-    this.consumeSequence(4); // Skip '<!--'
-    const value = this.readUntil('-->');
-    this.consumeSequence(3); // Skip '-->'
-    return {
-      type: 'Comment',
-      value: value.trim(),
-      location: startLocation
-    };
-  }
-
-  private readDoctype(startLocation: { line: number; column: number }): DOMXMLToken {
-    this.consumeSequence(9); // Skip '<!DOCTYPE'
-    this.skipWhitespace();
-    const value = this.readUntil('>');
-    this.consume(); // Skip '>'
-    return {
-      type: 'Doctype',
-      value: value.trim(),
-      location: startLocation
-    };
   }
 }
