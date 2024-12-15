@@ -20,6 +20,8 @@
   "scripts": {
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
+    "type-check": "tsc -p tsconfig.test.json --noEmit",
+    "type-check:build": "tsc -p tsconfig.build.json --noEmit",
     "build:ts": "tsc --emitDeclarationOnly",
     "build:rollup": "rollup -c",
     "build": "npm run build:ts && npm run build:rollup",

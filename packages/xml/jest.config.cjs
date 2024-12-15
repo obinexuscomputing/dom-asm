@@ -7,7 +7,7 @@ module.exports = {
   },
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
-      tsconfig: 'tsconfig.json',
+      tsconfig: 'tsconfig.test.json',
       diagnostics: {
         ignoreCodes: [151001]
       }
@@ -24,10 +24,5 @@ module.exports = {
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
-  verbose: true,
-  testTimeout: 60000,
-  maxWorkers: 2,
-  transformIgnorePatterns: [
-    'node_modules/(?!(ts-jest)/)'
-  ]
+  verbose: true
 };
