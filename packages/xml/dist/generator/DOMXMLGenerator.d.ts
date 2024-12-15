@@ -1,4 +1,4 @@
-import { DOMXMLAST } from '../ast/DOMXMLAST';
+import { DOMXMLAST } from "../ast";
 export interface GeneratorOptions {
     indent?: string;
     newLine?: string;

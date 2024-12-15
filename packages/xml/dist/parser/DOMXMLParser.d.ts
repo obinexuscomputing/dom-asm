@@ -1,9 +1,10 @@
-import { DOMXMLToken } from "../tokenizer/DOMXMLTokenizer";
-import { DOMXMLAST } from "../ast/DOMXMLAST";
+import { DOMXMLAST } from "../ast";
+import { DOMXMLToken } from "../tokenizer";
 export declare class DOMXMLParser {
     private tokens;
     private position;
-    constructor(tokens: DOMXMLToken[]);
+    constructor(tokens?: DOMXMLToken[]);
+    setTokens(tokens: DOMXMLToken[]): void;
     parse(): DOMXMLAST;
     private computeMetadata;
 }

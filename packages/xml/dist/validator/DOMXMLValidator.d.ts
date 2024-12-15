@@ -1,32 +1,38 @@
-export interface XMLSchemaDefinition {
-    elements: {
-        [key: string]: {
-            attributes?: string[];
-            required?: string[];
-            children?: string[];
-            minOccurs?: number;
-            maxOccurs?: number;
-        };
-    };
+import { DOMXMLAST } from "../ast";
+export interface ValidationOptions {
+    strictMode?: boolean;
+    allowUnknownElements?: boolean;
+    schema?: XMLSchema;
+    customValidators?: Array<(ast: DOMXMLAST) => ValidationError[]>;
 }
-export declare class XMLValidator {
-    private schema;
-    constructor(schema: XMLSchemaDefinition);
-    validate(ast: any): ValidationResult;
+export interface ValidationResult {
+    valid: boolean;
+    errors: ValidationError[];
+}
+export interface ValidationError {
+    code: string;
+    message: string;
+    line?: number;
+    column?: number;
+    nodePath?: string;
+}
+export interface XMLSchema {
+    elements: Record<string, XMLElementSchema>;
+}
+export interface XMLElementSchema {
+    attributes?: string[];
+    required?: string[];
+    children?: string[];
+    minOccurs?: number;
+    maxOccurs?: number;
+}
+export declare class DOMXMLValidator {
+    private options;
+    private schema?;
+    constructor(options?: ValidationOptions);
+    validate(ast: DOMXMLAST): ValidationResult;
     private validateNode;
     private validateAttributes;
     private validateChildren;
 }
-interface ValidationResult {
-    valid: boolean;
-    errors: ValidationError[];
-}
-interface ValidationError {
-    message: string;
-    location: {
-        line: number;
-        column: number;
-    };
-}
-export {};
 //# sourceMappingURL=DOMXMLValidator.d.ts.map
