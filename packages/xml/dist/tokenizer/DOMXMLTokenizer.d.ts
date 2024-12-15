@@ -11,12 +11,13 @@ export interface DOMXMLToken {
     };
 }
 export declare class DOMXMLTokenizer extends XMLBaseTokenizer {
+    private static readonly VOID_ELEMENTS;
     tokenize(): DOMXMLToken[];
     private readStartTag;
     private readEndTag;
+    private readAttributes;
     private readText;
     private readComment;
     private readDoctype;
-    private readAttributes;
 }
 //# sourceMappingURL=DOMXMLTokenizer.d.ts.map
