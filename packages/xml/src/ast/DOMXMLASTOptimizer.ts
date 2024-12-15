@@ -1,4 +1,4 @@
-ximport { DOMXMLAST } from "./DOMXMLAST";
+import { DOMXMLASTNode, DOMXMLAST } from "./DOMXMLAST";
 
 // Helper type for optimization process
 export interface OptimizationContext {
@@ -94,7 +94,7 @@ export class DOMXMLASTOptimizer {
       }
 
       if (node.children) {
-        node.children.forEach((child: unknown) => traverse(child));
+        node.children.forEach((child: DOMXMLASTNode) => traverse(child));
       }
     };
 
