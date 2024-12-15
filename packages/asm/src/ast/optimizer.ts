@@ -1,4 +1,4 @@
-import { ASTNode, MinimizedAutomaton } from "./types";
+import { ASTNode, MinimizedAutomaton } from "../types";
 
 export function optimizeAST(root: ASTNode, automaton: MinimizedAutomaton): ASTNode {
     // Traverse the AST and update transitions based on minimized automaton
