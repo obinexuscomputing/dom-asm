@@ -24,6 +24,10 @@ function isTextNode(node: ASTNode): node is TextNode {
   return node.type === "Text";
 }
 
+function isElementNode(node: ASTNode): node is ElementNode {
+  return node.type === "Element";
+}
+
 export class ParserError extends Error {
   token: Token;
   position: number;
@@ -38,7 +42,7 @@ export class ParserError extends Error {
   }
 }
 
-export class Parser {
+export class HTMLParser {
   private tokenizer: HTMLTokenizer;
   private astBuilder: AST;
   private validator: Validator;
@@ -57,15 +61,17 @@ export class Parser {
     this.shouldThrow = false;
   }
 
-  private handleError(error: ParserError): void {
+  private handleError(error: ParserError, quiet = false): void {
     if (this.errorHandler) {
       this.errorHandler(error);
     } else {
       if (this.shouldThrow) {
         throw error;
       }
-      console.error(`Error at position ${error.position}: ${error.message}`);
-      console.error(`Problematic token: ${JSON.stringify(error.token)}`);
+      if (!quiet) {
+        console.error(`Error at position ${error.position}: ${error.message}`);
+        console.error(`Problematic token: ${JSON.stringify(error.token)}`);
+      }
     }
   }
 
@@ -83,29 +89,35 @@ export class Parser {
 
   private cleanWhitespace(node: ASTNode): void {
     if (node.children) {
+      // First clean children recursively before filtering current level
+      node.children.forEach(child => this.cleanWhitespace(child));
+      
+      // Then filter whitespace at current level
       node.children = node.children.filter(child => {
         if (isTextNode(child)) {
           return !this.isWhitespace(child.value);
         }
         return true;
       });
-      
-      node.children.forEach(child => this.cleanWhitespace(child));
     }
-  }
-
-  private isElementNode(node: ASTNode): node is ElementNode {
-    return node.type === "Element";
   }
 
   private buildASTWithRecovery(tokens: Token[]): ASTNode {
     const root = this.astBuilder.getRoot();
-    const stack: ASTNode[] = [root];
+    const stack: ElementNode[] = [root as ElementNode];
     let currentParent = root;
-    let recoveryMode = false;
+    let skipUntilTag: string | null = null;
 
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
+
+      // Skip tokens if we're in recovery mode
+      if (skipUntilTag && token.type === "EndTag" && token.name === skipUntilTag) {
+        skipUntilTag = null;
+        continue;
+      }
+      if (skipUntilTag) continue;
+
       try {
         switch (token.type) {
           case "StartTag": {
@@ -119,29 +131,25 @@ export class Parser {
             currentParent.children.push(elementNode);
             stack.push(elementNode);
             currentParent = elementNode;
-            recoveryMode = false;
             break;
           }
           
           case "EndTag": {
-            if (recoveryMode) {
-              continue;
-            }
-
             const matchingStartIndex = stack.findIndex(node => 
-              this.isElementNode(node) && node.name === token.name
+              node.name === token.name
             );
 
             if (matchingStartIndex === -1) {
               throw new ParserError(
                 `Unmatched end tag: </${token.name}>. Expected </${
-                  this.isElementNode(currentParent) ? currentParent.name : "unknown"
+                  isElementNode(currentParent) ? currentParent.name : "unknown"
                 }>.`,
                 token,
                 i
               );
             }
 
+            // Pop all nodes up to and including the matching start tag
             while (stack.length > matchingStartIndex) {
               stack.pop();
             }
@@ -150,28 +158,24 @@ export class Parser {
           }
 
           case "Text": {
-            if (!recoveryMode) {
-              const textNode: TextNode = {
-                type: "Text",
-                value: token.value,
-                children: [],
-                parent: currentParent
-              };
-              currentParent.children.push(textNode);
-            }
+            const textNode: TextNode = {
+              type: "Text",
+              value: token.value,
+              children: [],
+              parent: currentParent
+            };
+            currentParent.children.push(textNode);
             break;
           }
 
           case "Comment": {
-            if (!recoveryMode) {
-              const commentNode: CommentNode = {
-                type: "Comment",
-                value: token.value,
-                children: [],
-                parent: currentParent
-              };
-              currentParent.children.push(commentNode);
-            }
+            const commentNode: CommentNode = {
+              type: "Comment",
+              value: token.value,
+              children: [],
+              parent: currentParent
+            };
+            currentParent.children.push(commentNode);
             break;
           }
         }
@@ -179,7 +183,10 @@ export class Parser {
         if (error instanceof ParserError) {
           this.handleError(error);
           if (!this.shouldThrow) {
-            recoveryMode = true;
+            // Set recovery mode to skip until matching end tag
+            if (isElementNode(currentParent)) {
+              skipUntilTag = currentParent.name;
+            }
             continue;
           }
           throw error;
@@ -188,18 +195,17 @@ export class Parser {
       }
     }
 
-    // Handle unclosed tags
+    // Handle any unclosed tags at the end
     while (stack.length > 1) {
       const unclosedNode = stack.pop()!;
-      if (this.isElementNode(unclosedNode)) {
-        this.handleError(
-          new ParserError(
-            `Unclosed tag: <${unclosedNode.name}>`,
-            { type: "StartTag", name: unclosedNode.name, attributes: {} },
-            tokens.length
-          )
-        );
-      }
+      this.handleError(
+        new ParserError(
+          `Unclosed tag: <${unclosedNode.name}>`,
+          { type: "StartTag", name: unclosedNode.name, attributes: {} },
+          tokens.length
+        ),
+        true // Quiet mode for unclosed tags
+      );
     }
 
     return root;
