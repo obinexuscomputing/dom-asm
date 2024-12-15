@@ -1,1 +1,0 @@
-{"version":3,"file":"DOMXMLOptimizer.d.ts","sourceRoot":"","sources":["../../src/ast/DOMXMLOptimizer.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAiB,MAAM,QAAQ,CAAC;AAElD,qBAAa,eAAe;IACnB,QAAQ,CAAC,GAAG,EAAE,SAAS,GAAG,SAAS;IAW1C,OAAO,CAAC,gBAAgB;IAwCxB,OAAO,CAAC,eAAe;CAoCxB"}

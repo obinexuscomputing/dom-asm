@@ -1,3 +1,6 @@
+import { DOMXMLToken } from "..";
+import { DOMXMLAST, DOMXMLASTNode } from "../ast";
+
 export class DOMXMLParser {
   private tokens: DOMXMLToken[];
   private position: number;

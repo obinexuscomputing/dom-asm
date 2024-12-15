@@ -1,3 +1,14 @@
+import { XMLBaseTokenizer } from './XMLBaseTokenizer';
+
+export interface DOMXMLToken {
+  type: 'StartTag' | 'EndTag' | 'Text' | 'Comment' | 'Doctype';
+  name?: string;
+  value?: string;
+  attributes?: Record<string, string>;
+  selfClosing?: boolean;
+  location: { line: number; column: number };
+}
+
 export class DOMXMLTokenizer extends XMLBaseTokenizer {
   constructor(input: string) {
     super(input);
@@ -13,6 +24,7 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       const currentPosition = { line: this.line, column: this.column };
 
       if (char === '<') {
+        // Flush accumulated text content
         if (textContent.trim()) {
           tokens.push({
             type: 'Text',
@@ -23,7 +35,7 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
         textContent = '';
         textStart = null;
 
-        // Process different types of tags
+        // Process tags
         if (this.matches('<!--')) {
           tokens.push(this.readComment(currentPosition));
         } else if (this.matches('<!DOCTYPE')) {
@@ -34,11 +46,15 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
           tokens.push(this.readStartTag(currentPosition));
         }
       } else {
-        if (!textStart) textStart = { ...currentPosition };
+        // Accumulate text content
+        if (!textStart) {
+          textStart = { ...currentPosition };
+        }
         textContent += this.consume();
       }
     }
 
+    // Add remaining text content
     if (textContent.trim()) {
       tokens.push({
         type: 'Text',
@@ -61,8 +77,9 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       selfClosing = true;
       this.consume();
     }
-
-    if (this.peek() === '>') this.consume();
+    if (this.peek() === '>') {
+      this.consume();
+    }
 
     return {
       type: 'StartTag',
@@ -77,7 +94,9 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     this.consumeSequence(2); // Skip '</'
     const name = this.readTagName();
     this.skipWhitespace();
-    if (this.peek() === '>') this.consume();
+    if (this.peek() === '>') {
+      this.consume();
+    }
 
     return {
       type: 'EndTag',
@@ -107,5 +126,49 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       value: value.trim(),
       location: startLocation,
     };
+  }
+
+  private readAttributes(): Record<string, string> {
+    const attributes: Record<string, string> = {};
+
+    while (this.position < this.input.length) {
+      this.skipWhitespace();
+      if (this.peek() === '>' || this.peek() === '/' || !this.peek()) {
+        break;
+      }
+
+      const name = this.readAttributeName();
+      if (!name) break;
+
+      this.skipWhitespace();
+      if (this.peek() === '=') {
+        this.consume(); // Skip '='
+        this.skipWhitespace();
+        attributes[name] = this.readAttributeValue();
+      } else {
+        attributes[name] = 'true'; // Boolean attribute
+      }
+    }
+
+    return attributes;
+  }
+
+  private readTagName(): string {
+    return this.readWhile((char) => this.isNameChar(char));
+  }
+
+  private readAttributeName(): string {
+    return this.readWhile((char) => this.isNameChar(char));
+  }
+
+  private readAttributeValue(): string {
+    const quote = this.peek();
+    if (quote === '"' || quote === "'") {
+      this.consume(); // Skip opening quote
+      const value = this.readUntil(quote);
+      this.consume(); // Skip closing quote
+      return value;
+    }
+    return this.readUntil(/[\s>\/]/);
   }
 }
