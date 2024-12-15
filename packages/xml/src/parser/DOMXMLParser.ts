@@ -1,6 +1,3 @@
-import { DOMXMLAST, DOMXMLASTNode } from "../ast";
-import { DOMXMLToken } from "../tokenizer";
-
 export class DOMXMLParser {
   private tokens: DOMXMLToken[];
   private position: number;
@@ -17,13 +14,12 @@ export class DOMXMLParser {
 
   public parse(): DOMXMLAST {
     this.position = 0;
-    
-    // Create virtual root to hold the actual root element
+
     const virtualRoot: DOMXMLASTNode = {
       type: 'Element',
       name: '#document',
       children: [],
-      attributes: {}
+      attributes: {},
     };
 
     const stack: DOMXMLASTNode[] = [virtualRoot];
@@ -33,87 +29,61 @@ export class DOMXMLParser {
       const token = this.tokens[this.position++];
 
       switch (token.type) {
-        case 'StartTag': {
+        case 'StartTag':
           const elementNode: DOMXMLASTNode = {
             type: 'Element',
-            name: token.name || '',
+            name: token.name!,
             attributes: token.attributes || {},
-            children: []
+            children: [],
           };
-
           currentNode.children!.push(elementNode);
-
           if (!token.selfClosing) {
             stack.push(elementNode);
             currentNode = elementNode;
           }
           break;
-        }
 
-        case 'EndTag': {
-          if (stack.length <= 1) {
-            throw new Error(
-              `Unexpected closing tag "${token.name}" at line ${token.location.line}, column ${token.location.column}`
-            );
-          }
-
-          const openTag = stack[stack.length - 1];
-          if (openTag.name !== token.name) {
-            throw new Error(
-              `Mismatched tags: opening "${openTag.name}" and closing "${token.name}" at line ${token.location.line}, column ${token.location.column}`
-            );
-          }
-
-          stack.pop();
-          currentNode = stack[stack.length - 1];
-          break;
-        }
-
-        case 'Text': {
-          if (token.value?.trim()) {
-            const textNode: DOMXMLASTNode = {
-              type: 'Text',
-              value: token.value.trim()
-            };
-            currentNode.children!.push(textNode);
-          }
-          break;
-        }
-
-        case 'Comment': {
-          const commentNode: DOMXMLASTNode = {
-            type: 'Comment',
-            value: token.value || ''
-          };
-          currentNode.children!.push(commentNode);
-          break;
-        }
-
-        case 'Doctype': {
+        case 'EndTag':
           if (stack.length > 1) {
-            throw new Error(
-              `DOCTYPE declaration must be at root level at line ${token.location.line}, column ${token.location.column}`
-            );
+            const openTag = stack.pop()!;
+            if (openTag.name !== token.name) {
+              throw new Error(`Mismatched tags: "${openTag.name}" and "${token.name}".`);
+            }
+            currentNode = stack[stack.length - 1];
           }
-          const doctypeNode: DOMXMLASTNode = {
-            type: 'Doctype',
-            value: token.value || ''
-          };
-          currentNode.children!.push(doctypeNode);
           break;
-        }
+
+        case 'Text':
+          currentNode.children!.push({
+            type: 'Text',
+            value: token.value?.trim() || '',
+          });
+          break;
+
+        case 'Comment':
+          currentNode.children!.push({
+            type: 'Comment',
+            value: token.value || '',
+          });
+          break;
+
+        case 'Doctype':
+          currentNode.children!.push({
+            type: 'Doctype',
+            value: token.value || '',
+          });
+          break;
       }
     }
 
     if (stack.length > 1) {
       const unclosedTag = stack[stack.length - 1];
-      throw new Error(`Unclosed tag: ${unclosedTag.name}`);
+      throw new Error(`Unclosed tag: "${unclosedTag.name}".`);
     }
 
-    // Return the actual root element instead of the virtual root
     return {
       root: virtualRoot.children![0],
-      metadata: this.computeMetadata(virtualRoot.children![0])
+      metadata: this.computeMetadata(virtualRoot.children![0]),
     };
   }
 
@@ -123,12 +93,12 @@ export class DOMXMLParser {
     let textCount = 0;
     let commentCount = 0;
 
-    const countNode = (node: DOMXMLASTNode) => {
+    const traverse = (node: DOMXMLASTNode) => {
       nodeCount++;
       switch (node.type) {
         case 'Element':
           elementCount++;
-          node.children?.forEach(countNode);
+          node.children?.forEach(traverse);
           break;
         case 'Text':
           textCount++;
@@ -139,13 +109,13 @@ export class DOMXMLParser {
       }
     };
 
-    countNode(root);
+    traverse(root);
 
     return {
       nodeCount,
       elementCount,
       textCount,
-      commentCount
+      commentCount,
     };
   }
 }
