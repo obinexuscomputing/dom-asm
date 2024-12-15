@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
     "declaration": true,
-    
+
     "declarationDir": "./dist",
     "emitDeclarationOnly": true,
     "module": "ESNext",
+    "moduleResolution": "nodenext",
     "target": "ESNext",
     "outDir": "./dist",
     "strict": true,
