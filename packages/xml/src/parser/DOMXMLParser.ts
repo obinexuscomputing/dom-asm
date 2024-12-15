@@ -5,18 +5,21 @@ export class DOMXMLParser {
   private tokens: DOMXMLToken[];
   private position: number;
 
-  constructor(tokens?: DOMXMLToken[]) {
-    this.tokens = tokens || [];
+  constructor() {
+    this.tokens = [];
     this.position = 0;
   }
 
-  public setTokens(tokens: DOMXMLToken[]): void {
+  public parse(tokens: DOMXMLToken[]): DOMXMLAST {
     this.tokens = tokens;
     this.position = 0;
-  }
-
-  public parse(): DOMXMLAST {
-    const root: DOMXMLASTNode = { type: "Element", name: "root", children: [] };
+    
+    const root: DOMXMLASTNode = {
+      type: 'Element',
+      name: 'root',
+      children: []
+    };
+    
     const stack: DOMXMLASTNode[] = [root];
     let currentParent = root;
 
@@ -24,21 +27,24 @@ export class DOMXMLParser {
       const token = this.tokens[this.position++];
 
       switch (token.type) {
-        case "StartTag":
+        case 'StartTag': {
           const elementNode: DOMXMLASTNode = {
-            type: "Element",
+            type: 'Element',
             name: token.name,
             attributes: token.attributes,
-            children: [],
+            children: []
           };
-          currentParent.children?.push(elementNode);
+          
+          currentParent.children!.push(elementNode);
+          
           if (!token.selfClosing) {
             stack.push(elementNode);
             currentParent = elementNode;
           }
           break;
+        }
 
-        case "EndTag":
+        case 'EndTag': {
           if (stack.length > 1) {
             if (currentParent.name !== token.name) {
               throw new Error(
@@ -49,15 +55,28 @@ export class DOMXMLParser {
             currentParent = stack[stack.length - 1];
           }
           break;
+        }
 
-        case "Text":
-        case "Comment":
-        case "Doctype":
-          currentParent.children?.push({
-            type: token.type,
-            value: token.value,
-          });
+        case 'Text': {
+          if (token.value && token.value.trim()) {
+            const textNode: DOMXMLASTNode = {
+              type: 'Text',
+              value: token.value.trim()
+            };
+            currentParent.children!.push(textNode);
+          }
           break;
+        }
+
+        case 'Comment':
+        case 'Doctype': {
+          const node: DOMXMLASTNode = {
+            type: token.type,
+            value: token.value
+          };
+          currentParent.children!.push(node);
+          break;
+        }
       }
     }
 
@@ -68,25 +87,39 @@ export class DOMXMLParser {
 
     return {
       root,
-      metadata: this.computeMetadata(root),
+      metadata: this.computeMetadata(root)
     };
   }
 
-  private computeMetadata(root: DOMXMLASTNode): DOMXMLAST["metadata"] {
+  private computeMetadata(root: DOMXMLASTNode) {
     let nodeCount = 0;
     let elementCount = 0;
     let textCount = 0;
     let commentCount = 0;
 
-    function traverse(node: DOMXMLASTNode): void {
+    const traverse = (node: DOMXMLASTNode) => {
       nodeCount++;
-      if (node.type === "Element") elementCount++;
-      if (node.type === "Text") textCount++;
-      if (node.type === "Comment") commentCount++;
-      node.children?.forEach(traverse);
-    }
+      switch (node.type) {
+        case 'Element':
+          elementCount++;
+          node.children?.forEach(traverse);
+          break;
+        case 'Text':
+          textCount++;
+          break;
+        case 'Comment':
+          commentCount++;
+          break;
+      }
+    };
 
     traverse(root);
-    return { nodeCount, elementCount, textCount, commentCount };
+
+    return {
+      nodeCount,
+      elementCount,
+      textCount,
+      commentCount
+    };
   }
 }
