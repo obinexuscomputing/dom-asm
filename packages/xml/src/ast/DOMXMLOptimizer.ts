@@ -1,3 +1,5 @@
+import { DOMXMLASTNode, DOMXMLAST } from "./DOMXMLAST";
+
 export interface StateNode {
   type: 'Element' | 'Text' | 'Comment' | 'Doctype';
   value?: string;
