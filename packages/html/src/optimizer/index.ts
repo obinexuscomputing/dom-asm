@@ -1,4 +1,4 @@
-import { HTMLAST, HTMLASTNode } from "../ast";
+import { HTMLAST, HTMLASTNode } from "../ast/HTMLAST";
 
 export class HTMLASTOptimizer {
   public optimize(ast: HTMLAST): HTMLAST {

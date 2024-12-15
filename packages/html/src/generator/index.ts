@@ -1,4 +1,4 @@
-import { HTMLASTNode } from "../ast";
+import { HTMLASTNode } from "../ast/HTMLAST";
 
 export class HTMLCodeGenerator {
   private selfClosingTags: string[];
