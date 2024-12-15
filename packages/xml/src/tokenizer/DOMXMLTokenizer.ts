@@ -1,159 +1,143 @@
-import { XMLBaseTokenizer } from './XMLBaseTokenizer';
+export class DOMXMLParser {
+  private tokens: DOMXMLToken[];
+  private position: number;
 
-export interface DOMXMLToken {
-  type: 'StartTag' | 'EndTag' | 'Text' | 'Comment' | 'Doctype';
-  name?: string;
-  value?: string;
-  attributes?: Record<string, string>;
-  selfClosing?: boolean;
-  location: { line: number; column: number };
-}
+  constructor(tokens?: DOMXMLToken[]) {
+    this.tokens = tokens || [];
+    this.position = 0;
+  }
 
-export class DOMXMLTokenizer extends XMLBaseTokenizer {
-  public tokenize(): DOMXMLToken[] {
-    const tokens: DOMXMLToken[] = [];
+  public setTokens(tokens: DOMXMLToken[]): void {
+    this.tokens = tokens;
+    this.position = 0;
+  }
 
-    while (this.position < this.input.length) {
-      const location = this.getCurrentLocation();
-      
-      if (this.peek() === '<') {
-        if (this.peek(1) === '!') {
-          if (this.input.startsWith('<!--', this.position)) {
-            const token = this.readComment();
-            tokens.push({ ...token, location });
-          } else if (this.input.startsWith('<!DOCTYPE', this.position)) {
-            const token = this.readDoctype();
-            tokens.push({ ...token, location });
+  public parse(): DOMXMLAST {
+    this.position = 0;
+
+    const root: DOMXMLASTNode = {
+      type: 'Element',
+      name: 'root',
+      children: [],
+    };
+
+    const stack: DOMXMLASTNode[] = [root];
+    let currentParent = root;
+
+    while (this.position < this.tokens.length) {
+      const token = this.tokens[this.position++];
+
+      switch (token.type) {
+        case 'StartTag': {
+          const elementNode: DOMXMLASTNode = {
+            type: 'Element',
+            name: token.name!,
+            attributes: token.attributes || {},
+            children: [],
+          };
+
+          // Add to current parent's children
+          currentParent.children!.push(elementNode);
+
+          // If not self-closing, push to stack and update currentParent
+          if (!token.selfClosing) {
+            stack.push(elementNode);
+            currentParent = elementNode;
           }
-        } else if (this.peek(1) === '/') {
-          const token = this.readEndTag();
-          tokens.push({ ...token, location });
-        } else {
-          const token = this.readStartTag();
-          tokens.push({ ...token, location });
+          break;
         }
-      } else {
-        const token = this.readText();
-        if (token.value && token.value.trim()) {
-          tokens.push({ ...token, location });
+
+        case 'EndTag': {
+          if (stack.length > 1) {
+            const expectedTagName = currentParent.name;
+            if (expectedTagName !== token.name) {
+              throw new Error(
+                `Mismatched tags: opening "${expectedTagName}" and closing "${token.name}" at line ${token.location.line}, column ${token.location.column}`
+              );
+            }
+            stack.pop();
+            currentParent = stack[stack.length - 1];
+          }
+          break;
         }
+
+        case 'Text': {
+          const trimmedValue = token.value?.trim();
+          if (trimmedValue) {
+            currentParent.children!.push({
+              type: 'Text',
+              value: trimmedValue,
+            });
+          }
+          break;
+        }
+
+        case 'Comment': {
+          currentParent.children!.push({
+            type: 'Comment',
+            value: token.value || '',
+          });
+          break;
+        }
+
+        case 'Doctype': {
+          currentParent.children!.push({
+            type: 'Doctype',
+            value: token.value || '',
+          });
+          break;
+        }
+
+        default:
+          throw new Error(`Unexpected token type: ${token.type}`);
       }
     }
 
-    return tokens;
-  }
-
-  private readStartTag(): DOMXMLToken {
-    this.consume(); // Skip '<'
-    const tagName = this.readUntil(/[\s\/>]/);
-    const attributes: Record<string, string> = {};
-    let selfClosing = false;
-
-    this.readAttributes(attributes);
-
-    this.skipWhitespace();
-    if (this.peek() === '/') {
-      selfClosing = true;
-      this.consume();
-    }
-    this.consume(); // Skip '>'
-
-    return {
-      type: 'StartTag',
-      name: tagName,
-      attributes,
-      selfClosing,
-      location: this.getCurrentLocation()
-    };
-  }
-
-  private readEndTag(): DOMXMLToken {
-    this.consume(); // Skip '<'
-    this.consume(); // Skip '/'
-    const tagName = this.readUntil(/[\s>]/);
-    this.skipWhitespace();
-    this.consume(); // Skip '>'
-
-    return {
-      type: 'EndTag',
-      name: tagName,
-      location: this.getCurrentLocation()
-    };
-  }
-
-  private readText(): DOMXMLToken {
-    return {
-      type: 'Text',
-      value: this.readUntil('<'),
-      location: this.getCurrentLocation()
-    };
-  }
-
-  private readComment(): DOMXMLToken {
-    this.position += 4; // Skip '<!--'
-    let value = '';
-    while (
-      this.position < this.input.length && 
-      !this.input.startsWith('-->', this.position)
-    ) {
-      value += this.consume();
-    }
-    
-    if (this.position < this.input.length) {
-      this.position += 3; // Skip '-->'
+    // Check for any unclosed tags
+    if (stack.length > 1) {
+      const unclosedTag = stack[stack.length - 1];
+      throw new Error(`Unclosed tag: ${unclosedTag.name}`);
     }
 
     return {
-      type: 'Comment',
-      value: value.trim(),
-      location: this.getCurrentLocation()
+      root,
+      metadata: this.computeMetadata(root),
     };
   }
 
-  private readDoctype(): DOMXMLToken {
-    this.position += 9; // Skip '<!DOCTYPE'
-    this.skipWhitespace();
-    const value = this.readUntil('>');
-    this.consume(); // Skip '>'
+  private computeMetadata(root: DOMXMLASTNode) {
+    let nodeCount = 0;
+    let elementCount = 0;
+    let textCount = 0;
+    let commentCount = 0;
 
-    return {
-      type: 'Doctype',
-      value: value.trim(),
-      location: this.getCurrentLocation()
-    };
-  }
-
-  private readAttributes(attributes: Record<string, string>): void {
-    while (this.position < this.input.length) {
-      this.skipWhitespace();
-      
-      if (this.peek() === '>' || this.peek() === '/' || this.peek() === undefined) {
-        break;
-      }
-
-      const name = this.readUntil(/[\s=>/]/);
-      if (!name) break;
-
-      let value = '';
-      this.skipWhitespace();
-      
-      if (this.peek() === '=') {
-        this.consume(); // Skip '='
-        this.skipWhitespace();
-        
-        const quote = this.peek();
-        if (quote === '"' || quote === "'") {
-          this.consume(); // Skip opening quote
-          value = this.readUntil(quote);
-          this.consume(); // Skip closing quote
-        } else {
-          value = this.readUntil(/[\s>]/);
+    const traverse = (node: DOMXMLASTNode, isRoot = false) => {
+      if (!isRoot) {
+        nodeCount++;
+        switch (node.type) {
+          case 'Element':
+            elementCount++;
+            break;
+          case 'Text':
+            textCount++;
+            break;
+          case 'Comment':
+            commentCount++;
+            break;
         }
-      } else {
-        value = 'true'; // Boolean attribute
       }
 
-      attributes[name] = value;
-    }
+      if (node.children) {
+        node.children.forEach((child) => traverse(child));
+      }
+    };
+
+    traverse(root, true);
+    return {
+      nodeCount,
+      elementCount,
+      textCount,
+      commentCount,
+    };
   }
 }
