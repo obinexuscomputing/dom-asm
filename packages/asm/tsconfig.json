@@ -1,23 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "esnext",       // Ensure compatibility with Node.js and Jest
-    "moduleResolution": "node",
-    "strict": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",         // Compile output directory
-    "baseUrl": ".",             // Enable path aliases
-    "paths": {
-      "src/*": ["src/*"]        // Support path aliases for src files
-    },
-    "sourceMap": true           // Enable source maps for debugging
+    "declaration": true,
+    "declarationDir": "./dist",
+    "emitDeclarationOnly": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "outDir": "./dist",
+    "strict": true
   },
-  "include": [
-    "src/**/*",                 // Include source files
-    "tests/**/*"                // Include test files
-  ],
-  "exclude": [
-    "node_modules",             // Exclude dependencies
-    "dist"                      // Exclude compiled output
-  ]
+  "include": ["src/**/*.ts"],  // Fix this path to only include files in 'src'
+  "exclude": ["node_modules", "dist"]
 }

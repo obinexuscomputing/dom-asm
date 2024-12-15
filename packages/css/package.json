@@ -15,8 +15,7 @@
     }
   },
   "scripts": {
-    "build": "rollup -c",
-    "clean": "rimraf dist",
+    "build": "tsc && rollup -c",    "clean": "rimraf dist",
     "test": "jest --passWithNoTests",
     "lint": "eslint ."
   },
