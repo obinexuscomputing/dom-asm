@@ -14,7 +14,6 @@ export class DOMXMLParser {
     this.tokens = tokens;
     this.position = 0;
   }
-
   public parse(): DOMXMLAST {
     this.position = 0;
    
@@ -38,12 +37,11 @@ export class DOMXMLParser {
             children: []
           };
          
+          currentParent.children!.push(elementNode);
+         
           if (!token.selfClosing) {
-            currentParent.children!.push(elementNode);
             stack.push(elementNode);
             currentParent = elementNode;
-          } else {
-            currentParent.children!.push(elementNode);
           }
           break;
         }
@@ -62,23 +60,22 @@ export class DOMXMLParser {
         }
 
         case 'Text': {
-          if (token.value && token.value.trim()) {
-            const textNode: DOMXMLASTNode = {
+          const value = token.value?.trim();
+          if (value) {
+            currentParent.children!.push({
               type: 'Text',
-              value: token.value.trim()
-            };
-            currentParent.children!.push(textNode);
+              value
+            });
           }
           break;
         }
 
         case 'Comment':
         case 'Doctype': {
-          const node: DOMXMLASTNode = {
+          currentParent.children!.push({
             type: token.type,
             value: token.value
-          };
-          currentParent.children!.push(node);
+          });
           break;
         }
       }
