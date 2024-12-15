@@ -30,7 +30,6 @@ export class DOMXMLAST {
       switch (node.type) {
         case "Element":
           elementCount++;
-          node.children?.forEach(traverse);
           break;
         case "Text":
           textCount++;
@@ -39,6 +38,7 @@ export class DOMXMLAST {
           commentCount++;
           break;
       }
+      node.children?.forEach(traverse);
     };
 
     traverse(this.root);
@@ -50,7 +50,6 @@ export class DOMXMLAST {
       commentCount,
     };
   }
-
   addChildNode(parent: DOMXMLASTNode, child: DOMXMLASTNode): void {
     parent.children = parent.children || [];
     parent.children.push(child);
