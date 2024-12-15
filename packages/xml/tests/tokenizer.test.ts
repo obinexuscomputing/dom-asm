@@ -8,14 +8,26 @@ describe('DOMXMLTokenizer', () => {
       tokenizer = new DOMXMLTokenizer('<root>Hello</root>');
       const tokens = tokenizer.tokenize();
       
-      expect(tokens).toHaveLength(3);
-      expect(tokens[0]).toEqual({
-        type: 'StartTag',
-        name: 'root',
-        attributes: {},
-        selfClosing: false,
-        location: { line: 1, column: 1 }
-      });
+      expect(tokens).toHaveLength(3); // StartTag, Text, EndTag
+      expect(tokens).toEqual([
+        {
+          type: 'StartTag',
+          name: 'root',
+          attributes: {},
+          selfClosing: false,
+          location: { line: 1, column: 1 }
+        },
+        {
+          type: 'Text',
+          value: 'Hello',
+          location: { line: 1, column: 6 }
+        },
+        {
+          type: 'EndTag',
+          name: 'root',
+          location: { line: 1, column: 11 }
+        }
+      ]);
     });
 
     test('should handle self-closing tags', () => {
@@ -36,9 +48,16 @@ describe('DOMXMLTokenizer', () => {
       tokenizer = new DOMXMLTokenizer('<div id="main" class="container">');
       const tokens = tokenizer.tokenize();
       
-      expect(tokens[0].attributes).toEqual({
-        id: 'main',
-        class: 'container'
+      expect(tokens).toHaveLength(1);
+      expect(tokens[0]).toEqual({
+        type: 'StartTag',
+        name: 'div',
+        attributes: {
+          id: 'main',
+          class: 'container'
+        },
+        selfClosing: false,
+        location: { line: 1, column: 1 }
       });
     });
   });
@@ -48,6 +67,7 @@ describe('DOMXMLTokenizer', () => {
       tokenizer = new DOMXMLTokenizer('<!-- Test comment -->');
       const tokens = tokenizer.tokenize();
       
+      expect(tokens).toHaveLength(1);
       expect(tokens[0]).toEqual({
         type: 'Comment',
         value: 'Test comment',
@@ -59,6 +79,7 @@ describe('DOMXMLTokenizer', () => {
       tokenizer = new DOMXMLTokenizer('<!DOCTYPE html>');
       const tokens = tokenizer.tokenize();
       
+      expect(tokens).toHaveLength(1);
       expect(tokens[0]).toEqual({
         type: 'Doctype',
         value: 'html',
@@ -70,8 +91,30 @@ describe('DOMXMLTokenizer', () => {
       tokenizer = new DOMXMLTokenizer('<ns:element xmlns:ns="http://example.com">');
       const tokens = tokenizer.tokenize();
       
-      expect(tokens[0].name).toBe('ns:element');
-      expect(tokens[0].attributes?.['xmlns:ns']).toBe('http://example.com');
+      expect(tokens).toHaveLength(1);
+      expect(tokens[0]).toEqual({
+        type: 'StartTag',
+        name: 'ns:element',
+        attributes: {
+          'xmlns:ns': 'http://example.com'
+        },
+        selfClosing: false,
+        location: { line: 1, column: 1 }
+      });
+    });
+
+    test('should handle mixed content', () => {
+      tokenizer = new DOMXMLTokenizer('<root>Text<child/>More text</root>');
+      const tokens = tokenizer.tokenize();
+      
+      expect(tokens).toHaveLength(5);
+      expect(tokens.map(t => t.type)).toEqual([
+        'StartTag',
+        'Text',
+        'StartTag',
+        'Text',
+        'EndTag'
+      ]);
     });
   });
 
@@ -81,8 +124,15 @@ describe('DOMXMLTokenizer', () => {
       const tokens = tokenizer.tokenize();
       
       expect(tokens).toHaveLength(2);
-      expect(tokens[1].type).toBe('StartTag');
+      expect(tokens.map(t => t.type)).toEqual(['StartTag', 'StartTag']);
       expect(tokens[1].name).toBe('unclosed');
+    });
+
+    test('should handle empty input', () => {
+      tokenizer = new DOMXMLTokenizer('');
+      const tokens = tokenizer.tokenize();
+      
+      expect(tokens).toHaveLength(0);
     });
   });
 });
