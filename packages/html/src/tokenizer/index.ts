@@ -1,4 +1,5 @@
 export type HTMLToken =
+  | { type: "Doctype"; value: string }
   | { type: "StartTag"; name: string; attributes: Record<string, string> }
   | { type: "EndTag"; name: string }
   | { type: "Text"; value: string }
@@ -21,6 +22,8 @@ export class HTMLTokenizer {
       if (char === "<") {
         if (this.input.startsWith("<!--", this.position)) {
           tokens.push(this.readComment());
+        } else if (this.input.startsWith("<!DOCTYPE", this.position)) {
+          tokens.push(this.readDoctype());
         } else if (this.input[this.position + 1] === "/") {
           tokens.push(this.readEndTag());
         } else {
@@ -32,6 +35,13 @@ export class HTMLTokenizer {
     }
 
     return tokens;
+  }
+
+  private readDoctype(): HTMLToken {
+    this.position += 9; // Skip '<!DOCTYPE'
+    const value = this.readUntil(">").trim();
+    this.position++; // Skip '>'
+    return { type: "Doctype", value };
   }
 
   private readStartTag(): HTMLToken {

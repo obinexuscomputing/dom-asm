@@ -1,13 +1,12 @@
 import { HTMLToken } from "../tokenizer";
 
 export interface HTMLASTNode {
-  type: "Element" | "Text" | "Comment";
+  type: "Element" | "Text" | "Comment" | "Doctype";
   name?: string; // For "Element" nodes
-  value?: string; // For "Text" or "Comment" nodes
+  value?: string; // For "Text", "Comment", or "Doctype" nodes
   attributes?: Record<string, string>; // For "Element" nodes
   children?: HTMLASTNode[]; // For "Element" nodes
 }
-
 
 export interface HTMLAST {
   root: HTMLASTNode; // Root node of the AST

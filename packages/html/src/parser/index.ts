@@ -36,7 +36,6 @@ export interface HTMLCommentNode {
   value: string;
 }
 
-
 export class HTMLParser {
   private tokenizer: HTMLTokenizer;
 
@@ -51,46 +50,50 @@ export class HTMLParser {
   }
 
   private buildAST(tokens: HTMLToken[]): HTMLASTNode {
-    const root: HTMLElementNode = { type: "Element", name: "root", attributes: {}, children: [] };
-    const stack: HTMLElementNode[] = [root];
+    const root: HTMLASTNode = { type: "Element", name: "root", children: [] };
+    const stack: HTMLASTNode[] = [root];
+    let currentParent = root;
 
     for (const token of tokens) {
       switch (token.type) {
-        case "StartTag": {
-          const elementNode: HTMLElementNode = {
+        case "Doctype":
+          currentParent.children?.push({
+            type: "Doctype",
+            value: token.value,
+          });
+          break;
+
+        case "StartTag":
+          const elementNode: HTMLASTNode = {
             type: "Element",
-            name: token.name ?? "", // Default to an empty string
-            attributes: token.attributes ?? {}, // Default to an empty object
+            name: token.name,
+            attributes: token.attributes,
             children: [],
           };
-          stack[stack.length - 1].children.push(elementNode);
+          currentParent.children?.push(elementNode);
           stack.push(elementNode);
+          currentParent = elementNode;
           break;
-        }
-        
-        case "Text": {
-          const textNode: HTMLTextNode = {
-            type: "Text",
-            value: token.value ?? "", // Default to an empty string
-          };
-          stack[stack.length - 1].children.push(textNode);
-          break;
-        }
-        
-        case "Comment": {
-          const commentNode: HTMLCommentNode = {
-            type: "Comment",
-            value: token.value ?? "", // Default to an empty string
-          };
-          stack[stack.length - 1].children.push(commentNode);
-          break;
-        }
-      }        
 
+        case "EndTag":
+          if (stack.length > 1) {
+            stack.pop();
+            currentParent = stack[stack.length - 1];
+          }
+          break;
+
+        case "Text":
+        case "Comment":
+          currentParent.children?.push({
+            type: token.type,
+            value: token.value,
+          });
+          break;
+      }
     }
 
     if (stack.length > 1) {
-      throw new HTMLParserError("Unclosed tags detected", tokens[tokens.length - 1], tokens.length);
+      throw new Error("Unclosed tags detected");
     }
 
     return root;
