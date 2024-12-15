@@ -20,6 +20,10 @@ interface CommentNode extends ASTNode {
   value: string;
 }
 
+function isTextNode(node: ASTNode): node is TextNode {
+  return node.type === "Text";
+}
+
 export class ParserError extends Error {
   token: Token;
   position: number;
@@ -73,20 +77,19 @@ export class Parser {
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
     const ast = this.buildASTWithRecovery(tokens);
-    
-    // Clean up whitespace text nodes
     this.cleanWhitespace(ast);
     return ast;
   }
 
   private cleanWhitespace(node: ASTNode): void {
     if (node.children) {
-      // Remove pure whitespace text nodes
-      node.children = node.children.filter(child => 
-        !(child.type === "Text" && this.isWhitespace(child.value))
-      );
+      node.children = node.children.filter(child => {
+        if (isTextNode(child)) {
+          return !this.isWhitespace(child.value);
+        }
+        return true;
+      });
       
-      // Clean remaining children
       node.children.forEach(child => this.cleanWhitespace(child));
     }
   }
@@ -139,7 +142,6 @@ export class Parser {
               );
             }
 
-            // Pop up to the matching tag
             while (stack.length > matchingStartIndex) {
               stack.pop();
             }
