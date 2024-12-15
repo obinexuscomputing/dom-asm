@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs","sources":["../src/api/htmlApi.ts"],"sourcesContent":[null],"names":["file","content","fs","readFileSync","parsed"],"mappings":"yTAEM,SAAoBA,GAGxB,MAAO,CAAEC,QAFOC,EAAGC,aAAaH,EAAM,SAEpBI,OAAQ,qBAC5B"}

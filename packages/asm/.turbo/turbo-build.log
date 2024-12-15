@@ -2,18 +2,8 @@
 > @obinexuscomputing/asm@1.0.0 build
 > tsc && rollup -c
 
-[1G[0K[1m[31m[!] [1mSyntaxError: Unexpected identifier 'assert'[22m[1m[39m[22m
-[2m    at compileSourceTextModule (node:internal/modules/esm/utils:340:16)
-    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:102:18)
-    at ModuleLoader.#translate (node:internal/modules/esm/loader:433:12)
-    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:480:27)[22m
-
-
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/asm
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/asm@1.0.0
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/asm
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c tsc && rollup -c
-[1G[0K⠙[1G[0K
+[1G[0K[36m
+[1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js[22m...[39m
+[32mcreated [1mdist/index.cjs, dist/index.js[22m in [1m3.2s[22m[39m
+[36m
+[1msrc/index.ts[22m → [1mdist/index.d.ts[22m...[39m
