@@ -1,7 +1,5 @@
-import { HTMLASTNode } from "../ast";
+import { HTMLAST, HTMLASTNode, HTMLASTBuilder } from "../ast";
 import { HTMLToken, HTMLTokenizer } from "../tokenizer";
-
-
 
 export class HTMLParserError extends Error {
   public token: HTMLToken;
@@ -18,43 +16,33 @@ export class HTMLParserError extends Error {
   }
 }
 
-
-export interface HTMLElementNode {
-  type: "Element";
-  name: string;
-  attributes: Record<string, string>;
-  children: HTMLASTNode[];
-}
-
-export interface HTMLTextNode {
-  type: "Text";
-  value: string;
-}
-
-export interface HTMLCommentNode {
-  type: "Comment";
-  value: string;
+export interface HTMLParserOptions {
+  throwOnError?: boolean;
+  errorHandler?: (error: HTMLParserError) => void;
 }
 
 export class HTMLParser {
   private tokenizer: HTMLTokenizer;
+  private options: HTMLParserOptions;
 
-  constructor() {
+  constructor(options: HTMLParserOptions = { throwOnError: true }) {
     this.tokenizer = new HTMLTokenizer("");
-  }public parse(input: string): HTMLAST {
+    this.options = options;
+  }
+
+  public parse(input: string): HTMLAST {
     const tokenizer = new HTMLTokenizer(input);
     const tokens = tokenizer.tokenize();
-  
+
     try {
       const astBuilder = new HTMLASTBuilder(tokens);
       return astBuilder.buildAST();
     } catch (error) {
       if (this.options.throwOnError) throw error;
-      if (this.errorHandler) this.errorHandler(error);
+      if (this.options.errorHandler) this.options.errorHandler(error as HTMLParserError);
       return { root: { type: "Element", name: "root", children: [] } };
     }
   }
-  
 
   private buildAST(tokens: HTMLToken[]): HTMLASTNode {
     const root: HTMLASTNode = { type: "Element", name: "root", children: [] };
@@ -86,6 +74,11 @@ export class HTMLParser {
           if (stack.length > 1) {
             stack.pop();
             currentParent = stack[stack.length - 1];
+          } else {
+            if (this.options.errorHandler) {
+              const error = new HTMLParserError(`Unmatched end tag: ${token.name}`, token, stack.length);
+              this.options.errorHandler(error);
+            }
           }
           break;
 
@@ -100,7 +93,7 @@ export class HTMLParser {
     }
 
     if (stack.length > 1) {
-      throw new Error("Unclosed tags detected");
+      throw new HTMLParserError("Unclosed tags detected", tokens[tokens.length - 1], stack.length);
     }
 
     return root;
