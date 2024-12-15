@@ -1,2 +1,2 @@
-"use strict";
+export {};
 //# sourceMappingURL=cssApi.js.map

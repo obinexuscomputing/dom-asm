@@ -1,2 +1,2 @@
-"use strict";
+"use strict";function e(e){var t=Object.create(null);return e&&Object.keys(e).forEach((function(r){if("default"!==r){var n=Object.getOwnPropertyDescriptor(e,r);Object.defineProperty(t,r,n.get?n:{enumerable:!0,get:function(){return e[r]}})}})),t.default=e,Object.freeze(t)}var t=e(require("fs"));exports.parseFile=function(e){return{content:t.readFileSync(e,"utf-8"),parsed:"HTML Parsed Result"}};
 //# sourceMappingURL=index.cjs.map
