@@ -49,9 +49,13 @@ export class HTMLASTBuilder {
           break;
 
         case "EndTag":
-          if (stack.length > 1) {
+          if (stack.length > 1 && currentParent.name === token.name) {
             stack.pop();
             currentParent = stack[stack.length - 1];
+          } else {
+            console.warn(
+              `Unmatched end tag: ${token.name} at position ${this.position}`
+            );
           }
           break;
 
@@ -62,7 +66,18 @@ export class HTMLASTBuilder {
             value: token.value,
           });
           break;
+
+        default:
+          console.warn(
+            `Unexpected token type: ${token.type} at position ${this.position}`
+          );
       }
+    }
+
+    if (stack.length > 1) {
+      console.warn(
+        `Unclosed tags detected: ${stack.slice(1).map((node) => node.name)}`
+      );
     }
 
     return {
