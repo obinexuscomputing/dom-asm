@@ -7,18 +7,18 @@
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 10 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 10 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
 transform: {
     <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
@@ -26,15 +26,15 @@ transform: {
 See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 10 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
 transform: {
     <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
@@ -42,15 +42,15 @@ transform: {
 See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 10 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
 transform: {
     <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
@@ -58,15 +58,15 @@ transform: {
 See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 10 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
 transform: {
     <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
@@ -74,164 +74,167 @@ transform: {
 See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 10 s
-[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
-transform: {
-    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
-},
-See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 10 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        1 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        4 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        2 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s, estimated 6 s
 [32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-
+[1mTime:[22m        4 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mast.test.ts[22m ([0m[1m[41m5.043 s[49m[22m[0m)
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m ([0m[1m[41m5.257 s[49m[22m[0m)
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m ([0m[1m[41m5.066 s[49m[22m[0m)
-
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-
-[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
-[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m ([0m[1m[41m5.152 s[49m[22m[0m)
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mast.test.ts[22m ([0m[1m[41m5.303 s[49m[22m[0m)
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
-[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 10 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m ([0m[1m[41m5.324 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m ([0m[1m[41m5.351 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m ([0m[1m[41m5.348 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+
 [1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
 [1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5.611 s, estimated 10 s
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
+[1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
+[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        5.902 s, estimated 6 s
 [2mRan all test suites[22m[2m.[22m
 [1G[0K⠙[1G[0K

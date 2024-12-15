@@ -3,209 +3,123 @@
 > jest --no-cache
 
 [1G[0K[1m[2mDetermining test suites to run...[22m[22m[999D[K
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s[K[1A[K[1A[K[1A[K[1A[K[1A
+[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        1 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[K[1A[K[1A[999D[K
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mConsole
-
-    [2m[31mconsole.error[39m[22m
-[31m      Error at position 7: Unmatched end tag: </mismatch>. Expected </div>.[39m
+[K[1A[K[1A  [2m[31mconsole.error[39m[22m
+[31m    Error at position 7: Unmatched end tag: </unmatched>. Expected </div>.[39m
 [2m[22m
-[2m    [0m [90m 61 |[39m         [36mthrow[39m error[33m;[39m[22m
-[2m     [90m 62 |[39m       }[22m
-[2m    [31m[1m>[22m[2m[39m[90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[0m[22m
+[2m    [0m [90m 70 |[39m       }[22m
+[2m     [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
+[2m     [90m 74 |[39m       }[22m
+[2m     [90m 75 |[39m     }[0m[22m
 [2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:63:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:132:20)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:27:24)[22m[2m[22m
-
-    [2m[31mconsole.error[39m[22m
-[31m      Problematic token: {"type":"EndTag","name":"mismatch"}[39m
-[2m[22m
-[2m    [0m [90m 62 |[39m       }[22m
-[2m     [90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m    [31m[1m>[22m[2m[39m[90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[22m
-[2m     [90m 67 |[39m[0m[22m
-[2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:64:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:132:20)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:27:24)[22m[2m[22m
-
-    [2m[31mconsole.error[39m[22m
-[31m      Error at position 11: Unclosed tag: <div>[39m
-[2m[22m
-[2m    [0m [90m 61 |[39m         [36mthrow[39m error[33m;[39m[22m
-[2m     [90m 62 |[39m       }[22m
-[2m    [31m[1m>[22m[2m[39m[90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[0m[22m
-[2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:63:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:191:14)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:27:24)[22m[2m[22m
-
-    [2m[31mconsole.error[39m[22m
-[31m      Problematic token: {"type":"StartTag","name":"div","attributes":{}}[39m
-[2m[22m
-[2m    [0m [90m 62 |[39m       }[22m
-[2m     [90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m    [31m[1m>[22m[2m[39m[90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[22m
-[2m     [90m 67 |[39m[0m[22m
-[2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:64:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:191:14)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:27:24)[22m[2m[22m
+[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:72:17)[22m[2m[22m
+[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
+[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:22:24)[22m[2m[22m
 
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[K[1A[K[1A[999D[K
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mConsole
-
-    [2m[31mconsole.error[39m[22m
-[31m      Error at position 7: Unmatched end tag: </unmatched>. Expected </div>.[39m
+[K[1A[K[1A  [2m[31mconsole.error[39m[22m
+[31m    Problematic token: {"type":"EndTag","name":"unmatched"}[39m
 [2m[22m
-[2m    [0m [90m 61 |[39m         [36mthrow[39m error[33m;[39m[22m
-[2m     [90m 62 |[39m       }[22m
-[2m    [31m[1m>[22m[2m[39m[90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[0m[22m
+[2m    [0m [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
+[2m     [90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 74 |[39m       }[22m
+[2m     [90m 75 |[39m     }[22m
+[2m     [90m 76 |[39m   }[0m[22m
 [2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:63:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:132:20)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/tokenizer.test.ts[39m[0m[2m:22:24)[22m[2m[22m
-
-    [2m[31mconsole.error[39m[22m
-[31m      Problematic token: {"type":"EndTag","name":"unmatched"}[39m
-[2m[22m
-[2m    [0m [90m 62 |[39m       }[22m
-[2m     [90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m    [31m[1m>[22m[2m[39m[90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[22m
-[2m     [90m 67 |[39m[0m[22m
-[2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:64:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:132:20)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/tokenizer.test.ts[39m[0m[2m:22:24)[22m[2m[22m
-
-    [2m[31mconsole.error[39m[22m
-[31m      Error at position 11: Unclosed tag: <div>[39m
-[2m[22m
-[2m    [0m [90m 61 |[39m         [36mthrow[39m error[33m;[39m[22m
-[2m     [90m 62 |[39m       }[22m
-[2m    [31m[1m>[22m[2m[39m[90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[0m[22m
-[2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:63:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:191:14)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/tokenizer.test.ts[39m[0m[2m:22:24)[22m[2m[22m
-
-    [2m[31mconsole.error[39m[22m
-[31m      Problematic token: {"type":"StartTag","name":"div","attributes":{}}[39m
-[2m[22m
-[2m    [0m [90m 62 |[39m       }[22m
-[2m     [90m 63 |[39m       console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m    [31m[1m>[22m[2m[39m[90m 64 |[39m       console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m               [31m[1m^[22m[2m[39m[22m
-[2m     [90m 65 |[39m     }[22m
-[2m     [90m 66 |[39m   }[22m
-[2m     [90m 67 |[39m[0m[22m
-[2m[22m
-[2m      [2mat Parser.handleError ([22m[2msrc/parser/index.ts[2m:64:15)[22m[2m[22m
-[2m      [2mat Parser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:191:14)[22m[2m[22m
-[2m      [2mat Parser.parse ([22m[2msrc/parser/index.ts[2m:75:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/tokenizer.test.ts[39m[0m[2m:22:24)[22m[2m[22m
+[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:73:17)[22m[2m[22m
+[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
+[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:22:24)[22m[2m[22m
 
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A[999D[K
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A  [2m[31mconsole.error[39m[22m
+[31m    Error at position 7: Unmatched end tag: </mismatch>. Expected </div>.[39m
+[2m[22m
+[2m    [0m [90m 70 |[39m       }[22m
+[2m     [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
+[2m    [31m[1m>[22m[2m[39m[90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
+[2m     [90m 74 |[39m       }[22m
+[2m     [90m 75 |[39m     }[0m[22m
+[2m[22m
+[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:72:17)[22m[2m[22m
+[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
+[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:52:24)[22m[2m[22m
 
-[1mTest Suites: [22m0 of 2 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 total
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A[999D[K
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A  [2m[31mconsole.error[39m[22m
+[31m    Problematic token: {"type":"EndTag","name":"mismatch"}[39m
+[2m[22m
+[2m    [0m [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
+[2m     [90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
+[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
+[2m     [90m 74 |[39m       }[22m
+[2m     [90m 75 |[39m     }[22m
+[2m     [90m 76 |[39m   }[0m[22m
+[2m[22m
+[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:73:17)[22m[2m[22m
+[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
+[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:52:24)[22m[2m[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A  Parser with Custom Errors
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A    [32m✓[39m [2mshould throw HTMLParserError for unmatched end tags (41 ms)[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A    [32m✓[39m [2mshould continue parsing after encountering an error when throwOnError is false (72 ms)[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A  Parser with Error Handler
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A    [32m✓[39m [2mshould invoke custom error handler for unmatched end tags (8 ms)[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A    [32m✓[39m [2mshould recover and continue parsing after an error (25 ms)[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+[K[1A[K[1A[999D[K[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
 [1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 total
-[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2.386 s
+[1mTime:[22m        1.842 s
 [2mRan all test suites[22m[2m.[22m
 [1G[0K⠙[1G[0K
