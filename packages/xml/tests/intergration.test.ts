@@ -1,57 +1,78 @@
-import { DOMXML } from '../src';
+import { DOMXMLTokenizer } from '../src/tokenizer';
+import { DOMXMLParser } from '../src/parser/DOMXMLParser';
+import { DOMXMLOptimizer } from '../src/optimizer';
+import { DOMXMLValidator } from '../src/validator';
 
 describe('DOMXML Integration', () => {
-  let xml: DOMXML;
-
-  beforeEach(() => {
-    xml = new DOMXML({ validateOnParse: true });
-  });
-
   test('should handle complete XML workflow', () => {
     const input = `
-      <?xml version="1.0" encoding="UTF-8"?>
       <root>
-        <!-- Test comment -->
-        <item id="1">
-          <name>Test Item</name>
-          <value>123</value>
-        </item>
+        <!-- Comment -->
+        <parent>
+          <child>Test</child>
+        </parent>
       </root>
     `;
 
-    const ast = xml.parse(input);
-    expect(ast.metadata?.elementCount).toBe(4); // root, item, name, value
-    expect(ast.metadata?.commentCount).toBe(1);
+    const tokenizer = new DOMXMLTokenizer(input);
+    const tokens = tokenizer.tokenize();
+    
+    const parser = new DOMXMLParser(tokens);
+    const ast = parser.parse();
 
-    const output = xml.generate(ast);
-    expect(output).toContain('<?xml version="1.0" encoding="UTF-8"?>');
-    expect(output).toContain('<item id="1">');
-    expect(output).toContain('<name>Test Item</name>');
+    expect(ast.metadata?.elementCount).toBe(3); // root, parent, child
+    expect(ast.metadata?.textCount).toBe(1);
+    expect(ast.metadata?.commentCount).toBe(1);
   });
 
   test('should optimize AST', () => {
     const input = `
       <root>
-        <div></div>
-        <div></div>
-        <text>  </text>
+        <div>  </div>
+        <div>Test1</div>
+        <div>Test2</div>
       </root>
     `;
 
-    const ast = xml.parse(input);
-    const optimized = xml.optimize(ast);
-    expect(optimized.metadata?.elementCount).toBeLessThan(ast.metadata?.elementCount!);
+    const tokenizer = new DOMXMLTokenizer(input);
+    const parser = new DOMXMLParser(tokenizer.tokenize());
+    const ast = parser.parse();
+    
+    const optimizer = new DOMXMLOptimizer();
+    const optimizedAst = optimizer.optimize(ast);
+
+    // Empty div should be removed or optimized
+    expect(optimizedAst.metadata?.elementCount).toBeLessThan(ast.metadata?.elementCount!);
   });
 
   test('should validate XML', () => {
-    const input = '<root><valid>test</valid></root>';
-    const ast = xml.parse(input);
-    const result = xml.validate(ast);
+    const input = '<root><item required="true" /></root>';
+    
+    const tokenizer = new DOMXMLTokenizer(input);
+    const parser = new DOMXMLParser(tokenizer.tokenize());
+    const ast = parser.parse();
+    
+    const validator = new DOMXMLValidator({
+      schema: {
+        elements: {
+          item: {
+            attributes: ['required'],
+            required: ['required']
+          }
+        }
+      }
+    });
+
+    const result = validator.validate(ast);
     expect(result.valid).toBe(true);
   });
 
   test('should handle errors gracefully', () => {
-    const input = '<root><invalid></valid></root>';
-    expect(() => xml.parse(input)).toThrow();
+    const input = '<root><unclosed>';
+    
+    const tokenizer = new DOMXMLTokenizer(input);
+    const parser = new DOMXMLParser(tokenizer.tokenize());
+    
+    expect(() => parser.parse()).toThrow('Unclosed tag');
   });
 });

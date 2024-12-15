@@ -1,6 +1,5 @@
 import { DOMXMLParser } from '../src/parser/DOMXMLParser';
 import { DOMXMLTokenizer } from '../src/tokenizer';
-import { DOMXMLAST } from '../src/ast';
 
 describe('DOMXMLParser', () => {
   let parser: DOMXMLParser;
@@ -9,8 +8,7 @@ describe('DOMXMLParser', () => {
   describe('Basic Parsing', () => {
     test('should parse simple XML', () => {
       tokenizer = new DOMXMLTokenizer('<root><child>Test</child></root>');
-      const tokens = tokenizer.tokenize();
-      parser = new DOMXMLParser(tokens);
+      parser = new DOMXMLParser(tokenizer.tokenize());
       
       const ast = parser.parse();
       expect(ast.root.type).toBe('Element');
@@ -26,8 +24,7 @@ describe('DOMXMLParser', () => {
           </parent>
         </root>
       `);
-      const tokens = tokenizer.tokenize();
-      parser = new DOMXMLParser(tokens);
+      parser = new DOMXMLParser(tokenizer.tokenize());
       
       const ast = parser.parse();
       expect(ast.metadata?.elementCount).toBe(3); // root, parent, child
@@ -44,8 +41,7 @@ describe('DOMXMLParser', () => {
           <item />
         </root>
       `);
-      const tokens = tokenizer.tokenize();
-      parser = new DOMXMLParser(tokens);
+      parser = new DOMXMLParser(tokenizer.tokenize());
       
       const ast = parser.parse();
       expect(ast.metadata).toEqual({
@@ -60,16 +56,14 @@ describe('DOMXMLParser', () => {
   describe('Error Handling', () => {
     test('should throw on mismatched tags', () => {
       tokenizer = new DOMXMLTokenizer('<root><child></parent></root>');
-      const tokens = tokenizer.tokenize();
-      parser = new DOMXMLParser(tokens);
+      parser = new DOMXMLParser(tokenizer.tokenize());
       
       expect(() => parser.parse()).toThrow('Mismatched tags');
     });
 
     test('should throw on unclosed tags', () => {
       tokenizer = new DOMXMLTokenizer('<root><child>');
-      const tokens = tokenizer.tokenize();
-      parser = new DOMXMLParser(tokens);
+      parser = new DOMXMLParser(tokenizer.tokenize());
       
       expect(() => parser.parse()).toThrow('Unclosed tag');
     });

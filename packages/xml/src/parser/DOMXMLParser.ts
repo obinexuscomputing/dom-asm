@@ -5,13 +5,17 @@ export class DOMXMLParser {
   private tokens: DOMXMLToken[];
   private position: number;
 
-  constructor() {
-    this.tokens = [];
+  constructor(tokens?: DOMXMLToken[]) {
+    this.tokens = tokens || [];
     this.position = 0;
   }
 
-  public parse(tokens: DOMXMLToken[]): DOMXMLAST {
+  public setTokens(tokens: DOMXMLToken[]): void {
     this.tokens = tokens;
+    this.position = 0;
+  }
+
+  public parse(): DOMXMLAST {
     this.position = 0;
     
     const root: DOMXMLASTNode = {
