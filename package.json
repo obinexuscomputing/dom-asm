@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build:ts": "tsc --build",
-    "build": "npm run build:ts",
+    "build": "npm run build:ts && rollup -c ",
     "test": "turbo test",
     "lint": "turbo lint",
     "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",

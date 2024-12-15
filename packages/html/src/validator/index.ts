@@ -46,11 +46,12 @@ export interface HTMLValidationResult {
 
 export class HTMLValidator {
   public validate(ast: HTMLASTNode): HTMLValidationResult {
+    
     const errors: string[] = [];
     this.traverse(ast, errors);
     return { valid: errors.length === 0, errors };
   }
-
+  
   private traverse(node: HTMLASTNode, errors: string[]): void {
     if (node.type === "Element") {
       if (!node.name?.match(/^[a-zA-Z0-9\-]+$/)) {

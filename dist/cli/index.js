@@ -44,7 +44,7 @@ async function processFile(file, type, options) {
                 ast = new HTMLParser().parse(tokens);
                 if (options.validate) {
                     const validator = new HTMLValidator();
-                    const validationResult = validator.validateAST(ast);
+                    const validationResult = validator.validate(ast); // Validate the AST
                     if (!validationResult.valid) {
                         throw new Error(`Validation errors:\n${validationResult.errors.join("\n")}`);
                     }
@@ -53,7 +53,7 @@ async function processFile(file, type, options) {
                     const optimizer = new HTMLASTOptimizer();
                     ast = optimizer.optimize(ast);
                     const generator = new HTMLCodeGenerator();
-                    result.optimized = generator.generateHTML(ast);
+                    result.optimized = generator.generateHTML(ast); // Generate optimized HTML
                 }
                 break;
             case "js":
