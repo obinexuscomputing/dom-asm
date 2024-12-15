@@ -3,8 +3,9 @@ import { DOMXMLToken } from "../tokenizer";
 export declare class DOMXMLParser {
     private tokens;
     private position;
-    constructor();
-    parse(tokens: DOMXMLToken[]): DOMXMLAST;
+    constructor(tokens?: DOMXMLToken[]);
+    setTokens(tokens: DOMXMLToken[]): void;
+    parse(): DOMXMLAST;
     private computeMetadata;
 }
 //# sourceMappingURL=DOMXMLParser.d.ts.map
