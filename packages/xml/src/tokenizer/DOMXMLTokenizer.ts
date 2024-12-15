@@ -17,55 +17,43 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
 
   public tokenize(): DOMXMLToken[] {
     const tokens: DOMXMLToken[] = [];
-    let text = '';
-    let textLocation = this.getCurrentLocation();
 
     while (this.position < this.input.length) {
       const char = this.peek();
 
       if (char === '<') {
-        // Push any accumulated text before processing the tag
-        if (text.trim()) {
-          tokens.push({
-            type: 'Text',
-            value: text.trim(),
-            location: textLocation
-          });
-        }
-        text = '';
-
+        // Get location before consuming any characters
         const location = this.getCurrentLocation();
+
         if (this.matches('<!--')) {
           tokens.push(this.readComment());
         } else if (this.matches('<!DOCTYPE')) {
           tokens.push(this.readDoctype());
         } else if (this.peek(1) === '/') {
-          tokens.push(this.readEndTag());
+          // Store the start location for end tag
+          tokens.push(this.readEndTag(location));
         } else {
-          tokens.push(this.readStartTag());
+          // Store the start location for start tag
+          tokens.push(this.readStartTag(location));
         }
       } else {
-        if (!text) {
-          textLocation = this.getCurrentLocation();
+        // Store the start location for text content
+        const textLocation = this.getCurrentLocation();
+        const textContent = this.readTextContent();
+        if (textContent.trim()) {
+          tokens.push({
+            type: 'Text',
+            value: textContent,
+            location: textLocation
+          });
         }
-        text += this.consume();
       }
-    }
-
-    // Handle any remaining text
-    if (text.trim()) {
-      tokens.push({
-        type: 'Text',
-        value: text.trim(),
-        location: textLocation
-      });
     }
 
     return tokens;
   }
 
-  private readStartTag(): DOMXMLToken {
-    const location = this.getCurrentLocation();
+  private readStartTag(location: { line: number; column: number }): DOMXMLToken {
     this.consume(); // Skip '<'
     const name = this.readTagName();
     const attributes = this.readAttributes();
@@ -93,11 +81,10 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
   }
 
   private readTagName(): string {
-    return this.readWhile((char) => this.isNameChar(char));
+    return this.readWhile(char => this.isNameChar(char));
   }
 
-  private readEndTag(): DOMXMLToken {
-    const location = this.getCurrentLocation();
+  private readEndTag(location: { line: number; column: number }): DOMXMLToken {
     this.consumeSequence(2); // Skip '</'
     const name = this.readTagName();
     this.skipWhitespace();
@@ -155,6 +142,14 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       return value;
     }
     return this.readUntil(/[\s>\/]/);
+  }
+
+  private readTextContent(): string {
+    let content = '';
+    while (this.position < this.input.length && this.peek() !== '<') {
+      content += this.consume();
+    }
+    return content;
   }
 
   private readComment(): DOMXMLToken {
