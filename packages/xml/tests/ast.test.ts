@@ -1,5 +1,6 @@
 import { DOMXMLAST, DOMXMLASTNode } from '../src/ast';
-import { DOMXMLOptimizer } from '../src/ast/DOMXMLOptimizer';
+import { DOMXMLASTOptimizer } from '../src/ast/DOMXMLASTOptimizer'; // Correct import
+
 
 describe('DOMXMLOptimizer', () => {
   let optimizer: DOMXMLOptimizer;
