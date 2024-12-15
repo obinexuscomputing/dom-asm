@@ -1,6 +1,5 @@
 import { Tokenizer } from "./tokenizer";
 import { Validator } from "./validator";
-import {ASTNode , ASTOptimizer  } from "./optimizer";
 import { CodeGenerator } from "./generator";
 import { Parser } from "./parser";
 

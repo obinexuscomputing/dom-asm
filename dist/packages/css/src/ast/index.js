@@ -112,5 +112,4 @@ export class ASTBuilder {
         return this.parseStylesheet();
     }
 }
-// 
 //# sourceMappingURL=index.js.map
