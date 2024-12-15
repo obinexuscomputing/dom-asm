@@ -1,24 +1,9 @@
 
 > @obinexuscomputing/js@1.0.0 build
-> rollup -c
+> npm run build:ts && npm run build:rollup
 
-[1G[0K[36m
-[1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js[22m...[39m
-[32mcreated [1mdist/index.cjs, dist/index.js[22m in [1m4.8s[22m[39m
-[36m
-[1mdist/index.d.ts[22m → [1mdist/index.d.ts[22m...[39m
-[1m[31m[!] [1mRollupError: Could not resolve entry module "dist/index.d.ts".[22m[1m[39m[22m
-[2m    at getRollupError (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:285:41)
-    at Object.error (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/parseAst.js:281:42)
-    at ModuleLoader.loadEntryModule (/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/node_modules/rollup/dist/shared/rollup.js:21272:32)
-    at async Promise.all (index 0)[22m
+[1G[0K
+> @obinexuscomputing/js@1.0.0 build:ts
+> tsc
 
-
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/js@1.0.0
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
-[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c rollup -c
-[1G[0K⠙[1G[0K
+[1G[0K
