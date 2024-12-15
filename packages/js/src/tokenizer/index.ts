@@ -35,6 +35,31 @@ export class JSTokenizer {
     );
   }
   
+  private readOperator(input: string, start: number): [string, number] {
+    let operator = '';
+    let maxOperator = '';
+    let current = start;
+  
+    while (current < input.length && /[=!<>&|+\-*/%?.]/.test(input[current])) {
+      operator += input[current];
+      if (this.operators.has(operator)) {
+        maxOperator = operator;
+      }
+      current++;
+    }
+  
+    if (maxOperator) {
+      return [maxOperator, maxOperator.length];
+    }
+  
+    // Handle single-character operators like "="
+    if (this.operators.has(input[start])) {
+      return [input[start], 1];
+    }
+  
+    throw new Error(`Unexpected character: ${input[start]}`);
+  }
+  
 
   public tokenize(input: string): JSToken[] {
     const tokens: JSToken[] = [];

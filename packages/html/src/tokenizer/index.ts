@@ -14,27 +14,31 @@ export class HTMLTokenizer {
     this.position = 0;
   }
 
-  public tokenize(): HTMLToken[] {
+  public tokenize(input: string): HTMLToken[] {
     const tokens: HTMLToken[] = [];
-
-    while (this.position < this.input.length) {
-      const char = this.input[this.position];
-
-      if (char === "<") {
-        if (this.input[this.position + 1] === "/") {
-          tokens.push(this.readEndTag());
-        } else if (this.input[this.position + 1] === "!") {
-          tokens.push(this.readComment());
+    let position = 0;
+  
+    while (position < input.length) {
+      const char = input[position];
+  
+      if (char === '<') {
+        if (input[position + 1] === '!') {
+          tokens.push(this.readComment(input, position));
+        } else if (input[position + 1] === '/') {
+          tokens.push(this.readEndTag(input, position));
         } else {
-          tokens.push(this.readStartTag());
+          tokens.push(this.readStartTag(input, position));
         }
       } else {
-        tokens.push(this.readText());
+        tokens.push(this.readText(input, position));
       }
+  
+      position++;
     }
-
+  
     return tokens;
   }
+  
 
   private readStartTag(): HTMLToken {
     this.position++; // Skip '<'
