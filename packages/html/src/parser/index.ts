@@ -73,7 +73,7 @@ export class Parser {
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
     const ast = this.buildASTWithRecovery(tokens);
-
+    
     // Clean up whitespace text nodes
     this.cleanWhitespace(ast);
     return ast;
@@ -83,9 +83,9 @@ export class Parser {
     if (node.children) {
       // Remove pure whitespace text nodes
       node.children = node.children.filter(child => 
-        !(child.type === "Text" && this.isWhitespace(child.value ?? ""))
+        !(child.type === "Text" && this.isWhitespace(child.value))
       );
-
+      
       // Clean remaining children
       node.children.forEach(child => this.cleanWhitespace(child));
     }
@@ -100,7 +100,7 @@ export class Parser {
     const stack: ASTNode[] = [root];
     let currentParent = root;
     let recoveryMode = false;
-  
+
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i];
       try {
@@ -108,10 +108,10 @@ export class Parser {
           case "StartTag": {
             const elementNode: ElementNode = {
               type: "Element",
-              name: token.name ?? "unknown",
-              attributes: token.attributes || {},
+              name: token.name,
+              attributes: token.attributes,
               children: [],
-              parent: currentParent,
+              parent: currentParent
             };
             currentParent.children.push(elementNode);
             stack.push(elementNode);
@@ -119,55 +119,54 @@ export class Parser {
             recoveryMode = false;
             break;
           }
+          
           case "EndTag": {
             if (recoveryMode) {
               continue;
             }
-  
+
             const matchingStartIndex = stack.findIndex(node => 
               this.isElementNode(node) && node.name === token.name
             );
-  
+
             if (matchingStartIndex === -1) {
-              this.handleError(
-                new ParserError(
-                  `Unmatched end tag: </${token.name}>. Expected </${
-                    this.isElementNode(currentParent) ? currentParent.name : "unknown"
-                  }>.`,
-                  token,
-                  i
-                )
+              throw new ParserError(
+                `Unmatched end tag: </${token.name}>. Expected </${
+                  this.isElementNode(currentParent) ? currentParent.name : "unknown"
+                }>.`,
+                token,
+                i
               );
-              recoveryMode = true;
-              continue;
             }
-  
-            // Pop stack to the matching tag
+
+            // Pop up to the matching tag
             while (stack.length > matchingStartIndex) {
               stack.pop();
             }
             currentParent = stack[stack.length - 1];
             break;
           }
+
           case "Text": {
             if (!recoveryMode) {
               const textNode: TextNode = {
                 type: "Text",
-                value: token.value ?? "",
+                value: token.value,
                 children: [],
-                parent: currentParent,
+                parent: currentParent
               };
               currentParent.children.push(textNode);
             }
             break;
           }
+
           case "Comment": {
             if (!recoveryMode) {
               const commentNode: CommentNode = {
                 type: "Comment",
-                value: token.value ?? "",
+                value: token.value,
                 children: [],
-                parent: currentParent,
+                parent: currentParent
               };
               currentParent.children.push(commentNode);
             }
@@ -177,13 +176,16 @@ export class Parser {
       } catch (error) {
         if (error instanceof ParserError) {
           this.handleError(error);
-          recoveryMode = true;
-          continue;
+          if (!this.shouldThrow) {
+            recoveryMode = true;
+            continue;
+          }
+          throw error;
         }
         throw error;
       }
     }
-  
+
     // Handle unclosed tags
     while (stack.length > 1) {
       const unclosedNode = stack.pop()!;
@@ -197,9 +199,7 @@ export class Parser {
         );
       }
     }
-  
+
     return root;
   }
-  
-  
 }
