@@ -1,4 +1,4 @@
-import { DOMXMLOptimizer, DOMXMLAST } from "./ast";
+import { DOMXMLASTOptimizer, DOMXMLAST } from "./ast";
 import { GeneratorOptions, DOMXMLGenerator } from "./generator";
 import { DOMXMLParser } from "./parser/DOMXMLParser";
 import { DOMXMLTokenizer } from "./tokenizer";
@@ -6,7 +6,7 @@ import { ValidationOptions, DOMXMLValidator, ValidationResult } from "./validato
 
 // Export AST types and components
 export type { DOMXMLAST, DOMXMLASTNode } from "./ast/DOMXMLAST";
-export { DOMXMLOptimizer } from "./ast/DOMXMLASTOptimizer";
+export { DOMXMLASTOptimizer } from "./ast/DOMXMLASTOptimizer";
 
 // Export tokenizer components
 export { XMLBaseTokenizer } from "./tokenizer/XMLBaseTokenizer";

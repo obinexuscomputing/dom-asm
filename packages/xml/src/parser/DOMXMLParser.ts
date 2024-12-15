@@ -25,20 +25,20 @@ export class DOMXMLParser {
    */
   public parse(): DOMXMLAST {
     this.position = 0;
-
+  
     const virtualRoot: DOMXMLASTNode = {
       type: "Element",
       name: "#document",
       children: [],
       attributes: {},
     };
-
+  
     const stack: DOMXMLASTNode[] = [virtualRoot];
     let currentNode = virtualRoot;
-
+  
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
-
+  
       switch (token.type) {
         case "StartTag": {
           const elementNode: DOMXMLASTNode = {
@@ -54,7 +54,7 @@ export class DOMXMLParser {
           }
           break;
         }
-
+  
         case "EndTag": {
           if (stack.length > 1) {
             const openTag = stack.pop()!;
@@ -69,7 +69,7 @@ export class DOMXMLParser {
           }
           break;
         }
-
+  
         case "Text": {
           const textValue = token.value?.trim();
           if (textValue) {
@@ -80,7 +80,7 @@ export class DOMXMLParser {
           }
           break;
         }
-
+  
         case "Comment": {
           currentNode.children!.push({
             type: "Comment",
@@ -88,7 +88,7 @@ export class DOMXMLParser {
           });
           break;
         }
-
+  
         case "Doctype": {
           currentNode.children!.push({
             type: "Doctype",
@@ -96,21 +96,21 @@ export class DOMXMLParser {
           });
           break;
         }
-
+  
         default:
           throw new Error(`Unexpected token type: "${token.type}".`);
       }
     }
-
+  
     if (stack.length > 1) {
       const unclosedTag = stack.pop()!;
       throw new Error(`Unclosed tag: "${unclosedTag.name}".`);
     }
-
-    return {
-      root: virtualRoot.children![0],
-      metadata: this.computeMetadata(virtualRoot.children![0]),
-    };
+  
+    const root = virtualRoot.children![0];
+    const metadata = this.computeMetadata(root);
+  
+    return new DOMXMLAST(root, metadata);
   }
 
   /**
