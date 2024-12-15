@@ -20,7 +20,7 @@ class HTMLASTOptimizer {
     });
   }
 
-  private mergeTextNodes(node: ASTNode): void {
+  private mergeTextNodes(node: HTMLASTNode): void {
     let i = 0;
     while (i < node.children.length - 1) {
       const current = node.children[i];
