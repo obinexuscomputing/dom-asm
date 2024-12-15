@@ -9,7 +9,9 @@
     "dom-asm.bat": "./bin/dom-asm.bat",
     "dom-asm.ps1": "./bin/dom-asm.ps1"
   },
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "build": "turbo build",
     "test": "turbo test",
@@ -36,13 +38,13 @@
     "rollup": "^4.0.0",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
-    "turbo": "^1.9.0",
+    "turbo": "^1.13.4",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@obinexuscomputing/js": "workspace:*",
-    "@obinexuscomputing/html": "workspace:*",
     "@obinexuscomputing/css": "workspace:*",
+    "@obinexuscomputing/html": "workspace:*",
+    "@obinexuscomputing/js": "workspace:*",
     "commander": "^11.1.0"
   },
   "engines": {
