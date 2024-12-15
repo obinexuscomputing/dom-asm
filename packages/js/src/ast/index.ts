@@ -46,7 +46,7 @@ export class JSASTBuilder {
       return this.parseVariableDeclaration();
     }
 
-    if (token?.type === TokenType.Number || token?.type === TokenType.String) {
+    if (token?.type === TokenType.Literal) {
       return this.parseInlineConstant();
     }
 
@@ -89,7 +89,7 @@ export class JSASTBuilder {
   private parseValue(): ASTNode | null {
     const token = this.currentToken();
 
-    if (token?.type === TokenType.Number || token?.type === TokenType.String) {
+    if (token?.type === TokenType.Literal) {
       return this.parseInlineConstant();
     }
 

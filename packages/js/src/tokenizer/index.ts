@@ -7,6 +7,8 @@ export enum TokenType {
   TemplateLiteral,
   Comment,
   EndOfStatement,
+  Number,       
+  String,       
 }
 
 export interface Token {

@@ -5,7 +5,11 @@ export class ASTOptimizer {
             if (node.type === 'VariableDeclaration' && node.children) {
                 const value = node.children[1];
                 if (value.type === 'Literal') {
-                    return { type: 'InlineConstant', value: `${node.children[0].value}=${value.value}` };
+                    return {
+                        type: 'InlineConstant',
+                        value: `${node.children[0].value}=${value.value}`,
+                        children: [], // Ensure children is included
+                    };
                 }
             }
             if (node.children) {
