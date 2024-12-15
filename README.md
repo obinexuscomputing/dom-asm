@@ -2,6 +2,12 @@
 
 `DOM-ASM` is a groundbreaking library and command-line tool for automaton state minimization and abstract syntax tree (AST) optimization. Developed through cutting-edge research by Nnamdi Michael Okpala, `DOM-ASM` provides advanced tools for modern web development.
 
+`DOM-ASM` is also a product of Obinexus Computing, a hub of innovation advocating for digital rights as human rights and promoting accessible computing. Obinexus Computing tutorials and resources are available on our [website](https://obinexuscomputing.org).
+
+![Computing from the Heart](./heart-icon.svg)
+
+**Computing from the Heart**
+
 For more details on the research behind `DOM-ASM`, refer to the documentation in the [docs](./docs) folder.
 
 ---
@@ -33,7 +39,7 @@ npm install -g @obinexuscomputing/dom-asm
 Clone the repository and set up the workspace:
 
 ```bash
-git clone https://github.com/obinexuscomputing/dom-asm.git
+git clone https://github.com/your-repo/dom-asm.git
 cd dom-asm
 npm install
 ```
@@ -137,5 +143,5 @@ This project is licensed under the ISC License. See the [LICENSE](LICENSE) file 
 
 ## Acknowledgements
 
-Special thanks to the Obinexus Computing team and the groundbreaking research by Nnamdi Michael Okpala that powers this project.
+Special thanks to the Obinexus Computing team and the groundbreaking research by Nnamdi Michael Okpala that powers this project. Obinexus Computing also stands as an advocate for accessible computing and digital rights as human rights.
 
