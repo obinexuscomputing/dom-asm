@@ -34,7 +34,7 @@ export abstract class XMLBaseTokenizer {
     while (
       this.position < this.input.length &&
       !(typeof stop === 'string'
-        ? this.peek() === stop
+        ? this.input.startsWith(stop, this.position)
         : stop.test(this.peek()))
     ) {
       result += this.consume();

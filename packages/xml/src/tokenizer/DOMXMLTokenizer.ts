@@ -1,4 +1,4 @@
-import { XMLBaseTokenizer } from "./XMLBaseTokenizer";
+import { XMLBaseTokenizer } from './XMLBaseTokenizer';
 
 export interface DOMXMLToken {
   type: 'StartTag' | 'EndTag' | 'Text' | 'Comment' | 'Doctype';
@@ -51,11 +51,10 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
 
     this.readAttributes(attributes);
 
-    // Check for self-closing tag
     this.skipWhitespace();
     if (this.peek() === '/') {
       selfClosing = true;
-      this.consume(); // Skip '/'
+      this.consume();
     }
     this.consume(); // Skip '>'
 
@@ -91,29 +90,29 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
   }
 
   private readComment(): DOMXMLToken {
-    this.consume(); // Skip '<'
-    this.consume(); // Skip '!'
-    this.consume(); // Skip '-'
-    this.consume(); // Skip '-'
+    this.position += 4; // Skip '<!--'
+    let value = '';
+    while (
+      this.position < this.input.length && 
+      !this.input.startsWith('-->', this.position)
+    ) {
+      value += this.consume();
+    }
     
-    const value = this.readUntil('-->');
-    this.consume(); // Skip '-'
-    this.consume(); // Skip '-'
-    this.consume(); // Skip '>'
+    if (this.position < this.input.length) {
+      this.position += 3; // Skip '-->'
+    }
 
     return {
       type: 'Comment',
-      value,
+      value: value.trim(),
       location: this.getCurrentLocation()
     };
   }
 
   private readDoctype(): DOMXMLToken {
-    this.consume(); // Skip '<'
-    this.consume(); // Skip '!'
-    this.readUntil(/\s/); // Skip 'DOCTYPE'
+    this.position += 9; // Skip '<!DOCTYPE'
     this.skipWhitespace();
-    
     const value = this.readUntil('>');
     this.consume(); // Skip '>'
 
