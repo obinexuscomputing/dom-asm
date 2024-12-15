@@ -15,16 +15,16 @@ export class DOMXMLOptimizer {
   public optimize(ast: DOMXMLAST): DOMXMLAST {
     // Initialize the state machine structure
     this.initializeStructure(ast.root);
-    
+
     // Build equivalence classes
     const equivalenceClasses = this.buildEquivalenceClasses();
-    
+
     // Create minimized AST
     const minimizedAST = this.buildMinimizedAST(equivalenceClasses);
-    
+
     // Update metadata
     minimizedAST.metadata = this.computeMetadata(minimizedAST.root);
-    
+
     return minimizedAST;
   }
 
@@ -48,7 +48,7 @@ export class DOMXMLOptimizer {
       for (const child of node.children) {
         const childState = this.initializeStructure(child);
         stateNode.astChildren.add(child);
-        
+
         if (child.type === 'Element') {
           stateNode.transitions.set(child.name!, childState);
         }
@@ -133,7 +133,7 @@ export class DOMXMLOptimizer {
 
   private computeTransitionSignature(node: StateNode): string {
     const parts: string[] = [];
-    
+
     // Add transitions
     for (const [key, target] of node.transitions) {
       parts.push(`${key}:${target.equivalenceClass}`);
@@ -150,6 +150,7 @@ export class DOMXMLOptimizer {
     return parts.sort().join('|');
   }
 
+
   private buildMinimizedAST(classes: Map<number, Set<StateNode>>): DOMXMLAST {
     const root: DOMXMLASTNode = { type: 'Element', name: 'root', children: [] };
     const processedClasses = new Set<number>();
@@ -158,8 +159,12 @@ export class DOMXMLOptimizer {
     // Create minimized nodes
     for (const [classId, nodes] of classes) {
       if (processedClasses.has(classId)) continue;
-      
-      const representative = nodes.values().next().value;
+
+      const nodesIter = nodes.values();
+      const representative = nodesIter.next().value;
+
+      if (!representative) continue; // Skip if no representative found
+
       const minimizedNode: DOMXMLASTNode = {
         type: representative.type,
         value: representative.value,
@@ -180,8 +185,13 @@ export class DOMXMLOptimizer {
 
     // Connect nodes based on transitions
     for (const [classId, nodes] of classes) {
-      const representative = nodes.values().next().value;
-      const currentNode = nodeClassMap.get(classId)!;
+      const nodesIter = nodes.values();
+      const representative = nodesIter.next().value;
+
+      if (!representative) continue;
+
+      const currentNode = nodeClassMap.get(classId);
+      if (!currentNode) continue;
 
       for (const [key, target] of representative.transitions) {
         const targetNode = nodeClassMap.get(target.equivalenceClass);
@@ -193,6 +203,7 @@ export class DOMXMLOptimizer {
 
     return { root, metadata: undefined };
   }
+
 
   private computeMetadata(node: DOMXMLASTNode): DOMXMLAST['metadata'] {
     let nodeCount = 0;
