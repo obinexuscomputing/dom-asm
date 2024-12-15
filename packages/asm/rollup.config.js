@@ -1,6 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import typescript from '@rollup/plugin-typescript';
+import vue from 'rollup-plugin-vue';
+import ts from 'rollup-plugin-ts';
 import dts from 'rollup-plugin-dts';
 import { terser } from 'rollup-plugin-terser';
 
@@ -12,6 +13,7 @@ export default [
         file: 'dist/index.cjs',
         format: 'cjs',
         sourcemap: true,
+        exports: 'auto',
       },
       {
         file: 'dist/index.js',
@@ -22,9 +24,20 @@ export default [
     plugins: [
       resolve(),
       commonjs(),
-      typescript({ tsconfig: './tsconfig.json' }),
+      vue(),
+      ts({
+        tsconfig: './tsconfig.json',
+        hook: {
+          outputPath(path, kind) {
+            // Ensure TypeScript-generated `.d.ts` files are properly output
+            if (kind === 'declaration') return path.replace('src/', '');
+            return path;
+          },
+        },
+      }),
       terser(),
     ],
+    external: ['vue'], 
   },
   {
     input: 'dist/index.d.ts',
