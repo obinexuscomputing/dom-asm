@@ -1,11 +1,23 @@
 
-> @obinexuscomputing/dom-css@1.0.0 build
+> @obinexuscomputing/css@1.0.0 build
 > rollup -c
 
-[1G[0K[36m
-[1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js, dist/index.umd.js[22m...[39m
-[32mcreated [1mdist/index.cjs, dist/index.js, dist/index.umd.js[22m in [1m7.3s[22m[39m
-[36m
-[1mdist/index.d.ts[22m → [1mdist/index.d.ts[22m...[39m
-[32mcreated [1mdist/index.d.ts[22m in [1m311ms[22m[39m
-[1G[0K⠙[1G[0K
+[1G[0K[1m[31m[!] [1mError: Cannot find package 'rollup-plugin-vue' imported from /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/rollup.config.js[22m[1m[39m[22m
+[2m    at packageResolve (node:internal/modules/esm/resolve:838:9)
+    at moduleResolve (node:internal/modules/esm/resolve:907:18)
+    at defaultResolve (node:internal/modules/esm/resolve:1037:11)
+    at ModuleLoader.defaultResolve (node:internal/modules/esm/loader:650:12)
+    at ModuleLoader.#cachedDefaultResolve (node:internal/modules/esm/loader:599:25)
+    at ModuleLoader.resolve (node:internal/modules/esm/loader:582:38)
+    at ModuleLoader.getModuleJobForImport (node:internal/modules/esm/loader:241:38)
+    at ModuleJob._link (node:internal/modules/esm/module_job:132:49)[22m
+
+
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/css@1.0.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c rollup -c
+[1G[0K⠙
