@@ -1,28 +1,22 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "outDir": "dist",                      // Ensure all compiled files go to "dist"
+    "declaration": true,                   // Generate declaration files
+    "declarationMap": true,                // Enable declaration maps
+    "declarationDir": "dist",              // Align declarationDir with Rollup's output
+    "sourceMap": true,                     // Generate source maps for debugging
+    "noEmitOnError": true,                 // Prevent emitting files on errors
+    "rootDir": "src"       ,                // Ensure all paths are relative to "src"
     "strict": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationDir": "./dist",
-    "emitDeclarationOnly": true,
-    "baseUrl": ".",
-    "paths": {
-      "src/*": ["src/*"]
-    },
-    "sourceMap": true,
-    "skipLibCheck": true // Prevents type conflicts in `node_modules`
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "module": "ESNext",
+    "emitDeclarationOnly": true
+
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.d.ts" // Exclude existing declaration files from being recompiled
-  ]
+  "include": ["src/**/*.ts"],              // Include all TypeScript files in "src"
+  "exclude": ["node_modules", "dist"]      // Exclude unnecessary directories
 }

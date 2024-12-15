@@ -30,4 +30,3 @@ export declare class Tokenizer {
     private shouldAddSemicolon;
     tokenize(input: string): Token[];
 }
-//# sourceMappingURL=index.d.ts.map

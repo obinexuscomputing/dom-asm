@@ -17,4 +17,3 @@ export declare class JSASTBuilder {
     private parseValue;
     buildAST(): ASTNode;
 }
-//# sourceMappingURL=index.d.ts.map
