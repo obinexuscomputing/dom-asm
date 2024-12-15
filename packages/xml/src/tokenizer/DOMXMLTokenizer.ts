@@ -1,88 +1,146 @@
-export type DOMXMLToken =
-  | { type: "StartTag"; name: string; attributes: Record<string, string>; selfClosing: boolean }
-  | { type: "EndTag"; name: string }
-  | { type: "Text"; value: string }
-  | { type: "Comment"; value: string }
-  | { type: "Doctype"; value: string };
+import { XMLBaseTokenizer } from '../tokenize/XMLBaseTokenizer';
 
-import { BaseTokenizer } from "../BaseTokenizer";
+export interface DOMXMLToken {
+  type: 'StartTag' | 'EndTag' | 'Text' | 'Comment' | 'Doctype';
+  value?: string;
+  name?: string;
+  namespace?: string;
+  attributes?: Record<string, string>;
+  selfClosing?: boolean;
+  location: { line: number; column: number };
+}
 
-export class DOMXMLTokenizer extends BaseTokenizer {
+export class DOMXMLTokenizer extends XMLBaseTokenizer {
   public tokenize(): DOMXMLToken[] {
     const tokens: DOMXMLToken[] = [];
 
     while (this.position < this.input.length) {
-      const char = this.input[this.position];
-
-      if (char === "<") {
-        if (this.input.startsWith("<!--", this.position)) {
-          tokens.push(this.readComment());
-        } else if (this.input.startsWith("<!DOCTYPE", this.position)) {
-          tokens.push(this.readDoctype());
-        } else if (this.input[this.position + 1] === "/") {
-          tokens.push(this.readEndTag());
+      const location = this.getCurrentLocation();
+      
+      if (this.peek() === '<') {
+        if (this.peek(1) === '!') {
+          if (this.input.startsWith('<!--', this.position)) {
+            tokens.push({ ...this.readComment(), location });
+          } else if (this.input.startsWith('<!DOCTYPE', this.position)) {
+            tokens.push({ ...this.readDoctype(), location });
+          }
+        } else if (this.peek(1) === '/') {
+          tokens.push({ ...this.readEndTag(), location });
         } else {
-          tokens.push(this.readStartTag());
+          tokens.push({ ...this.readStartTag(), location });
         }
       } else {
-        tokens.push(this.readText());
+        const textToken = this.readText();
+        if (textToken.value.trim()) {
+          tokens.push({ ...textToken, location });
+        }
       }
     }
 
     return tokens;
   }
 
-  private readStartTag(): DOMXMLToken {
-    this.position++; // Skip '<'
-    const name = this.readUntil(/[ \/>]/).trim();
-    const attributes: Record<string, string> = {};
+  private readStartTag(): Omit<DOMXMLToken, 'location'> {
+    this.consume(); // Skip '<'
+    const nameWithNs = this.readUntil(/[\s\/>]/);
+    const [namespace, name] = this.parseNameWithNamespace(nameWithNs);
+    const attributes = this.readAttributes();
     let selfClosing = false;
 
-    while (this.position < this.input.length && this.input[this.position] !== ">") {
-      if (this.input[this.position] === "/") {
-        selfClosing = true;
-        this.position++;
+    this.skipWhitespace();
+    if (this.peek() === '/') {
+      selfClosing = true;
+      this.consume(); // Skip '/'
+    }
+    this.consume(); // Skip '>'
+
+    return {
+      type: 'StartTag',
+      name,
+      namespace,
+      attributes,
+      selfClosing
+    };
+  }
+
+  private readEndTag(): Omit<DOMXMLToken, 'location'> {
+    this.consume(); // Skip '<'
+    this.consume(); // Skip '/'
+    const nameWithNs = this.readUntil('>');
+    const [namespace, name] = this.parseNameWithNamespace(nameWithNs);
+    this.consume(); // Skip '>'
+
+    return {
+      type: 'EndTag',
+      name,
+      namespace
+    };
+  }
+
+  private readText(): Omit<DOMXMLToken, 'location'> {
+    return {
+      type: 'Text',
+      value: this.readUntil('<')
+    };
+  }
+
+  private readComment(): Omit<DOMXMLToken, 'location'> {
+    this.position += 4; // Skip '<!--'
+    const value = this.readUntil('-->');
+    this.position += 3; // Skip '-->'
+    return {
+      type: 'Comment',
+      value
+    };
+  }
+
+  private readDoctype(): Omit<DOMXMLToken, 'location'> {
+    this.position += 9; // Skip '<!DOCTYPE'
+    const value = this.readUntil('>');
+    this.consume(); // Skip '>'
+    return {
+      type: 'Doctype',
+      value
+    };
+  }
+
+  private readAttributes(): Record<string, string> {
+    const attributes: Record<string, string> = {};
+    
+    while (this.position < this.input.length) {
+      this.skipWhitespace();
+      
+      if (this.peek() === '>' || this.peek() === '/' || this.peek() === undefined) {
         break;
       }
 
-      const attrName = this.readUntil(/[= \/>]/).trim();
-      if (this.input[this.position] === "=") {
-        this.position++; // Skip '='
-        const quote = this.input[this.position];
-        this.position++; // Skip opening quote
-        const attrValue = this.readUntil(new RegExp(`${quote}`));
-        attributes[attrName] = attrValue;
-        this.position++; // Skip closing quote
+      const nameWithNs = this.readUntil(/[\s=>/]/);
+      if (!nameWithNs) break;
+      
+      const [namespace, name] = this.parseNameWithNamespace(nameWithNs);
+      let value = '';
+
+      this.skipWhitespace();
+      if (this.peek() === '=') {
+        this.consume(); // Skip '='
+        this.skipWhitespace();
+        const quote = this.peek();
+        if (quote === '"' || quote === "'") {
+          this.consume(); // Skip opening quote
+          value = this.readUntil(quote);
+          this.consume(); // Skip closing quote
+        }
       }
+
+      const attrName = namespace ? `${namespace}:${name}` : name;
+      attributes[attrName] = value;
     }
 
-    this.position++; // Skip '>'
-    return { type: "StartTag", name, attributes, selfClosing };
+    return attributes;
   }
 
-  private readEndTag(): DOMXMLToken {
-    this.position += 2; // Skip '</'
-    const name = this.readUntil(">").trim();
-    this.position++; // Skip '>'
-    return { type: "EndTag", name };
-  }
-
-  private readComment(): DOMXMLToken {
-    this.position += 4; // Skip '<!--'
-    const value = this.readUntil("-->").trim();
-    this.position += 3; // Skip '-->'
-    return { type: "Comment", value };
-  }
-
-  private readDoctype(): DOMXMLToken {
-    this.position += 9; // Skip '<!DOCTYPE'
-    const value = this.readUntil(">").trim();
-    this.position++; // Skip '>'
-    return { type: "Doctype", value };
-  }
-
-  private readText(): DOMXMLToken {
-    const value = this.readUntil("<").trim();
-    return { type: "Text", value };
+  private parseNameWithNamespace(name: string): [string | undefined, string] {
+    const parts = name.split(':');
+    return parts.length > 1 ? [parts[0], parts[1]] : [undefined, parts[0]];
   }
 }
