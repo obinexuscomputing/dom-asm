@@ -45,11 +45,12 @@
     "@obinexuscomputing/css": "workspace:*",
     "@obinexuscomputing/html": "workspace:*",
     "@obinexuscomputing/js": "workspace:*",
-    "commander": "^11.1.0"
+    "commander": "^11.1.0",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "npm@10.9.2", 
+  "packageManager": "npm@10.9.2",
   "license": "ISC"
 }
