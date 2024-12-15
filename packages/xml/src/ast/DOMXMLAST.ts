@@ -1,17 +1,22 @@
 export interface DOMXMLASTNode {
-  type: 'Element' | 'Text' | 'Comment' | 'Doctype';
+  type: "Element" | "Text" | "Comment";
   name?: string;
   value?: string;
   attributes?: Record<string, string>;
   children?: DOMXMLASTNode[];
+}
 
-  // Optional fields for optimization or additional metadata
-  equivalenceClass?: number;
-  optimizationData?: {
-    hash: string;
-    transitionSignature?: string;
-    isMinimized?: boolean;
+export interface DOMXMLAST {
+  root: DOMXMLASTNode;
+  metadata: {
+    nodeCount: number;
+    elementCount: number;
+    textCount: number;
+    commentCount: number;
   };
+  computeMetadata(root: DOMXMLASTNode): DOMXMLAST["metadata"];
+  addChildNode(parent: DOMXMLASTNode, child: DOMXMLASTNode): void;
+  removeChildNode(parent: DOMXMLASTNode, child: DOMXMLASTNode): void;
 }
 
 
@@ -60,7 +65,7 @@ export class DOMXMLAST {
       }
 
       if (node.children) {
-        node.children.forEach((child: DOMXMLASTNode) => traverse(child));
+        node.children.forEach((child) => traverse(child));
       }
     };
 
