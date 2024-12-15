@@ -46,6 +46,7 @@ interface ProcessOptions {
   debug?: boolean;
 }
 
+// Generic file processing function
 async function processFile(
   file: string,
   type: "css" | "html" | "js",
@@ -60,43 +61,48 @@ async function processFile(
   try {
     switch (type) {
       case "css":
-        tokens = new CSSTokenizer(content).tokenize();
+        tokens = new CSSTokenizer().tokenize(content);
         ast = new CSSParser().parse(tokens);
 
-        if (options.validate) new CSSValidator().validate(ast);
+        if (options.validate) {
+          new CSSValidator(ast).validate();
+        }
 
         if (options.optimize) {
-          const optimizedAst = new CSSOptimizer().optimize(ast);
+          const optimizedAst = new CSSOptimizer(ast).optimize();
           result.optimized = new CSSGenerator().generate(optimizedAst);
         }
         break;
 
       case "html":
-        tokens = new HTMLTokenizer(content).tokenize();
+        tokens = new HTMLTokenizer().tokenize(content);
         ast = new HTMLParser().parse(tokens);
 
-        if (options.validate) new HTMLValidator().validate(ast);
+        if (options.validate) {
+          new HTMLValidator(ast).validate();
+        }
 
         if (options.optimize) {
-          const optimizedAst = new HTMLOptimizer().optimize(ast);
+          const optimizedAst = new HTMLOptimizer(ast).optimize();
           result.optimized = new HTMLGenerator().generate(optimizedAst);
         }
         break;
 
       case "js":
-        tokens = new JSTokenizer(content).tokenize();
+        tokens = new JSTokenizer().tokenize(content);
         ast = new JSASTBuilder(tokens).buildAST();
 
         if (options.validate) {
-          console.warn(`[Validation] Not implemented for JS yet.`);
+          console.warn("[Validation] Not implemented for JS.");
         }
 
         if (options.optimize) {
-          const optimizedAst = new JSOptimizer().optimize(ast);
+          const optimizedAst = new JSOptimizer(ast).optimize();
           result.optimized = new JSGenerator().generate(optimizedAst);
         }
         break;
     }
+
     result.tokens = tokens;
     result.ast = ast;
 
@@ -119,11 +125,16 @@ async function processFile(
       console.log(output);
     }
   } catch (error) {
-    console.error(`[Error] ${error.message}`);
+    if (error instanceof Error) {
+      console.error(`[Error] ${error.message}`);
+    } else {
+      console.error("[Error] Unknown error occurred");
+    }
     throw error;
   }
 }
 
+// Command registration function
 const registerCommand = (type: "css" | "html" | "js", description: string) => {
   const cmd = program.command(type).description(`${description} processing commands`);
   cmd
@@ -143,13 +154,16 @@ const registerCommand = (type: "css" | "html" | "js", description: string) => {
     });
 };
 
+// Register commands for CSS, HTML, and JavaScript
 registerCommand("css", "CSS");
 registerCommand("html", "HTML");
 registerCommand("js", "JavaScript");
 
+// CLI entry point
 program
   .name("@obinexuscomputing/asm")
   .version("1.0.0")
   .description("DOM ASM CLI tool for parsing and analyzing web assets");
 
+// Parse command-line arguments
 program.parse(process.argv);

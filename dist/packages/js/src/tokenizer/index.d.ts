@@ -6,7 +6,9 @@ export declare enum TokenType {
     Literal = 4,
     TemplateLiteral = 5,
     Comment = 6,
-    EndOfStatement = 7
+    EndOfStatement = 7,
+    Number = 8,
+    String = 9
 }
 export interface Token {
     type: TokenType;

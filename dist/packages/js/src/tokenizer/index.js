@@ -8,6 +8,8 @@ export var TokenType;
     TokenType[TokenType["TemplateLiteral"] = 5] = "TemplateLiteral";
     TokenType[TokenType["Comment"] = 6] = "Comment";
     TokenType[TokenType["EndOfStatement"] = 7] = "EndOfStatement";
+    TokenType[TokenType["Number"] = 8] = "Number";
+    TokenType[TokenType["String"] = 9] = "String";
 })(TokenType || (TokenType = {}));
 export class Tokenizer {
     keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while', 'true', 'false']);

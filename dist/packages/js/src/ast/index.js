@@ -31,7 +31,7 @@ export class JSASTBuilder {
         if (token?.type === TokenType.Keyword && token.value === "const") {
             return this.parseVariableDeclaration();
         }
-        if (token?.type === TokenType.Number || token?.type === TokenType.String) {
+        if (token?.type === TokenType.Literal) {
             return this.parseInlineConstant();
         }
         return null;
@@ -66,7 +66,7 @@ export class JSASTBuilder {
     }
     parseValue() {
         const token = this.currentToken();
-        if (token?.type === TokenType.Number || token?.type === TokenType.String) {
+        if (token?.type === TokenType.Literal) {
             return this.parseInlineConstant();
         }
         return null;
