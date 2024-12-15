@@ -15,10 +15,13 @@
     }
   },
   "scripts": {
-    "build": "tsc && rollup -c",    "clean": "rimraf dist",
-    "test": "jest --passWithNoTests",
-    "lint": "eslint ."
-  },
+      "clean": "rm -rf dist",
+  "build": "npm run clean && npm run build:ts && npm run build:rollup",
+  "build:ts": "tsc --emitDeclarationOnly",
+  "build:rollup": "rollup -c",
+  "test":"jest "
+},
+
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
   "license": "ISC",
   "dependencies": {
