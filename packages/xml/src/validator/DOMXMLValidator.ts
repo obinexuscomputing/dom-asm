@@ -91,7 +91,7 @@ export class DOMXMLValidator {
       }
     }
 
-    node.children?.forEach((child) => {
+    node.children?.forEach((child:DOMXMLASTNode) => {
       this.validateNode(child, errors, currentPath);
     });
   }
@@ -137,11 +137,11 @@ export class DOMXMLValidator {
   ): void {
     const children = node.children || [];
     const elementChildren = children.filter(
-      (child) => child.type === "Element",
+      (child:DOMXMLASTNode) => child.type === "Element",
     );
 
     if (schema.children) {
-      elementChildren.forEach((child) => {
+      elementChildren.forEach((child:DOMXMLASTNode) => {
         if (
           child.type === "Element" &&
           !schema.children?.includes(child.name || "")
