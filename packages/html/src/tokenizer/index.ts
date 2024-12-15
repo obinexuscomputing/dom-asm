@@ -74,7 +74,7 @@ export class HTMLTokenizer {
 
   private readComment(): HTMLToken {
     this.position += 4; // Skip '<!--'
-    const value = this.readUntil("-->");
+    const value = this.readUntil("-->").trim();
     this.position += 3; // Skip '-->'
     return { type: "Comment", value };
   }
@@ -88,10 +88,13 @@ export class HTMLTokenizer {
     const start = this.position;
     while (
       this.position < this.input.length &&
-      !(typeof stop === "string" ? this.input[this.position] === stop : stop.test(this.input.substring(this.position)))
+      !(typeof stop === "string"
+        ? this.input[this.position] === stop
+        : stop.test(this.input.substring(this.position)))
     ) {
       this.position++;
     }
-    return this.input.slice(start, this.position);
+    const result = this.input.slice(start, this.position);
+    return result || ""; // Ensure we return an empty string if no match is found
   }
 }
