@@ -1,1 +1,0 @@
-{"version":3,"file":"index.cjs","sources":["../src/utils/index.ts","../src/api/js-api.ts"],"sourcesContent":[null,null],"names":["notImplemented","moduleName","featureName","Error","jsString"],"mappings":"aAAgB,SAAAA,EAAeC,EAAoBC,GAC/C,MAAM,IAAIC,MAAM,gBAAgBD,qBAA+BD,6BACjE,0CCAI,SAAkBG,GACtBJ,EAAe,KAAM,SACvB"}

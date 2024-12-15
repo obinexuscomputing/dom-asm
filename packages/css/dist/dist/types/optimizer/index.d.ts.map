@@ -1,1 +1,0 @@
-{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../../../src/optimizer/index.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,OAAO,EAAE,MAAM,QAAQ,CAAC;AAEjC,qBAAa,SAAS;IACpB,OAAO,CAAC,GAAG,CAAU;gBAET,GAAG,EAAE,OAAO;IAIxB,OAAO,CAAC,2BAA2B;IAoBnC,OAAO,CAAC,kBAAkB;IA2BnB,QAAQ,IAAI,OAAO;CAK3B"}
