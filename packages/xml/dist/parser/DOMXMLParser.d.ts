@@ -6,6 +6,7 @@ export declare class DOMXMLParser {
     constructor(tokens?: DOMXMLToken[]);
     setTokens(tokens: DOMXMLToken[]): void;
     parse(): DOMXMLAST;
+    private removeEmptyTextNodes;
     private computeMetadata;
 }
 //# sourceMappingURL=DOMXMLParser.d.ts.map

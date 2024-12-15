@@ -94,6 +94,7 @@ declare abstract class XMLBaseTokenizer {
     protected position: number;
     protected line: number;
     protected column: number;
+    protected type: string | undefined;
     constructor(input: string);
     abstract tokenize(): unknown[];
     protected peek(offset?: number): string;
@@ -133,6 +134,7 @@ declare class DOMXMLParser {
     constructor(tokens?: DOMXMLToken[]);
     setTokens(tokens: DOMXMLToken[]): void;
     parse(): DOMXMLAST;
+    private removeEmptyTextNodes;
     private computeMetadata;
 }
 
