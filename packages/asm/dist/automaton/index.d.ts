@@ -1,2 +1,2 @@
-export * from './src/';
+export * from './stateMinimizers';
 //# sourceMappingURL=index.d.ts.map

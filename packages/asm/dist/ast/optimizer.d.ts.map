@@ -1,0 +1,1 @@
+{"version":3,"file":"optimizer.d.ts","sourceRoot":"","sources":["../../src/ast/optimizer.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,kBAAkB,EAAE,MAAM,SAAS,CAAC;AAEtD,wBAAgB,WAAW,CAAC,IAAI,EAAE,OAAO,EAAE,SAAS,EAAE,kBAAkB,GAAG,OAAO,CAmBjF"}

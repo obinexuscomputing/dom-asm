@@ -1,4 +1,4 @@
-import { Automaton, ASTNode } from "../types";
+import { Automaton, ASTNode } from "../types/";
 
 export function validateAutomaton(automaton: Automaton): boolean {
     // Check that all transitions point to valid states
