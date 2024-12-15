@@ -10,7 +10,7 @@ export class DOMXMLASTOptimizer {
     return new DOMXMLAST(optimizedRoot, metadata);
   }
   
-  private optimizeChildren(children: DOMXMLASTNode[]): DOMXMLASTNode[] {
+  public optimizeChildren(children: DOMXMLASTNode[]): DOMXMLASTNode[] {
     // First pass: Remove empty text nodes and optimize children recursively
     let optimized = children
       .filter((node) => {
@@ -19,13 +19,8 @@ export class DOMXMLASTOptimizer {
           return node.value?.trim() !== "";
         }
         if (node.type === "Element") {
-          // Keep elements with attributes or valid children
-          const hasNonEmptyChildren = (node.children || []).some((child) =>
-            child.type === "Text"
-              ? child.value?.trim() !== ""
-              : child.type === "Element"
-          );
-          return hasNonEmptyChildren || Object.keys(node.attributes || {}).length > 0;
+          // Always keep elements; further optimization happens recursively
+          return true;
         }
         return true; // Keep other node types (e.g., Comment, Doctype)
       })
