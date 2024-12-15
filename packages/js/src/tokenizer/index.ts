@@ -1,4 +1,4 @@
-export enum TokenType {
+export enum JSTokenType {
   Keyword,
   Identifier,
   Operator,
@@ -11,8 +11,8 @@ export enum TokenType {
   String,
 }
 
-export interface Token {
-  type: TokenType;
+export interface JSToken {
+  type: JSTokenType;
   value: string;
 }
 
@@ -20,23 +20,23 @@ export class JSTokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return', 'for', 'while', 'true', 'false']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '&&', '||', '!', '==', '=>', '+=', '-=', '*=', '/=', '||=', '&&=', '??', '?.']);
   private singleCharDelimiters = new Set([';', '{', '}', '(', ')', '[', ']']);
-  private previousToken: Token | null = null;
+  private previousToken: JSToken | null = null;
 
   constructor() {}
 
-  private shouldAddSemicolon(tokens: Token[]): boolean {
+  private shouldAddSemicolon(tokens: JSToken[]): boolean {
     return (
       this.previousToken &&
-      this.previousToken.type !== TokenType.Delimiter &&
-      !tokens.some(token => token.type === TokenType.Delimiter && token.value === ';')
+      this.previousToken.type !== JSTokenType.Delimiter &&
+      !tokens.some(token => token.type === JSTokenType.Delimiter && token.value === ';')
     );
   }
 
-  public tokenize(input: string): Token[] {
-    const tokens: Token[] = [];
+  public tokenize(input: string): JSToken[] {
+    const tokens: JSToken[] = [];
     let current = 0;
 
-    const addToken = (type: TokenType, value: string) => {
+    const addToken = (type: JSTokenType, value: string) => {
       this.previousToken = { type, value };
       tokens.push(this.previousToken);
     };
@@ -57,7 +57,7 @@ export class JSTokenizer {
         while (current < input.length && input[current] !== '\n') {
           value += input[current++];
         }
-        addToken(TokenType.Comment, value);
+        addToken(JSTokenType.Comment, value);
         continue;
       }
 
@@ -69,7 +69,7 @@ export class JSTokenizer {
           value += input[current++];
         }
         current += 2; // Skip closing '*/'
-        addToken(TokenType.Comment, value);
+        addToken(JSTokenType.Comment, value);
         continue;
       }
 
@@ -79,7 +79,7 @@ export class JSTokenizer {
         while (current < input.length && /[0-9.]/.test(input[current])) {
           value += input[current++];
         }
-        addToken(TokenType.Literal, value);
+        addToken(JSTokenType.Literal, value);
         continue;
       }
 
@@ -90,9 +90,9 @@ export class JSTokenizer {
           value += input[current++];
         }
         if (this.keywords.has(value)) {
-          addToken(TokenType.Keyword, value);
+          addToken(JSTokenType.Keyword, value);
         } else {
-          addToken(TokenType.Identifier, value);
+          addToken(JSTokenType.Identifier, value);
         }
         continue;
       }
@@ -100,14 +100,14 @@ export class JSTokenizer {
       // Handle operators
       const operator = input.slice(current, current + 2);
       if (this.operators.has(operator)) {
-        addToken(TokenType.Operator, operator);
+        addToken(JSTokenType.Operator, operator);
         current += 2;
         continue;
       }
 
       // Handle single-character delimiters
       if (this.singleCharDelimiters.has(char)) {
-        addToken(TokenType.Delimiter, char);
+        addToken(JSTokenType.Delimiter, char);
         current++;
         continue;
       }
@@ -115,7 +115,7 @@ export class JSTokenizer {
       throw new Error(`Unexpected character: ${char}`);
     }
 
-    addToken(TokenType.EndOfStatement, 'EOF');
+    addToken(JSTokenType.EndOfStatement, 'EOF');
     return tokens;
   }
 }

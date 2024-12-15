@@ -1,29 +1,28 @@
-
-export type ASTNode = {
+export type JSASTNode = {
   type: string;
   value?: string;
-  children: ASTNode[];
+  children: JSASTNode[];
 };
 
 export class JSASTBuilder {
-  private tokens: Token[];
+  private tokens: JSToken[];
   private position: number;
 
-  constructor(tokens: Token[]) {
+  constructor(tokens: JSToken[]) {
     this.tokens = tokens;
     this.position = 0;
   }
 
-  private currentToken(): Token | null {
+  private currentToken(): JSToken | null {
     return this.position < this.tokens.length ? this.tokens[this.position] : null;
   }
 
-  private consumeToken(): Token {
+  private consumeToken(): JSToken {
     return this.tokens[this.position++];
   }
 
-  private parseProgram(): ASTNode {
-    const program: ASTNode = { type: "Program", children: [] };
+  private parseProgram(): JSASTNode {
+    const program: JSASTNode = { type: "Program", children: [] };
 
     while (this.currentToken()) {
       const statement = this.parseStatement();
@@ -35,18 +34,18 @@ export class JSASTBuilder {
     return program;
   }
 
-  private parseStatement(): ASTNode | null {
+  private parseStatement(): JSASTNode | null {
     const token = this.currentToken();
-    if (token?.type === TokenType.Keyword && token.value === "const") {
+    if (token?.type === JSTokenType.Keyword && token.value === "const") {
       return this.parseVariableDeclaration();
     }
     return null;
   }
 
-  private parseVariableDeclaration(): ASTNode {
+  private parseVariableDeclaration(): JSASTNode {
     this.consumeToken(); // Consume 'const'
     const identifier = this.consumeToken();
-    if (!identifier || identifier.type !== TokenType.Identifier) {
+    if (!identifier || identifier.type !== JSTokenType.Identifier) {
       throw new Error("Expected identifier after 'const'");
     }
 
@@ -56,7 +55,7 @@ export class JSASTBuilder {
     }
 
     const value = this.consumeToken();
-    if (!value || value.type !== TokenType.Literal) {
+    if (!value || value.type !== JSTokenType.Literal) {
       throw new Error("Expected value after '='");
     }
 
@@ -69,7 +68,7 @@ export class JSASTBuilder {
     };
   }
 
-  public buildAST(): ASTNode {
+  public buildAST(): JSASTNode {
     return this.parseProgram();
   }
 }
