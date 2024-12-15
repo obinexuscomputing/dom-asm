@@ -1,6 +1,3 @@
-import { DOMXMLAST, DOMXMLASTNode } from "../ast";
-import { DOMXMLToken } from "../tokenizer";
-
 export class DOMXMLParser {
   private tokens: DOMXMLToken[];
   private position: number;
@@ -17,30 +14,32 @@ export class DOMXMLParser {
 
   public parse(): DOMXMLAST {
     this.position = 0;
-   
+
     const root: DOMXMLASTNode = {
       type: 'Element',
       name: 'root',
-      children: []
+      children: [],
     };
-   
+
     const stack: DOMXMLASTNode[] = [root];
     let currentParent = root;
 
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
-      
+
       switch (token.type) {
         case 'StartTag': {
           const elementNode: DOMXMLASTNode = {
             type: 'Element',
-            name: token.name,
+            name: token.name!,
             attributes: token.attributes || {},
-            children: []
+            children: [],
           };
-         
+
+          // Add to current parent's children
           currentParent.children!.push(elementNode);
-         
+
+          // If not self-closing, push to stack and update currentParent
           if (!token.selfClosing) {
             stack.push(elementNode);
             currentParent = elementNode;
@@ -50,9 +49,10 @@ export class DOMXMLParser {
 
         case 'EndTag': {
           if (stack.length > 1) {
-            if (currentParent.name !== token.name) {
+            const expectedTagName = currentParent.name;
+            if (expectedTagName !== token.name) {
               throw new Error(
-                `Mismatched tags: opening "${currentParent.name}" and closing "${token.name}" at line ${token.location.line}, column ${token.location.column}`
+                `Mismatched tags: opening "${expectedTagName}" and closing "${token.name}" at line ${token.location.line}, column ${token.location.column}`
               );
             }
             stack.pop();
@@ -62,27 +62,38 @@ export class DOMXMLParser {
         }
 
         case 'Text': {
-          const trimmedValue = (token.value || '').trim();
+          const trimmedValue = token.value?.trim();
           if (trimmedValue) {
             currentParent.children!.push({
-              type: 'Text' as const,  // Force the literal type
-              value: trimmedValue
+              type: 'Text',
+              value: trimmedValue,
             });
           }
           break;
         }
 
-        case 'Comment':
-        case 'Doctype': {
+        case 'Comment': {
           currentParent.children!.push({
-            type: token.type,
-            value: token.value || ''
+            type: 'Comment',
+            value: token.value || '',
           });
           break;
         }
+
+        case 'Doctype': {
+          currentParent.children!.push({
+            type: 'Doctype',
+            value: token.value || '',
+          });
+          break;
+        }
+
+        default:
+          throw new Error(`Unexpected token type: ${token.type}`);
       }
     }
 
+    // Check for any unclosed tags
     if (stack.length > 1) {
       const unclosedTag = stack[stack.length - 1];
       throw new Error(`Unclosed tag: ${unclosedTag.name}`);
@@ -90,7 +101,7 @@ export class DOMXMLParser {
 
     return {
       root,
-      metadata: this.computeMetadata(root)
+      metadata: this.computeMetadata(root),
     };
   }
 
@@ -100,7 +111,7 @@ export class DOMXMLParser {
     let textCount = 0;
     let commentCount = 0;
 
-    const traverse = (node: DOMXMLASTNode, isRoot: boolean = false) => {
+    const traverse = (node: DOMXMLASTNode, isRoot = false) => {
       if (!isRoot) {
         nodeCount++;
         switch (node.type) {
@@ -115,9 +126,9 @@ export class DOMXMLParser {
             break;
         }
       }
-      
+
       if (node.children) {
-        node.children.forEach(child => traverse(child));
+        node.children.forEach((child) => traverse(child));
       }
     };
 
@@ -126,7 +137,7 @@ export class DOMXMLParser {
       nodeCount,
       elementCount,
       textCount,
-      commentCount
+      commentCount,
     };
   }
 }
