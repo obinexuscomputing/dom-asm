@@ -1,1 +1,2 @@
-export * from './src/api/';
+export * from './api/index';
+//# sourceMappingURL=index.d.ts.map

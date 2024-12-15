@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sources":["../src/api/htmlApi.ts"],"sourcesContent":[null],"names":["parseFile","file","content","fs","readFileSync","parsed"],"mappings":"qBAEM,SAAUA,EAAUC,GAGxB,MAAO,CAAEC,QAFOC,EAAGC,aAAaH,EAAM,SAEpBI,OAAQ,qBAC5B"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":"AAAA,cAAc,aAAa,CAAA"}
