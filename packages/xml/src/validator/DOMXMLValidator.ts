@@ -1,22 +1,34 @@
-export interface XMLSchemaDefinition {
-    elements: {
-      [key: string]: {
-        attributes?: string[];
-        required?: string[];
-        children?: string[];
-        minOccurs?: number;
-        maxOccurs?: number;
-      };
+import { DOMXMLAST } from '../ast/DOMXMLAST';
+
+export interface ValidationOptions {
+  strictMode?: boolean;
+  allowUnknownElements?: boolean;
+  customValidators?: Array<(ast: DOMXMLAST) => ValidationError[]>;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+  errors: ValidationError[];
+}
+
+export interface ValidationError {
+  code: string;
+  message: string;
+  line?: number;
+  column?: number;
+  nodePath?: string;
+}
+
+export class DOMXMLValidator {
+  private options: ValidationOptions;
+
+  constructor(options: ValidationOptions = {}) {
+    this.options = {
+      strictMode: false,
+      allowUnknownElements: true,
+      ...options
     };
   }
-  
-  export class DOMXMLValidator {
-    private schema: XMLSchemaDefinition;
-  
-    constructor(schema: XMLSchemaDefinition) {
-      this.schema = schema;
-    }
-  
     public validate(ast: any): ValidationResult {
       const errors: ValidationError[] = [];
       this.validateNode(ast.root, errors);

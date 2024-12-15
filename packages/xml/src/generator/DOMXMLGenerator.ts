@@ -1,4 +1,4 @@
-import { DOMXMLAST, DOMXMLASTNode } from '../ast/DOMXMLAST';
+import { DOMXMLAST } from '../ast/DOMXMLAST';
 
 export interface GeneratorOptions {
   indent?: string;
