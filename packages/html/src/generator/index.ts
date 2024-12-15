@@ -1,7 +1,13 @@
-import { ASTNode } from "../ast/index";
+import { HTMLASTNode } from "../parser";
 
 class HTMLCodeGenerator {
-  public generateHTML(node: ASTNode): string {
+  private selfClosingTags: string[];
+
+  constructor(selfClosingTags: string[] = ["img", "input", "br", "hr", "meta", "link"]) {
+    this.selfClosingTags = selfClosingTags;
+  }
+
+  public generateHTML(node: HTMLASTNode): string {
     if (node.type === "Text") {
       return node.value || "";
     }
@@ -31,8 +37,7 @@ class HTMLCodeGenerator {
   }
 
   private isSelfClosingTag(tagName?: string): boolean {
-    const selfClosingTags = ["img", "input", "br", "hr", "meta", "link"];
-    return selfClosingTags.includes(tagName || "");
+    return this.selfClosingTags.includes(tagName || "");
   }
 }
 

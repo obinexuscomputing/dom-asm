@@ -1,16 +1,10 @@
-type Token =
+export type HTMLToken =
   | { type: "StartTag"; name: string; attributes: Record<string, string> }
   | { type: "EndTag"; name: string }
   | { type: "Text"; value: string }
   | { type: "Comment"; value: string };
-  export enum TokenType {
-    Keyword = "keyword",
-    Identifier = "identifier",
-    Number = "number",
-    String = "string",
-  }
-  
- class HTMLTokenizer {
+
+export class HTMLTokenizer {
   private input: string;
   private position: number = 0;
 
@@ -18,15 +12,15 @@ type Token =
     this.input = input;
   }
 
-  tokenize(): Token[] {
-    const tokens: Token[] = [];
+  public tokenize(): HTMLToken[] {
+    const tokens: HTMLToken[] = [];
     while (this.position < this.input.length) {
       const char = this.input[this.position];
 
-      if (char === '<') {
-        if (this.input[this.position + 1] === '/') {
+      if (char === "<") {
+        if (this.input[this.position + 1] === "/") {
           tokens.push(this.readEndTag());
-        } else if (this.input[this.position + 1] === '!') {
+        } else if (this.input[this.position + 1] === "!") {
           tokens.push(this.readComment());
         } else {
           tokens.push(this.readStartTag());
@@ -38,13 +32,13 @@ type Token =
     return tokens;
   }
 
-  private readStartTag(): Token {
+  private readStartTag(): HTMLToken {
     this.position++; // Skip '<'
     const name = this.readUntil(/[ \/>]/);
     const attributes: Record<string, string> = {};
 
-    while (this.input[this.position] !== '>' && this.input[this.position] !== '/') {
-      const attrName = this.readUntil('=').trim();
+    while (this.input[this.position] !== ">" && this.input[this.position] !== "/") {
+      const attrName = this.readUntil("=").trim();
       this.position++; // Skip '='
       const quote = this.input[this.position];
       this.position++; // Skip opening quote
@@ -53,44 +47,41 @@ type Token =
       this.position++; // Skip closing quote
     }
 
-    if (this.input[this.position] === '/') {
+    if (this.input[this.position] === "/") {
       this.position++; // Skip '/'
     }
 
     this.position++; // Skip '>'
-    return { type: 'StartTag', name, attributes };
+    return { type: "StartTag", name, attributes };
   }
 
-  private readEndTag(): Token {
+  private readEndTag(): HTMLToken {
     this.position += 2; // Skip '</'
-    const name = this.readUntil('>');
+    const name = this.readUntil(">");
     this.position++; // Skip '>'
-    return { type: 'EndTag', name };
+    return { type: "EndTag", name };
   }
 
-  private readComment(): Token {
+  private readComment(): HTMLToken {
     this.position += 4; // Skip '<!--'
-    const value = this.readUntil('-->');
+    const value = this.readUntil("-->");
     this.position += 3; // Skip '-->'
-    return { type: 'Comment', value };
+    return { type: "Comment", value };
   }
 
-  private readText(): Token {
-    const value = this.readUntil('<');
-    return { type: 'Text', value };
+  private readText(): HTMLToken {
+    const value = this.readUntil("<");
+    return { type: "Text", value };
   }
 
   private readUntil(stopChar: string | RegExp): string {
     const start = this.position;
     while (
       this.position < this.input.length &&
-      !(typeof stopChar === 'string' ? this.input[this.position] === stopChar : stopChar.test(this.input[this.position]))
+      !(typeof stopChar === "string" ? this.input[this.position] === stopChar : stopChar.test(this.input[this.position]))
     ) {
       this.position++;
     }
     return this.input.slice(start, this.position);
   }
 }
-
-// Exporting the tokenizer class for usage in the `dom-html` library.
-export { HTMLTokenizer, Token };

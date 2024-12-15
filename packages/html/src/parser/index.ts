@@ -1,37 +1,13 @@
-import { Token, HTMLTokenizer } from "../tokenizer/index";
-import { AST, ASTNode } from "../ast/index";
-import { ValidationResult, Validator } from "../validator/index";
+import { HTMLASTNode } from "../ast";
+import { HTMLToken, HTMLTokenizer } from "../tokenizer";
 
-type ErrorHandler = (error: HTMLParserError) => void;
 
-interface ElementNode extends ASTNode {
-  type: "Element";
-  name: string;
-  attributes: Record<string, string>;
-}
 
-interface TextNode extends ASTNode {
-  type: "Text";
-  value: string;
-}
+export class HTMLParserError extends Error {
+  public token: HTMLToken;
+  public position: number;
 
-interface CommentNode extends ASTNode {
-  type: "Comment";
-  value: string;
-}
-
-function isTextNode(node: ASTNode): node is TextNode {
-  return node.type === "Text";
-}
-
-function isElementNode(node: ASTNode): node is ElementNode {
-  return node.type === "Element";
-}
-
-export class  HTMLParserError extends Error {
-  token: Token;
-  position: number;
-  constructor(message: string, token: Token, position: number) {
+  constructor(message: string, token: HTMLToken, position: number) {
     super(message);
     this.name = "HTMLParserError";
     this.token = token;
@@ -42,170 +18,86 @@ export class  HTMLParserError extends Error {
   }
 }
 
+
+export interface HTMLElementNode {
+  type: "Element";
+  name: string;
+  attributes: Record<string, string>;
+  children: HTMLASTNode[];
+}
+
+export interface HTMLTextNode {
+  type: "Text";
+  value: string;
+}
+
+export interface HTMLCommentNode {
+  type: "Comment";
+  value: string;
+}
+
+
 export class HTMLParser {
   private tokenizer: HTMLTokenizer;
-  private astBuilder: AST;
-  private validator: Validator;
-  private errorHandler: ErrorHandler | null = null;
-  private shouldThrow: boolean = true;
 
-  constructor(options = { throwOnError: true }) {
+  constructor() {
     this.tokenizer = new HTMLTokenizer("");
-    this.astBuilder = new AST();
-    this.validator = new Validator();
-    this.shouldThrow = options.throwOnError;
   }
 
-  setErrorHandler(handler: ErrorHandler): void {
-    this.errorHandler = handler;
-    this.shouldThrow = false;
-  }
-
-  private handleError(error: HTMLParserError, quiet = false): void {
-    if (this.errorHandler) {
-      this.errorHandler(error);
-    } else {
-      if (this.shouldThrow) {
-        throw error;
-      }
-      if (!quiet) {
-        console.error(`Error at position ${error.position}: ${error.message}`);
-        console.error(`Problematic token: ${JSON.stringify(error.token)}`);
-      }
-    }
-  }
-
-  private isWhitespace(str: string): boolean {
-    return /^\s*$/.test(str);
-  }
-
-  public parse(input: string): ASTNode {
+  public parse(input: string): HTMLASTNode {
     this.tokenizer = new HTMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
-    const ast = this.buildASTWithRecovery(tokens);
-    this.cleanWhitespace(ast);
-    return ast;
+    return this.buildAST(tokens);
   }
 
-  private cleanWhitespace(node: ASTNode): void {
-    if (node.children) {
-      // First clean children recursively before filtering current level
-      node.children.forEach(child => this.cleanWhitespace(child));
-      
-      // Then filter whitespace at current level
-      node.children = node.children.filter(child => {
-        if (isTextNode(child)) {
-          return !this.isWhitespace(child.value);
+  private buildAST(tokens: HTMLToken[]): HTMLASTNode {
+    const root: HTMLElementNode = { type: "Element", name: "root", attributes: {}, children: [] };
+    const stack: HTMLElementNode[] = [root];
+
+    for (const token of tokens) {
+      switch (token.type) {
+        case "StartTag": {
+          const elementNode: HTMLElementNode = {
+            type: "Element",
+            name: token.name,
+            attributes: token.attributes,
+            children: [],
+          };
+          stack[stack.length - 1].children.push(elementNode);
+          stack.push(elementNode);
+          break;
         }
-        return true;
-      });
-    }
-  }
 
-  private buildASTWithRecovery(tokens: Token[]): ASTNode {
-    const root = this.astBuilder.getRoot();
-    const stack: ElementNode[] = [root as ElementNode];
-    let currentParent = root;
-    let skipUntilTag: string | null = null;
-
-    for (let i = 0; i < tokens.length; i++) {
-      const token = tokens[i];
-
-      // Skip tokens if we're in recovery mode
-      if (skipUntilTag && token.type === "EndTag" && token.name === skipUntilTag) {
-        skipUntilTag = null;
-        continue;
-      }
-      if (skipUntilTag) continue;
-
-      try {
-        switch (token.type) {
-          case "StartTag": {
-            const elementNode: ElementNode = {
-              type: "Element",
-              name: token.name,
-              attributes: token.attributes,
-              children: [],
-              parent: currentParent
-            };
-            currentParent.children.push(elementNode);
-            stack.push(elementNode);
-            currentParent = elementNode;
-            break;
+        case "EndTag": {
+          const current = stack.pop();
+          if (!current || current.name !== token.name) {
+            throw new HTMLParserError(`Unmatched end tag: </${token.name}>`, token, tokens.indexOf(token));
           }
-          
-          case "EndTag": {
-            const matchingStartIndex = stack.findIndex(node => 
-              node.name === token.name
-            );
-
-            if (matchingStartIndex === -1) {
-              throw new HTMLParserError(
-                `Unmatched end tag: </${token.name}>. Expected </${
-                  isElementNode(currentParent) ? currentParent.name : "unknown"
-                }>.`,
-                token,
-                i
-              );
-            }
-
-            // Pop all nodes up to and including the matching start tag
-            while (stack.length > matchingStartIndex) {
-              stack.pop();
-            }
-            currentParent = stack[stack.length - 1];
-            break;
-          }
-
-          case "Text": {
-            const textNode: TextNode = {
-              type: "Text",
-              value: token.value,
-              children: [],
-              parent: currentParent
-            };
-            currentParent.children.push(textNode);
-            break;
-          }
-
-          case "Comment": {
-            const commentNode: CommentNode = {
-              type: "Comment",
-              value: token.value,
-              children: [],
-              parent: currentParent
-            };
-            currentParent.children.push(commentNode);
-            break;
-          }
+          break;
         }
-      } catch (error) {
-        if (error instanceof HTMLParserError) {
-          this.handleError(error);
-          if (!this.shouldThrow) {
-            // Set recovery mode to skip until matching end tag
-            if (isElementNode(currentParent)) {
-              skipUntilTag = currentParent.name;
-            }
-            continue;
-          }
-          throw error;
+
+        case "Text": {
+          const textNode: HTMLTextNode = {
+            type: "Text",
+            value: token.value,
+          };
+          stack[stack.length - 1].children.push(textNode);
+          break;
         }
-        throw error;
+
+        case "Comment": {
+          const commentNode: HTMLCommentNode = {
+            type: "Comment",
+            value: token.value,
+          };
+          stack[stack.length - 1].children.push(commentNode);
+          break;
+        }
       }
     }
 
-    // Handle any unclosed tags at the end
-    while (stack.length > 1) {
-      const unclosedNode = stack.pop()!;
-      this.handleError(
-        new HTMLParserError(
-          `Unclosed tag: <${unclosedNode.name}>`,
-          { type: "StartTag", name: unclosedNode.name, attributes: {} },
-          tokens.length
-        ),
-        true // Quiet mode for unclosed tags
-      );
+    if (stack.length > 1) {
+      throw new HTMLParserError("Unclosed tags detected", tokens[tokens.length - 1], tokens.length);
     }
 
     return root;
