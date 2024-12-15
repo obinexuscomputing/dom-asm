@@ -59,41 +59,34 @@ export class HTMLParser {
         case "StartTag": {
           const elementNode: HTMLElementNode = {
             type: "Element",
-            name: token.name,
-            attributes: token.attributes,
+            name: token.name ?? "", // Default to an empty string
+            attributes: token.attributes ?? {}, // Default to an empty object
             children: [],
           };
           stack[stack.length - 1].children.push(elementNode);
           stack.push(elementNode);
           break;
         }
-
-        case "EndTag": {
-          const current = stack.pop();
-          if (!current || current.name !== token.name) {
-            throw new HTMLParserError(`Unmatched end tag: </${token.name}>`, token, tokens.indexOf(token));
-          }
-          break;
-        }
-
+        
         case "Text": {
           const textNode: HTMLTextNode = {
             type: "Text",
-            value: token.value,
+            value: token.value ?? "", // Default to an empty string
           };
           stack[stack.length - 1].children.push(textNode);
           break;
         }
-
+        
         case "Comment": {
           const commentNode: HTMLCommentNode = {
             type: "Comment",
-            value: token.value,
+            value: token.value ?? "", // Default to an empty string
           };
           stack[stack.length - 1].children.push(commentNode);
           break;
         }
-      }
+      }        
+
     }
 
     if (stack.length > 1) {
