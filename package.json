@@ -22,10 +22,10 @@
     "cli": "node bin/dom-asm"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.0",
-    "@rollup/plugin-json": "^6.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.0",
-    "@rollup/plugin-typescript": "^11.0.0",
+    "@rollup/plugin-commonjs": "^25.0.8",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^15.3.1",
+    "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
@@ -38,7 +38,7 @@
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
     "turbo": "^1.13.4",
-    "typescript": "^5.3.3"
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@obinexuscomputing/css": "workspace:*",
@@ -49,9 +49,7 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-ts": "^3.4.5"
   },
-  "engines": {
-    "node": ">=18.0.0"
-  },
+ 
   "packageManager": "npm@10.9.2",
   "license": "ISC",
   "volta": {
