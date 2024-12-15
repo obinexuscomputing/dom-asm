@@ -1,7 +1,7 @@
 import { DOMXMLTokenizer } from '../src/tokenizer';
 import { DOMXMLParser } from '../src/parser/DOMXMLParser';
-import { DOMXMLOptimizer } from '../src/optimizer';
 import { DOMXMLValidator } from '../src/validator';
+import { DOMXMLOptimizer } from '../src/ast/DOMXMLOptimizer';
 
 describe('DOMXML Integration', () => {
   test('should handle complete XML workflow', () => {
