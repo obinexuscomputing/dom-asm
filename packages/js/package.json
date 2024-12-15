@@ -8,7 +8,8 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build:ts": "tsc",
+  
+    "build:ts": "tsc --emitDeclarationOnly",
     "build:rollup": "rollup -c",
     "build": "npm run build:ts && npm run build:rollup",
     "test": "jest --maxWorkers=2 --testTimeout=60000",
