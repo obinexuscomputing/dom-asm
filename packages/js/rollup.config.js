@@ -1,7 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import vue from 'rollup-plugin-vue';
 import dts from 'rollup-plugin-dts';
 import { terser } from 'rollup-plugin-terser';
 
@@ -28,7 +27,7 @@ export default [
       vue(),
       terser(),
     ],
-    external: ['vue'], 
+   
   },
   {
     input: 'src/index.ts', 
