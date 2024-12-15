@@ -45,25 +45,41 @@ export class HTMLTokenizer {
     return { type: "Doctype", value, line, column };
   }
 
+
+  private readEndTag(): HTMLToken {
+    const { line, column } = this.getCurrentLocation();
+    this.consume(2); // Skip '</'
+    const name = this.readUntil(">").toLowerCase().trim(); // HTML tag names are case-insensitive
+    this.consume(); // Skip '>'
+    return { type: "EndTag", name, line, column };
+  }
   private readStartTag(): HTMLToken {
     const { line, column } = this.getCurrentLocation();
     this.consume(); // Skip '<'
-    const name = this.readUntil(/[ \/>]/).toLowerCase().trim(); // HTML tag names are case-insensitive
+  
+    // Read tag name
+    const name = this.readUntil(/[ \/>]/).toLowerCase().trim();
+    if (!name) {
+      throw new Error(`Invalid start tag at line ${line}, column ${column}`);
+    }
+  
     const attributes: Record<string, string> = {};
     let selfClosing = false;
-
+  
+    // Process attributes and self-closing marker
     while (this.peek() && this.peek() !== ">") {
       this.skipWhitespace();
-
+  
       if (this.peek() === "/") {
         selfClosing = true;
         this.consume(); // Skip '/'
         break;
       }
-
+  
       const attrName = this.readUntil(/[= \/>]/).trim();
       if (!attrName) break;
-
+  
+      // Handle attribute value or boolean attributes
       if (this.peek() === "=") {
         this.consume(); // Skip '='
         const quote = this.peek();
@@ -79,19 +95,17 @@ export class HTMLTokenizer {
         attributes[attrName] = "true"; // Boolean attribute
       }
     }
-
-    this.consume(); // Skip '>'
+  
+    // Ensure the tag ends with '>'
+    if (this.peek() === ">") {
+      this.consume(); // Skip '>'
+    } else {
+      throw new Error(`Unclosed tag: <${name} at line ${line}, column ${column}`);
+    }
+  
     return { type: "StartTag", name, attributes, selfClosing, line, column };
   }
-
-  private readEndTag(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(2); // Skip '</'
-    const name = this.readUntil(">").toLowerCase().trim(); // HTML tag names are case-insensitive
-    this.consume(); // Skip '>'
-    return { type: "EndTag", name, line, column };
-  }
-
+  
   private readComment(): HTMLToken {
     const { line, column } = this.getCurrentLocation();
     this.consume(4); // Skip '<!--'
