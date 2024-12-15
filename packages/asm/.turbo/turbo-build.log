@@ -1,0 +1,143 @@
+
+> @obinexuscomputing/asm@1.0.0 build
+> tsc && rollup -c
+
+[1G[0K[96m../../node_modules/@types/babel__core/index.d.ts[0m:[93m2[0m:[93m31[0m - [91merror[0m[90m TS2792: [0mCannot find module '@babel/parser'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m2[0m import { ParserOptions } from "@babel/parser";
+[7m [0m [91m                              ~~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/babel__core/index.d.ts[0m:[93m5[0m:[93m20[0m - [91merror[0m[90m TS2792: [0mCannot find module '@babel/types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m5[0m import * as t from "@babel/types";
+[7m [0m [91m                   ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/babel__core/index.d.ts[0m:[93m10[0m:[93m52[0m - [91merror[0m[90m TS2792: [0mCannot find module '@babel/parser'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m10[0m export type ParseResult = ReturnType<typeof import("@babel/parser").parse>;
+[7m  [0m [91m                                                   ~~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/babel__generator/index.d.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2792: [0mCannot find module '@babel/types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m1[0m import * as t from "@babel/types";
+[7m [0m [91m                   ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/babel__template/index.d.ts[0m:[93m1[0m:[93m31[0m - [91merror[0m[90m TS2792: [0mCannot find module '@babel/parser'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m1[0m import { ParserOptions } from "@babel/parser";
+[7m [0m [91m                              ~~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/babel__template/index.d.ts[0m:[93m2[0m:[93m48[0m - [91merror[0m[90m TS2792: [0mCannot find module '@babel/types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m2[0m import { Expression, Program, Statement } from "@babel/types";
+[7m [0m [91m                                               ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/babel__traverse/index.d.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2792: [0mCannot find module '@babel/types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m1[0m import * as t from "@babel/types";
+[7m [0m [91m                   ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/babel__traverse/index.d.ts[0m:[93m361[0m:[93m28[0m - [91merror[0m[90m TS2536: [0mType '"type"' cannot be used to index type 'T'.
+
+[7m361[0m     type: T extends Node ? T["type"] : T extends null | undefined ? undefined : Node["type"] | undefined;
+[7m   [0m [91m                           ~~~~~~~~~[0m
+
+[96m../../node_modules/@types/jest/index.d.ts[0m:[93m622[0m:[93m32[0m - [91merror[0m[90m TS2792: [0mCannot find module 'expect'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m622[0m     type MatcherUtils = import("expect").MatcherUtils & { [other: string]: any };
+[7m   [0m [91m                               ~~~~~~~~[0m
+
+[96m../../node_modules/@types/jest/index.d.ts[0m:[93m640[0m:[93m44[0m - [91merror[0m[90m TS2792: [0mCannot find module 'pretty-format'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m640[0m     type SnapshotSerializerPlugin = import("pretty-format").Plugin;
+[7m   [0m [91m                                           ~~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/jest/index.d.ts[0m:[93m678[0m:[93m32[0m - [91merror[0m[90m TS2792: [0mCannot find module 'expect'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m678[0m     type MatcherState = import("expect").MatcherState;
+[7m   [0m [91m                               ~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m6[0m:[93m76[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m6[0m type _Request = typeof globalThis extends { onmessage: any } ? {} : import("undici-types").Request;
+[7m [0m [91m                                                                           ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m7[0m:[93m77[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m7[0m type _Response = typeof globalThis extends { onmessage: any } ? {} : import("undici-types").Response;
+[7m [0m [91m                                                                            ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m8[0m:[93m77[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m8[0m type _FormData = typeof globalThis extends { onmessage: any } ? {} : import("undici-types").FormData;
+[7m [0m [91m                                                                            ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m9[0m:[93m76[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m9[0m type _Headers = typeof globalThis extends { onmessage: any } ? {} : import("undici-types").Headers;
+[7m [0m [91m                                                                           ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m10[0m:[93m81[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m10[0m type _MessageEvent = typeof globalThis extends { onmessage: any } ? {} : import("undici-types").MessageEvent;
+[7m  [0m [91m                                                                                ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m12[0m:[93m14[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m12[0m     : import("undici-types").RequestInit;
+[7m  [0m [91m             ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m14[0m:[93m14[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m14[0m     : import("undici-types").ResponseInit;
+[7m  [0m [91m             ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m434[0m:[93m25[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m434[0m         : typeof import("undici-types").Request;
+[7m   [0m [91m                        ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m443[0m:[93m25[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m443[0m         : typeof import("undici-types").Response;
+[7m   [0m [91m                        ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m450[0m:[93m25[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m450[0m         : typeof import("undici-types").FormData;
+[7m   [0m [91m                        ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m457[0m:[93m25[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m457[0m         : typeof import("undici-types").Headers;
+[7m   [0m [91m                        ~~~~~~~~~~~~~~[0m
+
+[96m../../node_modules/@types/node/globals.d.ts[0m:[93m467[0m:[93m25[0m - [91merror[0m[90m TS2792: [0mCannot find module 'undici-types'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m467[0m         : typeof import("undici-types").MessageEvent;
+[7m   [0m [91m                        ~~~~~~~~~~~~~~[0m
+
+[96msrc/index.ts[0m:[93m1[0m:[93m15[0m - [91merror[0m[90m TS2792: [0mCannot find module './src/api/index.ts'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+
+[7m1[0m export * from './src/api/index.ts'
+[7m [0m [91m              ~~~~~~~~~~~~~~~~~~~~[0m
+
+
+Found 24 errors in 7 files.
+
+Errors  Files
+     3  ../../node_modules/@types/babel__core/index.d.ts[90m:2[0m
+     1  ../../node_modules/@types/babel__generator/index.d.ts[90m:1[0m
+     2  ../../node_modules/@types/babel__template/index.d.ts[90m:1[0m
+     2  ../../node_modules/@types/babel__traverse/index.d.ts[90m:1[0m
+     3  ../../node_modules/@types/jest/index.d.ts[90m:622[0m
+    12  ../../node_modules/@types/node/globals.d.ts[90m:6[0m
+     1  src/index.ts[90m:1[0m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `build` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m2[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/asm
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/asm@1.0.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/asm
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c tsc && rollup -c
+[1G[0K⠙[1G[0K

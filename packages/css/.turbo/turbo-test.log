@@ -1,0 +1,298 @@
+
+> @obinexuscomputing/css@1.0.0 test
+> jest
+
+[1G[0K[1m[2mDetermining test suites to run...[22m[22m[999D[K
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        0 s, estimated 4 s
+[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        0 s, estimated 4 s
+[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        2 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s, estimated 4 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m5 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m6 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m7 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m8 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m9 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m10 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m11 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m ([0m[1m[41m11.647 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m11 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m11 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
+[1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mast.test.ts[22m ([0m[1m[41m11.694 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
+[1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m ([0m[1m[41m11.76 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
+[1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m3 passed[39m[22m, 3 of 5 total
+[1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m ([0m[1m[41m12.021 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m3 passed[39m[22m, 3 of 5 total
+[1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
+[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m ([0m[1m[41m12.25 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
+[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+
+[1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
+[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m
