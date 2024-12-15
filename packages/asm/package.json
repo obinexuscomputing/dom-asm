@@ -8,6 +8,12 @@
     "packages/html",
     "packages/js"
   ],
+   "bin": {
+    "asm": "./bin/asm",
+    "asm.bat": "./bin/asm.bat",
+    "asm.ps1": "./bin/asm.ps1"
+  },
+    
   "description": "A unified library for DOM manipulation and compilation with support for asm, css, html, and js.",
   "scripts": {
     "build": "rollup -c",

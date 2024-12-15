@@ -1,3 +1,3 @@
-export * from './css-api';
-export * from './html-api';
-export * from './js-api'
+export * from './htmlApi';
+export * from './cssApI';
+export * from './jsApi';

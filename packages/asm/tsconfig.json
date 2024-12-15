@@ -2,20 +2,20 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "outDir": "dist",                      // Ensure all compiled files go to "dist"
-    "declaration": true,                   // Generate declaration files
-    "declarationMap": true,                // Enable declaration maps
-    "declarationDir": "dist",              // Align declarationDir with Rollup's output
-    "sourceMap": true,                     // Generate source maps for debugging
-    "noEmitOnError": true,                 // Prevent emitting files on errors
-    "rootDir": "src"        ,               // Ensure all paths are relative to "src"
+    "outDir": "dist", // Ensure all compiled files go to "dist"
+    "declaration": true, // Generate declaration files
+    "declarationMap": true, // Enable declaration maps
+    "declarationDir": "dist", // Align declarationDir with Rollup's output
+    "sourceMap": true, // Generate source maps for debugging
+    "noEmitOnError": true, // Prevent emitting files on errors
+    "rootDir": "src", // Ensure all paths are relative to "src"
     "paths": {
       "@obinexuscomputing/js": ["../js/src/index.ts"],
       "@obinexuscomputing/css": ["../css/src/index.ts"],
-      "@obinexuscomputing/html": ["../chtml/src/index.ts"],
-
+      "@obinexuscomputing/html": ["../chtml/src/index.ts"]
     }
   },
-  "include": ["src/**/*.ts"],              // Include all TypeScript files in "src"
-  "exclude": ["node_modules", "dist"]      // Exclude unnecessary directories
+  "files": ["dist", "bin"],
+  "include": ["src/**/*.ts"], // Include all TypeScript files in "src"
+  "exclude": ["node_modules", "dist"] // Exclude unnecessary directories
 }

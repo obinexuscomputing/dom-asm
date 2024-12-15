@@ -1,39 +1,99 @@
 import { Command } from "commander";
-import * as CSS from "../api/css-api";
-import * as HTML from "../api/html-api";
-import * as JS from "../api/js-api";
+import { parseFile as parseHTML } from './api/htmlApi';
+import { notImplemented } from './utils';
+import path from 'path';
+import fs from 'fs';
 
 const program = new Command();
 
+// Helper function to validate file existence
+function validateFile(filePath: string): string {
+  const absolutePath = path.resolve(filePath);
+  if (!fs.existsSync(absolutePath)) {
+    throw new Error(`File not found: ${filePath}`);
+  }
+  return absolutePath;
+}
+
+// Helper function to handle command execution
+function executeCommand(action: () => any) {
+  try {
+    const result = action();
+    console.log(JSON.stringify(result, null, 2));
+  } catch (error) {
+    console.error('Error:', error instanceof Error ? error.message : 'Unknown error occurred');
+    process.exit(1);
+  }
+}
+
 // Version and description
-program.version("1.0.0").description("CLI for @obinexuscomputing/asm");
+program
+  .name('@obinexuscomputing/asm')
+  .version('1.0.0')
+  .description('DOM ASM CLI tool for parsing and analyzing web assets');
 
 // CSS Commands
 program
-  .command("css-parse <file>")
-  .description("Parse a CSS file")
-  .action((file) => {
-    const parsed = CSS.parseFile(file);
-    console.log(JSON.stringify(parsed, null, 2));
-  });
+  .command('css')
+  .description('CSS related commands')
+  .addCommand(
+    new Command('parse')
+      .argument('<file>', 'CSS file to parse')
+      .description('Parse a CSS file')
+      .action((file) => {
+        executeCommand(() => {
+          const validatedPath = validateFile(file);
+          // CSS parsing is not implemented yet
+          notImplemented('CSS', 'parse');
+        });
+      })
+  );
 
 // HTML Commands
 program
-  .command("html-parse <file>")
-  .description("Parse an HTML file")
-  .action((file) => {
-    const parsed = HTML.parseFile(file);
-    console.log(JSON.stringify(parsed, null, 2));
-  });
+  .command('html')
+  .description('HTML related commands')
+  .addCommand(
+    new Command('parse')
+      .argument('<file>', 'HTML file to parse')
+      .description('Parse an HTML file')
+      .action((file) => {
+        executeCommand(() => {
+          const validatedPath = validateFile(file);
+          return parseHTML(validatedPath);
+        });
+      })
+  );
 
-// JS Commands
+// JavaScript Commands
 program
-  .command("js-parse <file>")
-  .description("Parse a JavaScript file")
-  .action((file) => {
-    const parsed = JS.parseFile(file);
-    console.log(JSON.stringify(parsed, null, 2));
-  });
+  .command('js')
+  .description('JavaScript related commands')
+  .addCommand(
+    new Command('parse')
+      .argument('<file>', 'JavaScript file to parse')
+      .description('Parse a JavaScript file')
+      .action((file) => {
+        executeCommand(() => {
+          const validatedPath = validateFile(file);
+          // JS parsing is not implemented yet
+          notImplemented('JavaScript', 'parse');
+        });
+      })
+  );
 
-// Execute the CLI
-program.parse(process.argv);
+// Common options for all commands
+program.option('-d, --debug', 'Enable debug output');
+program.option('-o, --output <file>', 'Output file (defaults to stdout)');
+
+// Error handling for unknown commands
+program.on('command:*', function (operands) {
+  console.error(`Error: Unknown command '${operands[0]}'`);
+  const availableCommands = program.commands.map(cmd => cmd.name());
+  console.error('Available commands:', availableCommands.join(', '));
+  process.exit(1);
+});
+
+export function run() {
+  program.parse(process.argv);
+}
