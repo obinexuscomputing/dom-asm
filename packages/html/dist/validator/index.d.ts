@@ -33,7 +33,7 @@ if (validationResult.valid) {
 }
 
  */
-import { HTMLASTNode } from "../ast";
+import { HTMLASTNode } from "../ast/HTMLAST";
 export interface HTMLValidationResult {
     valid: boolean;
     errors: string[];

@@ -1,4 +1,4 @@
-import { HTMLAST } from "../ast";
+import { HTMLAST } from "../ast/HTMLAST";
 export declare class HTMLASTOptimizer {
     optimize(ast: HTMLAST): HTMLAST;
     private removeEmptyNodes;
