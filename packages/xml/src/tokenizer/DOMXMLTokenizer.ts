@@ -1,5 +1,4 @@
-// src/tokenizer/DOMXMLTokenizer.ts
-import { XMLBaseTokenizer } from './XMLBaseTokenizer';
+import { XMLBaseTokenizer } from "./XMLBaseTokenizer";
 
 export interface DOMXMLToken {
   type: 'StartTag' | 'EndTag' | 'Text' | 'Comment' | 'Doctype';

@@ -1,4 +1,4 @@
-import { type DOMXMLAST, type DOMXMLASTNode } from '../ast';
+import { DOMXMLAST, DOMXMLASTNode } from ".";
 
 export interface ValidationOptions {
   strictMode?: boolean;
