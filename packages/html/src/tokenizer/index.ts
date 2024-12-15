@@ -1,3 +1,4 @@
+import XMLBaseTokenizer from "@obinexuscomputing/xml"
 export type HTMLToken =
   | { type: "Doctype"; value: string; line: number; column: number }
   | { type: "StartTag"; name: string; attributes: Record<string, string>; selfClosing: boolean; line: number; column: number }
