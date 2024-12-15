@@ -1,4 +1,4 @@
-import { DOMXMLAST } from "./DOMXMLAST";
+ximport { DOMXMLAST } from "./DOMXMLAST";
 
 // Helper type for optimization process
 export interface OptimizationContext {

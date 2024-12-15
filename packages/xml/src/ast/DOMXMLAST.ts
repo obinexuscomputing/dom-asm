@@ -1,3 +1,19 @@
+export interface DOMXMLASTNode {
+  type: 'Element' | 'Text' | 'Comment' | 'Doctype';
+  name?: string;
+  value?: string;
+  attributes?: Record<string, string>;
+  children?: DOMXMLASTNode[];
+
+  // Optional fields for optimization or additional metadata
+  equivalenceClass?: number;
+  optimizationData?: {
+    hash: string;
+    transitionSignature?: string;
+    isMinimized?: boolean;
+  };
+}
+
 
 export class DOMXMLAST {
   root: DOMXMLASTNode;
@@ -44,7 +60,7 @@ export class DOMXMLAST {
       }
 
       if (node.children) {
-        node.children.forEach((child: unknown) => traverse(child));
+        node.children.forEach((child: DOMXMLASTNode) => traverse(child));
       }
     };
 
