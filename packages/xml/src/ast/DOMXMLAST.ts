@@ -1,34 +1,4 @@
-export interface DOMXMLASTNode {
-  type: 'Element' | 'Text' | 'Comment' | 'Doctype';
-  name?: string;
-  value?: string;
-  attributes?: Record<string, string>;
-  children?: DOMXMLASTNode[];
-
-  // Optional fields for optimization or additional metadata
-  equivalenceClass?: number;
-  optimizationData?: {
-    hash: string;
-    transitionSignature?: string;
-    isMinimized?: boolean;
-  };
-}
-
-export interface DOMXMLAST {
-  root: DOMXMLASTNode;
-  metadata?: {
-    nodeCount: number;
-    elementCount: number;
-    textCount: number;
-    commentCount: number;
-    optimizationMetrics?: {
-      originalStateCount: number;
-      minimizedStateCount: number;
-      reductionPercentage: number;
-    };
-  };
-}
-
+import { DOMXMLASTNode } from ".";
 
 export class DOMXMLAST {
   root: DOMXMLASTNode;
@@ -75,7 +45,7 @@ export class DOMXMLAST {
       }
 
       if (node.children) {
-        node.children.forEach((child) => traverse(child));
+        node.children.forEach((child: unknown) => traverse(child));
       }
     };
 
@@ -103,7 +73,7 @@ export class DOMXMLAST {
    */
   removeChildNode(parent: DOMXMLASTNode, child: DOMXMLASTNode): void {
     if (!parent.children) return;
-    parent.children = parent.children.filter((c) => c !== child);
+    parent.children = parent.children.filter((c: any) => c !== child);
     this.metadata = this.computeMetadata(); // Update metadata
   }
 }

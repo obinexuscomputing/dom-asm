@@ -1,4 +1,4 @@
-import { DOMXMLASTNode } from "./DOMXMLAST";
+import { DOMXMLAST, DOMXMLASTNode } from '../ast';
 
 // Helper type for optimization process
 export interface OptimizationContext {
@@ -52,7 +52,7 @@ export class DOMXMLAST {
       }
 
       if (node.children) {
-        node.children.forEach((child) => traverse(child));
+        node.children.forEach((child: any) => traverse(child));
       }
     };
 
@@ -80,8 +80,15 @@ export class DOMXMLAST {
    */
   removeChildNode(parent: DOMXMLASTNode, child: DOMXMLASTNode): void {
     if (!parent.children) return;
-    parent.children = parent.children.filter((c) => c !== child);
+    parent.children = parent.children.filter((c: any) => c !== child);
     this.metadata = this.computeMetadata(); // Update metadata
+  }
+
+  /**
+   * Create an instance of DOMXMLAST from raw components.
+   */
+  static fromComponents(root: DOMXMLASTNode): DOMXMLAST {
+    return new DOMXMLAST(root);
   }
 }
 
@@ -111,7 +118,7 @@ export class DOMXMLASTOptimizer {
         }
         if (node.type === 'Element') {
           // Keep elements with attributes or non-empty children
-          const hasNonEmptyChildren = (node.children || []).some((child) =>
+          const hasNonEmptyChildren = (node.children || []).some((child: { type: string; value: string; }) =>
             child.type === 'Text'
               ? child.value && child.value.trim() !== ''
               : child.type === 'Element'
@@ -172,7 +179,7 @@ export class DOMXMLASTOptimizer {
       }
 
       if (node.children) {
-        node.children.forEach((child) => traverse(child));
+        node.children.forEach((child: unknown) => traverse(child));
       }
     };
 
