@@ -66,7 +66,17 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
 
     return tokens;
   }
-
+  public readText(): DOMXMLToken {
+    const startLocation = this.getCurrentLocation();
+    const value = this.readUntil('<', { includeStop: false }); // Stop before the next tag
+  
+    return {
+      type: 'Text',
+      value: value.trim(),
+      location: startLocation, // Correct start position of the text
+    };
+  }
+  
   private readStartTag(startLocation: { line: number; column: number }): DOMXMLToken {
     this.consume(); // Skip '<'
     const name = this.readTagName();
@@ -78,7 +88,6 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       selfClosing = true;
       this.consume(); // Skip '/'
     }
-  
     if (this.peek() === '>') {
       this.consume(); // Skip '>'
     }
@@ -91,6 +100,7 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       location: startLocation, // Correctly tracks initial position
     };
   }
+  
   
   private readEndTag(startLocation: { line: number; column: number }): DOMXMLToken {
     this.consumeSequence(2); // Skip '</'

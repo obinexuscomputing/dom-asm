@@ -25,18 +25,18 @@ export abstract class XMLBaseTokenizer {
   protected matches(str: string): boolean {
     return this.input.startsWith(str, this.position);
   }
-
   protected consume(): string {
     const char = this.peek();
     if (char === '\n') {
       this.line++;
-      this.column = 1;
+      this.column = 1; // Reset column on a new line
     } else {
       this.column++;
     }
     this.position++;
     return char;
   }
+  
   
   protected consumeSequence(length: number): string {
     let result = '';
@@ -45,6 +45,7 @@ export abstract class XMLBaseTokenizer {
     }
     return result;
   }
+  
   protected readUntil(
     stop: string | RegExp,
     options: { escape?: boolean; includeStop?: boolean; skipStop?: boolean } = {}
