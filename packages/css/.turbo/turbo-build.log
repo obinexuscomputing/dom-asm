@@ -10,8 +10,4 @@
 > @obinexuscomputing/css@1.0.0 build:ts
 > tsc --emitDeclarationOnly
 
-[1G[0K[1G[0K⠙[1G[0K
-> @obinexuscomputing/css@1.0.0 build:rollup
-> rollup -c
-
 [1G[0K
