@@ -25,12 +25,16 @@ export class JSTokenizer {
   constructor() {}
 
   private shouldAddSemicolon(tokens: JSToken[]): boolean {
+    if (!this.previousToken) {
+      return false; // No semicolon should be added if there is no previous token.
+    }
+  
     return (
-      this.previousToken &&
       this.previousToken.type !== JSTokenType.Delimiter &&
       !tokens.some(token => token.type === JSTokenType.Delimiter && token.value === ';')
     );
   }
+  
 
   public tokenize(input: string): JSToken[] {
     const tokens: JSToken[] = [];
