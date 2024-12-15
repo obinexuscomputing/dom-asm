@@ -9,9 +9,7 @@
     "dom-asm.bat": "./bin/dom-asm.bat",
     "dom-asm.ps1": "./bin/dom-asm.ps1"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  "workspaces": ["packages/*"],
   "scripts": {
     "build": "turbo build",
     "test": "turbo test",
