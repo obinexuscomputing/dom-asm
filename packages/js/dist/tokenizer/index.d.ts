@@ -20,7 +20,7 @@ export declare class JSTokenizer {
     private singleCharDelimiters;
     private previousToken;
     constructor();
-    private shouldAddSemicolon;
+    shouldAddSemicolon(tokens: JSToken[]): boolean;
     private readOperator;
     tokenize(input: string): JSToken[];
 }
