@@ -34,8 +34,8 @@ export declare class HTMLTokenizer {
     constructor(input: string);
     tokenize(): HTMLToken[];
     private readDoctype;
-    private readStartTag;
     private readEndTag;
+    private readStartTag;
     private readComment;
     private readText;
     private readUntil;
@@ -44,6 +44,7 @@ export declare class HTMLTokenizer {
     private matches;
     private consume;
     private skipWhitespace;
+    private addError;
     private getCurrentLocation;
 }
 //# sourceMappingURL=index.d.ts.map

@@ -41,13 +41,20 @@ export class HTMLParser {
 
   constructor() {
     this.tokenizer = new HTMLTokenizer("");
+  }public parse(input: string): HTMLAST {
+    const tokenizer = new HTMLTokenizer(input);
+    const tokens = tokenizer.tokenize();
+  
+    try {
+      const astBuilder = new HTMLASTBuilder(tokens);
+      return astBuilder.buildAST();
+    } catch (error) {
+      if (this.options.throwOnError) throw error;
+      if (this.errorHandler) this.errorHandler(error);
+      return { root: { type: "Element", name: "root", children: [] } };
+    }
   }
-
-  public parse(input: string): HTMLASTNode {
-    this.tokenizer = new HTMLTokenizer(input);
-    const tokens = this.tokenizer.tokenize();
-    return this.buildAST(tokens);
-  }
+  
 
   private buildAST(tokens: HTMLToken[]): HTMLASTNode {
     const root: HTMLASTNode = { type: "Element", name: "root", children: [] };
