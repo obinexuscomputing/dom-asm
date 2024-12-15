@@ -3,123 +3,428 @@
 > jest --no-cache
 
 [1G[0K[1m[2mDetermining test suites to run...[22m[22m[999D[K
-[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A[999D[K
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A  [2m[31mconsole.error[39m[22m
-[31m    Error at position 7: Unmatched end tag: </unmatched>. Expected </div>.[39m
-[2m[22m
-[2m    [0m [90m 70 |[39m       }[22m
-[2m     [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
-[2m    [31m[1m>[22m[2m[39m[90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
-[2m     [90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m 74 |[39m       }[22m
-[2m     [90m 75 |[39m     }[0m[22m
-[2m[22m
-[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:72:17)[22m[2m[22m
-[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
-[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:22:24)[22m[2m[22m
 
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A[999D[K
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A  [2m[31mconsole.error[39m[22m
-[31m    Problematic token: {"type":"EndTag","name":"unmatched"}[39m
-[2m[22m
-[2m    [0m [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
-[2m     [90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m    [31m[1m>[22m[2m[39m[90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
-[2m     [90m 74 |[39m       }[22m
-[2m     [90m 75 |[39m     }[22m
-[2m     [90m 76 |[39m   }[0m[22m
-[2m[22m
-[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:73:17)[22m[2m[22m
-[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
-[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:22:24)[22m[2m[22m
-
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A[999D[K
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A  [2m[31mconsole.error[39m[22m
-[31m    Error at position 7: Unmatched end tag: </mismatch>. Expected </div>.[39m
-[2m[22m
-[2m    [0m [90m 70 |[39m       }[22m
-[2m     [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
-[2m    [31m[1m>[22m[2m[39m[90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
-[2m     [90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m 74 |[39m       }[22m
-[2m     [90m 75 |[39m     }[0m[22m
-[2m[22m
-[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:72:17)[22m[2m[22m
-[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
-[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:52:24)[22m[2m[22m
-
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A[999D[K
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A  [2m[31mconsole.error[39m[22m
-[31m    Problematic token: {"type":"EndTag","name":"mismatch"}[39m
-[2m[22m
-[2m    [0m [90m 71 |[39m       [36mif[39m ([33m![39mquiet) {[22m
-[2m     [90m 72 |[39m         console[33m.[39merror([32m`Error at position ${error.position}: ${error.message}`[39m)[33m;[39m[22m
-[2m    [31m[1m>[22m[2m[39m[90m 73 |[39m         console[33m.[39merror([32m`Problematic token: ${JSON.stringify(error.token)}`[39m)[33m;[39m[22m
-[2m     [90m    |[39m                 [31m[1m^[22m[2m[39m[22m
-[2m     [90m 74 |[39m       }[22m
-[2m     [90m 75 |[39m     }[22m
-[2m     [90m 76 |[39m   }[0m[22m
-[2m[22m
-[2m      [2mat HTMLParser.handleError ([22m[2msrc/parser/index.ts[2m:73:17)[22m[2m[22m
-[2m      [2mat HTMLParser.buildASTWithRecovery ([22m[2msrc/parser/index.ts[2m:184:16)[22m[2m[22m
-[2m      [2mat HTMLParser.parse ([22m[2msrc/parser/index.ts[2m:85:22)[22m[2m[22m
-[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:52:24)[22m[2m[22m
-
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A  Parser with Custom Errors
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A    [32m✓[39m [2mshould throw HTMLParserError for unmatched end tags (37 ms)[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A    [32m✓[39m [2mshould continue parsing after encountering an error when throwOnError is false (88 ms)[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A  Parser with Error Handler
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A    [32m✓[39m [2mshould invoke custom error handler for unmatched end tags (7 ms)[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A    [32m✓[39m [2mshould recover and continue parsing after an error (26 ms)[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
-[K[1A[K[1A[999D[K[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 total
-[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        2.356 s
+[1mTime:[22m        0 s[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        0 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        1 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m[1m[31m5 failed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m[1m[31m5 failed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[1m[31m  [1m● [22m[1mParser with Custom Errors › should throw HTMLParserError for unmatched end tags[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoThrow[2m()[22m
+
+    Received function did not throw
+[2m[22m
+[2m    [0m [90m  9 |[39m [32m    `[39m[33m;[39m[22m
+[2m     [90m 10 |[39m     [36mconst[39m parser [33m=[39m [36mnew[39m [33mHTMLParser[39m({ throwOnError[33m:[39m [36mtrue[39m })[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 11 |[39m     expect(() [33m=>[39m parser[33m.[39mparse(input))[33m.[39mtoThrow([33mHTMLParserError[39m)[33m;[39m[22m
+[2m     [90m    |[39m                                       [31m[1m^[22m[2m[39m[22m
+[2m     [90m 12 |[39m   })[33m;[39m[22m
+[2m     [90m 13 |[39m[22m
+[2m     [90m 14 |[39m   it([32m"should continue parsing after encountering an error when throwOnError is false"[39m[33m,[39m () [33m=>[39m {[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:11:39)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mParser with Custom Errors › should continue parsing after encountering an error when throwOnError is false[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoHaveLength[2m([22m[32mexpected[39m[2m)[22m
+
+    Expected length: [32m1[39m
+    Received length: [31m4[39m
+    Received array:  [31m[{"type": "Text", "value": ""}, {"attributes": {}, "children": [{"type": "Text", "value": "iv>"}, {"attributes": {}, "children": [{"type": "Text", "value": "pan>Hello"}], "name": "", "type": "Element"}, {"type": "Text", "value": ""}], "name": "", "type": "Element"}, {"type": "Text", "value": ""}, {"type": "Text", "value": ""}][39m
+[2m[22m
+[2m    [0m [90m 21 |[39m     [36mconst[39m parser [33m=[39m [36mnew[39m [33mHTMLParser[39m({ throwOnError[33m:[39m [36mfalse[39m })[33m;[39m[22m
+[2m     [90m 22 |[39m     [36mconst[39m ast [33m=[39m parser[33m.[39mparse(input)[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 23 |[39m     expect(ast[33m.[39mchildren)[33m.[39mtoHaveLength([35m1[39m)[33m;[39m[22m
+[2m     [90m    |[39m                          [31m[1m^[22m[2m[39m[22m
+[2m     [90m 24 |[39m     expect(ast[33m.[39mchildren[[35m0[39m][33m.[39mname)[33m.[39mtoBe([32m"div"[39m)[33m;[39m[22m
+[2m     [90m 25 |[39m   })[33m;[39m[22m
+[2m     [90m 26 |[39m })[33m;[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:23:26)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mParser with Error Handler › should invoke custom error handler for unmatched end tags[39m[22m
+
+    TypeError: parser.setErrorHandler is not a function
+[2m[22m
+[2m    [0m [90m 36 |[39m     [36mconst[39m parser [33m=[39m [36mnew[39m [33mHTMLParser[39m({ throwOnError[33m:[39m [36mfalse[39m })[33m;[39m[22m
+[2m     [90m 37 |[39m     [36mconst[39m mockErrorHandler [33m=[39m jest[33m.[39mfn()[33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 38 |[39m     parser[33m.[39msetErrorHandler(mockErrorHandler)[33m;[39m[22m
+[2m     [90m    |[39m            [31m[1m^[22m[2m[39m[22m
+[2m     [90m 39 |[39m     [36mconst[39m ast [33m=[39m parser[33m.[39mparse(input)[33m;[39m[22m
+[2m     [90m 40 |[39m     expect(mockErrorHandler)[33m.[39mtoHaveBeenCalled()[33m;[39m[22m
+[2m     [90m 41 |[39m     expect(mockErrorHandler[33m.[39mmock[33m.[39mcalls[[35m0[39m][[35m0[39m])[33m.[39mtoBeInstanceOf([33mHTMLParserError[39m)[33m;[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:38:12)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mParser with Error Handler › should recover and continue parsing after an error[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m"div"[39m
+    Received: [31mundefined[39m
+[2m[22m
+[2m    [0m [90m 54 |[39m     [90m// Validate root node[39m[22m
+[2m     [90m 55 |[39m     [36mconst[39m divNode [33m=[39m ast[33m.[39mchildren[33m?[39m[33m.[39m[[35m0[39m][33m;[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 56 |[39m     expect(divNode[33m?[39m[33m.[39mname)[33m.[39mtoBe([32m"div"[39m)[33m;[39m[22m
+[2m     [90m    |[39m                           [31m[1m^[22m[2m[39m[22m
+[2m     [90m 57 |[39m     expect(divNode[33m?[39m[33m.[39mchildren[33m?[39m[33m.[39mlength)[33m.[39mtoBe([35m1[39m)[33m;[39m [90m// Only one valid child[39m[22m
+[2m     [90m 58 |[39m     [22m
+[2m     [90m 59 |[39m     [90m// Validate the valid child[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/parser.test.ts[39m[0m[2m:56:27)[22m[2m[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m[1m[31m5 failed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m[1m[31m5 failed[39m[22m, 5 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 2 total
+[1mTests:       [22m[1m[31m10 failed[39m[22m, [1m[32m2 passed[39m[22m, 12 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 2 total
+[1mTests:       [22m[1m[31m10 failed[39m[22m, [1m[32m2 passed[39m[22m, 12 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[1m[31m  [1m● [22m[1mHTMLTokenizer › should tokenize a basic HTML element with text content[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 3[39m
+    [31m+ Received  + 3[39m
+
+    [33m@@ -1,19 +1,19 @@[39m
+    [2m  Array [[22m
+    [2m    Object {[22m
+    [2m      "attributes": Object {},[22m
+    [2m      "column": 1,[22m
+    [2m      "line": 1,[22m
+    [32m-     "name": "div",[39m
+    [31m+     "name": "",[39m
+    [2m      "selfClosing": false,[22m
+    [2m      "type": "StartTag",[22m
+    [2m    },[22m
+    [2m    Object {[22m
+    [32m-     "column": 6,[39m
+    [31m+     "column": 3,[39m
+    [2m      "line": 1,[22m
+    [2m      "type": "Text",[22m
+    [32m-     "value": "Hello World",[39m
+    [31m+     "value": "iv>Hello World",[39m
+    [2m    },[22m
+    [2m    Object {[22m
+    [2m      "column": 17,[22m
+    [2m      "line": 1,[22m
+    [2m      "name": "div",[22m
+[2m[22m
+[2m    [0m [90m  7 |[39m     [36mconst[39m tokens [33m=[39m tokenizer[33m.[39mtokenize()[33m;[39m[22m
+[2m     [90m  8 |[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m  9 |[39m     expect(tokens)[33m.[39mtoEqual([[22m
+[2m     [90m    |[39m                    [31m[1m^[22m[2m[39m[22m
+[2m     [90m 10 |[39m       { type[33m:[39m [32m"StartTag"[39m[33m,[39m name[33m:[39m [32m"div"[39m[33m,[39m attributes[33m:[39m {}[33m,[39m selfClosing[33m:[39m [36mfalse[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m1[39m }[33m,[39m[22m
+[2m     [90m 11 |[39m       { type[33m:[39m [32m"Text"[39m[33m,[39m value[33m:[39m [32m"Hello World"[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m6[39m }[33m,[39m[22m
+[2m     [90m 12 |[39m       { type[33m:[39m [32m"EndTag"[39m[33m,[39m name[33m:[39m [32m"div"[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m17[39m }[33m,[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/HTMLTokenizer.test.ts[39m[0m[2m:9:20)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mHTMLTokenizer › should handle self-closing tags correctly[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 6[39m
+    [31m+ Received  + 9[39m
+
+    [2m  Array [[22m
+    [2m    Object {[22m
+    [32m-     "attributes": Object {[39m
+    [32m-       "alt": "Image",[39m
+    [32m-       "src": "image.png",[39m
+    [32m-     },[39m
+    [31m+     "attributes": Object {},[39m
+    [2m      "column": 1,[22m
+    [2m      "line": 1,[22m
+    [32m-     "name": "img",[39m
+    [32m-     "selfClosing": true,[39m
+    [31m+     "name": "",[39m
+    [31m+     "selfClosing": false,[39m
+    [2m      "type": "StartTag",[22m
+    [31m+   },[39m
+    [31m+   Object {[39m
+    [31m+     "column": 3,[39m
+    [31m+     "line": 1,[39m
+    [31m+     "type": "Text",[39m
+    [31m+     "value": "mg src='image.png' alt='Image' />",[39m
+    [2m    },[22m
+    [2m  ][22m
+[2m[22m
+[2m    [0m [90m 19 |[39m     [36mconst[39m tokens [33m=[39m tokenizer[33m.[39mtokenize()[33m;[39m[22m
+[2m     [90m 20 |[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 21 |[39m     expect(tokens)[33m.[39mtoEqual([[22m
+[2m     [90m    |[39m                    [31m[1m^[22m[2m[39m[22m
+[2m     [90m 22 |[39m       { type[33m:[39m [32m"StartTag"[39m[33m,[39m name[33m:[39m [32m"img"[39m[33m,[39m attributes[33m:[39m { src[33m:[39m [32m"image.png"[39m[33m,[39m alt[33m:[39m [32m"Image"[39m }[33m,[39m selfClosing[33m:[39m [36mtrue[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m1[39m }[33m,[39m[22m
+[2m     [90m 23 |[39m     ])[33m;[39m[22m
+[2m     [90m 24 |[39m   })[33m;[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/HTMLTokenizer.test.ts[39m[0m[2m:21:20)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mHTMLTokenizer › should tokenize boolean attributes[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 5[39m
+    [31m+ Received  + 9[39m
+
+    [2m  Array [[22m
+    [2m    Object {[22m
+    [32m-     "attributes": Object {[39m
+    [32m-       "disabled": "true",[39m
+    [32m-     },[39m
+    [31m+     "attributes": Object {},[39m
+    [2m      "column": 1,[22m
+    [2m      "line": 1,[22m
+    [32m-     "name": "input",[39m
+    [32m-     "selfClosing": true,[39m
+    [31m+     "name": "",[39m
+    [31m+     "selfClosing": false,[39m
+    [2m      "type": "StartTag",[22m
+    [31m+   },[39m
+    [31m+   Object {[39m
+    [31m+     "column": 3,[39m
+    [31m+     "line": 1,[39m
+    [31m+     "type": "Text",[39m
+    [31m+     "value": "nput disabled />",[39m
+    [2m    },[22m
+    [2m  ][22m
+[2m[22m
+[2m    [0m [90m 29 |[39m     [36mconst[39m tokens [33m=[39m tokenizer[33m.[39mtokenize()[33m;[39m[22m
+[2m     [90m 30 |[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 31 |[39m     expect(tokens)[33m.[39mtoEqual([[22m
+[2m     [90m    |[39m                    [31m[1m^[22m[2m[39m[22m
+[2m     [90m 32 |[39m       { type[33m:[39m [32m"StartTag"[39m[33m,[39m name[33m:[39m [32m"input"[39m[33m,[39m attributes[33m:[39m { disabled[33m:[39m [32m"true"[39m }[33m,[39m selfClosing[33m:[39m [36mtrue[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m1[39m }[33m,[39m[22m
+[2m     [90m 33 |[39m     ])[33m;[39m[22m
+[2m     [90m 34 |[39m   })[33m;[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/HTMLTokenizer.test.ts[39m[0m[2m:31:20)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mHTMLTokenizer › should tokenize comments[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  - 1[39m
+    [31m+ Received  + 1[39m
+
+    [2m  Array [[22m
+    [2m    Object {[22m
+    [2m      "column": 1,[22m
+    [2m      "line": 1,[22m
+    [2m      "type": "Comment",[22m
+    [32m-     "value": "This is a comment",[39m
+    [31m+     "value": " This is a comment ",[39m
+    [2m    },[22m
+    [2m  ][22m
+[2m[22m
+[2m    [0m [90m 39 |[39m     [36mconst[39m tokens [33m=[39m tokenizer[33m.[39mtokenize()[33m;[39m[22m
+[2m     [90m 40 |[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 41 |[39m     expect(tokens)[33m.[39mtoEqual([[22m
+[2m     [90m    |[39m                    [31m[1m^[22m[2m[39m[22m
+[2m     [90m 42 |[39m       { type[33m:[39m [32m"Comment"[39m[33m,[39m value[33m:[39m [32m"This is a comment"[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m1[39m }[33m,[39m[22m
+[2m     [90m 43 |[39m     ])[33m;[39m[22m
+[2m     [90m 44 |[39m   })[33m;[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/HTMLTokenizer.test.ts[39m[0m[2m:41:20)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mHTMLTokenizer › should tokenize nested elements[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -  4[39m
+    [31m+ Received  + 10[39m
+
+    [33m@@ -1,27 +1,33 @@[39m
+    [2m  Array [[22m
+    [2m    Object {[22m
+    [2m      "attributes": Object {},[22m
+    [2m      "column": 1,[22m
+    [2m      "line": 1,[22m
+    [32m-     "name": "div",[39m
+    [31m+     "name": "",[39m
+    [2m      "selfClosing": false,[22m
+    [2m      "type": "StartTag",[22m
+    [31m+   },[39m
+    [31m+   Object {[39m
+    [31m+     "column": 3,[39m
+    [31m+     "line": 1,[39m
+    [31m+     "type": "Text",[39m
+    [31m+     "value": "iv>",[39m
+    [2m    },[22m
+    [2m    Object {[22m
+    [2m      "attributes": Object {},[22m
+    [2m      "column": 6,[22m
+    [2m      "line": 1,[22m
+    [32m-     "name": "span",[39m
+    [31m+     "name": "",[39m
+    [2m      "selfClosing": false,[22m
+    [2m      "type": "StartTag",[22m
+    [2m    },[22m
+    [2m    Object {[22m
+    [32m-     "column": 12,[39m
+    [31m+     "column": 8,[39m
+    [2m      "line": 1,[22m
+    [2m      "type": "Text",[22m
+    [32m-     "value": "Text",[39m
+    [31m+     "value": "pan>Text",[39m
+    [2m    },[22m
+    [2m    Object {[22m
+    [2m      "column": 16,[22m
+    [2m      "line": 1,[22m
+    [2m      "name": "span",[22m
+[2m[22m
+[2m    [0m [90m 59 |[39m     [36mconst[39m tokens [33m=[39m tokenizer[33m.[39mtokenize()[33m;[39m[22m
+[2m     [90m 60 |[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 61 |[39m     expect(tokens)[33m.[39mtoEqual([[22m
+[2m     [90m    |[39m                    [31m[1m^[22m[2m[39m[22m
+[2m     [90m 62 |[39m       { type[33m:[39m [32m"StartTag"[39m[33m,[39m name[33m:[39m [32m"div"[39m[33m,[39m attributes[33m:[39m {}[33m,[39m selfClosing[33m:[39m [36mfalse[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m1[39m }[33m,[39m[22m
+[2m     [90m 63 |[39m       { type[33m:[39m [32m"StartTag"[39m[33m,[39m name[33m:[39m [32m"span"[39m[33m,[39m attributes[33m:[39m {}[33m,[39m selfClosing[33m:[39m [36mfalse[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m6[39m }[33m,[39m[22m
+[2m     [90m 64 |[39m       { type[33m:[39m [32m"Text"[39m[33m,[39m value[33m:[39m [32m"Text"[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m12[39m }[33m,[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/HTMLTokenizer.test.ts[39m[0m[2m:61:20)[22m[2m[22m
+
+[1m[31m  [1m● [22m[1mHTMLTokenizer › should handle malformed HTML gracefully[39m[22m
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+    [32m- Expected  -  5[39m
+    [31m+ Received  + 11[39m
+
+    [2m  Array [[22m
+    [2m    Object {[22m
+    [2m      "attributes": Object {},[22m
+    [2m      "column": 1,[22m
+    [2m      "line": 1,[22m
+    [32m-     "name": "div",[39m
+    [31m+     "name": "",[39m
+    [2m      "selfClosing": false,[22m
+    [2m      "type": "StartTag",[22m
+    [31m+   },[39m
+    [31m+   Object {[39m
+    [31m+     "column": 3,[39m
+    [31m+     "line": 1,[39m
+    [31m+     "type": "Text",[39m
+    [31m+     "value": "iv>",[39m
+    [2m    },[22m
+    [2m    Object {[22m
+    [2m      "attributes": Object {},[22m
+    [2m      "column": 6,[22m
+    [2m      "line": 1,[22m
+    [32m-     "name": "span",[39m
+    [31m+     "name": "",[39m
+    [2m      "selfClosing": false,[22m
+    [2m      "type": "StartTag",[22m
+    [2m    },[22m
+    [2m    Object {[22m
+    [32m-     "column": 12,[39m
+    [31m+     "column": 8,[39m
+    [2m      "line": 1,[22m
+    [2m      "type": "Text",[22m
+    [32m-     "value": "Text",[39m
+    [31m+     "value": "pan>Text",[39m
+    [2m    },[22m
+    [2m    Object {[22m
+    [32m-     "column": 18,[39m
+    [31m+     "column": 16,[39m
+    [2m      "line": 1,[22m
+    [2m      "name": "div",[22m
+    [2m      "type": "EndTag",[22m
+    [2m    },[22m
+    [2m  ][22m
+[2m[22m
+[2m    [0m [90m 73 |[39m     [36mconst[39m tokens [33m=[39m tokenizer[33m.[39mtokenize()[33m;[39m[22m
+[2m     [90m 74 |[39m[22m
+[2m    [31m[1m>[22m[2m[39m[90m 75 |[39m     expect(tokens)[33m.[39mtoEqual([[22m
+[2m     [90m    |[39m                    [31m[1m^[22m[2m[39m[22m
+[2m     [90m 76 |[39m       { type[33m:[39m [32m"StartTag"[39m[33m,[39m name[33m:[39m [32m"div"[39m[33m,[39m attributes[33m:[39m {}[33m,[39m selfClosing[33m:[39m [36mfalse[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m1[39m }[33m,[39m[22m
+[2m     [90m 77 |[39m       { type[33m:[39m [32m"StartTag"[39m[33m,[39m name[33m:[39m [32m"span"[39m[33m,[39m attributes[33m:[39m {}[33m,[39m selfClosing[33m:[39m [36mfalse[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m6[39m }[33m,[39m[22m
+[2m     [90m 78 |[39m       { type[33m:[39m [32m"Text"[39m[33m,[39m value[33m:[39m [32m"Text"[39m[33m,[39m line[33m:[39m [35m1[39m[33m,[39m column[33m:[39m [35m12[39m }[33m,[39m[0m[22m
+[2m[22m
+[2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/HTMLTokenizer.test.ts[39m[0m[2m:75:20)[22m[2m[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 2 total
+[1mTests:       [22m[1m[31m10 failed[39m[22m, [1m[32m2 passed[39m[22m, 12 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 total
+[1mTests:       [22m[1m[31m10 failed[39m[22m, [1m[32m2 passed[39m[22m, 12 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 total
+[1mTests:       [22m[1m[31m10 failed[39m[22m, [1m[32m2 passed[39m[22m, 12 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        4.208 s
 [2mRan all test suites[22m[2m.[22m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `test` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/html
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/html@1.0.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/html
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c jest --no-cache
 [1G[0K⠙[1G[0K
