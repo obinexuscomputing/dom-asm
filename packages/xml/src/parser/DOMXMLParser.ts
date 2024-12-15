@@ -18,16 +18,16 @@ export class DOMXMLParser {
   public parse(): DOMXMLAST {
     this.position = 0;
     
-    // Create document root
-    const documentRoot: DOMXMLASTNode = {
+    // Create virtual root to hold the actual root element
+    const virtualRoot: DOMXMLASTNode = {
       type: 'Element',
-      name: 'root',
+      name: '#document',
       children: [],
       attributes: {}
     };
 
-    const stack: DOMXMLASTNode[] = [documentRoot];
-    let currentNode = documentRoot;
+    const stack: DOMXMLASTNode[] = [virtualRoot];
+    let currentNode = virtualRoot;
 
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
@@ -41,13 +41,8 @@ export class DOMXMLParser {
             children: []
           };
 
-          // Always add to current node's children
-          if (!currentNode.children) {
-            currentNode.children = [];
-          }
-          currentNode.children.push(elementNode);
+          currentNode.children!.push(elementNode);
 
-          // Push to stack if not self-closing
           if (!token.selfClosing) {
             stack.push(elementNode);
             currentNode = elementNode;
@@ -57,7 +52,9 @@ export class DOMXMLParser {
 
         case 'EndTag': {
           if (stack.length <= 1) {
-            throw new Error(`Unexpected closing tag "${token.name}" at line ${token.location.line}, column ${token.location.column}`);
+            throw new Error(
+              `Unexpected closing tag "${token.name}" at line ${token.location.line}, column ${token.location.column}`
+            );
           }
 
           const openTag = stack[stack.length - 1];
@@ -78,10 +75,7 @@ export class DOMXMLParser {
               type: 'Text',
               value: token.value.trim()
             };
-            if (!currentNode.children) {
-              currentNode.children = [];
-            }
-            currentNode.children.push(textNode);
+            currentNode.children!.push(textNode);
           }
           break;
         }
@@ -91,39 +85,35 @@ export class DOMXMLParser {
             type: 'Comment',
             value: token.value || ''
           };
-          if (!currentNode.children) {
-            currentNode.children = [];
-          }
-          currentNode.children.push(commentNode);
+          currentNode.children!.push(commentNode);
           break;
         }
 
         case 'Doctype': {
           if (stack.length > 1) {
-            throw new Error(`DOCTYPE declaration must be at root level at line ${token.location.line}, column ${token.location.column}`);
+            throw new Error(
+              `DOCTYPE declaration must be at root level at line ${token.location.line}, column ${token.location.column}`
+            );
           }
           const doctypeNode: DOMXMLASTNode = {
             type: 'Doctype',
             value: token.value || ''
           };
-          if (!currentNode.children) {
-            currentNode.children = [];
-          }
-          currentNode.children.push(doctypeNode);
+          currentNode.children!.push(doctypeNode);
           break;
         }
       }
     }
 
-    // Check for unclosed tags
     if (stack.length > 1) {
       const unclosedTag = stack[stack.length - 1];
       throw new Error(`Unclosed tag: ${unclosedTag.name}`);
     }
 
+    // Return the actual root element instead of the virtual root
     return {
-      root: documentRoot,
-      metadata: this.computeMetadata(documentRoot)
+      root: virtualRoot.children![0],
+      metadata: this.computeMetadata(virtualRoot.children![0])
     };
   }
 
@@ -135,7 +125,6 @@ export class DOMXMLParser {
 
     const countNode = (node: DOMXMLASTNode) => {
       nodeCount++;
-      
       switch (node.type) {
         case 'Element':
           elementCount++;
@@ -150,12 +139,7 @@ export class DOMXMLParser {
       }
     };
 
-    // Count root and its children
     countNode(root);
-
-    // Adjust counts to exclude root from final counts
-    nodeCount--;
-    elementCount--;
 
     return {
       nodeCount,

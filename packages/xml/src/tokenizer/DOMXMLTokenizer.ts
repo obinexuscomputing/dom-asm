@@ -17,37 +17,53 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
 
   public tokenize(): DOMXMLToken[] {
     const tokens: DOMXMLToken[] = [];
+    let textStart: { line: number; column: number } | null = null;
+    let textContent = '';
 
     while (this.position < this.input.length) {
       const char = this.peek();
 
       if (char === '<') {
-        // Get location before consuming any characters
-        const location = this.getCurrentLocation();
+        // Handle any accumulated text before processing tag
+        if (textContent) {
+          const trimmed = textContent.trim();
+          if (trimmed) {
+            tokens.push({
+              type: 'Text',
+              value: trimmed,
+              location: textStart!
+            });
+          }
+          textContent = '';
+          textStart = null;
+        }
 
+        const tagStart = this.getCurrentLocation();
+        
         if (this.matches('<!--')) {
           tokens.push(this.readComment());
         } else if (this.matches('<!DOCTYPE')) {
           tokens.push(this.readDoctype());
         } else if (this.peek(1) === '/') {
-          // Store the start location for end tag
-          tokens.push(this.readEndTag(location));
+          tokens.push(this.readEndTag(tagStart));
         } else {
-          // Store the start location for start tag
-          tokens.push(this.readStartTag(location));
+          tokens.push(this.readStartTag(tagStart));
         }
       } else {
-        // Store the start location for text content
-        const textLocation = this.getCurrentLocation();
-        const textContent = this.readTextContent();
-        if (textContent.trim()) {
-          tokens.push({
-            type: 'Text',
-            value: textContent,
-            location: textLocation
-          });
+        if (!textStart) {
+          textStart = this.getCurrentLocation();
         }
+        textContent += this.consume();
       }
+    }
+
+    // Handle any remaining text
+    if (textContent && textContent.trim()) {
+      tokens.push({
+        type: 'Text',
+        value: textContent.trim(),
+        location: textStart!
+      });
     }
 
     return tokens;
@@ -62,13 +78,13 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     this.skipWhitespace();
     if (this.peek() === '/') {
       selfClosing = true;
-      this.consume(); // Skip '/'
-    } else if (DOMXMLTokenizer.VOID_ELEMENTS.has(name.toLowerCase())) {
+      this.consume();
+    } else if (name && DOMXMLTokenizer.VOID_ELEMENTS.has(name.toLowerCase())) {
       selfClosing = true;
     }
 
     if (this.peek() === '>') {
-      this.consume(); // Skip '>'
+      this.consume();
     }
 
     return {
@@ -80,16 +96,12 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     };
   }
 
-  private readTagName(): string {
-    return this.readWhile(char => this.isNameChar(char));
-  }
-
   private readEndTag(location: { line: number; column: number }): DOMXMLToken {
     this.consumeSequence(2); // Skip '</'
     const name = this.readTagName();
     this.skipWhitespace();
     if (this.peek() === '>') {
-      this.consume(); // Skip '>'
+      this.consume();
     }
 
     return {
@@ -99,10 +111,14 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     };
   }
 
+  private readTagName(): string {
+    return this.readWhile(char => this.isNameChar(char));
+  }
+
   private readAttributes(): Record<string, string> {
     const attributes: Record<string, string> = {};
 
-    while (true) {
+    while (this.position < this.input.length) {
       this.skipWhitespace();
       
       if (this.peek() === '>' || this.peek() === '/' || !this.peek()) {
@@ -120,7 +136,7 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
         this.skipWhitespace();
         value = this.readAttributeValue();
       } else {
-        value = 'true'; // Boolean attribute
+        value = name; // For boolean attributes, use the name as the value
       }
 
       attributes[name] = value;
@@ -144,20 +160,11 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     return this.readUntil(/[\s>\/]/);
   }
 
-  private readTextContent(): string {
-    let content = '';
-    while (this.position < this.input.length && this.peek() !== '<') {
-      content += this.consume();
-    }
-    return content;
-  }
-
   private readComment(): DOMXMLToken {
     const location = this.getCurrentLocation();
     this.consumeSequence(4); // Skip '<!--'
     const value = this.readUntil('-->');
     this.consumeSequence(3); // Skip '-->'
-
     return {
       type: 'Comment',
       value: value.trim(),
@@ -171,7 +178,6 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     this.skipWhitespace();
     const value = this.readUntil('>');
     this.consume(); // Skip '>'
-
     return {
       type: 'Doctype',
       value: value.trim(),
