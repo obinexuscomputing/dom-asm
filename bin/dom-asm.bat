@@ -1,10 +1,10 @@
-@REM asm.bat - Windows Batch launcher
+@REM dom-asm.bat - Windows Batch launcher
 @echo off
 node "%~dp0..\dist\cli" %*
 
 @REM ================================================================
 
-# asm.ps1 - PowerShell launcher
+# dom-asm.ps1 - PowerShell launcher
 $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 & node "$scriptPath\..\dist\cli" $args
 
@@ -15,8 +15,8 @@ $scriptPath = Split-Path -Parent $MyInvocation.MyCommand.Definition
 echo Installing platform-specific launchers...
 
 set "binPath=%~dp0"
-set "batTarget=%binPath%asm.bat"
-set "ps1Target=%binPath%asm.ps1"
+set "batTarget=%binPath%dom-asm.bat"
+set "ps1Target=%binPath%dom-asm.ps1"
 
 echo @echo off > "%batTarget%"
 echo node "%%~dp0..\dist\cli" %%* >> "%batTarget%"
