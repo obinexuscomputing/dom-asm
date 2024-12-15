@@ -40,9 +40,9 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@obinexuscomputing/djs": "workspace:*",
-    "@obinexuscomputing/dhtml": "workspace:*",
-    "@obinexuscomputing/dcss": "workspace:*",
+    "@obinexuscomputing/js": "workspace:*",
+    "@obinexuscomputing/html": "workspace:*",
+    "@obinexuscomputing/css": "workspace:*",
     "commander": "^11.1.0"
   },
   "engines": {
