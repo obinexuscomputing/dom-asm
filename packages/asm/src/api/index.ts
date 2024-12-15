@@ -1,3 +1,3 @@
 export * from './htmlApi';
-export * from './cssApI';
+export * from './cssApi';
 export * from './jsApi';

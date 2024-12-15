@@ -1,24 +1,23 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "target": "ES2020",
+    "module": "esnext",       // Ensure compatibility with Node.js and Jest
+    "moduleResolution": "node",
     "strict": true,
-    "outDir": "dist",                      // Ensure all compiled files go to "dist"
-    "declaration": true,                   // Generate declaration files
-    "declarationMap": true,                // Enable declaration maps
-    "declarationDir": "dist",              // Align declarationDir with Rollup's output
-    "sourceMap": true,                     // Generate source maps for debugging
-    "noEmitOnError": true,                 // Prevent emitting files on errors
-    "rootDir": "src"        ,               // Ensure all paths are relative to "src"
+    "esModuleInterop": true,
+    "outDir": "./dist",         // Compile output directory
+    "baseUrl": ".",             // Enable path aliases
     "paths": {
-      "@obinexuscomputing/js": ["../js/src/index.ts"],
-      "@obinexuscomputing/css": ["../css/src/index.ts"],
-      "@obinexuscomputing/html": ["../chtml/src/index.ts"],
-
-    }
-  },"files": [
-    "dist",
-    "bin"
+      "src/*": ["src/*"]        // Support path aliases for src files
+    },
+    "sourceMap": true           // Enable source maps for debugging
+  },
+  "include": [
+    "src/**/*",                 // Include source files
+    "tests/**/*"                // Include test files
   ],
-  "include": ["src/**/*.ts"],              // Include all TypeScript files in "src"
-  "exclude": ["node_modules", "dist"]      // Exclude unnecessary directories
+  "exclude": [
+    "node_modules",             // Exclude dependencies
+    "dist"                      // Exclude compiled output
+  ]
 }
