@@ -1,1 +1,1 @@
-export * from './src/api/index.ts';
+export * from './src/api/';
