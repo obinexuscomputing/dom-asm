@@ -18,15 +18,16 @@ export class DOMXMLParser {
   public parse(): DOMXMLAST {
     this.position = 0;
     
-    const root: DOMXMLASTNode = {
+    // Create document root
+    const documentRoot: DOMXMLASTNode = {
       type: 'Element',
       name: 'root',
       children: [],
       attributes: {}
     };
 
-    let currentNode: DOMXMLASTNode = root;
-    const stack: DOMXMLASTNode[] = [root];
+    const stack: DOMXMLASTNode[] = [documentRoot];
+    let currentNode = documentRoot;
 
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
@@ -40,8 +41,13 @@ export class DOMXMLParser {
             children: []
           };
 
-          currentNode.children?.push(elementNode);
+          // Always add to current node's children
+          if (!currentNode.children) {
+            currentNode.children = [];
+          }
+          currentNode.children.push(elementNode);
 
+          // Push to stack if not self-closing
           if (!token.selfClosing) {
             stack.push(elementNode);
             currentNode = elementNode;
@@ -68,19 +74,27 @@ export class DOMXMLParser {
 
         case 'Text': {
           if (token.value?.trim()) {
-            currentNode.children?.push({
+            const textNode: DOMXMLASTNode = {
               type: 'Text',
               value: token.value.trim()
-            });
+            };
+            if (!currentNode.children) {
+              currentNode.children = [];
+            }
+            currentNode.children.push(textNode);
           }
           break;
         }
 
         case 'Comment': {
-          currentNode.children?.push({
+          const commentNode: DOMXMLASTNode = {
             type: 'Comment',
             value: token.value || ''
-          });
+          };
+          if (!currentNode.children) {
+            currentNode.children = [];
+          }
+          currentNode.children.push(commentNode);
           break;
         }
 
@@ -88,47 +102,44 @@ export class DOMXMLParser {
           if (stack.length > 1) {
             throw new Error(`DOCTYPE declaration must be at root level at line ${token.location.line}, column ${token.location.column}`);
           }
-          currentNode.children?.push({
+          const doctypeNode: DOMXMLASTNode = {
             type: 'Doctype',
             value: token.value || ''
-          });
+          };
+          if (!currentNode.children) {
+            currentNode.children = [];
+          }
+          currentNode.children.push(doctypeNode);
           break;
         }
       }
     }
 
+    // Check for unclosed tags
     if (stack.length > 1) {
       const unclosedTag = stack[stack.length - 1];
       throw new Error(`Unclosed tag: ${unclosedTag.name}`);
     }
 
     return {
-      root: this.removeEmptyTextNodes(root),
-      metadata: this.computeMetadata(root)
+      root: documentRoot,
+      metadata: this.computeMetadata(documentRoot)
     };
   }
 
-  private removeEmptyTextNodes(node: DOMXMLASTNode): DOMXMLASTNode {
-    if (node.children) {
-      node.children = node.children
-        .filter(child => !(child.type === 'Text' && (!child.value || !child.value.trim())))
-        .map(child => this.removeEmptyTextNodes(child));
-    }
-    return node;
-  }
-
-  private computeMetadata(node: DOMXMLASTNode): DOMXMLAST['metadata'] {
+  private computeMetadata(root: DOMXMLASTNode): DOMXMLAST['metadata'] {
     let nodeCount = 0;
     let elementCount = 0;
     let textCount = 0;
     let commentCount = 0;
 
-    const countNodes = (n: DOMXMLASTNode) => {
+    const countNode = (node: DOMXMLASTNode) => {
       nodeCount++;
-      switch (n.type) {
+      
+      switch (node.type) {
         case 'Element':
           elementCount++;
-          n.children?.forEach(countNodes);
+          node.children?.forEach(countNode);
           break;
         case 'Text':
           textCount++;
@@ -139,7 +150,12 @@ export class DOMXMLParser {
       }
     };
 
-    node.children?.forEach(countNodes);
+    // Count root and its children
+    countNode(root);
+
+    // Adjust counts to exclude root from final counts
+    nodeCount--;
+    elementCount--;
 
     return {
       nodeCount,
