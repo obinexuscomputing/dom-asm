@@ -6,17 +6,20 @@ export class DOMXMLASTOptimizer {
    */
   public optimize(ast: DOMXMLAST): DOMXMLAST {
     const optimizedRoot = this.optimizeNode(ast.root);
-    return new DOMXMLAST(optimizedRoot, ast.computeMetadata());
+    const metadata = this.computeMetadata(optimizedRoot); // Use the optimized root
+    return new DOMXMLAST(optimizedRoot, metadata);
   }
+  
   private optimizeChildren(children: DOMXMLASTNode[]): DOMXMLASTNode[] {
     // First pass: Remove empty text nodes and optimize children recursively
     let optimized = children
       .filter((node) => {
         if (node.type === "Text") {
-          return node.value?.trim() !== ""; // Keep non-empty text nodes
+          // Keep non-empty text nodes
+          return node.value?.trim() !== "";
         }
         if (node.type === "Element") {
-          // Keep elements with non-empty children or attributes
+          // Keep elements with attributes or valid children
           const hasNonEmptyChildren = (node.children || []).some((child) =>
             child.type === "Text"
               ? child.value?.trim() !== ""
@@ -24,7 +27,7 @@ export class DOMXMLASTOptimizer {
           );
           return hasNonEmptyChildren || Object.keys(node.attributes || {}).length > 0;
         }
-        return true; // Keep other node types
+        return true; // Keep other node types (e.g., Comment, Doctype)
       })
       .map((node) =>
         node.type === "Element" && node.children
