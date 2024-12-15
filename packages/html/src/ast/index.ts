@@ -17,10 +17,6 @@ export interface HTMLAST {
   };
 }
 
-
-import { HTMLToken } from "./HTMLTokenizer";
-import { HTMLAST, HTMLASTNode } from "./ast";
-
 export class HTMLASTBuilder {
   private tokens: HTMLToken[];
   private position: number;
