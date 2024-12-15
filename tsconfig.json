@@ -4,8 +4,7 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "declaration": true,
-    "declarationDir": "dist/",
-        "emitDeclarationOnly": true,
+    "declarationDir": "dist",
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
@@ -16,6 +15,6 @@
       "*": ["packages/*"]
     }
   },
-  "include": ["packages/*/src/**/*.ts"],
+  "include": ["src/**/*.ts", "packages/*/src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }

@@ -7,238 +7,426 @@
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 7 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 7 s
-[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
-transform: {
-    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
-},
-See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
-
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 7 s
-[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
-transform: {
-    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
-},
-See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 7 s
-[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
-transform: {
-    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
-},
-See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        0 s, estimated 7 s
+[1mTime:[22m        0 s, estimated 6 s
 [37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        1 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
 transform: {
     <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
 },
 See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
 
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        1 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
 transform: {
     <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
 },
 See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
 
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        1 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        4 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[1mTime:[22m        1 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m ([0m[1m[41m5.084 s[49m[22m[0m)
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[1mTime:[22m        2 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+[1mTime:[22m        3 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[1mTime:[22m        4 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
-[1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m ([0m[1m[41m5.224 s[49m[22m[0m)
+[1mTime:[22m        5 s, estimated 6 s
+[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        6 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m7 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m8 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m9 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m10 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m11 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m12 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m13 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
-[1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m ([0m[1m[41m5.249 s[49m[22m[0m)
+[1mTime:[22m        [1m[33m13 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mTest suite failed to run
+
+    Unable to process '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/optimizer.test.ts', please make sure that `outDir` in your tsconfig is neither `''` or `'.'`. You can also configure Jest config option `transformIgnorePatterns` to inform `ts-jest` to transform /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/optimizer.test.ts
+
+      [2mat TsCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-compiler.js[2m:170:27)[22m
+      [2mat TsJestCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-jest-compiler.js[2m:14:39)[22m
+      [2mat TsJestTransformer.processWithTs ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:255:37)[22m
+      [2mat TsJestTransformer.process ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:184:24)[22m
+      [2mat ScriptTransformer.transformSource ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:545:31)[22m
+      [2mat ScriptTransformer._transformAndBuildScript ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:674:40)[22m
+      [2mat ScriptTransformer.transform ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:726:19)[22m
+
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
-[1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mast.test.ts[22m ([0m[1m[41m5.273 s[49m[22m[0m)
-
+[1mTime:[22m        [1m[33m13 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
-[1mTests:       [22m[1m[32m1 passed[39m[22m, 1 total
+[1mTest Suites: [22m0 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[1mTime:[22m        [1m[33m13 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
-[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m ([0m[1m[41m5.345 s[49m[22m[0m)
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
-[1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s, estimated 7 s
-[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[32m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[37m█[39m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
-[1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
-[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mTest suite failed to run
+
+    Unable to process '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/code-geenrator.test.ts', please make sure that `outDir` in your tsconfig is neither `''` or `'.'`. You can also configure Jest config option `transformIgnorePatterns` to inform `ts-jest` to transform /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/code-geenrator.test.ts
+
+      [2mat TsCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-compiler.js[2m:170:27)[22m
+      [2mat TsJestCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-jest-compiler.js[2m:14:39)[22m
+      [2mat TsJestTransformer.processWithTs ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:255:37)[22m
+      [2mat TsJestTransformer.process ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:184:24)[22m
+      [2mat ScriptTransformer.transformSource ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:545:31)[22m
+      [2mat ScriptTransformer._transformAndBuildScript ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:674:40)[22m
+      [2mat ScriptTransformer.transform ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:726:19)[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mcode-geenrator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 5 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5.924 s, estimated 7 s
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mTest suite failed to run
+
+    Unable to process '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/tokenizer.test.ts', please make sure that `outDir` in your tsconfig is neither `''` or `'.'`. You can also configure Jest config option `transformIgnorePatterns` to inform `ts-jest` to transform /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/tokenizer.test.ts
+
+      [2mat TsCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-compiler.js[2m:170:27)[22m
+      [2mat TsJestCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-jest-compiler.js[2m:14:39)[22m
+      [2mat TsJestTransformer.processWithTs ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:255:37)[22m
+      [2mat TsJestTransformer.process ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:184:24)[22m
+      [2mat ScriptTransformer.transformSource ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:545:31)[22m
+      [2mat ScriptTransformer._transformAndBuildScript ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:674:40)[22m
+      [2mat ScriptTransformer.transform ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:726:19)[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mTest suite failed to run
+
+    Unable to process '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/ast.test.ts', please make sure that `outDir` in your tsconfig is neither `''` or `'.'`. You can also configure Jest config option `transformIgnorePatterns` to inform `ts-jest` to transform /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/ast.test.ts
+
+      [2mat TsCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-compiler.js[2m:170:27)[22m
+      [2mat TsJestCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-jest-compiler.js[2m:14:39)[22m
+      [2mat TsJestTransformer.processWithTs ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:255:37)[22m
+      [2mat TsJestTransformer.process ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:184:24)[22m
+      [2mat ScriptTransformer.transformSource ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:545:31)[22m
+      [2mat ScriptTransformer._transformAndBuildScript ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:674:40)[22m
+      [2mat ScriptTransformer.transform ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:726:19)[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mTest suite failed to run
+
+    Unable to process '/home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/validator.test.ts', please make sure that `outDir` in your tsconfig is neither `''` or `'.'`. You can also configure Jest config option `transformIgnorePatterns` to inform `ts-jest` to transform /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/tests/validator.test.ts
+
+      [2mat TsCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-compiler.js[2m:170:27)[22m
+      [2mat TsJestCompiler.getCompiledOutput ([22m../../node_modules/ts-jest/dist/legacy/compiler/ts-jest-compiler.js[2m:14:39)[22m
+      [2mat TsJestTransformer.processWithTs ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:255:37)[22m
+      [2mat TsJestTransformer.process ([22m../../node_modules/ts-jest/dist/legacy/ts-jest-transformer.js[2m:184:24)[22m
+      [2mat ScriptTransformer.transformSource ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:545:31)[22m
+      [2mat ScriptTransformer._transformAndBuildScript ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:674:40)[22m
+      [2mat ScriptTransformer.transform ([22m../../node_modules/@jest/transform/build/ScriptTransformer.js[2m:726:19)[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mast.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mvalidator.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m2 failed[39m[22m, 2 of 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+
+[1mTest Suites: [22m[1m[31m5 failed[39m[22m, 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14 s[39m[22m[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K[1mTest Suites: [22m[1m[31m5 failed[39m[22m, 5 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        [1m[33m14.897 s[39m[22m
 [2mRan all test suites[22m[2m.[22m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `test` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/css@1.0.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c jest 
 [1G[0K⠙[1G[0K
