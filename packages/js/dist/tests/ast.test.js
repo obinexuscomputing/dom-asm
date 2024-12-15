@@ -1,21 +1,20 @@
 import { Tokenizer } from '../src/tokenizer';
-import { ASTBuilder } from '../src/ast';
+import { JSASTBuilder } from '../src/ast';
 describe('ASTBuilder', () => {
     const tokenizer = new Tokenizer();
-    const astBuilder = new ASTBuilder();
     it('should build an AST for a variable declaration', () => {
         const code = 'const x = 42;';
         const tokens = tokenizer.tokenize(code);
-        const ast = astBuilder.build(tokens);
+        const astBuilder = new JSASTBuilder(tokens);
+        const ast = astBuilder.buildAST();
         expect(ast).toEqual({
-            type: 'Program',
+            type: "Program",
             children: [
                 {
-                    type: 'VariableDeclaration',
-                    value: 'const',
+                    type: "VariableDeclaration",
                     children: [
-                        { type: 'Identifier', value: 'x' },
-                        { type: 'Literal', value: '42' },
+                        { type: "Identifier", value: "x", children: [] },
+                        { type: "Literal", value: "42", children: [] },
                     ],
                 },
             ],
@@ -23,7 +22,8 @@ describe('ASTBuilder', () => {
     });
     it('should throw an error for invalid syntax', () => {
         const tokens = tokenizer.tokenize('const x;');
-        expect(() => astBuilder.build(tokens)).toThrow('Unexpected token: EOF');
+        const astBuilder = new JSASTBuilder(tokens);
+        expect(() => astBuilder.buildAST()).toThrow('Unexpected token: EOF');
     });
 });
 //# sourceMappingURL=ast.test.js.map
