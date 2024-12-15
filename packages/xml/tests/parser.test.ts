@@ -4,17 +4,22 @@ import { DOMXMLTokenizer } from '../src/tokenizer';
 describe('DOMXMLParser', () => {
   let parser: DOMXMLParser;
   let tokenizer: DOMXMLTokenizer;
-
+  
   describe('Basic Parsing', () => {
-    test('should parse simple XML', () => {
-      tokenizer = new DOMXMLTokenizer('<root><child>Test</child></root>');
-      parser = new DOMXMLParser(tokenizer.tokenize());
-      
-      const ast = parser.parse();
-      expect(ast.root.type).toBe('Element');
-      expect(ast.root.children?.[0].type).toBe('Element');
-      expect(ast.root.children?.[0].children?.[0].type).toBe('Text');
-    });
+   // Add this at the start of the test
+   test('should parse simple XML', () => {
+     tokenizer = new DOMXMLTokenizer('<root><child>Test</child></root>');
+     const tokens = tokenizer.tokenize();
+     console.log('Tokens:', JSON.stringify(tokens, null, 2));
+     
+     parser = new DOMXMLParser(tokenizer.tokenize());
+     const ast = parser.parse();
+     console.log('AST:', JSON.stringify(ast, null, 2));
+     
+     expect(ast.root.type).toBe('Element');
+     expect(ast.root.children?.[0].type).toBe('Element');
+     expect(ast.root.children?.[0].children?.[0].type).toBe('Text');
+   });
 
     test('should handle nested elements', () => {
       tokenizer = new DOMXMLTokenizer(`

@@ -35,7 +35,7 @@ export class DOMXMLParser {
           const elementNode: DOMXMLASTNode = {
             type: 'Element',
             name: token.name,
-            attributes: token.attributes,
+            attributes: token.attributes || {},
             children: []
           };
          
@@ -64,22 +64,20 @@ export class DOMXMLParser {
         case 'Text': {
           const trimmedValue = (token.value || '').trim();
           if (trimmedValue) {
-            const textNode: DOMXMLASTNode = {
-              type: 'Text',
+            currentParent.children!.push({
+              type: 'Text' as const,  // Force the literal type
               value: trimmedValue
-            };
-            currentParent.children!.push(textNode);
+            });
           }
           break;
         }
 
         case 'Comment':
         case 'Doctype': {
-          const node: DOMXMLASTNode = {
+          currentParent.children!.push({
             type: token.type,
-            value: token.value
-          };
-          currentParent.children!.push(node);
+            value: token.value || ''
+          });
           break;
         }
       }
