@@ -2,5 +2,9 @@
 > @obinexuscomputing/dom-css@1.0.0 build
 > rollup -c
 
-[1G[0K[36m
+[1G[0K(node:155316) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/rollup.config.js is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/css/package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[36m
 [1msrc/index.ts[22m → [1mdist/index.cjs, dist/index.js, dist/index.umd.js[22m...[39m

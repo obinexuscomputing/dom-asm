@@ -1,6 +1,7 @@
 {
   "name": "@obinexuscomputing/dom-css",
   "version": "1.0.0",
+  "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,7 +17,6 @@
     "clean": "rimraf dist",
     "test": "jest"
   },
-  "dependencies": {},
   "devDependencies": {
     "typescript": "^5.2.0",
     "@rollup/plugin-typescript": "^11.1.3",
