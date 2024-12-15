@@ -107,13 +107,18 @@ export class HTMLTokenizer {
   }
 
   private readUntil(stop: string | RegExp): string {
-    let result = "";
-    while (this.peek() && !this.matches(stop)) {
-      result += this.consume();
+    const start = this.position;
+    while (
+      this.position < this.input.length &&
+      !(typeof stop === "string"
+        ? this.input[this.position] === stop
+        : stop.test(this.input.slice(this.position, this.position + 1)))
+    ) {
+      this.consume();
     }
-    return result;
+    return this.input.slice(start, this.position);
   }
-
+  
   private peek(offset: number = 0): string {
     return this.input[this.position + offset] || "";
   }
@@ -148,7 +153,10 @@ export class HTMLTokenizer {
       this.consume();
     }
   }
-
+  private addError(message: string): void {
+    console.error(`Error at line ${this.line}, column ${this.column}: ${message}`);
+  }
+  
   private getCurrentLocation(): { line: number; column: number } {
     return { line: this.line, column: this.column };
   }
