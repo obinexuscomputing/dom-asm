@@ -39,7 +39,7 @@ npm install -g @obinexuscomputing/dom-asm
 Clone the repository and set up the workspace:
 
 ```bash
-git clone https://github.com/your-repo/dom-asm.git
+git clone https://github.com/obinexuscomputing/dom-asm.git
 cd dom-asm
 npm install
 ```
