@@ -19,10 +19,9 @@
 // } else {
 //   console.log("CSS is valid.");
 // }
-
 import { ASTNode } from "../ast";
 
-export class Validator {
+export class CSSValidator {
   private ast: ASTNode;
   private errors: string[];
 
@@ -75,4 +74,3 @@ export class Validator {
     return this.errors;
   }
 }
-

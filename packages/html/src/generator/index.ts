@@ -1,6 +1,6 @@
 import { ASTNode } from "../ast/index";
 
-class CodeGenerator {
+class HTMLCodeGenerator {
   public generateHTML(node: ASTNode): string {
     if (node.type === "Text") {
       return node.value || "";
@@ -36,4 +36,4 @@ class CodeGenerator {
   }
 }
 
-export { CodeGenerator };
+export { HTMLCodeGenerator };

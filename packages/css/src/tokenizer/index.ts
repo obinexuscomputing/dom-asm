@@ -4,7 +4,7 @@ export type Token = {
   position: { line: number; column: number }; // For error reporting and debugging
 };
 
-export class Tokenizer {
+export class CSSTokenizer {
   private input: string;
   private position: number;
   private line: number;

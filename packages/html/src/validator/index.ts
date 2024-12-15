@@ -45,7 +45,7 @@ type ValidationResult = {
   errors: string[];
 };
 
-class Validator {
+class HTMLValidator {
   private namespaceRules: Record<string, string[]> = {
     "html": ["html", "head", "body", "title", "meta", "link", "p", "div", "a", "img", "media"],
   };
@@ -117,4 +117,4 @@ class Validator {
   }
 }
 
-export { Validator, ValidationResult };
+export { HTMLValidator, ValidationResult };

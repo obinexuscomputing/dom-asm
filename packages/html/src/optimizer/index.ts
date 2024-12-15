@@ -1,6 +1,6 @@
 import { ASTNode } from "../ast/index";
 
-class ASTOptimizer {
+class HTMLASTOptimizer {
   public optimize(node: ASTNode): ASTNode {
     this.removeEmptyNodes(node);
     this.mergeTextNodes(node);
@@ -43,4 +43,4 @@ class ASTOptimizer {
   }
 }
 
-export { ASTOptimizer };
+export { HTMLASTOptimizer };

@@ -1,10 +1,4 @@
 
-import { Tokenizer } from "../tokenizer";
-import { ASTBuilder } from "../ast";
-import { Validator } from "../validator";
-import { ASTOptimizer } from "../optimizer";
-import { ASTNode } from "../ast";
-
 // Example usage:
 // const cssInput = `/* Example CSS */
 // body {
@@ -13,6 +7,11 @@ import { ASTNode } from "../ast";
 //   color: black;
 // }`;
 
+import { ASTNode, ASTBuilder } from "../ast";
+import { CSSASTOptimizer } from "../optimizer";
+import { CSSTokenizer } from "../tokenizer";
+import { CSSValidator } from "../validator";
+
 // try {
 //   const parser = new Parser(cssInput, true); // Enable validation
 //   const ast = parser.parse();
@@ -20,8 +19,7 @@ import { ASTNode } from "../ast";
 // } catch (error) {
 //   console.error(error.message);
 // }
-
-export class Parser {
+export class CSSParser {
   private input: string;
   private validate: boolean;
 
@@ -31,28 +29,23 @@ export class Parser {
   }
 
   public parse(): ASTNode {
-    // Step 1: Tokenization
-    const tokenizer = new Tokenizer(this.input);
+    const tokenizer = new CSSTokenizer(this.input);
     const tokens = tokenizer.tokenize();
 
-    // Step 2: AST Building
     const astBuilder = new ASTBuilder(tokens);
     let ast = astBuilder.buildAST();
 
-    // Step 3: Validation (optional)
     if (this.validate) {
-      const validator = new Validator(ast);
+      const validator = new CSSValidator(ast);
       const errors = validator.validate();
       if (errors.length > 0) {
         throw new Error(`Validation errors:\n${errors.join("\n")}`);
       }
     }
 
-    // Step 4: Optimization
-    const optimizer = new ASTOptimizer(ast);
+    const optimizer = new CSSASTOptimizer(ast);
     ast = optimizer.optimize();
 
     return ast;
   }
 }
-
