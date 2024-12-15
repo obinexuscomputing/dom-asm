@@ -62,15 +62,12 @@ export class DOMXMLParser {
         }
 
         case 'Text': {
-          // Create a proper text node when we encounter text content
-          const textNode: DOMXMLASTNode = {
-            type: 'Text',  // Ensure we explicitly set this to 'Text'
-            value: token.value || ''  // Use empty string as fallback
-          };
-          
-          // Only add non-empty text nodes after trimming
-          if (textNode.value.trim()) {
-            textNode.value = textNode.value.trim();
+          const trimmedValue = (token.value || '').trim();
+          if (trimmedValue) {
+            const textNode: DOMXMLASTNode = {
+              type: 'Text',
+              value: trimmedValue
+            };
             currentParent.children!.push(textNode);
           }
           break;
