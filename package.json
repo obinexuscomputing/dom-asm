@@ -4,25 +4,23 @@
   "private": true,
   "type": "module",
   "description": "A unified library for DOM manipulation and compilation.",
- "bin": {
-  "dom-asm": "./bin/dom-asm",
-  "dom-asm.bat": "./bin/dom-asm.bat",
-  "dom-asm.ps1": "./bin/dom-asm.ps1",
-  "dom-asm.sh": "./bin/dom-asm.sh"
-},
-
+  "bin": {
+    "dom-asm": "./bin/dom-asm",
+    "dom-asm.bat": "./bin/dom-asm.bat",
+    "dom-asm.ps1": "./bin/dom-asm.ps1",
+    "dom-asm.sh": "./bin/dom-asm.sh"
+  },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
-  "build": "turbo build",
-  "test": "turbo test",
-  "lint": "turbo lint",
-  "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",
-  "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-  "cli": "node bin/dom-asm"
-}
-,
+    "build": "turbo build",
+    "test": "turbo test",
+    "lint": "turbo lint",
+    "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "cli": "node bin/dom-asm"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-json": "^6.0.0",
