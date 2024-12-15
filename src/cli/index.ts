@@ -2,7 +2,6 @@ import { Command } from "commander";
 import path from "path";
 import fs from "fs";
 
-// Import specialized packages
 import {
   CSSTokenizer,
   CSSParser,
