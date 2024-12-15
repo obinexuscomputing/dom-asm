@@ -1,4 +1,4 @@
-export class Parser {
+export class JSParser {
     parse(ast) {
         // Example: Convert AST into an intermediate representation (IR)
         if (ast.type === 'Program') {

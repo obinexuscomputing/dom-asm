@@ -3,7 +3,13 @@ type Token =
   | { type: "EndTag"; name: string }
   | { type: "Text"; value: string }
   | { type: "Comment"; value: string };
-
+  export enum TokenType {
+    Keyword = "keyword",
+    Identifier = "identifier",
+    Number = "number",
+    String = "string",
+  }
+  
  class HTMLTokenizer {
   private input: string;
   private position: number = 0;

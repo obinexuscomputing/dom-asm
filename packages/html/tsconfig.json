@@ -13,8 +13,9 @@
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
-       "allowImportingTsExtensions": true,
-    "module": "ESNext"
+    "module": "ESNext",
+    "allowImportingTsExtensions": true
+
   },
   "include": ["src/**/*.ts"],              // Include all TypeScript files in "src"
   "exclude": ["node_modules", "dist"]      // Exclude unnecessary directories

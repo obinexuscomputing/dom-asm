@@ -1,4 +1,4 @@
-import { ASTNode } from "../ast";
-export declare class Parser {
+import { ASTNode } from "src/ast";
+export declare class JSParser {
     parse(ast: ASTNode): any;
 }

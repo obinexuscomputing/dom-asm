@@ -1,9 +1,8 @@
-import { HTMLTokenizer } from "./tokenizer";
-import { AST } from "./ast";
-import { Validator } from "./validator";
-import { ASTOptimizer } from "./optimizer";
-import { CodeGenerator } from "./generator";
-import { HTMLParser, HTMLParserError } from "./parser";
+export { Tokenizer } from "./src/tokenizer";
+export { Parser } from "./src/parser";
+export { Validator } from "./src/validator";
+export { ASTOptimizer as Optimizer } from "./src/optimizer";
+export { Generator } from "./src/generator";
 
 // Re-export modules for public API
 export { HTMLTokenizer } from "./tokenizer";

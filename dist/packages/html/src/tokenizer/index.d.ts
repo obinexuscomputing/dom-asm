@@ -12,6 +12,12 @@ type Token = {
     type: "Comment";
     value: string;
 };
+export declare enum TokenType {
+    Keyword = "keyword",
+    Identifier = "identifier",
+    Number = "number",
+    String = "string"
+}
 declare class HTMLTokenizer {
     private input;
     private position;

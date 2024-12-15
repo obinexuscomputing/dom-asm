@@ -17,6 +17,3 @@ export declare class JSASTBuilder {
     private parseValue;
     buildAST(): ASTNode;
 }
-export declare class JSParser {
-    parse(ast: ASTNode): any;
-}

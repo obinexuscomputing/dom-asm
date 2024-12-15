@@ -1,3 +1,10 @@
+export var TokenType;
+(function (TokenType) {
+    TokenType["Keyword"] = "keyword";
+    TokenType["Identifier"] = "identifier";
+    TokenType["Number"] = "number";
+    TokenType["String"] = "string";
+})(TokenType || (TokenType = {}));
 class HTMLTokenizer {
     input;
     position = 0;

@@ -1,14 +1,5 @@
-// Example usage:
-// import { Tokenizer } from "../tokenizer";
-// const cssInput = `/* Example CSS */
-// body {
-//   background: white;
-//   color: black;
-// }`;
-// const tokenizer = new Tokenizer(cssInput);
-// const tokens = tokenizer.tokenize();
-// const astBuilder = new ASTBuilder(tokens);
-// console.log(JSON.stringify(astBuilder.buildAST(), null, 2));
+// Import the Token type from the tokenizer module
+import { TokenType } from "../tokenizer";
 export class JSASTBuilder {
     tokens;
     position;
@@ -26,7 +17,7 @@ export class JSASTBuilder {
         return token;
     }
     parseProgram() {
-        const program = { type: 'Program', children: [] };
+        const program = { type: "Program", children: [] };
         while (this.currentToken()) {
             const statement = this.parseStatement();
             if (statement) {
@@ -37,10 +28,10 @@ export class JSASTBuilder {
     }
     parseStatement() {
         const token = this.currentToken();
-        if (token?.type === 'keyword' && token.value === 'const') {
+        if (token?.type === TokenType.Keyword && token.value === "const") {
             return this.parseVariableDeclaration();
         }
-        if (token?.type === 'number' || token?.type === 'string') {
+        if (token?.type === TokenType.Number || token?.type === TokenType.String) {
             return this.parseInlineConstant();
         }
         return null;
@@ -48,12 +39,12 @@ export class JSASTBuilder {
     parseVariableDeclaration() {
         this.consumeToken(); // Consume 'const'
         const identifier = this.currentToken();
-        if (!identifier || identifier.type !== 'identifier') {
+        if (!identifier || identifier.type !== TokenType.Identifier) {
             throw new Error("Expected identifier after 'const'");
         }
         this.consumeToken();
         const equals = this.currentToken();
-        if (!equals || equals.value !== '=') {
+        if (!equals || equals.value !== "=") {
             throw new Error("Expected '=' after identifier");
         }
         this.consumeToken();
@@ -61,41 +52,27 @@ export class JSASTBuilder {
         if (!value) {
             throw new Error("Expected value after '='");
         }
-        return { type: 'VariableDeclaration', children: [
-                { type: 'Identifier', value: identifier.value, children: [] },
-                value
-            ] };
+        return {
+            type: "VariableDeclaration",
+            children: [
+                { type: "Identifier", value: identifier.value, children: [] },
+                value,
+            ],
+        };
     }
     parseInlineConstant() {
         const token = this.consumeToken();
-        return { type: 'InlineConstant', value: token.value, children: [] };
+        return { type: "InlineConstant", value: token.value, children: [] };
     }
     parseValue() {
         const token = this.currentToken();
-        if (token?.type === 'number' || token?.type === 'string') {
+        if (token?.type === TokenType.Number || token?.type === TokenType.String) {
             return this.parseInlineConstant();
         }
         return null;
     }
     buildAST() {
         return this.parseProgram();
-    }
-}
-export class JSParser {
-    parse(ast) {
-        // Example: Convert AST into an intermediate representation (IR)
-        if (ast.type === 'Program') {
-            return ast.children?.map((child) => this.parse(child));
-        }
-        if (ast.type === 'VariableDeclaration') {
-            const identifier = ast.children[0];
-            const value = ast.children[1];
-            return `const ${identifier.value} = ${this.parse(value)};`;
-        }
-        if (ast.type === 'InlineConstant') {
-            return ast.value;
-        }
-        return '';
     }
 }
 //# sourceMappingURL=index.js.map
