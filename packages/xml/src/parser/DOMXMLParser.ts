@@ -14,6 +14,7 @@ export class DOMXMLParser {
     this.tokens = tokens;
     this.position = 0;
   }
+
   public parse(): DOMXMLAST {
     this.position = 0;
    
@@ -60,12 +61,13 @@ export class DOMXMLParser {
         }
 
         case 'Text': {
-          const value = token.value?.trim();
-          if (value) {
-            currentParent.children!.push({
+          // Don't trim here - preserve the original text
+          if (token.value) {
+            const textNode: DOMXMLASTNode = {
               type: 'Text',
-              value
-            });
+              value: token.value
+            };
+            currentParent.children!.push(textNode);
           }
           break;
         }
@@ -86,10 +88,37 @@ export class DOMXMLParser {
       throw new Error(`Unclosed tag: ${unclosedTag.name}`);
     }
 
+    // After building the tree, clean up text nodes
+    this.cleanupTextNodes(root);
+
     return {
       root,
       metadata: this.computeMetadata(root)
     };
+  }
+
+  private cleanupTextNodes(node: DOMXMLASTNode): void {
+    if (node.children) {
+      // Clean up each child's text nodes
+      node.children.forEach(child => {
+        if (child.type === 'Element') {
+          this.cleanupTextNodes(child);
+        }
+      });
+
+      // Filter out empty text nodes and trim non-empty ones
+      node.children = node.children
+        .map(child => {
+          if (child.type === 'Text' && child.value) {
+            return {
+              ...child,
+              value: child.value.trim()
+            };
+          }
+          return child;
+        })
+        .filter(child => !(child.type === 'Text' && (!child.value || child.value === '')));
+    }
   }
 
   private computeMetadata(root: DOMXMLASTNode) {
@@ -101,12 +130,16 @@ export class DOMXMLParser {
     const traverse = (node: DOMXMLASTNode, isRoot: boolean = false) => {
       if (!isRoot) {
         nodeCount++;
-        if (node.type === 'Element') {
-          elementCount++;
-        } else if (node.type === 'Text') {
-          textCount++;
-        } else if (node.type === 'Comment') {
-          commentCount++;
+        switch (node.type) {
+          case 'Element':
+            elementCount++;
+            break;
+          case 'Text':
+            textCount++;
+            break;
+          case 'Comment':
+            commentCount++;
+            break;
         }
       }
       
@@ -116,7 +149,6 @@ export class DOMXMLParser {
     };
 
     traverse(root, true);
-
     return {
       nodeCount,
       elementCount,
