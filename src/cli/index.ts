@@ -1,11 +1,31 @@
 import { Command } from "commander";
-import path from 'path';
-import fs from 'fs';
+import path from "path";
+import fs from "fs";
 
 // Import specialized packages
-import * as cssPackage from '@obinexuscomputing/css';
-import * as htmlPackage from '@obinexuscomputing/html';
-import * as jsPackage from '@obinexuscomputing/js';
+import {
+  Tokenizer as CSSTokenizer,
+  Parser as CSSParser,
+  Validator as CSSValidator,
+  ASTOptimizer as CSSOptimizer,
+  Generator as CSSGenerator,
+} from "@obinexuscomputing/css";
+
+import {
+  Tokenizer as HTMLTokenizer,
+  Parser as HTMLParser,
+  Validator as HTMLValidator,
+  ASTOptimizer as HTMLOptimizer,
+  Generator as HTMLGenerator,
+} from "@obinexuscomputing/html";
+
+import {
+  Tokenizer as JSTokenizer,
+  JSASTBuilder,
+  JSParser,
+  ASTOptimizer as JSOptimizer,
+  Generator as JSGenerator,
+} from "@obinexuscomputing/js";
 
 const program = new Command();
 
@@ -21,164 +41,115 @@ function validateFile(filePath: string): string {
 interface ProcessOptions {
   optimize?: boolean;
   validate?: boolean;
-  format?: 'json' | 'text';
+  format?: "json" | "text";
   output?: string;
+  debug?: boolean;
 }
 
-// Generic processing function
 async function processFile(
-  file: string, 
-  type: 'css' | 'html' | 'js',
+  file: string,
+  type: "css" | "html" | "js",
   options: ProcessOptions
 ) {
   const filePath = validateFile(file);
-  const content = fs.readFileSync(filePath, 'utf-8');
-  
+  const content = fs.readFileSync(filePath, "utf-8");
+
   let result: any = {};
-  
-  switch (type) {
-    case 'css': {
-      const tokens = new cssPackage.tokenizer.Tokenizer().tokenize(content);
-      const ast = new cssPackage.parser.Parser().parse(tokens);
-      
-      if (options.validate) {
-        new cssPackage.validator.Validator().validate(ast);
-      }
-      
-      if (options.optimize) {
-        const optimizedAst = new cssPackage.optimizer.Optimizer().optimize(ast);
-        result.optimized = new cssPackage.generator.Generator().generate(optimizedAst);
-      }
-      
-      result.ast = ast;
-      result.tokens = tokens;
-      break;
+  let tokens: any, ast: any;
+
+  try {
+    switch (type) {
+      case "css":
+        tokens = new CSSTokenizer(content).tokenize();
+        ast = new CSSParser().parse(tokens);
+
+        if (options.validate) new CSSValidator().validate(ast);
+
+        if (options.optimize) {
+          const optimizedAst = new CSSOptimizer().optimize(ast);
+          result.optimized = new CSSGenerator().generate(optimizedAst);
+        }
+        break;
+
+      case "html":
+        tokens = new HTMLTokenizer(content).tokenize();
+        ast = new HTMLParser().parse(tokens);
+
+        if (options.validate) new HTMLValidator().validate(ast);
+
+        if (options.optimize) {
+          const optimizedAst = new HTMLOptimizer().optimize(ast);
+          result.optimized = new HTMLGenerator().generate(optimizedAst);
+        }
+        break;
+
+      case "js":
+        tokens = new JSTokenizer(content).tokenize();
+        ast = new JSASTBuilder(tokens).buildAST();
+
+        if (options.validate) {
+          console.warn(`[Validation] Not implemented for JS yet.`);
+        }
+
+        if (options.optimize) {
+          const optimizedAst = new JSOptimizer().optimize(ast);
+          result.optimized = new JSGenerator().generate(optimizedAst);
+        }
+        break;
     }
-    
-    case 'html': {
-      const tokens = new htmlPackage.tokenizer.Tokenizer().tokenize(content);
-      const ast = new htmlPackage.parser.Parser().parse(tokens);
-      
-      if (options.validate) {
-        new htmlPackage.validator.Validator().validate(ast);
-      }
-      
-      if (options.optimize) {
-        const optimizedAst = new htmlPackage.optimizer.Optimizer().optimize(ast);
-        result.optimized = new htmlPackage.generator.Generator().generate(optimizedAst);
-      }
-      
-      result.ast = ast;
-      result.tokens = tokens;
-      break;
+    result.tokens = tokens;
+    result.ast = ast;
+
+    if (options.debug) {
+      console.debug(`[DEBUG] Tokens: ${JSON.stringify(tokens, null, 2)}`);
+      console.debug(`[DEBUG] AST: ${JSON.stringify(ast, null, 2)}`);
     }
-    
-    case 'js': {
-      const tokens = new jsPackage.tokenizer.Tokenizer().tokenize(content);
-      const ast = new jsPackage.parser.Parser().parse(tokens);
-      
-      if (options.validate) {
-        new jsPackage.validator.Validator().validate(ast);
-      }
-      
-      if (options.optimize) {
-        const optimizedAst = new jsPackage.optimizer.Optimizer().optimize(ast);
-        result.optimized = new jsPackage.generator.Generator().generate(optimizedAst);
-      }
-      
-      result.ast = ast;
-      result.tokens = tokens;
-      break;
+
+    const output =
+      options.format === "text"
+        ? JSON.stringify(result, null, 2)
+        : result;
+
+    if (options.output) {
+      fs.writeFileSync(
+        options.output,
+        typeof output === "string" ? output : JSON.stringify(output, null, 2)
+      );
+    } else {
+      console.log(output);
     }
+  } catch (error) {
+    console.error(`[Error] ${error.message}`);
+    throw error;
   }
-  
-  const output = options.format === 'text' ? 
-    JSON.stringify(result, null, 2) : 
-    result;
-    
-  if (options.output) {
-    fs.writeFileSync(options.output, 
-      typeof output === 'string' ? output : JSON.stringify(output, null, 2)
-    );
-  } else {
-    console.log(output);
-  }
-  
-  return result;
 }
 
-// CLI Configuration
-program
-  .name('@obinexuscomputing/asm')
-  .version('1.0.0')
-  .description('DOM ASM CLI tool for parsing and analyzing web assets');
-
-// Common options for all commands
-const commonOptions = (command: Command) => {
-  return command
-    .option('-o, --optimize', 'Optimize the AST')
-    .option('-v, --validate', 'Validate the AST')
-    .option('-f, --format <format>', 'Output format (json or text)', 'json')
-    .option('--output <file>', 'Output file (defaults to stdout)')
-    .option('-d, --debug', 'Enable debug output');
+const registerCommand = (type: "css" | "html" | "js", description: string) => {
+  const cmd = program.command(type).description(`${description} processing commands`);
+  cmd
+    .command("parse")
+    .argument("<file>", `${description} file to parse`)
+    .description(`Parse a ${description} file`)
+    .option("-o, --optimize", "Optimize the AST")
+    .option("-v, --validate", "Validate the AST")
+    .option("-f, --format <format>", "Output format (json or text)", "json")
+    .option("--output <file>", "Output file (defaults to stdout)")
+    .option("-d, --debug", "Enable debug output")
+    .action((file, options) => {
+      processFile(file, type, options).catch((error) => {
+        console.error("Error:", error.message);
+        process.exit(1);
+      });
+    });
 };
 
-// CSS Commands
-const cssCommand = program.command('css')
-  .description('CSS processing commands');
+registerCommand("css", "CSS");
+registerCommand("html", "HTML");
+registerCommand("js", "JavaScript");
 
-commonOptions(
-  cssCommand.command('parse')
-    .argument('<file>', 'CSS file to parse')
-    .description('Parse a CSS file')
-).action((file, options) => {
-  processFile(file, 'css', options)
-    .catch(error => {
-      console.error('Error:', error.message);
-      process.exit(1);
-    });
-});
+program
+  .name("@obinexuscomputing/asm")
+  .version("1.0.0")
+  .description("DOM ASM CLI tool for parsing and analyzing web assets");
 
-// HTML Commands
-const htmlCommand = program.command('html')
-  .description('HTML processing commands');
-
-commonOptions(
-  htmlCommand.command('parse')
-    .argument('<file>', 'HTML file to parse')
-    .description('Parse an HTML file')
-).action((file, options) => {
-  processFile(file, 'html', options)
-    .catch(error => {
-      console.error('Error:', error.message);
-      process.exit(1);
-    });
-});
-
-// JavaScript Commands
-const jsCommand = program.command('js')
-  .description('JavaScript processing commands');
-
-commonOptions(
-  jsCommand.command('parse')
-    .argument('<file>', 'JavaScript file to parse')
-    .description('Parse a JavaScript file')
-).action((file, options) => {
-  processFile(file, 'js', options)
-    .catch(error => {
-      console.error('Error:', error.message);
-      process.exit(1);
-    });
-});
-
-// Error handling for unknown commands
-program.on('command:*', function (operands) {
-  console.error(`Error: Unknown command '${operands[0]}'`);
-  const availableCommands = program.commands.map(cmd => cmd.name());
-  console.error('Available commands:', availableCommands.join(', '));
-  process.exit(1);
-});
-
-export function run() {
-  program.parse(process.argv);
-}
+program.parse(process.argv);

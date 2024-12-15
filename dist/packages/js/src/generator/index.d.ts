@@ -1,4 +1,4 @@
 import { ASTNode } from "../ast";
-export declare class CodeGenerator {
+export declare class JSCodeGenerator {
     generate(ast: ASTNode): string;
 }

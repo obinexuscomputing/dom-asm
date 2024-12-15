@@ -1,14 +1,14 @@
-import { ASTNode } from "../ast";
+import { ASTNode } from "src/ast";
 
-export class Parser {
+export class JSParser {
     parse(ast: ASTNode): any {
       // Example: Convert AST into an intermediate representation (IR)
       if (ast.type === 'Program') {
-        return ast.children?.map((child) => this.parse(child));
+        return ast.children?.map((child: any) => this.parse(child));
       }
   
       if (ast.type === 'VariableDeclaration') {
-        return `Declare ${ast.value} ${ast.children?.map((child) => this.parse(child)).join(' ')}`;
+        return `Declare ${ast.value} ${ast.children?.map((child: any) => this.parse(child)).join(' ')}`;
       }
   
       if (ast.type === 'InlineConstant') {

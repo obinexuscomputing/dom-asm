@@ -1,4 +1,4 @@
-import { CodeGenerator } from '../src/code-generator';
+import { CodeGenerator } from '../src/generator';
 
 describe('CodeGenerator', () => {
   const generator = new CodeGenerator();

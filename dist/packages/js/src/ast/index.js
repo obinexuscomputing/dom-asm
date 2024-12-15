@@ -9,7 +9,7 @@
 // const tokens = tokenizer.tokenize();
 // const astBuilder = new ASTBuilder(tokens);
 // console.log(JSON.stringify(astBuilder.buildAST(), null, 2));
-export class ASTBuilder {
+export class JSASTBuilder {
     tokens;
     position;
     constructor(tokens) {
@@ -25,116 +25,77 @@ export class ASTBuilder {
             this.position++;
         return token;
     }
-    parseStylesheet() {
-        const stylesheet = { type: 'stylesheet', children: [] };
+    parseProgram() {
+        const program = { type: 'Program', children: [] };
         while (this.currentToken()) {
-            const rule = this.parseRule();
-            if (rule) {
-                stylesheet.children.push(rule);
+            const statement = this.parseStatement();
+            if (statement) {
+                program.children.push(statement);
             }
         }
-        return stylesheet;
+        return program;
     }
-    parseRule() {
-        const selector = this.parseSelector();
-        if (!selector)
-            return null;
-        const rule = { type: 'rule', children: [selector] };
+    parseStatement() {
         const token = this.currentToken();
-        if (token?.type === 'other' && token.value === '{') {
-            this.consumeToken(); // Consume '{'
-            const declarations = this.parseDeclarations();
-            rule.children.push(...declarations);
-            const closingBrace = this.currentToken();
-            if (closingBrace?.type === 'other' && closingBrace.value === '}') {
-                this.consumeToken(); // Consume '}'
-            }
-            else {
-                throw new Error(`Unexpected token: expected '}' but found ${closingBrace?.value}`);
-            }
+        if (token?.type === 'keyword' && token.value === 'const') {
+            return this.parseVariableDeclaration();
         }
-        return rule;
-    }
-    parseSelector() {
-        const token = this.currentToken();
-        if (token?.type === 'other') {
-            this.consumeToken();
-            return { type: 'selector', value: token.value, children: [] };
+        if (token?.type === 'number' || token?.type === 'string') {
+            return this.parseInlineConstant();
         }
         return null;
     }
-    parseDeclarations() {
-        const declarations = [];
-        while (this.currentToken() && this.currentToken()?.value !== '}') {
-            const declaration = this.parseDeclaration();
-            if (declaration) {
-                declarations.push(declaration);
-            }
+    parseVariableDeclaration() {
+        this.consumeToken(); // Consume 'const'
+        const identifier = this.currentToken();
+        if (!identifier || identifier.type !== 'identifier') {
+            throw new Error("Expected identifier after 'const'");
         }
-        return declarations;
+        this.consumeToken();
+        const equals = this.currentToken();
+        if (!equals || equals.value !== '=') {
+            throw new Error("Expected '=' after identifier");
+        }
+        this.consumeToken();
+        const value = this.parseValue();
+        if (!value) {
+            throw new Error("Expected value after '='");
+        }
+        return { type: 'VariableDeclaration', children: [
+                { type: 'Identifier', value: identifier.value, children: [] },
+                value
+            ] };
     }
-    parseDeclaration() {
-        const property = this.parseProperty();
-        if (!property)
-            return null;
-        const token = this.currentToken();
-        if (token?.type === 'other' && token.value === ':') {
-            this.consumeToken(); // Consume ':'
-            const value = this.parseValue();
-            if (value) {
-                const declaration = { type: 'declaration', children: [property, value] };
-                const semicolon = this.currentToken();
-                if (semicolon?.type === 'other' && semicolon.value === ';') {
-                    this.consumeToken(); // Consume ';'
-                }
-                return declaration;
-            }
-        }
-        return null;
-    }
-    parseProperty() {
-        const token = this.currentToken();
-        if (token?.type === 'other') {
-            this.consumeToken();
-            return { type: 'property', value: token.value, children: [] };
-        }
-        return null;
+    parseInlineConstant() {
+        const token = this.consumeToken();
+        return { type: 'InlineConstant', value: token.value, children: [] };
     }
     parseValue() {
         const token = this.currentToken();
-        if (token?.type === 'other') {
-            this.consumeToken();
-            return { type: 'value', value: token.value, children: [] };
+        if (token?.type === 'number' || token?.type === 'string') {
+            return this.parseInlineConstant();
         }
         return null;
     }
     buildAST() {
-        return this.parseStylesheet();
+        return this.parseProgram();
     }
 }
-export class Parser {
+export class JSParser {
     parse(ast) {
         // Example: Convert AST into an intermediate representation (IR)
-        if (ast.type === 'stylesheet') {
+        if (ast.type === 'Program') {
             return ast.children?.map((child) => this.parse(child));
         }
-        if (ast.type === 'rule') {
-            const selector = ast.children.find((child) => child.type === 'selector');
-            const declarations = ast.children.filter((child) => child.type === 'declaration');
-            return {
-                selector: selector?.value,
-                declarations: declarations.map((declaration) => this.parse(declaration)),
-            };
+        if (ast.type === 'VariableDeclaration') {
+            const identifier = ast.children[0];
+            const value = ast.children[1];
+            return `const ${identifier.value} = ${this.parse(value)};`;
         }
-        if (ast.type === 'declaration') {
-            const property = ast.children.find((child) => child.type === 'property');
-            const value = ast.children.find((child) => child.type === 'value');
-            return {
-                property: property?.value,
-                value: value?.value,
-            };
+        if (ast.type === 'InlineConstant') {
+            return ast.value;
         }
-        return ast.value;
+        return '';
     }
 }
 //# sourceMappingURL=index.js.map

@@ -4,21 +4,19 @@ export type ASTNode = {
     value?: string;
     children: ASTNode[];
 };
-export declare class ASTBuilder {
+export declare class JSASTBuilder {
     private tokens;
     private position;
     constructor(tokens: Token[]);
     private currentToken;
     private consumeToken;
-    private parseStylesheet;
-    private parseRule;
-    private parseSelector;
-    private parseDeclarations;
-    private parseDeclaration;
-    private parseProperty;
+    private parseProgram;
+    private parseStatement;
+    private parseVariableDeclaration;
+    private parseInlineConstant;
     private parseValue;
     buildAST(): ASTNode;
 }
-export declare class Parser {
+export declare class JSParser {
     parse(ast: ASTNode): any;
 }
