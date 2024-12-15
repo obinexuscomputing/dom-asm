@@ -1,4 +1,4 @@
-import { DOMXMLAST } from '../ast/DOMXMLAST';
+import { type DOMXMLAST, type DOMXMLASTNode } from '../ast';
 
 export interface GeneratorOptions {
   indent?: string;
@@ -21,11 +21,11 @@ export class DOMXMLGenerator {
 
   public generate(ast: DOMXMLAST): string {
     let result = '';
-
+    
     if (this.options.xmlDeclaration) {
       result += '<?xml version="1.0" encoding="UTF-8"?>' + this.options.newLine;
     }
-
+    
     result += this.generateNode(ast.root, 0);
     return result;
   }
@@ -49,10 +49,9 @@ export class DOMXMLGenerator {
     const indent = this.options.prettyPrint ? this.getIndent(depth) : '';
     let result = indent + '<' + (node.name || '');
 
-    // Add attributes
     if (node.attributes) {
       result += Object.entries(node.attributes)
-        .map(([key, value]) => ` ${key}="${this.escapeAttribute(value)}"`)
+        .map(([key, value]) => ` ${key}="${this.escapeAttribute(String(value))}"`)
         .join('');
     }
 
@@ -62,11 +61,7 @@ export class DOMXMLGenerator {
 
     result += '>';
 
-    if (
-      node.children.length === 1 &&
-      node.children[0].type === 'Text'
-    ) {
-      // Inline text content
+    if (node.children.length === 1 && node.children[0].type === 'Text') {
       result += this.escapeText(node.children[0].value || '');
       result += '</' + node.name + '>' + this.options.newLine;
       return result;
@@ -74,8 +69,7 @@ export class DOMXMLGenerator {
 
     result += this.options.newLine;
 
-    // Add child nodes
-    for (const child of node.children || []) {
+    for (const child of node.children) {
       result += this.generateNode(child, depth + 1);
     }
 
@@ -90,12 +84,12 @@ export class DOMXMLGenerator {
 
   private generateComment(node: DOMXMLASTNode, depth: number): string {
     const indent = this.options.prettyPrint ? this.getIndent(depth) : '';
-    return indent + '<!--' + node.value + '-->' + this.options.newLine;
+    return indent + '<!--' + (node.value || '') + '-->' + this.options.newLine;
   }
 
   private generateDoctype(node: DOMXMLASTNode, depth: number): string {
     const indent = this.options.prettyPrint ? this.getIndent(depth) : '';
-    return indent + '<!DOCTYPE ' + node.value + '>' + this.options.newLine;
+    return indent + '<!DOCTYPE ' + (node.value || '') + '>' + this.options.newLine;
   }
 
   private getIndent(depth: number): string {

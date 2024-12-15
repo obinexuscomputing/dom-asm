@@ -1,8 +1,9 @@
-import { DOMXMLAST } from '../ast/DOMXMLAST';
+import { type DOMXMLAST, type DOMXMLASTNode } from '../ast';
 
 export interface ValidationOptions {
   strictMode?: boolean;
   allowUnknownElements?: boolean;
+  schema?: XMLSchema;
   customValidators?: Array<(ast: DOMXMLAST) => ValidationError[]>;
 }
 
@@ -19,84 +20,130 @@ export interface ValidationError {
   nodePath?: string;
 }
 
+export interface XMLSchema {
+  elements: Record<string, XMLElementSchema>;
+}
+
+export interface XMLElementSchema {
+  attributes?: string[];
+  required?: string[];
+  children?: string[];
+  minOccurs?: number;
+  maxOccurs?: number;
+}
+
 export class DOMXMLValidator {
-  private options: ValidationOptions;
+  private options: Required<ValidationOptions>;
+  private schema?: XMLSchema;
 
   constructor(options: ValidationOptions = {}) {
     this.options = {
       strictMode: false,
       allowUnknownElements: true,
-      ...options
+      schema: options.schema,
+      customValidators: options.customValidators || []
+    } as Required<ValidationOptions>;
+    
+    this.schema = options.schema;
+  }
+
+  public validate(ast: DOMXMLAST): ValidationResult {
+    const errors: ValidationError[] = [];
+
+    if (this.schema) {
+      this.validateNode(ast.root, errors, []);
+    }
+
+    this.options.customValidators.forEach(validator => {
+      errors.push(...validator(ast));
+    });
+
+    return {
+      valid: errors.length === 0,
+      errors
     };
   }
-    public validate(ast: any): ValidationResult {
-      const errors: ValidationError[] = [];
-      this.validateNode(ast.root, errors);
-      return {
-        valid: errors.length === 0,
-        errors
-      };
-    }
-  
-    private validateNode(node: any, errors: ValidationError[]): void {
-      if (node.type !== 'Element') return;
-  
-      const elementSchema = this.schema.elements[node.name];
-      if (!elementSchema) {
+
+  private validateNode(node: DOMXMLASTNode, errors: ValidationError[], path: string[]): void {
+    if (node.type !== 'Element') return;
+
+    const currentPath = [...path, node.name || ''];
+
+    if (this.schema?.elements) {
+      const elementSchema = this.schema.elements[node.name || ''];
+      
+      if (!elementSchema && this.options.strictMode) {
         errors.push({
+          code: 'UNKNOWN_ELEMENT',
           message: `Unknown element: ${node.name}`,
-          location: node.location
+          nodePath: currentPath.join('/')
         });
         return;
       }
-  
-      this.validateAttributes(node, elementSchema, errors);
-      this.validateChildren(node, elementSchema, errors);
-    }
-  
-    private validateAttributes(node: any, schema: any, errors: ValidationError[]): void {
-      // Check required attributes
-      if (schema.required) {
-        for (const required of schema.required) {
-          if (!node.attributes?.[required]) {
-            errors.push({
-              message: `Missing required attribute: ${required} on element ${node.name}`,
-              location: node.location
-            });
-          }
-        }
-      }
-  
-      // Check for unknown attributes
-      if (schema.attributes) {
-        for (const attr of Object.keys(node.attributes || {})) {
-          if (!schema.attributes.includes(attr)) {
-            errors.push({
-              message: `Unknown attribute: ${attr} on element ${node.name}`,
-              location: node.location
-            });
-          }
-        }
+
+      if (elementSchema) {
+        this.validateAttributes(node, elementSchema, errors, currentPath);
+        this.validateChildren(node, elementSchema, errors, currentPath);
       }
     }
-  
-    private validateChildren(node: any, schema: any, errors: ValidationError[]): void {
-      if (!schema.children) return;
-  
-      for (const child of node.children || []) {
-        if (child.type === 'Element') {
-          this.validateNode(child, errors);
-        }
+
+    node.children?.forEach(child => {
+      this.validateNode(child, errors, currentPath);
+    });
+  }
+
+  private validateAttributes(
+    node: DOMXMLASTNode,
+    schema: XMLElementSchema,
+    errors: ValidationError[],
+    path: string[]
+  ): void {
+    const attributes = node.attributes || {};
+
+    // Check required attributes
+    schema.required?.forEach(required => {
+      if (!attributes[required]) {
+        errors.push({
+          code: 'MISSING_REQUIRED_ATTRIBUTE',
+          message: `Missing required attribute: ${required}`,
+          nodePath: path.join('/')
+        });
       }
+    });
+
+    // Check unknown attributes in strict mode
+    if (this.options.strictMode && schema.attributes) {
+      Object.keys(attributes).forEach(attr => {
+        if (!schema.attributes?.includes(attr)) {
+          errors.push({
+            code: 'UNKNOWN_ATTRIBUTE',
+            message: `Unknown attribute: ${attr}`,
+            nodePath: path.join('/')
+          });
+        }
+      });
     }
   }
-  
-  interface ValidationResult {
-    valid: boolean;
-    errors: ValidationError[];
+
+  private validateChildren(
+    node: DOMXMLASTNode,
+    schema: XMLElementSchema,
+    errors: ValidationError[],
+    path: string[]
+  ): void {
+    const children = node.children || [];
+    const elementChildren = children.filter(child => child.type === 'Element');
+
+    if (schema.children) {
+      elementChildren.forEach(child => {
+        if (child.type === 'Element' && !schema.children?.includes(child.name || '')) {
+          errors.push({
+            code: 'INVALID_CHILD_ELEMENT',
+            message: `Invalid child element: ${child.name}`,
+            nodePath: path.join('/')
+          });
+        }
+      });
+    }
   }
-  
-  interface ValidationError {
-    message: string;
-    location: { line: number; column: number };
-  }
+}
