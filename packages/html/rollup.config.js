@@ -25,14 +25,11 @@ export default [
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
         name: 'DOMHTML', // Replace with 'DOMCSS', 'DOMJS', or 'DOMHTML' based on the package
-        globals: {
-          vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
-        },
+      
         sourcemap: true,
       },
     ],
     plugins: [
-      vue(), // Handles .vue files
       resolve(), // Resolves node_modules imports
       commonjs(), // Converts CommonJS modules to ES Modules
       typescript({ tsconfig: './tsconfig.json' }), // TypeScript support

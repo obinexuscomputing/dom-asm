@@ -14,7 +14,7 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "module": "ESNext",
-    "allowImportingTsExtensions": true
+    "emitDeclarationOnly": true
 
   },
   "include": ["src/**/*.ts"],              // Include all TypeScript files in "src"
