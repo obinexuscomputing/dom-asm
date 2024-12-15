@@ -24,7 +24,7 @@ export class JSTokenizer {
 
   constructor() {}
 
-  private shouldAddSemicolon(tokens: JSToken[]): boolean {
+  public shouldAddSemicolon(tokens: JSToken[]): boolean {
     if (!this.previousToken) {
       return false; // No semicolon should be added if there is no previous token.
     }
