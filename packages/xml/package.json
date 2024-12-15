@@ -23,12 +23,12 @@
     "build:ts": "tsc --emitDeclarationOnly",
     "build:rollup": "rollup -c",
     "build": "npm run build:ts && npm run build:rollup",
-    "test": "jest --maxWorkers=2 --testTimeout=60000",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test": "jest --config jest.config.cjs",
+    "test:watch": "jest --config jest.config.cjs --watch",
+    "test:coverage": "jest --config jest.config.cjs --coverage",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
@@ -69,24 +69,6 @@
     "rollup": "^4.28.1",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.2"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "roots": [
-      "<rootDir>/tests"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.ts"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.ts"
-    ],
-    "coverageDirectory": "coverage",
-    "verbose": true,
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    }
   },
   "publishConfig": {
     "access": "public"
