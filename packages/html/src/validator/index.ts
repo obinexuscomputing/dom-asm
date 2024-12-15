@@ -37,7 +37,8 @@ if (validationResult.valid) {
 
  */
 
-import { HTMLASTNode } from "../parser";
+import { HTMLASTNode } from "../ast";
+
 
 export interface HTMLValidationResult {
   valid: boolean;

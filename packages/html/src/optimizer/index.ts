@@ -1,4 +1,4 @@
-import { ASTNode } from "../ast/index";
+import { HTMLASTNode } from "../ast";
 
 class HTMLASTOptimizer {
   public optimize(node: ASTNode): ASTNode {
@@ -7,7 +7,7 @@ class HTMLASTOptimizer {
     return node;
   }
 
-  private removeEmptyNodes(node: ASTNode): void {
+  private removeEmptyNodes(node: HTMLASTNode): void {
     node.children = node.children.filter((child) => {
       if (child.type === "Text" && child.value?.trim() === "") {
         return false; // Remove empty text nodes
