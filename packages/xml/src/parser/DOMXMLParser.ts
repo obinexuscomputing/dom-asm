@@ -17,19 +17,18 @@ export class DOMXMLParser {
 
   public parse(): DOMXMLAST {
     this.position = 0;
-    
+   
     const root: DOMXMLASTNode = {
       type: 'Element',
       name: 'root',
       children: []
     };
-    
+   
     const stack: DOMXMLASTNode[] = [root];
     let currentParent = root;
 
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
-
       switch (token.type) {
         case 'StartTag': {
           const elementNode: DOMXMLASTNode = {
@@ -38,12 +37,13 @@ export class DOMXMLParser {
             attributes: token.attributes,
             children: []
           };
-          
-          currentParent.children!.push(elementNode);
-          
+         
           if (!token.selfClosing) {
+            currentParent.children!.push(elementNode);
             stack.push(elementNode);
             currentParent = elementNode;
+          } else {
+            currentParent.children!.push(elementNode);
           }
           break;
         }
@@ -101,23 +101,24 @@ export class DOMXMLParser {
     let textCount = 0;
     let commentCount = 0;
 
-    const traverse = (node: DOMXMLASTNode) => {
-      nodeCount++;
-      switch (node.type) {
-        case 'Element':
+    const traverse = (node: DOMXMLASTNode, isRoot: boolean = false) => {
+      if (!isRoot) {
+        nodeCount++;
+        if (node.type === 'Element') {
           elementCount++;
-          node.children?.forEach(traverse);
-          break;
-        case 'Text':
+        } else if (node.type === 'Text') {
           textCount++;
-          break;
-        case 'Comment':
+        } else if (node.type === 'Comment') {
           commentCount++;
-          break;
+        }
+      }
+      
+      if (node.children) {
+        node.children.forEach(child => traverse(child));
       }
     };
 
-    traverse(root);
+    traverse(root, true);
 
     return {
       nodeCount,
