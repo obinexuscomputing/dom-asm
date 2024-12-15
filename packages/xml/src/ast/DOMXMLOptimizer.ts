@@ -1,30 +1,41 @@
 import { DOMXMLAST, DOMXMLASTNode } from '../ast';
+
 // Helper type for optimization process
 export interface OptimizationContext {
   stateMap: Map<string, DOMXMLASTNode>;
   equivalenceClasses: Map<number, Set<DOMXMLASTNode>>;
   currentClass: number;
 }
+
 export class DOMXMLOptimizer {
+  /**
+   * Optimize the given AST by removing redundant nodes, merging text nodes, and recalculating metadata.
+   */
   public optimize(ast: DOMXMLAST): DOMXMLAST {
-    // Create a new root to avoid modifying the original
+    // Deep clone the root to avoid modifying the original AST
     const optimizedRoot = { ...ast.root };
     optimizedRoot.children = this.optimizeChildren(ast.root.children || []);
 
+    // Recalculate metadata after optimization
     return {
       root: optimizedRoot,
       metadata: this.computeMetadata(optimizedRoot),
     };
   }
 
+  /**
+   * Optimize children nodes by removing empty nodes and merging adjacent text nodes.
+   */
   private optimizeChildren(children: DOMXMLASTNode[]): DOMXMLASTNode[] {
-    // First pass: Remove empty text nodes and elements with no content
+    // First pass: Filter out empty nodes and optimize children recursively
     let optimized = children
       .filter((node) => {
         if (node.type === 'Text') {
+          // Keep non-empty text nodes
           return node.value && node.value.trim() !== '';
         }
         if (node.type === 'Element') {
+          // Keep elements with attributes or non-empty children
           const hasNonEmptyChildren = (node.children || []).some((child) =>
             child.type === 'Text'
               ? child.value && child.value.trim() !== ''
@@ -32,10 +43,12 @@ export class DOMXMLOptimizer {
           );
           return hasNonEmptyChildren || Object.keys(node.attributes || {}).length > 0;
         }
+        // Keep comments and other nodes
         return true;
       })
       .map((node) => {
         if (node.type === 'Element' && node.children) {
+          // Optimize children recursively
           return {
             ...node,
             children: this.optimizeChildren(node.children),
@@ -49,7 +62,7 @@ export class DOMXMLOptimizer {
     while (i < optimized.length - 1) {
       if (optimized[i].type === 'Text' && optimized[i + 1].type === 'Text') {
         optimized[i].value = (optimized[i].value || '') + (optimized[i + 1].value || '');
-        optimized.splice(i + 1, 1);
+        optimized.splice(i + 1, 1); // Remove the merged node
       } else {
         i++;
       }
@@ -58,6 +71,9 @@ export class DOMXMLOptimizer {
     return optimized;
   }
 
+  /**
+   * Compute metadata for the optimized AST, including counts for different node types.
+   */
   private computeMetadata(root: DOMXMLASTNode): DOMXMLAST['metadata'] {
     let nodeCount = 0;
     let elementCount = 0;
