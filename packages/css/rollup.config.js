@@ -24,7 +24,7 @@ export default [
       {
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
-        name: 'DOMCSS', // Replace with 'DOMCSS', 'DOMJS', or 'DOMHTML' based on the package
+        name: 'DOMCSS', 
         globals: {
           vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
         },
