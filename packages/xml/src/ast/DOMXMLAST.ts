@@ -3,11 +3,6 @@ export interface DOMXMLMetadata {
   elementCount: number;
   textCount: number;
   commentCount: number;
-  optimizationMetrics?: {
-    originalStateCount: number;
-    minimizedStateCount: number;
-    reductionPercentage: number;
-  };
 }
 
 export interface DOMXMLASTNode {
@@ -35,6 +30,7 @@ export class DOMXMLAST {
       switch (node.type) {
         case "Element":
           elementCount++;
+          node.children?.forEach(traverse);
           break;
         case "Text":
           textCount++;
@@ -42,9 +38,6 @@ export class DOMXMLAST {
         case "Comment":
           commentCount++;
           break;
-      }
-      if (node.children) {
-        node.children.forEach(traverse);
       }
     };
 
