@@ -26,7 +26,7 @@ export default [
       typescript({ tsconfig: './tsconfig.json' }),
       terser(),
     ],
-    external: [], // Add external dependencies here if needed
+    external: [], 
   },
   {
     input: 'src/index.ts',
