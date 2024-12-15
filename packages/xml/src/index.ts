@@ -6,7 +6,7 @@ import { ValidationOptions, DOMXMLValidator, ValidationResult } from "./validato
 
 // Export AST types and components
 export type { DOMXMLAST, DOMXMLASTNode } from "./ast/DOMXMLAST";
-export { DOMXMLOptimizer } from "./ast/DOMXMLOptimizer";
+export { DOMXMLOptimizer } from "./ast/DOMXMLASTOptimizer";
 
 // Export tokenizer components
 export { XMLBaseTokenizer } from "./tokenizer/XMLBaseTokenizer";

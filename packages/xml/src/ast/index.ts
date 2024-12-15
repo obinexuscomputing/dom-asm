@@ -1,2 +1,2 @@
-export type { DOMXMLAST, DOMXMLASTNode } from './DOMXMLAST';
-export { DOMXMLOptimizer } from './DOMXMLOptimizer';
+export * from './DOMXMLAST';
+export * from './DOMXMLASTOptimizer'
