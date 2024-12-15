@@ -8,8 +8,10 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c",
-    "test": "NODE_OPTIONS=--max-old-space-size=4096 jest --maxWorkers=2 --testTimeout=60000",
+"build:ts": "tsc",
+  "build:rollup": "rollup -c",
+  "build": "npm run build:ts && npm run build:rollup",
+      "test": "NODE_OPTIONS=--max-old-space-size=4096 jest --maxWorkers=2 --testTimeout=60000",
     "lint": "eslint ."
   },
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
