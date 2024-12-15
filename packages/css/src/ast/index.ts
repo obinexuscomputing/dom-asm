@@ -1,4 +1,4 @@
-
+// Import the Token type from the tokenizer module
 import { Token } from "../tokenizer";
 
 export type ASTNode = {
@@ -143,5 +143,3 @@ export class ASTBuilder {
     return this.parseStylesheet();
   }
 }
-
-// 
