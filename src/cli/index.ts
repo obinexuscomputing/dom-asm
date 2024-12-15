@@ -80,27 +80,28 @@ async function processFile(
         }
         break;
 
-      case "html":
-        tokens = new HTMLTokenizer(content).tokenize();
-        ast = new HTMLParser().parse(tokens);
-
-        if (options.validate) {
-          const validator = new HTMLValidator();
-          const validationResult = validator.validateAST(ast);
-          if (!validationResult.valid) {
-            throw new Error(
-              `Validation errors:\n${validationResult.errors.join("\n")}`
-            );
+        case "html":
+          tokens = new HTMLTokenizer(content).tokenize();
+          ast = new HTMLParser().parse(tokens);
+        
+          if (options.validate) {
+            const validator = new HTMLValidator();
+            const validationResult = validator.validate(ast); // Validate the AST
+            if (!validationResult.valid) {
+              throw new Error(
+                `Validation errors:\n${validationResult.errors.join("\n")}`
+              );
+            }
           }
-        }
-
-        if (options.optimize) {
-          const optimizer = new HTMLASTOptimizer();
-          ast = optimizer.optimize(ast);
-          const generator = new HTMLCodeGenerator();
-          result.optimized = generator.generateHTML(ast);
-        }
-        break;
+        
+          if (options.optimize) {
+            const optimizer = new HTMLASTOptimizer();
+            ast = optimizer.optimize(ast);
+            const generator = new HTMLCodeGenerator();
+            result.optimized = generator.generateHTML(ast); // Generate optimized HTML
+          }
+          break;
+        
 
       case "js":
         tokens = new JSTokenizer().tokenize(content);
