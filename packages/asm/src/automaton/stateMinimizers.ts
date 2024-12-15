@@ -1,4 +1,4 @@
-import { Automaton, TransitionFunction, State } from "./types";
+import { Automaton, TransitionFunction, State } from "../types";
 
 export function minimizeAutomaton(automaton: Automaton): Automaton {
     const { states, transitions, initialState, acceptingStates } = automaton;
