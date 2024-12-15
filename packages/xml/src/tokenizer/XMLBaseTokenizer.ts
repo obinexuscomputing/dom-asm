@@ -3,7 +3,7 @@ export abstract class XMLBaseTokenizer {
   protected position: number;
   protected line: number;
   protected column: number;
-
+  protected type: string | undefined;
   constructor(input: string) {
     this.input = input;
     this.position = 0;

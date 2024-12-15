@@ -17,80 +17,67 @@ export class DOMXMLParser {
 
   public parse(): DOMXMLAST {
     this.position = 0;
-
-    // Initialize root node with explicit children array
+    
     const root: DOMXMLASTNode = {
       type: 'Element',
       name: 'root',
       children: [],
-      attributes: {}  // Add explicit empty attributes
+      attributes: {}
     };
 
+    let currentNode: DOMXMLASTNode = root;
     const stack: DOMXMLASTNode[] = [root];
-    let currentParent = root;
 
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
 
       switch (token.type) {
         case 'StartTag': {
-          if (!token.name) {
-            throw new Error(`Missing tag name at line ${token.location.line}, column ${token.location.column}`);
-          }
-
           const elementNode: DOMXMLASTNode = {
             type: 'Element',
-            name: token.name,
+            name: token.name || '',
             attributes: token.attributes || {},
-            children: []  // Always initialize children array
+            children: []
           };
 
-          // Ensure currentParent has a children array
-          if (!currentParent.children) {
-            currentParent.children = [];
-          }
-          currentParent.children.push(elementNode);
+          currentNode.children?.push(elementNode);
 
           if (!token.selfClosing) {
             stack.push(elementNode);
-            currentParent = elementNode;
+            currentNode = elementNode;
           }
           break;
         }
 
         case 'EndTag': {
-          if (stack.length > 1) {
-            const expectedTagName = currentParent.name;
-            if (expectedTagName !== token.name) {
-              throw new Error(
-                `Mismatched tags: opening "${expectedTagName}" and closing "${token.name}" at line ${token.location.line}, column ${token.location.column}`
-              );
-            }
-            stack.pop();
-            currentParent = stack[stack.length - 1];
+          if (stack.length <= 1) {
+            throw new Error(`Unexpected closing tag "${token.name}" at line ${token.location.line}, column ${token.location.column}`);
           }
+
+          const openTag = stack[stack.length - 1];
+          if (openTag.name !== token.name) {
+            throw new Error(
+              `Mismatched tags: opening "${openTag.name}" and closing "${token.name}" at line ${token.location.line}, column ${token.location.column}`
+            );
+          }
+
+          stack.pop();
+          currentNode = stack[stack.length - 1];
           break;
         }
 
         case 'Text': {
-          if (!currentParent.children) {
-            currentParent.children = [];
-          }
-          const trimmedValue = token.value?.trim();
-          if (trimmedValue) {
-            currentParent.children.push({
+          if (token.value?.trim()) {
+            currentNode.children?.push({
               type: 'Text',
-              value: trimmedValue
+              value: token.value.trim()
             });
           }
           break;
         }
 
         case 'Comment': {
-          if (!currentParent.children) {
-            currentParent.children = [];
-          }
-          currentParent.children.push({
+          currentNode.children?.push({
             type: 'Comment',
             value: token.value || ''
           });
@@ -98,18 +85,15 @@ export class DOMXMLParser {
         }
 
         case 'Doctype': {
-          if (!currentParent.children) {
-            currentParent.children = [];
+          if (stack.length > 1) {
+            throw new Error(`DOCTYPE declaration must be at root level at line ${token.location.line}, column ${token.location.column}`);
           }
-          currentParent.children.push({
+          currentNode.children?.push({
             type: 'Doctype',
             value: token.value || ''
           });
           break;
         }
-
-        default:
-          throw new Error(`Unexpected token type: ${(token as DOMXMLToken).type}`);
       }
     }
 
@@ -119,36 +103,44 @@ export class DOMXMLParser {
     }
 
     return {
-      root,
+      root: this.removeEmptyTextNodes(root),
       metadata: this.computeMetadata(root)
     };
   }
 
-  private computeMetadata(root: DOMXMLASTNode) {
+  private removeEmptyTextNodes(node: DOMXMLASTNode): DOMXMLASTNode {
+    if (node.children) {
+      node.children = node.children
+        .filter(child => !(child.type === 'Text' && (!child.value || !child.value.trim())))
+        .map(child => this.removeEmptyTextNodes(child));
+    }
+    return node;
+  }
+
+  private computeMetadata(node: DOMXMLASTNode): DOMXMLAST['metadata'] {
     let nodeCount = 0;
     let elementCount = 0;
     let textCount = 0;
     let commentCount = 0;
 
-    const traverse = (node: DOMXMLASTNode, isRoot = false) => {
-      if (!isRoot) {
-        nodeCount++;
-        switch (node.type) {
-          case 'Element':
-            elementCount++;
-            break;
-          case 'Text':
-            textCount++;
-            break;
-          case 'Comment':
-            commentCount++;
-            break;
-        }
+    const countNodes = (n: DOMXMLASTNode) => {
+      nodeCount++;
+      switch (n.type) {
+        case 'Element':
+          elementCount++;
+          n.children?.forEach(countNodes);
+          break;
+        case 'Text':
+          textCount++;
+          break;
+        case 'Comment':
+          commentCount++;
+          break;
       }
-      node.children?.forEach((child) => traverse(child));
     };
 
-    traverse(root, true);
+    node.children?.forEach(countNodes);
+
     return {
       nodeCount,
       elementCount,
