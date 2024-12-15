@@ -29,6 +29,7 @@ export class DOMXMLParser {
 
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
+      
       switch (token.type) {
         case 'StartTag': {
           const elementNode: DOMXMLASTNode = {
@@ -61,12 +62,15 @@ export class DOMXMLParser {
         }
 
         case 'Text': {
-          // Don't trim here - preserve the original text
-          if (token.value) {
-            const textNode: DOMXMLASTNode = {
-              type: 'Text',
-              value: token.value
-            };
+          // Create a proper text node when we encounter text content
+          const textNode: DOMXMLASTNode = {
+            type: 'Text',  // Ensure we explicitly set this to 'Text'
+            value: token.value || ''  // Use empty string as fallback
+          };
+          
+          // Only add non-empty text nodes after trimming
+          if (textNode.value.trim()) {
+            textNode.value = textNode.value.trim();
             currentParent.children!.push(textNode);
           }
           break;
@@ -74,10 +78,11 @@ export class DOMXMLParser {
 
         case 'Comment':
         case 'Doctype': {
-          currentParent.children!.push({
+          const node: DOMXMLASTNode = {
             type: token.type,
             value: token.value
-          });
+          };
+          currentParent.children!.push(node);
           break;
         }
       }
@@ -88,37 +93,10 @@ export class DOMXMLParser {
       throw new Error(`Unclosed tag: ${unclosedTag.name}`);
     }
 
-    // After building the tree, clean up text nodes
-    this.cleanupTextNodes(root);
-
     return {
       root,
       metadata: this.computeMetadata(root)
     };
-  }
-
-  private cleanupTextNodes(node: DOMXMLASTNode): void {
-    if (node.children) {
-      // Clean up each child's text nodes
-      node.children.forEach(child => {
-        if (child.type === 'Element') {
-          this.cleanupTextNodes(child);
-        }
-      });
-
-      // Filter out empty text nodes and trim non-empty ones
-      node.children = node.children
-        .map(child => {
-          if (child.type === 'Text' && child.value) {
-            return {
-              ...child,
-              value: child.value.trim()
-            };
-          }
-          return child;
-        })
-        .filter(child => !(child.type === 'Text' && (!child.value || child.value === '')));
-    }
   }
 
   private computeMetadata(root: DOMXMLASTNode) {
