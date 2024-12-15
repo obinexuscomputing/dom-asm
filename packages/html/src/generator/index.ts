@@ -1,6 +1,6 @@
-import { HTMLASTNode } from "../parser";
+import { HTMLASTNode } from "../ast";
 
-class HTMLCodeGenerator {
+export class HTMLCodeGenerator {
   private selfClosingTags: string[];
 
   constructor(selfClosingTags: string[] = ["img", "input", "br", "hr", "meta", "link"]) {
@@ -13,12 +13,12 @@ class HTMLCodeGenerator {
     }
 
     if (node.type === "Comment") {
-      return `<!-- ${node.value} -->`;
+      return `<!-- ${node.value || ""} -->`;
     }
 
     if (node.type === "Element") {
       const attributes = this.generateAttributes(node.attributes || {});
-      const children = node.children.map((child) => this.generateHTML(child)).join("");
+      const children = node.children?.map((child: HTMLASTNode) => this.generateHTML(child)).join("") || "";
 
       if (this.isSelfClosingTag(node.name)) {
         return `<${node.name}${attributes} />`;
@@ -40,5 +40,3 @@ class HTMLCodeGenerator {
     return this.selfClosingTags.includes(tagName || "");
   }
 }
-
-export { HTMLCodeGenerator };

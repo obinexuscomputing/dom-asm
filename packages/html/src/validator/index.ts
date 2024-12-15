@@ -39,7 +39,6 @@ if (validationResult.valid) {
 
 import { HTMLASTNode } from "../ast";
 
-
 export interface HTMLValidationResult {
   valid: boolean;
   errors: string[];
@@ -54,10 +53,10 @@ export class HTMLValidator {
 
   private traverse(node: HTMLASTNode, errors: string[]): void {
     if (node.type === "Element") {
-      if (!node.name.match(/^[a-zA-Z0-9\-]+$/)) {
-        errors.push(`Invalid tag name: ${node.name}`);
+      if (!node.name?.match(/^[a-zA-Z0-9\-]+$/)) {
+        errors.push(`Invalid tag name: ${node.name || "undefined"}`);
       }
-      for (const child of node.children) {
+      for (const child of node.children || []) {
         this.traverse(child, errors);
       }
     }

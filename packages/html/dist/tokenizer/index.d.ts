@@ -1,0 +1,26 @@
+export type HTMLToken = {
+    type: "StartTag";
+    name: string;
+    attributes: Record<string, string>;
+} | {
+    type: "EndTag";
+    name: string;
+} | {
+    type: "Text";
+    value: string;
+} | {
+    type: "Comment";
+    value: string;
+};
+export declare class HTMLTokenizer {
+    private input;
+    private position;
+    constructor(input: string);
+    tokenize(): HTMLToken[];
+    private readStartTag;
+    private readEndTag;
+    private readComment;
+    private readText;
+    private readUntil;
+}
+//# sourceMappingURL=index.d.ts.map

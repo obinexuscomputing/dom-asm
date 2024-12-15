@@ -1,6 +1,6 @@
-import { HTMLASTNode } from "../ast/index";
+import { HTMLASTNode } from "../ast";
 
-class HTMLASTOptimizer {
+export class HTMLASTOptimizer {
   public optimize(node: HTMLASTNode): HTMLASTNode {
     this.removeEmptyNodes(node);
     this.mergeTextNodes(node);
@@ -11,12 +11,12 @@ class HTMLASTOptimizer {
     if (node.children) {
       node.children = node.children.filter((child) => {
         if (child.type === "Text" && child.value?.trim() === "") {
-          return false; // Remove empty text nodes
+          return false;
         }
-        if (child.type === "Element" && child.children?.length === 0 && !this.isSelfClosingTag(child.name)) {
-          return false; // Remove empty non-self-closing nodes
+        if (child.type === "Element" && (!child.children || child.children.length === 0)) {
+          return false;
         }
-        this.removeEmptyNodes(child); // Recursively optimize children
+        this.removeEmptyNodes(child);
         return true;
       });
     }
@@ -30,21 +30,13 @@ class HTMLASTOptimizer {
         const next = node.children[i + 1];
 
         if (current.type === "Text" && next.type === "Text") {
-          // Merge adjacent text nodes
           current.value = (current.value || "") + (next.value || "");
-          node.children.splice(i + 1, 1); // Remove the merged node
+          node.children.splice(i + 1, 1);
         } else {
-          this.mergeTextNodes(current); // Recursively optimize children
+          this.mergeTextNodes(current);
           i++;
         }
       }
     }
   }
-
-  private isSelfClosingTag(tagName?: string): boolean {
-    const selfClosingTags = ["img", "input", "br", "hr", "meta", "link"];
-    return selfClosingTags.includes(tagName || "");
-  }
 }
-
-export { HTMLASTOptimizer };
