@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
    "test": "jest --no-cache",
-    "build": "tsc",
+    "build": "rollup -c",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean"
   },
