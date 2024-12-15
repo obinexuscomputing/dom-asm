@@ -1,13 +1,15 @@
 export type HTMLToken =
-  | { type: "Doctype"; value: string }
-  | { type: "StartTag"; name: string; attributes: Record<string, string>; selfClosing: boolean }
-  | { type: "EndTag"; name: string }
-  | { type: "Text"; value: string }
-  | { type: "Comment"; value: string };
+  | { type: "Doctype"; value: string; line: number; column: number }
+  | { type: "StartTag"; name: string; attributes: Record<string, string>; selfClosing: boolean; line: number; column: number }
+  | { type: "EndTag"; name: string; line: number; column: number }
+  | { type: "Text"; value: string; line: number; column: number }
+  | { type: "Comment"; value: string; line: number; column: number };
 
 export class HTMLTokenizer {
   private input: string;
   private position: number = 0;
+  private line: number = 1;
+  private column: number = 1;
 
   constructor(input: string) {
     this.input = input;
@@ -15,16 +17,15 @@ export class HTMLTokenizer {
 
   public tokenize(): HTMLToken[] {
     const tokens: HTMLToken[] = [];
-
     while (this.position < this.input.length) {
-      const char = this.input[this.position];
+      const char = this.peek();
 
       if (char === "<") {
-        if (this.input.startsWith("<!--", this.position)) {
+        if (this.match("<!--")) {
           tokens.push(this.readComment());
-        } else if (this.input.startsWith("<!DOCTYPE", this.position)) {
+        } else if (this.match("<!DOCTYPE")) {
           tokens.push(this.readDoctype());
-        } else if (this.input[this.position + 1] === "/") {
+        } else if (this.peek(1) === "/") {
           tokens.push(this.readEndTag());
         } else {
           tokens.push(this.readStartTag());
@@ -33,79 +34,122 @@ export class HTMLTokenizer {
         tokens.push(this.readText());
       }
     }
-
     return tokens;
   }
 
   private readDoctype(): HTMLToken {
-    this.position += 9; // Skip '<!DOCTYPE'
+    const { line, column } = this.getCurrentLocation();
+    this.consume(9); // Skip '<!DOCTYPE'
     const value = this.readUntil(">").trim();
-    this.position++; // Skip '>'
-    return { type: "Doctype", value };
+    this.consume(); // Skip '>'
+    return { type: "Doctype", value, line, column };
   }
 
   private readStartTag(): HTMLToken {
-    this.position++; // Skip '<'
-    const name = this.readUntil(/[ \/>]/).trim();
+    const { line, column } = this.getCurrentLocation();
+    this.consume(); // Skip '<'
+    const name = this.readUntil(/[ \/>]/).toLowerCase().trim(); // HTML tag names are case-insensitive
     const attributes: Record<string, string> = {};
     let selfClosing = false;
 
-    while (this.position < this.input.length && this.input[this.position] !== ">") {
-      if (this.input[this.position] === "/") {
+    while (this.peek() && this.peek() !== ">") {
+      this.skipWhitespace();
+
+      if (this.peek() === "/") {
         selfClosing = true;
-        this.position++; // Skip '/'
+        this.consume(); // Skip '/'
         break;
       }
 
       const attrName = this.readUntil(/[= \/>]/).trim();
+      if (!attrName) break;
 
-      if (this.input[this.position] === "=") {
-        this.position++; // Skip '='
-        const quote = this.input[this.position];
-        this.position++; // Skip opening quote
-        const attrValue = this.readUntil(new RegExp(`${quote}`));
-        attributes[attrName] = attrValue;
-        this.position++; // Skip closing quote
+      if (this.peek() === "=") {
+        this.consume(); // Skip '='
+        const quote = this.peek();
+        if (quote === '"' || quote === "'") {
+          this.consume(); // Skip opening quote
+          const attrValue = this.readUntil(quote);
+          this.consume(); // Skip closing quote
+          attributes[attrName] = attrValue;
+        } else {
+          attributes[attrName] = this.readUntil(/[ \/>]/);
+        }
       } else {
-        // Boolean attributes (e.g., checked)
-        attributes[attrName] = "true";
+        attributes[attrName] = "true"; // Boolean attribute
       }
     }
 
-    this.position++; // Skip '>'
-    return { type: "StartTag", name, attributes, selfClosing };
+    this.consume(); // Skip '>'
+    return { type: "StartTag", name, attributes, selfClosing, line, column };
   }
 
   private readEndTag(): HTMLToken {
-    this.position += 2; // Skip '</'
-    const name = this.readUntil(">").trim();
-    this.position++; // Skip '>'
-    return { type: "EndTag", name };
+    const { line, column } = this.getCurrentLocation();
+    this.consume(2); // Skip '</'
+    const name = this.readUntil(">").toLowerCase().trim(); // HTML tag names are case-insensitive
+    this.consume(); // Skip '>'
+    return { type: "EndTag", name, line, column };
   }
 
   private readComment(): HTMLToken {
-    this.position += 4; // Skip '<!--'
-    const value = this.readUntil("-->").trim();
-    this.position += 3; // Skip '-->'
-    return { type: "Comment", value };
+    const { line, column } = this.getCurrentLocation();
+    this.consume(4); // Skip '<!--'
+    const value = this.readUntil("-->");
+    this.consume(3); // Skip '-->'
+    return { type: "Comment", value, line, column };
   }
 
   private readText(): HTMLToken {
+    const { line, column } = this.getCurrentLocation();
     const value = this.readUntil("<").trim();
-    return { type: "Text", value };
+    return { type: "Text", value, line, column };
   }
 
   private readUntil(stop: string | RegExp): string {
-    const start = this.position;
-    while (
-      this.position < this.input.length &&
-      !(typeof stop === "string"
-        ? this.input[this.position] === stop
-        : stop.test(this.input.substring(this.position)))
-    ) {
+    let result = "";
+    while (this.peek() && !this.matches(stop)) {
+      result += this.consume();
+    }
+    return result;
+  }
+
+  private peek(offset: number = 0): string {
+    return this.input[this.position + offset] || "";
+  }
+
+  private match(str: string): boolean {
+    return this.input.startsWith(str, this.position);
+  }
+
+  private matches(pattern: string | RegExp): boolean {
+    const slice = this.input.slice(this.position);
+    return typeof pattern === "string" ? slice.startsWith(pattern) : pattern.test(slice);
+  }
+
+  private consume(count: number = 1): string {
+    let result = "";
+    for (let i = 0; i < count; i++) {
+      const char = this.input[this.position];
+      if (char === "\n") {
+        this.line++;
+        this.column = 1;
+      } else {
+        this.column++;
+      }
+      result += char;
       this.position++;
     }
-    const result = this.input.slice(start, this.position);
-    return result || ""; // Ensure we return an empty string if no match is found
+    return result;
+  }
+
+  private skipWhitespace(): void {
+    while (/\s/.test(this.peek())) {
+      this.consume();
+    }
+  }
+
+  private getCurrentLocation(): { line: number; column: number } {
+    return { line: this.line, column: this.column };
   }
 }
