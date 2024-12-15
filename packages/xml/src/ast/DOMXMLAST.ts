@@ -1,11 +1,11 @@
 export interface DOMXMLASTNode {
-  type: "Element" | "Text" | "Comment" | "Doctype";
+  type: 'Element' | 'Text' | 'Comment' | 'Doctype';
   name?: string;
   value?: string;
   attributes?: Record<string, string>;
-  children?: DOMXMLASTNode[];
-  
-  // Optimization related fields
+  children?: DOMXMLASTNode[]; // Default will be set during processing
+
+  // Optimization-related fields
   equivalenceClass?: number;
   optimizationData?: {
     hash: string;
@@ -29,9 +29,3 @@ export interface DOMXMLAST {
   };
 }
 
-// Helper type for optimization process
-export interface OptimizationContext {
-  stateMap: Map<string, DOMXMLASTNode>;
-  equivalenceClasses: Map<number, Set<DOMXMLASTNode>>;
-  currentClass: number;
-}

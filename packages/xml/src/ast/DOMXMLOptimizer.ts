@@ -1,38 +1,44 @@
 import { DOMXMLAST, DOMXMLASTNode } from '../ast';
-
+// Helper type for optimization process
+export interface OptimizationContext {
+  stateMap: Map<string, DOMXMLASTNode>;
+  equivalenceClasses: Map<number, Set<DOMXMLASTNode>>;
+  currentClass: number;
+}
 export class DOMXMLOptimizer {
   public optimize(ast: DOMXMLAST): DOMXMLAST {
     // Create a new root to avoid modifying the original
     const optimizedRoot = { ...ast.root };
     optimizedRoot.children = this.optimizeChildren(ast.root.children || []);
-    
+
     return {
       root: optimizedRoot,
-      metadata: this.computeMetadata(optimizedRoot)
+      metadata: this.computeMetadata(optimizedRoot),
     };
   }
 
   private optimizeChildren(children: DOMXMLASTNode[]): DOMXMLASTNode[] {
     // First pass: Remove empty text nodes and elements with no content
     let optimized = children
-      .filter(node => {
+      .filter((node) => {
         if (node.type === 'Text') {
           return node.value && node.value.trim() !== '';
         }
         if (node.type === 'Element') {
-          const hasNonEmptyChildren = (node.children || []).some(child => 
-            child.type === 'Text' ? child.value && child.value.trim() !== '' :
-            child.type === 'Element'
+          const hasNonEmptyChildren = (node.children || []).some((child) =>
+            child.type === 'Text'
+              ? child.value && child.value.trim() !== ''
+              : child.type === 'Element'
           );
           return hasNonEmptyChildren || Object.keys(node.attributes || {}).length > 0;
         }
         return true;
       })
-      .map(node => {
+      .map((node) => {
         if (node.type === 'Element' && node.children) {
           return {
             ...node,
-            children: this.optimizeChildren(node.children)
+            children: this.optimizeChildren(node.children),
           };
         }
         return node;
@@ -52,7 +58,7 @@ export class DOMXMLOptimizer {
     return optimized;
   }
 
-  private computeMetadata(root: DOMXMLASTNode) {
+  private computeMetadata(root: DOMXMLASTNode): DOMXMLAST['metadata'] {
     let nodeCount = 0;
     let elementCount = 0;
     let textCount = 0;
@@ -73,9 +79,9 @@ export class DOMXMLOptimizer {
             break;
         }
       }
-      
+
       if (node.children) {
-        node.children.forEach(child => traverse(child));
+        node.children.forEach((child) => traverse(child));
       }
     };
 
@@ -85,7 +91,7 @@ export class DOMXMLOptimizer {
       nodeCount,
       elementCount,
       textCount,
-      commentCount
+      commentCount,
     };
   }
 }
