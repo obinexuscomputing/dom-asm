@@ -1,10 +1,10 @@
-import { XMLBaseTokenizer } from '../tokenize/XMLBaseTokenizer';
+// src/tokenizer/DOMXMLTokenizer.ts
+import { XMLBaseTokenizer } from './XMLBaseTokenizer';
 
 export interface DOMXMLToken {
   type: 'StartTag' | 'EndTag' | 'Text' | 'Comment' | 'Doctype';
-  value?: string;
   name?: string;
-  namespace?: string;
+  value?: string;
   attributes?: Record<string, string>;
   selfClosing?: boolean;
   location: { line: number; column: number };
@@ -20,19 +20,23 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
       if (this.peek() === '<') {
         if (this.peek(1) === '!') {
           if (this.input.startsWith('<!--', this.position)) {
-            tokens.push({ ...this.readComment(), location });
+            const token = this.readComment();
+            tokens.push({ ...token, location });
           } else if (this.input.startsWith('<!DOCTYPE', this.position)) {
-            tokens.push({ ...this.readDoctype(), location });
+            const token = this.readDoctype();
+            tokens.push({ ...token, location });
           }
         } else if (this.peek(1) === '/') {
-          tokens.push({ ...this.readEndTag(), location });
+          const token = this.readEndTag();
+          tokens.push({ ...token, location });
         } else {
-          tokens.push({ ...this.readStartTag(), location });
+          const token = this.readStartTag();
+          tokens.push({ ...token, location });
         }
       } else {
-        const textToken = this.readText();
-        if (textToken.value.trim()) {
-          tokens.push({ ...textToken, location });
+        const token = this.readText();
+        if (token.value && token.value.trim()) {
+          tokens.push({ ...token, location });
         }
       }
     }
@@ -40,13 +44,15 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     return tokens;
   }
 
-  private readStartTag(): Omit<DOMXMLToken, 'location'> {
+  private readStartTag(): DOMXMLToken {
     this.consume(); // Skip '<'
-    const nameWithNs = this.readUntil(/[\s\/>]/);
-    const [namespace, name] = this.parseNameWithNamespace(nameWithNs);
-    const attributes = this.readAttributes();
+    const tagName = this.readUntil(/[\s\/>]/);
+    const attributes: Record<string, string> = {};
     let selfClosing = false;
 
+    this.readAttributes(attributes);
+
+    // Check for self-closing tag
     this.skipWhitespace();
     if (this.peek() === '/') {
       selfClosing = true;
@@ -56,57 +62,70 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
 
     return {
       type: 'StartTag',
-      name,
-      namespace,
+      name: tagName,
       attributes,
-      selfClosing
+      selfClosing,
+      location: this.getCurrentLocation()
     };
   }
 
-  private readEndTag(): Omit<DOMXMLToken, 'location'> {
+  private readEndTag(): DOMXMLToken {
     this.consume(); // Skip '<'
     this.consume(); // Skip '/'
-    const nameWithNs = this.readUntil('>');
-    const [namespace, name] = this.parseNameWithNamespace(nameWithNs);
+    const tagName = this.readUntil(/[\s>]/);
+    this.skipWhitespace();
     this.consume(); // Skip '>'
 
     return {
       type: 'EndTag',
-      name,
-      namespace
+      name: tagName,
+      location: this.getCurrentLocation()
     };
   }
 
-  private readText(): Omit<DOMXMLToken, 'location'> {
+  private readText(): DOMXMLToken {
     return {
       type: 'Text',
-      value: this.readUntil('<')
+      value: this.readUntil('<'),
+      location: this.getCurrentLocation()
     };
   }
 
-  private readComment(): Omit<DOMXMLToken, 'location'> {
-    this.position += 4; // Skip '<!--'
+  private readComment(): DOMXMLToken {
+    this.consume(); // Skip '<'
+    this.consume(); // Skip '!'
+    this.consume(); // Skip '-'
+    this.consume(); // Skip '-'
+    
     const value = this.readUntil('-->');
-    this.position += 3; // Skip '-->'
+    this.consume(); // Skip '-'
+    this.consume(); // Skip '-'
+    this.consume(); // Skip '>'
+
     return {
       type: 'Comment',
-      value
+      value,
+      location: this.getCurrentLocation()
     };
   }
 
-  private readDoctype(): Omit<DOMXMLToken, 'location'> {
-    this.position += 9; // Skip '<!DOCTYPE'
+  private readDoctype(): DOMXMLToken {
+    this.consume(); // Skip '<'
+    this.consume(); // Skip '!'
+    this.readUntil(/\s/); // Skip 'DOCTYPE'
+    this.skipWhitespace();
+    
     const value = this.readUntil('>');
     this.consume(); // Skip '>'
+
     return {
       type: 'Doctype',
-      value
+      value: value.trim(),
+      location: this.getCurrentLocation()
     };
   }
 
-  private readAttributes(): Record<string, string> {
-    const attributes: Record<string, string> = {};
-    
+  private readAttributes(attributes: Record<string, string>): void {
     while (this.position < this.input.length) {
       this.skipWhitespace();
       
@@ -114,33 +133,29 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
         break;
       }
 
-      const nameWithNs = this.readUntil(/[\s=>/]/);
-      if (!nameWithNs) break;
-      
-      const [namespace, name] = this.parseNameWithNamespace(nameWithNs);
-      let value = '';
+      const name = this.readUntil(/[\s=>/]/);
+      if (!name) break;
 
+      let value = '';
       this.skipWhitespace();
+      
       if (this.peek() === '=') {
         this.consume(); // Skip '='
         this.skipWhitespace();
+        
         const quote = this.peek();
         if (quote === '"' || quote === "'") {
           this.consume(); // Skip opening quote
           value = this.readUntil(quote);
           this.consume(); // Skip closing quote
+        } else {
+          value = this.readUntil(/[\s>]/);
         }
+      } else {
+        value = 'true'; // Boolean attribute
       }
 
-      const attrName = namespace ? `${namespace}:${name}` : name;
-      attributes[attrName] = value;
+      attributes[name] = value;
     }
-
-    return attributes;
-  }
-
-  private parseNameWithNamespace(name: string): [string | undefined, string] {
-    const parts = name.split(':');
-    return parts.length > 1 ? [parts[0], parts[1]] : [undefined, parts[0]];
   }
 }
