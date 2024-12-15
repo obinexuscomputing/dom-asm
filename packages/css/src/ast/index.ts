@@ -20,7 +20,7 @@ export type ASTNode = {
 // const astBuilder = new ASTBuilder(tokens);
 // console.log(JSON.stringify(astBuilder.buildAST(), null, 2));
 
-export class CSSASTBuilder {
+export class ASTBuilder {
   private tokens: Token[];
   private position: number;
 
