@@ -18,10 +18,12 @@ export class DOMXMLParser {
   public parse(): DOMXMLAST {
     this.position = 0;
 
+    // Initialize root node with explicit children array
     const root: DOMXMLASTNode = {
       type: 'Element',
       name: 'root',
       children: [],
+      attributes: {}  // Add explicit empty attributes
     };
 
     const stack: DOMXMLASTNode[] = [root];
@@ -32,17 +34,23 @@ export class DOMXMLParser {
 
       switch (token.type) {
         case 'StartTag': {
+          if (!token.name) {
+            throw new Error(`Missing tag name at line ${token.location.line}, column ${token.location.column}`);
+          }
+
           const elementNode: DOMXMLASTNode = {
             type: 'Element',
-            name: token.name!,
+            name: token.name,
             attributes: token.attributes || {},
-            children: [],
+            children: []  // Always initialize children array
           };
 
-          // Add to current parent's children
-          currentParent.children!.push(elementNode);
+          // Ensure currentParent has a children array
+          if (!currentParent.children) {
+            currentParent.children = [];
+          }
+          currentParent.children.push(elementNode);
 
-          // If not self-closing, push to stack and update currentParent
           if (!token.selfClosing) {
             stack.push(elementNode);
             currentParent = elementNode;
@@ -65,38 +73,46 @@ export class DOMXMLParser {
         }
 
         case 'Text': {
+          if (!currentParent.children) {
+            currentParent.children = [];
+          }
           const trimmedValue = token.value?.trim();
           if (trimmedValue) {
-            currentParent.children!.push({
+            currentParent.children.push({
               type: 'Text',
-              value: trimmedValue,
+              value: trimmedValue
             });
           }
           break;
         }
 
         case 'Comment': {
-          currentParent.children!.push({
+          if (!currentParent.children) {
+            currentParent.children = [];
+          }
+          currentParent.children.push({
             type: 'Comment',
-            value: token.value || '',
+            value: token.value || ''
           });
           break;
         }
 
         case 'Doctype': {
-          currentParent.children!.push({
+          if (!currentParent.children) {
+            currentParent.children = [];
+          }
+          currentParent.children.push({
             type: 'Doctype',
-            value: token.value || '',
+            value: token.value || ''
           });
           break;
         }
 
         default:
-          throw new Error(`Unexpected token type: ${token.type}`);
+          throw new Error(`Unexpected token type: ${(token as DOMXMLToken).type}`);
       }
     }
 
-    // Check for any unclosed tags
     if (stack.length > 1) {
       const unclosedTag = stack[stack.length - 1];
       throw new Error(`Unclosed tag: ${unclosedTag.name}`);
@@ -104,7 +120,7 @@ export class DOMXMLParser {
 
     return {
       root,
-      metadata: this.computeMetadata(root),
+      metadata: this.computeMetadata(root)
     };
   }
 
@@ -129,10 +145,7 @@ export class DOMXMLParser {
             break;
         }
       }
-
-      if (node.children) {
-        node.children.forEach((child) => traverse(child));
-      }
+      node.children?.forEach((child) => traverse(child));
     };
 
     traverse(root, true);
@@ -140,7 +153,7 @@ export class DOMXMLParser {
       nodeCount,
       elementCount,
       textCount,
-      commentCount,
+      commentCount
     };
   }
 }
