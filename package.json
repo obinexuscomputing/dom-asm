@@ -4,11 +4,13 @@
   "private": true,
   "type": "module",
   "description": "A unified library for DOM manipulation and compilation.",
-  "bin": {
-    "dom-asm": "./bin/dom-asm",
-    "dom-asm.bat": "./bin/dom-asm.bat",
-    "dom-asm.ps1": "./bin/dom-asm.ps1"
-  },
+ "bin": {
+  "dom-asm": "./bin/dom-asm",
+  "dom-asm.bat": "./bin/dom-asm.bat",
+  "dom-asm.ps1": "./bin/dom-asm.ps1",
+  "dom-asm.sh": "./bin/dom-asm.sh"
+},
+
   "workspaces": [
     "packages/*"
   ],
