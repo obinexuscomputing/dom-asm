@@ -1,3 +1,5 @@
+import { JSToken, JSTokenType } from "../tokenizer";
+
 export type JSASTNode = {
   type: string;
   value?: string;

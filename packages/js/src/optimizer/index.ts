@@ -1,10 +1,10 @@
-import { ASTNode } from "../ast";
+import { JSASTNode } from "../ast";
 
 export class JSASTOptimizer {
   constructor() {}
 
-  public optimize(ast: ASTNode): ASTNode {
-    function simplify(node: ASTNode): ASTNode {
+  public optimize(ast: JSASTNode): JSASTNode {
+    function simplify(node: JSASTNode): JSASTNode {
       if (node.type === "VariableDeclaration" && node.children) {
         const value = node.children[1];
         if (value.type === "Literal") {

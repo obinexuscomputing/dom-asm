@@ -1,9 +1,9 @@
-import { ASTNode } from "../ast";
+import { JSASTNode } from "../ast";
 
 export class JSCodeGenerator {
   constructor() {}
 
-  public generate(ast: ASTNode): string {
+  public generate(ast: JSASTNode): string {
     if (ast.type === "Program") {
       return ast.children.map((child) => this.generate(child)).join("\n");
     }
