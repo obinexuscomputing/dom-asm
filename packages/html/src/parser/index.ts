@@ -2,7 +2,7 @@ import { Token, HTMLTokenizer } from "../tokenizer/index";
 import { AST, ASTNode } from "../ast/index";
 import { ValidationResult, Validator } from "../validator/index";
 
-type ErrorHandler = (error: ParserError) => void;
+type ErrorHandler = (error: HTMLParserError) => void;
 
 interface ElementNode extends ASTNode {
   type: "Element";
@@ -28,16 +28,16 @@ function isElementNode(node: ASTNode): node is ElementNode {
   return node.type === "Element";
 }
 
-export class ParserError extends Error {
+export class  HTMLParserError extends Error {
   token: Token;
   position: number;
   constructor(message: string, token: Token, position: number) {
     super(message);
-    this.name = "ParserError";
+    this.name = "HTMLParserError";
     this.token = token;
     this.position = position;
     if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, ParserError);
+      Error.captureStackTrace(this, HTMLParserError);
     }
   }
 }
