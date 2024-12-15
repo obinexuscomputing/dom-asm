@@ -6,16 +6,17 @@ module.exports = {
     '^src/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: '<rootDir>/tsconfig.json',
-      },
-    ],
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.json',
+      diagnostics: {
+        ignoreCodes: [151001]
+      }
+    }]
   },
   testMatch: [
-    '<rootDir>/tests/**/*.test.ts',
+    '<rootDir>/tests/**/*.test.ts'
   ],
+  moduleDirectories: ['node_modules', 'src'],
   collectCoverageFrom: [
     'src/**/*.ts',
     '!src/**/index.ts',
@@ -25,5 +26,8 @@ module.exports = {
   coverageReporters: ['text', 'lcov'],
   verbose: true,
   testTimeout: 60000,
-  maxWorkers: 2
+  maxWorkers: 2,
+  transformIgnorePatterns: [
+    'node_modules/(?!(ts-jest)/)'
+  ]
 };
