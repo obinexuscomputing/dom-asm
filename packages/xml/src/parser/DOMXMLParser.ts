@@ -110,7 +110,6 @@ export class DOMXMLParser {
     return {
       root: virtualRoot.children![0],
       metadata: this.computeMetadata(virtualRoot.children![0]),
-      type: "",
     };
   }
 
