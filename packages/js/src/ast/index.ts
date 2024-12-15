@@ -1,4 +1,3 @@
-import { Token, TokenType } from "./JSTokenizer";
 
 export type ASTNode = {
   type: string;
