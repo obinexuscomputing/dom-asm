@@ -148,8 +148,10 @@ declare class DOMXMLTokenizer extends XMLBaseTokenizer {
     tokenize(): DOMXMLToken[];
     private readStartTag;
     private readEndTag;
+    private readTagName;
     private readAttributes;
-    private readText;
+    private readAttributeName;
+    private readAttributeValue;
     private readComment;
     private readDoctype;
 }
@@ -160,7 +162,6 @@ declare class DOMXMLParser {
     constructor(tokens?: DOMXMLToken[]);
     setTokens(tokens: DOMXMLToken[]): void;
     parse(): DOMXMLAST;
-    private removeEmptyTextNodes;
     private computeMetadata;
 }
 
