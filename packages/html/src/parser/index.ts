@@ -61,7 +61,7 @@ export class HTMLParser {
     this.shouldThrow = false;
   }
 
-  private handleError(error: ParserError, quiet = false): void {
+  private handleError(error: HTMLParserError, quiet = false): void {
     if (this.errorHandler) {
       this.errorHandler(error);
     } else {
@@ -140,7 +140,7 @@ export class HTMLParser {
             );
 
             if (matchingStartIndex === -1) {
-              throw new ParserError(
+              throw new HTMLParserError(
                 `Unmatched end tag: </${token.name}>. Expected </${
                   isElementNode(currentParent) ? currentParent.name : "unknown"
                 }>.`,
@@ -180,7 +180,7 @@ export class HTMLParser {
           }
         }
       } catch (error) {
-        if (error instanceof ParserError) {
+        if (error instanceof HTMLParserError) {
           this.handleError(error);
           if (!this.shouldThrow) {
             // Set recovery mode to skip until matching end tag
@@ -199,7 +199,7 @@ export class HTMLParser {
     while (stack.length > 1) {
       const unclosedNode = stack.pop()!;
       this.handleError(
-        new ParserError(
+        new HTMLParserError(
           `Unclosed tag: <${unclosedNode.name}>`,
           { type: "StartTag", name: unclosedNode.name, attributes: {} },
           tokens.length
