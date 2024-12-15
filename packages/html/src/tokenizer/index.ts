@@ -1,19 +1,22 @@
-export type HTMLToken =
-  | { type: "StartTag"; name: string; attributes: Record<string, string> }
-  | { type: "EndTag"; name: string }
-  | { type: "Text"; value: string }
-  | { type: "Comment"; value: string };
+export interface HTMLToken {
+  type: "StartTag" | "EndTag" | "Text" | "Comment";
+  name?: string; // For StartTag or EndTag
+  value?: string; // For Text or Comment
+  attributes?: Record<string, string>; // For StartTag
+}
 
 export class HTMLTokenizer {
   private input: string;
-  private position: number = 0;
+  private position: number;
 
   constructor(input: string) {
     this.input = input;
+    this.position = 0;
   }
 
   public tokenize(): HTMLToken[] {
     const tokens: HTMLToken[] = [];
+
     while (this.position < this.input.length) {
       const char = this.input[this.position];
 
@@ -29,6 +32,7 @@ export class HTMLTokenizer {
         tokens.push(this.readText());
       }
     }
+
     return tokens;
   }
 

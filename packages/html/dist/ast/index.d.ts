@@ -5,4 +5,13 @@ export interface HTMLASTNode {
     attributes?: Record<string, string>;
     children?: HTMLASTNode[];
 }
+export interface HTMLAST {
+    root: HTMLASTNode;
+    metadata?: {
+        nodeCount: number;
+        elementCount: number;
+        textCount: number;
+        commentCount: number;
+    };
+}
 //# sourceMappingURL=index.d.ts.map
