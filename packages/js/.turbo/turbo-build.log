@@ -10,4 +10,22 @@
 > @obinexuscomputing/js@1.0.0 build:rollup
 > rollup -c
 
-[1G[0K
+[1G[0K[36m
+[1msrc/index.ts[22m → [1mdist/html/index.cjs, dist/html/index.js, dist/html/index.umd.js[22m...[39m
+[32mcreated [1mdist/html/index.cjs, dist/html/index.js, dist/html/index.umd.js[22m in [1m4.3s[22m[39m
+[36m
+[1msrc/index.ts[22m → [1mdist/html/index.d.ts[22m...[39m
+[32mcreated [1mdist/html/index.d.ts[22m in [1m1.3s[22m[39m
+[36m
+[1msrc/index.ts[22m → [1mdist/css/index.cjs, dist/css/index.js, dist/css/index.umd.js[22m...[39m
+[32mcreated [1mdist/css/index.cjs, dist/css/index.js, dist/css/index.umd.js[22m in [1m1.8s[22m[39m
+[36m
+[1msrc/index.ts[22m → [1mdist/css/index.d.ts[22m...[39m
+[32mcreated [1mdist/css/index.d.ts[22m in [1m984ms[22m[39m
+[36m
+[1msrc/index.ts[22m → [1mdist/js/index.cjs, dist/js/index.js, dist/js/index.umd.js[22m...[39m
+[32mcreated [1mdist/js/index.cjs, dist/js/index.js, dist/js/index.umd.js[22m in [1m1.7s[22m[39m
+[36m
+[1msrc/index.ts[22m → [1mdist/js/index.d.ts[22m...[39m
+[32mcreated [1mdist/js/index.d.ts[22m in [1m925ms[22m[39m
+[1G[0K⠙[1G[0K[1G[0K⠙[1G[0K

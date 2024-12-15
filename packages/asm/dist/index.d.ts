@@ -1,2 +1,3 @@
-export * from './api/index';
-//# sourceMappingURL=index.d.ts.map
+declare function parseFile(file: string): object;
+
+export { parseFile };

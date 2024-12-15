@@ -21,14 +21,12 @@ export default [
       },
     ],
     plugins: [
-      resolve({
-        preferBuiltins: true, // Ensure Node.js built-ins like `assert` are resolved
-      }),
+      resolve(),
       commonjs(),
       typescript({ tsconfig: './tsconfig.json' }),
-      vue(),
       terser(),
     ],
+    external: [], // Add external dependencies here if needed
   },
   {
     input: 'src/index.ts',
