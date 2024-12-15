@@ -5,6 +5,7 @@ export type HTMLToken = {
     type: "StartTag";
     name: string;
     attributes: Record<string, string>;
+    selfClosing: boolean;
 } | {
     type: "EndTag";
     name: string;
