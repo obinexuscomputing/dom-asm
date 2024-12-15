@@ -6,7 +6,7 @@
 
 **Disclaimer:** This technology is patented. It is shared for testing and evaluation purposes only.
 
-**Computing from the Heart**
+**Computing from the ![Heart](./heart-icon.png)*
 
 For more details on the research behind `DOM-ASM`, refer to the documentation in the [docs](./docs) folder.
 
