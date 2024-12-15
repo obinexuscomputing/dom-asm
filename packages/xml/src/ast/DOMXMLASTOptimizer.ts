@@ -8,63 +8,58 @@ export class DOMXMLASTOptimizer {
     const optimizedRoot = this.optimizeNode(ast.root);
     return new DOMXMLAST(optimizedRoot, ast.computeMetadata());
   }
-  /**
-   * Optimize children nodes by removing empty nodes and merging adjacent text nodes.
-   */
   private optimizeChildren(children: DOMXMLASTNode[]): DOMXMLASTNode[] {
+    // First pass: Remove empty text nodes and optimize children recursively
     let optimized = children
       .filter((node) => {
         if (node.type === "Text") {
-          return node.value?.trim() !== "";
+          return node.value?.trim() !== ""; // Keep non-empty text nodes
         }
         if (node.type === "Element") {
-          const hasNonEmptyChildren = (node.children || []).some((child: DOMXMLASTNode) =>
+          // Keep elements with non-empty children or attributes
+          const hasNonEmptyChildren = (node.children || []).some((child) =>
             child.type === "Text"
               ? child.value?.trim() !== ""
               : child.type === "Element"
           );
           return hasNonEmptyChildren || Object.keys(node.attributes || {}).length > 0;
         }
-        return true;
+        return true; // Keep other node types
       })
       .map((node) =>
         node.type === "Element" && node.children
           ? { ...node, children: this.optimizeChildren(node.children) }
           : node
       );
-
-    // Merge adjacent text nodes
+  
+    // Second pass: Merge adjacent text nodes
     let i = 0;
     while (i < optimized.length - 1) {
       const current = optimized[i];
       const next = optimized[i + 1];
       if (current.type === "Text" && next.type === "Text") {
-        current.value = (current.value || "") + (next.value || "");
+        current.value = (current.value || "") + (next.value || ""); // Merge text values
         optimized.splice(i + 1, 1); // Remove the merged node
       } else {
         i++;
       }
     }
-
+  
     return optimized;
   }
+  
 
   private optimizeNode(node: DOMXMLASTNode): DOMXMLASTNode {
     if (node.children) {
-      node.children = node.children
-        .filter((child) =>
-          child.type === "Text"
-            ? child.value?.trim() !== ""
-            : child.type !== "Doctype" || Object.keys(child.attributes || {}).length > 0
-        )
-        .map((child) => this.optimizeNode(child));
+      node.children = this.optimizeChildren(node.children);
     }
     return node;
   }
+  
   /**
    * Compute metadata for the optimized AST.
    */
-  private computeMetadata(root: DOMXMLASTNode): DOMXMLAST["metadata"] {
+  public computeMetadata(root: DOMXMLASTNode): DOMXMLAST["metadata"] {
     let nodeCount = 0;
     let elementCount = 0;
     let textCount = 0;
