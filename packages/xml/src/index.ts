@@ -1,6 +1,6 @@
 import { DOMXMLASTOptimizer, DOMXMLAST } from "./ast";
 import { GeneratorOptions, DOMXMLGenerator } from "./generator";
-import { DOMXMLParser } from "./parser/DOMXMLParser";
+import { DOMXMLParser } from "./parser/index";
 import { DOMXMLTokenizer } from "./tokenizer";
 import { ValidationOptions, DOMXMLValidator, ValidationResult } from "./validator";
 
