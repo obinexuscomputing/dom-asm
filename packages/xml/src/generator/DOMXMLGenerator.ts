@@ -12,33 +12,33 @@ export class DOMXMLGenerator {
 
   constructor(options: GeneratorOptions = {}) {
     this.options = {
-      indent: options.indent ?? '  ',
-      newLine: options.newLine ?? '\n',
+      indent: options.indent ?? "  ",
+      newLine: options.newLine ?? "\n",
       xmlDeclaration: options.xmlDeclaration ?? true,
-      prettyPrint: options.prettyPrint ?? true
+      prettyPrint: options.prettyPrint ?? true,
     };
   }
 
   public generate(ast: DOMXMLAST): string {
-    let result = '';
-    
+    let result = "";
+
     if (this.options.xmlDeclaration) {
       result += '<?xml version="1.0" encoding="UTF-8"?>' + this.options.newLine;
     }
-    
+
     result += this.generateNode(ast.root, 0);
     return result;
   }
 
   private generateNode(node: DOMXMLASTNode, depth: number): string {
     switch (node.type) {
-      case 'Element':
+      case "Element":
         return this.generateElement(node, depth);
-      case 'Text':
+      case "Text":
         return this.generateText(node, depth);
-      case 'Comment':
+      case "Comment":
         return this.generateComment(node, depth);
-      case 'Doctype':
+      case "Doctype":
         return this.generateDoctype(node, depth);
       default:
         throw new Error(`Unknown node type: ${node.type}`);
@@ -46,24 +46,26 @@ export class DOMXMLGenerator {
   }
 
   private generateElement(node: DOMXMLASTNode, depth: number): string {
-    const indent = this.options.prettyPrint ? this.getIndent(depth) : '';
-    let result = indent + '<' + (node.name || '');
+    const indent = this.options.prettyPrint ? this.getIndent(depth) : "";
+    let result = indent + "<" + (node.name || "");
 
     if (node.attributes) {
       result += Object.entries(node.attributes)
-        .map(([key, value]) => ` ${key}="${this.escapeAttribute(String(value))}"`)
-        .join('');
+        .map(
+          ([key, value]) => ` ${key}="${this.escapeAttribute(String(value))}"`,
+        )
+        .join("");
     }
 
     if (!node.children?.length) {
-      return result + '/>' + this.options.newLine;
+      return result + "/>" + this.options.newLine;
     }
 
-    result += '>';
+    result += ">";
 
-    if (node.children.length === 1 && node.children[0].type === 'Text') {
-      result += this.escapeText(node.children[0].value || '');
-      result += '</' + node.name + '>' + this.options.newLine;
+    if (node.children.length === 1 && node.children[0].type === "Text") {
+      result += this.escapeText(node.children[0].value || "");
+      result += "</" + node.name + ">" + this.options.newLine;
       return result;
     }
 
@@ -73,23 +75,25 @@ export class DOMXMLGenerator {
       result += this.generateNode(child, depth + 1);
     }
 
-    result += indent + '</' + node.name + '>' + this.options.newLine;
+    result += indent + "</" + node.name + ">" + this.options.newLine;
     return result;
   }
 
   private generateText(node: DOMXMLASTNode, depth: number): string {
-    const indent = this.options.prettyPrint ? this.getIndent(depth) : '';
-    return indent + this.escapeText(node.value || '') + this.options.newLine;
+    const indent = this.options.prettyPrint ? this.getIndent(depth) : "";
+    return indent + this.escapeText(node.value || "") + this.options.newLine;
   }
 
   private generateComment(node: DOMXMLASTNode, depth: number): string {
-    const indent = this.options.prettyPrint ? this.getIndent(depth) : '';
-    return indent + '<!--' + (node.value || '') + '-->' + this.options.newLine;
+    const indent = this.options.prettyPrint ? this.getIndent(depth) : "";
+    return indent + "<!--" + (node.value || "") + "-->" + this.options.newLine;
   }
 
   private generateDoctype(node: DOMXMLASTNode, depth: number): string {
-    const indent = this.options.prettyPrint ? this.getIndent(depth) : '';
-    return indent + '<!DOCTYPE ' + (node.value || '') + '>' + this.options.newLine;
+    const indent = this.options.prettyPrint ? this.getIndent(depth) : "";
+    return (
+      indent + "<!DOCTYPE " + (node.value || "") + ">" + this.options.newLine
+    );
   }
 
   private getIndent(depth: number): string {
@@ -98,17 +102,17 @@ export class DOMXMLGenerator {
 
   private escapeText(text: string): string {
     return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
   }
 
   private escapeAttribute(text: string): string {
     return text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&apos;");
   }
 }
