@@ -1,4 +1,3 @@
-import { DOMXMLASTNode } from ".";
 
 export class DOMXMLAST {
   root: DOMXMLASTNode;
