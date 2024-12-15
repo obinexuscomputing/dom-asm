@@ -1,6 +1,6 @@
 {
-  "name": "@obinexuscomputing/dom-js",
-  "version": "1.0.0",
+  "name": "@obinexuscomputing/djs",
+    "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "A package for JavaScript parsing and validation.",

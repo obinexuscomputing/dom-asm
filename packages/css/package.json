@@ -1,6 +1,7 @@
 {
-  "name": "@obinexuscomputing/dom-css",
-  "version": "1.0.0",
+  {
+    "name": "@obinexuscomputing/dcss",
+"version": "1.0.0",
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
