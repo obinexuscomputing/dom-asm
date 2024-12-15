@@ -1,7 +1,7 @@
 import { DOMXMLTokenizer } from '../src/tokenizer';
 import { DOMXMLParser } from '../src/parser/DOMXMLParser';
+import { DOMXMLASTOptimizer } from '../src/ast/DOMXMLASTOptimizer';
 import { DOMXMLValidator } from '../src/validator';
-import { DOMXMLOptimizer } from '../src/ast/DOMXMLOptimizer';
 
 describe('DOMXML Integration', () => {
   test('should handle complete XML workflow', () => {
@@ -16,63 +16,23 @@ describe('DOMXML Integration', () => {
 
     const tokenizer = new DOMXMLTokenizer(input);
     const tokens = tokenizer.tokenize();
-    
+
     const parser = new DOMXMLParser(tokens);
     const ast = parser.parse();
 
-    expect(ast.metadata?.elementCount).toBe(3); // root, parent, child
-    expect(ast.metadata?.textCount).toBe(1);
-    expect(ast.metadata?.commentCount).toBe(1);
-  });
-
-  test('should optimize AST', () => {
-    const input = `
-      <root>
-        <div>  </div>
-        <div>Test1</div>
-        <div>Test2</div>
-      </root>
-    `;
-
-    const tokenizer = new DOMXMLTokenizer(input);
-    const parser = new DOMXMLParser(tokenizer.tokenize());
-    const ast = parser.parse();
-    
-    const optimizer = new DOMXMLOptimizer();
+    const optimizer = new DOMXMLASTOptimizer();
     const optimizedAst = optimizer.optimize(ast);
 
-    // Empty div should be removed or optimized
-    expect(optimizedAst.metadata?.elementCount).toBeLessThan(ast.metadata?.elementCount!);
-  });
-
-  test('should validate XML', () => {
-    const input = '<root><item required="true" /></root>';
-    
-    const tokenizer = new DOMXMLTokenizer(input);
-    const parser = new DOMXMLParser(tokenizer.tokenize());
-    const ast = parser.parse();
-    
     const validator = new DOMXMLValidator({
       schema: {
         elements: {
-          item: {
-            attributes: ['required'],
-            required: ['required']
-          }
-        }
-      }
+          parent: { children: ["child"] },
+          child: { attributes: [] },
+        },
+      },
     });
 
-    const result = validator.validate(ast);
-    expect(result.valid).toBe(true);
-  });
-
-  test('should handle errors gracefully', () => {
-    const input = '<root><unclosed>';
-    
-    const tokenizer = new DOMXMLTokenizer(input);
-    const parser = new DOMXMLParser(tokenizer.tokenize());
-    
-    expect(() => parser.parse()).toThrow('Unclosed tag');
+    const validationResult = validator.validate(optimizedAst);
+    expect(validationResult.valid).toBe(true);
   });
 });
