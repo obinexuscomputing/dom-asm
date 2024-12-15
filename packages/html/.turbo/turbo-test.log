@@ -116,20 +116,15 @@
 [1mTest Suites: [22m0 of 2 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 2 total
-[1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 2 total
-[1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mConsole
+[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mConsole
 
     [2m[31mconsole.error[39m[22m
 [31m      Error at position 7: Unmatched end tag: </unmatched>. Expected </div>.[39m
@@ -196,20 +191,21 @@
 [2m      [2mat Object.<anonymous> ([22m[2m[0m[36mtests/tokenizer.test.ts[39m[0m[2m:22:24)[22m[2m[22m
 
 
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mparser.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 2 total
-[1mTests:       [22m[1m[32m3 passed[39m[22m, 3 total
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 
 [1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 total
 [1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
+[1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
 [1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 total
 [1mTests:       [22m[1m[32m4 passed[39m[22m, 4 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        3.039 s
+[1mTime:[22m        2.386 s
 [2mRan all test suites[22m[2m.[22m
 [1G[0K⠙[1G[0K
