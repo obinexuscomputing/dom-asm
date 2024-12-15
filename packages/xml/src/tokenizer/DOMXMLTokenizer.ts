@@ -13,6 +13,7 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
   constructor(input: string) {
     super(input);
   }
+  
 
   public tokenize(): DOMXMLToken[] {
     const tokens: DOMXMLToken[] = [];
@@ -71,25 +72,26 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
     const name = this.readTagName();
     const attributes = this.readAttributes();
     let selfClosing = false;
-
+  
     this.skipWhitespace();
     if (this.peek() === '/') {
       selfClosing = true;
-      this.consume();
+      this.consume(); // Skip '/'
     }
+  
     if (this.peek() === '>') {
-      this.consume();
+      this.consume(); // Skip '>'
     }
-
+  
     return {
       type: 'StartTag',
       name,
       attributes,
       selfClosing,
-      location: startLocation,
+      location: startLocation, // Correctly tracks initial position
     };
   }
-
+  
   private readEndTag(startLocation: { line: number; column: number }): DOMXMLToken {
     this.consumeSequence(2); // Skip '</'
     const name = this.readTagName();
@@ -152,7 +154,7 @@ export class DOMXMLTokenizer extends XMLBaseTokenizer {
 
     return attributes;
   }
-
+  
   private readTagName(): string {
     return this.readWhile((char) => this.isNameChar(char));
   }

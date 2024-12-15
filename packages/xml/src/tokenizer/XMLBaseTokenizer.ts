@@ -37,7 +37,7 @@ export abstract class XMLBaseTokenizer {
     this.position++;
     return char;
   }
-
+  
   protected consumeSequence(length: number): string {
     let result = '';
     for (let i = 0; i < length; i++) {
@@ -45,46 +45,49 @@ export abstract class XMLBaseTokenizer {
     }
     return result;
   }
-
-  protected readUntil(stop: string | RegExp, options: {
-    escape?: boolean;
-    includeStop?: boolean;
-    skipStop?: boolean;
-  } = {}): string {
+  protected readUntil(
+    stop: string | RegExp,
+    options: { escape?: boolean; includeStop?: boolean; skipStop?: boolean } = {}
+  ): string {
     const { escape = false, includeStop = false, skipStop = true } = options;
     let result = '';
     let escaped = false;
-
+  
     while (this.position < this.input.length) {
       const current = this.peek();
-
+  
+      // Handle escape sequences if `escape` is enabled
       if (escape && current === '\\' && !escaped) {
         escaped = true;
         result += this.consume();
         continue;
       }
-
-      const matches = typeof stop === 'string' ?
-        this.matches(stop) :
-        stop.test(current);
-
+  
+      const matches =
+        typeof stop === 'string' ? this.matches(stop) : stop.test(current);
+  
+      // Check for the stop condition
       if (!escaped && matches) {
         if (includeStop) {
-          result += typeof stop === 'string' ?
-            this.consumeSequence(stop.length) :
-            this.consume();
+          if (typeof stop === 'string') {
+            result += this.consumeSequence(stop.length); // Consume the stop string
+          } else {
+            result += this.consume(); // Consume the matching character
+          }
         } else if (skipStop) {
-          this.position += typeof stop === 'string' ? stop.length : 1;
+          this.position += typeof stop === 'string' ? stop.length : 1; // Skip the stop character(s)
         }
-        break;
+        break; // Exit the loop once the stop condition is met
       }
-
+  
+      // Append the current character to the result
       result += this.consume();
-      escaped = false;
+      escaped = false; // Reset escape flag after consuming a character
     }
-
+  
     return result;
   }
+  
 
   protected readWhile(predicate: (char: string, index: number) => boolean): string {
     let result = '';
