@@ -4,7 +4,7 @@ export type ASTNode = {
     value?: string;
     children: ASTNode[];
 };
-export declare class ASTBuilder {
+export declare class CSSASTBuilder {
     private tokens;
     private position;
     constructor(tokens: Token[]);

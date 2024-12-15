@@ -9,7 +9,7 @@
 // const tokens = tokenizer.tokenize();
 // const astBuilder = new ASTBuilder(tokens);
 // console.log(JSON.stringify(astBuilder.buildAST(), null, 2));
-export class ASTBuilder {
+export class CSSASTBuilder {
     tokens;
     position;
     constructor(tokens) {

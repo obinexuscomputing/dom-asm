@@ -1,9 +1,24 @@
 import { Token } from "../tokenizer";
-export interface ASTNode {
+export type ASTNode = {
     type: string;
     value?: string;
-    children?: ASTNode[];
-}
+    children: ASTNode[];
+};
 export declare class ASTBuilder {
-    build(tokens: Token[]): ASTNode;
+    private tokens;
+    private position;
+    constructor(tokens: Token[]);
+    private currentToken;
+    private consumeToken;
+    private parseStylesheet;
+    private parseRule;
+    private parseSelector;
+    private parseDeclarations;
+    private parseDeclaration;
+    private parseProperty;
+    private parseValue;
+    buildAST(): ASTNode;
+}
+export declare class Parser {
+    parse(ast: ASTNode): any;
 }
