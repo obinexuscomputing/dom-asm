@@ -6,8 +6,9 @@
     "module": "ESNext",
     "target": "ESNext",
     "outDir": "./dist",
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
-  "include": ["src/**/*.ts"],  // Fix this path to only include files in 'src'
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
