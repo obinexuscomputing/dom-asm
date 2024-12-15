@@ -32,7 +32,6 @@ export default [
       typescript({ tsconfig: './tsconfig.json' }),
       terser(),
     ],
-    external: ['vue'],
   },
   {
     input: 'src/index.ts',
