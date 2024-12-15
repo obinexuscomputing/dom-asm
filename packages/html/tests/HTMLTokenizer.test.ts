@@ -1,4 +1,4 @@
-import { HTMLTokenizer } from "../src/";
+import { HTMLTokenizer } from "../src/index";
 
 describe("HTMLTokenizer", () => {
   it("should tokenize a basic HTML element with text content", () => {
