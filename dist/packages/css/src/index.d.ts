@@ -1,3 +1,8 @@
+export { Tokenizer } from "./src/tokenizer";
+export { Parser } from "./src/parser";
+export { Validator } from "./src/validator";
+export { ASTOptimizer as Optimizer } from "./src/optimizer";
+export { Generator } from "./src/generator";
 export { Tokenizer } from "./tokenizer";
 export { ASTNode } from "./ast";
 export { Validator } from "./validator";
