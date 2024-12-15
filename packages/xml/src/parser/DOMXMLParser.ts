@@ -1,12 +1,16 @@
 import { DOMXMLAST, DOMXMLASTNode } from "../ast";
 import { DOMXMLToken } from "../tokenizer";
 
-
 export class DOMXMLParser {
   private tokens: DOMXMLToken[];
   private position: number;
 
-  constructor(tokens: DOMXMLToken[]) {
+  constructor(tokens?: DOMXMLToken[]) {
+    this.tokens = tokens || [];
+    this.position = 0;
+  }
+
+  public setTokens(tokens: DOMXMLToken[]): void {
     this.tokens = tokens;
     this.position = 0;
   }
@@ -36,6 +40,11 @@ export class DOMXMLParser {
 
         case "EndTag":
           if (stack.length > 1) {
+            if (currentParent.name !== token.name) {
+              throw new Error(
+                `Mismatched tags: opening "${currentParent.name}" and closing "${token.name}" at line ${token.location.line}, column ${token.location.column}`
+              );
+            }
             stack.pop();
             currentParent = stack[stack.length - 1];
           }
@@ -50,6 +59,11 @@ export class DOMXMLParser {
           });
           break;
       }
+    }
+
+    if (stack.length > 1) {
+      const unclosedTag = stack[stack.length - 1];
+      throw new Error(`Unclosed tag: ${unclosedTag.name}`);
     }
 
     return {

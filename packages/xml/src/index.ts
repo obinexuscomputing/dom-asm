@@ -38,7 +38,6 @@ export interface DOMXMLOptions {
   validationOptions?: ValidationOptions;
 }
 
-// Main class
 export class DOMXML {
   private tokenizer: DOMXMLTokenizer;
   private parser: DOMXMLParser;
@@ -64,13 +63,16 @@ export class DOMXML {
   public parse(input: string): DOMXMLAST {
     this.tokenizer = new DOMXMLTokenizer(input);
     const tokens = this.tokenizer.tokenize();
-    let ast = this.parser.parse(tokens);
+    
+    // Update parser with new tokens
+    this.parser.setTokens(tokens);
+    let ast = this.parser.parse();
 
     if (this.options.validateOnParse) {
       const validationResult = this.validator.validate(ast);
       if (!validationResult.valid) {
         throw new Error(
-          `XML Validation failed: ${JSON.stringify(validationResult.errors)}`,
+          `XML Validation failed: ${JSON.stringify(validationResult.errors)}`
         );
       }
     }
@@ -82,6 +84,7 @@ export class DOMXML {
     return ast;
   }
 
+  // Rest of the implementation remains the same
   public generate(ast: DOMXMLAST): string {
     return this.generator.generate(ast);
   }
@@ -94,6 +97,3 @@ export class DOMXML {
     return this.optimizer.optimize(ast);
   }
 }
-
-// Default export
-export default DOMXML;
