@@ -23,13 +23,14 @@ describe('DOMXMLOptimizer', () => {
 
     const optimizedAST = optimizer.optimize(ast);
 
-    expect(optimizedAST.root.children).toHaveLength(2); // Remove empty text node
-    expect(optimizedAST.root.children[0]).toEqual({
+    const children = optimizedAST.root.children || [];
+    expect(children).toHaveLength(2); // Remove empty text node
+    expect(children[0]).toEqual({
       type: 'Element',
       name: 'child',
       children: [],
     });
-    expect(optimizedAST.root.children[1]).toEqual({
+    expect(children[1]).toEqual({
       type: 'Text',
       value: 'Hello',
     });
@@ -49,8 +50,9 @@ describe('DOMXMLOptimizer', () => {
 
     const optimizedAST = optimizer.optimize(ast);
 
-    expect(optimizedAST.root.children).toHaveLength(1); // Merge text nodes
-    expect(optimizedAST.root.children[0]).toEqual({
+    const children = optimizedAST.root.children || [];
+    expect(children).toHaveLength(1); // Merge text nodes
+    expect(children[0]).toEqual({
       type: 'Text',
       value: 'Hello World!',
     });
@@ -75,14 +77,15 @@ describe('DOMXMLOptimizer', () => {
 
     const optimizedAST = optimizer.optimize(ast);
 
-    expect(optimizedAST.root.children).toHaveLength(2);
-    expect(optimizedAST.root.children[0]).toEqual({
+    const children = optimizedAST.root.children || [];
+    expect(children).toHaveLength(2);
+    expect(children[0]).toEqual({
       type: 'Element',
       name: 'child',
       attributes: { id: 'test' },
       children: [],
     });
-    expect(optimizedAST.root.children[1]).toEqual({
+    expect(children[1]).toEqual({
       type: 'Text',
       value: 'Content',
     });
@@ -131,8 +134,9 @@ describe('DOMXMLOptimizer', () => {
 
     const optimizedAST = optimizer.optimize(ast);
 
-    expect(optimizedAST.root.children).toHaveLength(1);
-    expect(optimizedAST.root.children[0]).toEqual({
+    const children = optimizedAST.root.children || [];
+    expect(children).toHaveLength(1);
+    expect(children[0]).toEqual({
       type: 'Element',
       name: 'parent',
       children: [
@@ -168,8 +172,9 @@ describe('DOMXMLOptimizer', () => {
 
     const optimizedAST = optimizer.optimize(ast);
 
-    expect(optimizedAST.root.children).toHaveLength(1);
-    expect(optimizedAST.root.children[0]).toEqual({
+    const children = optimizedAST.root.children || [];
+    expect(children).toHaveLength(1);
+    expect(children[0]).toEqual({
       type: 'Element',
       name: 'nonEmptyElement',
       attributes: { id: 'keep' },
