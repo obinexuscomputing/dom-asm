@@ -24,7 +24,6 @@ export default [
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
         name: 'DOMJS',
-      
         sourcemap: true,
       },
     ],
@@ -44,5 +43,13 @@ export default [
       format: 'es',
     },
     plugins: [dts()],
+    onwarn(warning, warn) {
+      // Log unresolved import warnings for debugging
+      if (warning.code === 'UNRESOLVED_IMPORT') {
+        console.error('Unresolved Import:', warning.source);
+      } else {
+        warn(warning);
+      }
+    },
   },
 ];
