@@ -1,4 +1,4 @@
-export type HTMLToken = 
+export type HTMLToken =
   | { type: "StartTag"; name: string; attributes: Record<string, string> }
   | { type: "EndTag"; name: string }
   | { type: "Text"; value: string }
@@ -14,13 +14,14 @@ export class HTMLTokenizer {
 
   public tokenize(): HTMLToken[] {
     const tokens: HTMLToken[] = [];
+
     while (this.position < this.input.length) {
       const char = this.input[this.position];
 
-      if (char === '<') {
-        if (this.input.startsWith('<!--', this.position)) {
+      if (char === "<") {
+        if (this.input.startsWith("<!--", this.position)) {
           tokens.push(this.readComment());
-        } else if (this.input[this.position + 1] === '/') {
+        } else if (this.input[this.position + 1] === "/") {
           tokens.push(this.readEndTag());
         } else {
           tokens.push(this.readStartTag());
@@ -29,22 +30,25 @@ export class HTMLTokenizer {
         tokens.push(this.readText());
       }
     }
+
     return tokens;
   }
 
   private readStartTag(): HTMLToken {
     this.position++; // Skip '<'
-    const name = this.readUntil(/[ \/>]/);
+    const name = this.readUntil(/[ \/>]/).trim();
     const attributes: Record<string, string> = {};
 
-    while (this.position < this.input.length && this.input[this.position] !== '>') {
-      const attrName = this.readUntil('=').trim();
-      this.position++; // Skip '='
-      const quote = this.input[this.position];
-      this.position++; // Skip opening quote
-      const attrValue = this.readUntil(new RegExp(`${quote}`));
-      attributes[attrName] = attrValue;
-      this.position++; // Skip closing quote
+    while (this.position < this.input.length && this.input[this.position] !== ">") {
+      const attrName = this.readUntil("=").trim();
+      if (this.input[this.position] === "=") {
+        this.position++; // Skip '='
+        const quote = this.input[this.position];
+        this.position++; // Skip opening quote
+        const attrValue = this.readUntil(new RegExp(`${quote}`));
+        attributes[attrName] = attrValue;
+        this.position++; // Skip closing quote
+      }
     }
 
     this.position++; // Skip '>'
@@ -53,20 +57,20 @@ export class HTMLTokenizer {
 
   private readEndTag(): HTMLToken {
     this.position += 2; // Skip '</'
-    const name = this.readUntil('>');
+    const name = this.readUntil(">").trim();
     this.position++; // Skip '>'
     return { type: "EndTag", name };
   }
 
   private readComment(): HTMLToken {
     this.position += 4; // Skip '<!--'
-    const value = this.readUntil('-->');
+    const value = this.readUntil("-->");
     this.position += 3; // Skip '-->'
     return { type: "Comment", value };
   }
 
   private readText(): HTMLToken {
-    const value = this.readUntil('<');
+    const value = this.readUntil("<").trim();
     return { type: "Text", value };
   }
 
@@ -74,7 +78,7 @@ export class HTMLTokenizer {
     const start = this.position;
     while (
       this.position < this.input.length &&
-      !(typeof stop === "string" ? this.input[this.position] === stop : stop.test(this.input[this.position]))
+      !(typeof stop === "string" ? this.input[this.position] === stop : stop.test(this.input.substring(this.position)))
     ) {
       this.position++;
     }
