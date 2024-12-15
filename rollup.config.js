@@ -1,31 +1,38 @@
-import typescript from '@rollup/plugin-typescript';
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import { terser } from 'rollup-plugin-terser';
+import typescript from "@rollup/plugin-typescript";
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import { terser } from "rollup-plugin-terser";
 
 export default {
-  input: 'src/index.ts', // Root entry point
+  input: "src/index.ts",
   output: [
     {
-      file: 'dist/index.cjs', // CommonJS output
-      format: 'cjs',
+      file: "dist/index.cjs",
+      format: "cjs",
       sourcemap: true,
     },
     {
-      file: 'dist/index.js', // ES Module output
-      format: 'es',
+      file: "dist/index.js",
+      format: "es",
       sourcemap: true,
     },
   ],
   plugins: [
-    resolve(), // Resolve third-party modules in node_modules
-    commonjs(), // Convert CommonJS modules to ES6
-    typescript({ tsconfig: './tsconfig.json' }), // Use TypeScript with Rollup
-    terser(), // Minify the output
+    resolve(),
+    commonjs(),
+    typescript({
+      tsconfig: "./tsconfig.json",
+      declaration: true, // Ensure declaration files are generated
+    }),
+    terser(),
   ],
-  external: [
-    // List dependencies to exclude from the bundle (e.g., Node.js built-ins or external packages)
-    'path',
-    'fs',
-  ],
+  external: ["path", "fs"],
+  onwarn(warning, warn) {
+    // Catch warnings and print them
+    if (warning.code === "CIRCULAR_DEPENDENCY") {
+      
+    } else {
+      warn(warning);
+    }
+  },
 };
