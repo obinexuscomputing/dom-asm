@@ -1,10 +1,9 @@
-// Import the Token type from the tokenizer module
-import { Token, TokenType } from "../tokenizer";
+import { Token, TokenType } from "./JSTokenizer";
 
 export type ASTNode = {
-  type: string; // e.g., 'Program', 'VariableDeclaration', 'InlineConstant', etc.
-  value?: string; // Optional value for the node, e.g., a variable name or constant value
-  children: ASTNode[]; // Child nodes for nested structures
+  type: string;
+  value?: string;
+  children: ASTNode[];
 };
 
 export class JSASTBuilder {
@@ -21,9 +20,7 @@ export class JSASTBuilder {
   }
 
   private consumeToken(): Token {
-    const token = this.currentToken();
-    if (token) this.position++;
-    return token!;
+    return this.tokens[this.position++];
   }
 
   private parseProgram(): ASTNode {
@@ -41,34 +38,26 @@ export class JSASTBuilder {
 
   private parseStatement(): ASTNode | null {
     const token = this.currentToken();
-
     if (token?.type === TokenType.Keyword && token.value === "const") {
       return this.parseVariableDeclaration();
     }
-
-    if (token?.type === TokenType.Literal) {
-      return this.parseInlineConstant();
-    }
-
     return null;
   }
 
   private parseVariableDeclaration(): ASTNode {
     this.consumeToken(); // Consume 'const'
-    const identifier = this.currentToken();
+    const identifier = this.consumeToken();
     if (!identifier || identifier.type !== TokenType.Identifier) {
       throw new Error("Expected identifier after 'const'");
     }
-    this.consumeToken();
 
-    const equals = this.currentToken();
+    const equals = this.consumeToken();
     if (!equals || equals.value !== "=") {
       throw new Error("Expected '=' after identifier");
     }
-    this.consumeToken();
 
-    const value = this.parseValue();
-    if (!value) {
+    const value = this.consumeToken();
+    if (!value || value.type !== TokenType.Literal) {
       throw new Error("Expected value after '='");
     }
 
@@ -76,24 +65,9 @@ export class JSASTBuilder {
       type: "VariableDeclaration",
       children: [
         { type: "Identifier", value: identifier.value, children: [] },
-        value,
+        { type: "Literal", value: value.value, children: [] },
       ],
     };
-  }
-
-  private parseInlineConstant(): ASTNode {
-    const token = this.consumeToken();
-    return { type: "InlineConstant", value: token.value, children: [] };
-  }
-
-  private parseValue(): ASTNode | null {
-    const token = this.currentToken();
-
-    if (token?.type === TokenType.Literal) {
-      return this.parseInlineConstant();
-    }
-
-    return null;
   }
 
   public buildAST(): ASTNode {
