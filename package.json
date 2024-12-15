@@ -13,16 +13,14 @@
     "packages/*"
   ],
   "scripts": {
-    "build:ts": "tsc --build",
-    "build": "npm run build:ts && rollup -c ",
-    "test": "turbo test",
-    "lint": "turbo lint",
-    "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",
-    "prebuild": "rm -rf packages/*/dist dist",
-    "pretest": "npm run build",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "cli": "node bin/dom-asm"
-  },
+  "build": "turbo build",
+  "test": "turbo test",
+  "lint": "turbo lint",
+  "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",
+  "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+  "cli": "node bin/dom-asm"
+}
+,
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-json": "^6.0.0",

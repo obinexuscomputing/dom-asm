@@ -1,2 +1,2 @@
-export * from './cli/';
+export * from './cli/index';
 //# sourceMappingURL=index.js.map

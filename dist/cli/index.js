@@ -1,7 +1,6 @@
 import { Command } from "commander";
 import path from "path";
 import fs from "fs";
-// Import specialized packages
 import { CSSTokenizer, CSSParser, CSSValidator, CSSASTOptimizer, CSSCodeGenerator, } from "@obinexuscomputing/css";
 import { HTMLTokenizer, HTMLParser, HTMLValidator, HTMLASTOptimizer, HTMLCodeGenerator, } from "@obinexuscomputing/html";
 import { JSTokenizer, JSASTBuilder, JSValidator, JSASTOptimizer, JSCodeGenerator, } from "@obinexuscomputing/js";
