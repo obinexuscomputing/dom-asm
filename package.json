@@ -4,7 +4,11 @@
   "private": true,
   "type": "module",
   "description": "A unified library for DOM manipulation and compilation.",
-  "packageManager": "npm@10.2.4",
+  "bin": {
+    "dom-asm": "./bin/dom-asm",
+    "dom-asm.bat": "./bin/dom-asm.bat",
+    "dom-asm.ps1": "./bin/dom-asm.ps1"
+  },
   "workspaces": [
     "packages/*"
   ],
@@ -12,12 +16,17 @@
     "build": "turbo build",
     "test": "turbo test",
     "lint": "turbo lint",
-    "clean": "turbo clean && rimraf node_modules packages/*/node_modules",
-    "prebuild": "rimraf packages/*/dist",
+    "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",
+    "prebuild": "rm -rf packages/*/dist dist",
     "pretest": "npm run build",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "cli": "node bin/dom-asm"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-json": "^6.0.0",
+    "@rollup/plugin-node-resolve": "^15.0.0",
+    "@rollup/plugin-typescript": "^11.0.0",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
@@ -26,48 +35,20 @@
     "eslint-config-prettier": "^9.1.0",
     "jest": "^29.7.0",
     "prettier": "^3.1.1",
-    "rimraf": "^6.0.1",
+    "rollup": "^4.0.0",
     "ts-jest": "^29.1.1",
+    "tslib": "^2.6.0",
     "turbo": "^1.9.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@obinexuscomputing/dom-css": "*",
-    "@obinexuscomputing/dom-html": "*",
-    "@obinexuscomputing/dom-js": "*",
+    "@obinexuscomputing/djs": "workspace:*",
+    "@obinexuscomputing/dhtml": "workspace:*",
+    "@obinexuscomputing/dcss": "workspace:*",
     "commander": "^11.1.0"
   },
   "engines": {
     "node": ">=18.0.0"
   },
-  "license": "ISC",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/obinexuscomputing/dom-asm.git"
-  },
-  "bugs": {
-    "url": "https://github.com/obinexuscomputing/dom-asm/issues"
-  },
-  "homepage": "https://github.com/obinexuscomputing/dom-asm#readme",
-  "keywords": [
-    "dom",
-    "ast",
-    "parser",
-    "compiler",
-    "html",
-    "css",
-    "javascript",
-    "typescript"
-  ],
-  "files": [
-    "dist",
-    "bin",
-    "README.md",
-    "LICENSE"
-  ],
-  "bin": {
-    "asm": "./bin/asm",
-    "asm.bat": "./bin/asm.bat",
-    "asm.ps1": "./bin/asm.ps1"
-  }
+  "license": "ISC"
 }
