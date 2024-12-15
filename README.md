@@ -1,12 +1,10 @@
 # DOM-ASM: Automaton State Minimization and AST Optimization Tool
 
-[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/obinexuscomputing)
-
 `DOM-ASM` is a groundbreaking library and command-line tool for automaton state minimization and abstract syntax tree (AST) optimization. Developed through cutting-edge research by Nnamdi Michael Okpala, `DOM-ASM` provides advanced tools for modern web development.
 
 `DOM-ASM` is also a product of Obinexus Computing, a hub of innovation advocating for digital rights as human rights and promoting accessible computing. Obinexus Computing tutorials and resources are available on our [website](https://obinexuscomputing.org).
 
-![Computing from the Heart](./heart-icon.svg)
+**Disclaimer:** This technology is patented. It is shared for testing and evaluation purposes only.
 
 **Computing from the Heart**
 
