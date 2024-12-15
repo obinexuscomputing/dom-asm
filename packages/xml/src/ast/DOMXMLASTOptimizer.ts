@@ -5,12 +5,9 @@ export class DOMXMLASTOptimizer {
    * Optimize the given AST by removing redundant nodes, merging text nodes, and recalculating metadata.
    */
   public optimize(ast: DOMXMLAST): DOMXMLAST {
-    const optimizedRoot = { ...ast.root };
-    optimizedRoot.children = this.optimizeChildren(ast.root.children || []);
-    const metadata = this.computeMetadata(optimizedRoot);
-    return new DOMXMLAST(optimizedRoot, metadata);
+    const optimizedRoot = this.optimizeNode(ast.root);
+    return new DOMXMLAST(optimizedRoot, ast.computeMetadata());
   }
-
   /**
    * Optimize children nodes by removing empty nodes and merging adjacent text nodes.
    */
@@ -50,6 +47,18 @@ export class DOMXMLASTOptimizer {
     return optimized;
   }
 
+  private optimizeNode(node: DOMXMLASTNode): DOMXMLASTNode {
+    if (node.children) {
+      node.children = node.children
+        .filter((child) =>
+          child.type === "Text"
+            ? child.value?.trim() !== ""
+            : child.type !== "Doctype" || Object.keys(child.attributes || {}).length > 0
+        )
+        .map((child) => this.optimizeNode(child));
+    }
+    return node;
+  }
   /**
    * Compute metadata for the optimized AST.
    */
