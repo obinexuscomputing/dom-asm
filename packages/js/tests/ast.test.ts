@@ -1,9 +1,9 @@
 import { Tokenizer, TokenType } from '../src/tokenizer';
-import { ASTBuilder } from '../src/ast';
+import { JSASTBuilder } from '../src/ast';
 
 describe('ASTBuilder', () => {
   const tokenizer = new Tokenizer();
-  const astBuilder = new ASTBuilder();
+  const astBuilder = new JSASTBuilder(ast);
 
   it('should build an AST for a variable declaration', () => {
     const code = 'const x = 42;';
