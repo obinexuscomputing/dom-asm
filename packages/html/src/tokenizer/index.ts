@@ -1,6 +1,6 @@
 export type HTMLToken =
   | { type: "Doctype"; value: string }
-  | { type: "StartTag"; name: string; attributes: Record<string, string> }
+  | { type: "StartTag"; name: string; attributes: Record<string, string>; selfClosing: boolean }
   | { type: "EndTag"; name: string }
   | { type: "Text"; value: string }
   | { type: "Comment"; value: string };
@@ -48,9 +48,17 @@ export class HTMLTokenizer {
     this.position++; // Skip '<'
     const name = this.readUntil(/[ \/>]/).trim();
     const attributes: Record<string, string> = {};
+    let selfClosing = false;
 
     while (this.position < this.input.length && this.input[this.position] !== ">") {
-      const attrName = this.readUntil("=").trim();
+      if (this.input[this.position] === "/") {
+        selfClosing = true;
+        this.position++; // Skip '/'
+        break;
+      }
+
+      const attrName = this.readUntil(/[= \/>]/).trim();
+
       if (this.input[this.position] === "=") {
         this.position++; // Skip '='
         const quote = this.input[this.position];
@@ -58,11 +66,14 @@ export class HTMLTokenizer {
         const attrValue = this.readUntil(new RegExp(`${quote}`));
         attributes[attrName] = attrValue;
         this.position++; // Skip closing quote
+      } else {
+        // Boolean attributes (e.g., checked)
+        attributes[attrName] = "true";
       }
     }
 
     this.position++; // Skip '>'
-    return { type: "StartTag", name, attributes };
+    return { type: "StartTag", name, attributes, selfClosing };
   }
 
   private readEndTag(): HTMLToken {
