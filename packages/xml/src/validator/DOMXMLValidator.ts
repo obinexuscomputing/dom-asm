@@ -10,7 +10,7 @@ export interface XMLSchemaDefinition {
     };
   }
   
-  export class XMLValidator {
+  export class DOMXMLValidator {
     private schema: XMLSchemaDefinition;
   
     constructor(schema: XMLSchemaDefinition) {
