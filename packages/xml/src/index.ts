@@ -41,7 +41,7 @@ export interface DOMXMLOptions {
 export class DOMXML {
   private tokenizer: DOMXMLTokenizer;
   private parser: DOMXMLParser;
-  private optimizer: DOMXMLOptimizer;
+  private optimizer: DOMXMLASTOptimizer;
   private generator: DOMXMLGenerator;
   private validator: DOMXMLValidator;
   private options: DOMXMLOptions;
@@ -55,7 +55,7 @@ export class DOMXML {
 
     this.tokenizer = new DOMXMLTokenizer("");
     this.parser = new DOMXMLParser();
-    this.optimizer = new DOMXMLOptimizer();
+    this.optimizer = new DOMXMLASTOptimizer();
     this.generator = new DOMXMLGenerator(options.generatorOptions);
     this.validator = new DOMXMLValidator(options.validationOptions);
   }
