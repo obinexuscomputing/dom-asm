@@ -36,9 +36,11 @@ export class DOMXMLASTOptimizer {
     // Merge adjacent text nodes
     let i = 0;
     while (i < optimized.length - 1) {
-      if (optimized[i].type === "Text" && optimized[i + 1].type === "Text") {
-        optimized[i].value = (optimized[i].value || "") + (optimized[i + 1].value || "");
-        optimized.splice(i + 1, 1);
+      const current = optimized[i];
+      const next = optimized[i + 1];
+      if (current.type === "Text" && next.type === "Text") {
+        current.value = (current.value || "") + (next.value || "");
+        optimized.splice(i + 1, 1); // Remove the merged node
       } else {
         i++;
       }

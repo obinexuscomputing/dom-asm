@@ -3,11 +3,6 @@ interface DOMXMLMetadata {
     elementCount: number;
     textCount: number;
     commentCount: number;
-    optimizationMetrics?: {
-        originalStateCount: number;
-        minimizedStateCount: number;
-        reductionPercentage: number;
-    };
 }
 interface DOMXMLASTNode {
     type: "Element" | "Text" | "Comment" | "Doctype";
