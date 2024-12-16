@@ -2,7 +2,7 @@ import { JSTokenizer } from "../tokenizer/JSTokenizer";
 import { JSValidator, ValidationError } from "../validator/JSValidator";
 import { JSParser } from "../parser/JSParser";
 import { JSASTBuilder, JSASTNode } from "../ast/JSAst";
-import { NodeType } from "../types";
+import { NodeType, TypedJSASTNode } from "../types";
 
 export interface GenerationError {
   code: string;
@@ -26,7 +26,7 @@ export interface GeneratorOptions {
   indent?: string;
 }
 
-export class JSGenerator {
+export class JSASTGenerator {
   private tokenizer: JSTokenizer;
   private validator: JSValidator;
   private parser: JSParser;
