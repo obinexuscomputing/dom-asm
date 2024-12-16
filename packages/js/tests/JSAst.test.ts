@@ -1,12 +1,29 @@
-import { JSASTBuilder, JSAstMinimizer, JSASTNode } from "../src";
-import { JSToken, JSTokenType } from "../src/tokenizer/JSTokenizer";
+import { JSASTBuilder } from '../src/ast';
+import { JSToken, JSTokenType } from '../src/tokenizer';
+import { NodeType } from '../src/ast/types';
+
 
 describe('JSAst and JSAstMinimizer', () => {
   describe('JSASTBuilder', () => {
     let builder: JSASTBuilder;
-
     beforeEach(() => {
       builder = new JSASTBuilder([]);
+    });
+  
+    it('should build a valid AST from tokens', () => {
+      const tokens: JSToken[] = [
+        { type: JSTokenType.Keyword, value: 'const' },
+        { type: JSTokenType.Identifier, value: 'x' },
+        { type: JSTokenType.Operator, value: '=' },
+        { type: JSTokenType.Literal, value: '42' },
+        { type: JSTokenType.Delimiter, value: ';' }
+      ];
+  
+      builder = new JSASTBuilder(tokens);
+      const ast = builder.buildAST();
+  
+      expect(ast.type).toBe(NodeType.Program);
+      expect(ast.children?.[0]?.type).toBe(NodeType.VariableDeclaration);
     });
 
     describe('buildAST', () => {

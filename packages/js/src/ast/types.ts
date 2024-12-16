@@ -35,11 +35,12 @@ export enum NodeType {
   }
   
   export interface JSASTNode extends BaseNode {
-    type: NodeType;
     children?: JSASTNode[];
   }
   
-  export interface ParsedJSASTNode extends JSASTNode {
-    type: NodeType;
-    children?: ParsedJSASTNode[];
+  export interface TypedJSASTNode extends JSASTNode {
+    children?: TypedJSASTNode[];
   }
+  
+  // Export all types from this file
+  export { JSASTNode as default };
