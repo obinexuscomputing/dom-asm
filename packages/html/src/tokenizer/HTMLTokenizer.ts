@@ -23,7 +23,8 @@ export class HTMLTokenizer {
       if (char === "<") {
         if (this.match("<!--")) {
           const commentToken = this.readComment();
-          if (commentToken.value) {
+          // Type guard to check if it's a comment token with value
+          if (commentToken.type === "Comment" && commentToken.value) {
             tokens.push(commentToken);
           }
         } else if (this.match("<!DOCTYPE")) {
@@ -35,7 +36,8 @@ export class HTMLTokenizer {
         }
       } else {
         const textToken = this.readText();
-        if (textToken.value) {
+        // Type guard to check if it's a text token with value
+        if (textToken.type === "Text" && textToken.value) {
           tokens.push(textToken);
         }
       }
@@ -63,6 +65,7 @@ export class HTMLTokenizer {
     return { type: "Comment", value: value.trim(), line, column };
   }
 
+  // Rest of the implementation remains the same...
   private readDoctype(): HTMLToken {
     const { line, column } = this.getCurrentLocation();
     this.consume(9); // Skip '<!DOCTYPE'
@@ -85,7 +88,6 @@ export class HTMLTokenizer {
     
     this.skipWhitespace();
     
-    // Read attributes until we hit the end of the tag
     while (this.position < this.input.length && !this.match(">")) {
       if (this.match("/>") || this.peek() === "/") {
         selfClosing = true;
@@ -98,13 +100,11 @@ export class HTMLTokenizer {
         continue;
       }
       
-      // Read attribute name
       const attrName = this.readUntil(/[\s=\/>]/).trim();
       if (!attrName) break;
       
       this.skipWhitespace();
       
-      // Handle attribute value
       if (this.peek() === "=") {
         this.consume(); // Skip '='
         this.skipWhitespace();
@@ -128,7 +128,6 @@ export class HTMLTokenizer {
       this.skipWhitespace();
     }
     
-    // Ensure tag is properly closed
     if (this.peek() === ">") {
       this.consume();
     }
@@ -157,7 +156,6 @@ export class HTMLTokenizer {
     
     return { type: "Text", value: value.trim(), line, column };
   }
-
   private readUntil(stop: string | RegExp): string {
     const start = this.position;
     while (this.position < this.input.length) {
