@@ -1,5 +1,5 @@
 export * from './ast/JSAST';
-export * from './ast/JSASTOptimizer';
+export * from './ast/JSAstMinimzer';
 export * from './generator/JSAstGenerator';
 export * from './minimizer/';
 export * from './tokenizer/';
