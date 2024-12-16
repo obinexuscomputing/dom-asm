@@ -1,12 +1,12 @@
 declare enum JSTokenType {
-    Keyword = 0,
-    Identifier = 1,
-    Operator = 2,
-    Delimiter = 3,
-    Literal = 4,
-    TemplateLiteral = 5,
-    Comment = 6,
-    EndOfStatement = 7
+    Keyword = "Keyword",
+    Identifier = "Identifier",
+    Operator = "Operator",
+    Delimiter = "Delimiter",
+    Literal = "Literal",
+    TemplateLiteral = "TemplateLiteral",
+    Comment = "Comment",
+    EndOfStatement = "EndOfStatement"
 }
 interface JSToken {
     type: JSTokenType;
@@ -22,7 +22,7 @@ declare class JSTokenizer {
 interface JSASTNode {
     type: string;
     value?: string;
-    children: JSASTNode[];
+    children?: JSASTNode[];
 }
 declare class JSASTBuilder {
     private tokens;
@@ -37,9 +37,17 @@ declare class JSASTBuilder {
     buildAST(): JSASTNode;
 }
 
-declare class JSASTOptimizer {
-    constructor();
+declare class JSAstMinimizer {
+    private uniqueNodes;
+    minimize(ast: JSASTNode): JSASTNode;
     optimize(ast: JSASTNode): JSASTNode;
+    private traverse;
+    private performOptimization;
+    private simplifyNode;
+}
+
+declare class JSAstGenerator {
+    generate(ast: JSASTNode): string;
 }
 
 declare class JSValidator {
@@ -54,13 +62,8 @@ declare class JSValidator {
     private validateLiteral;
 }
 
-declare class JSCodeGenerator {
-    constructor();
-    generate(ast: JSASTNode): string;
-}
-
 declare class JSParser {
     parse(ast: JSASTNode): any;
 }
 
-export { JSASTBuilder, type JSASTNode, JSASTOptimizer, JSCodeGenerator, JSParser, type JSToken, JSTokenType, JSTokenizer, JSValidator };
+export { JSASTBuilder, type JSASTNode, JSAstGenerator, JSAstMinimizer, JSParser, JSTokenizer, JSValidator };

@@ -1,6 +1,2 @@
-import { JSASTNode } from "../ast/JSAst";
-export declare class JSCodeGenerator {
-    constructor();
-    generate(ast: JSASTNode): string;
-}
+export * from './JSAstGenerator';
 //# sourceMappingURL=index.d.ts.map

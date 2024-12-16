@@ -2,7 +2,7 @@ import { JSToken } from "../tokenizer/JSTokenizer";
 export interface JSASTNode {
     type: string;
     value?: string;
-    children: JSASTNode[];
+    children?: JSASTNode[];
 }
 export declare class JSASTBuilder {
     private tokens;
