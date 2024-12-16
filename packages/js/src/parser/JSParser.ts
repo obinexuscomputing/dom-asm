@@ -18,44 +18,44 @@ export class JSParser {
 
     let current = 0;
 
-    const walk = (): TypedJSASTNode => {
+    const walk = (): JSASTNode => {
       const token = tokens[current];
-
+    
       if (!token) {
         throw new Error("Unexpected end of input");
       }
-
+    
       switch (token.type) {
         case JSTokenType.Keyword:
-          if (token.value === "const" || token.value === "let" || token.value === "var") {
+          if (["const", "let", "var"].includes(token.value)) {
             current++;
             const identifier = tokens[current];
-
+    
             if (!identifier || identifier.type !== JSTokenType.Identifier) {
               throw new Error("Expected identifier after declaration keyword");
             }
-
+    
             current++;
             const operator = tokens[current];
-
+    
             if (!operator || operator.value !== "=") {
               throw new Error("Expected '=' after identifier");
             }
-
+    
             current++;
             const valueToken = tokens[current];
-
+    
             if (!valueToken || valueToken.type !== JSTokenType.Literal) {
               throw new Error("Expected literal value after '='");
             }
-
+    
             current++;
             if (tokens[current]?.value !== ";") {
               throw new Error("Expected ';' after declaration");
             }
-
+    
             current++;
-
+    
             return {
               type: NodeType.VariableDeclaration,
               value: token.value,
@@ -66,23 +66,44 @@ export class JSParser {
             };
           }
           throw new Error(`Unexpected keyword: ${token.value}`);
-
+    
         case JSTokenType.Identifier:
           current++;
-          return { type: NodeType.Identifier, value: token.value, children: [] };
-
+          return { type: NodeType.Identifier, value: token.value };
+    
         case JSTokenType.Literal:
           current++;
-          return { type: NodeType.Literal, value: token.value, children: [] };
-
+          return { type: NodeType.Literal, value: token.value };
+    
+        case JSTokenType.Operator:
+          if (token.value === "=" || token.value === "+") {
+            const left = walk();
+            current++;
+            const right = walk();
+    
+            return {
+              type: NodeType.BinaryExpression,
+              value: token.value,
+              children: [left, right],
+            };
+          }
+          throw new Error(`Unexpected operator: ${token.value}`);
+    
+        case JSTokenType.Delimiter:
+          if (token.value === ";") {
+            current++;
+            return { type: NodeType.InlineConstant, value: token.value };
+          }
+          throw new Error(`Unexpected delimiter: ${token.value}`);
+    
         default:
           throw new Error(`Unexpected token type: ${token.type}`);
       }
     };
+    
 
     while (current < tokens.length) {
-      const node = walk();
-      ast.children?.push(node);
+      ast.children?.push(walk());
     }
 
     return ast;
