@@ -42,7 +42,25 @@ interface ValidationWarning {
   node?: HTMLASTNode;
   code: string;
 }
+/**
+ * const validator = new HTMLValidator({
+  spec: 'html6-xml',
+  strictMode: true,
+  allowCustomElements: true,
+  allowNamespaces: true,
+  customNamespaces: ['html', 'custom']
+});
 
+const result = validator.validate(ast);
+if (!result.valid) {
+  result.errors.forEach(error => {
+    console.error(`${error.code}: ${error.message}`);
+  });
+  result.warnings.forEach(warning => {
+    console.warn(`${warning.code}: ${warning.message}`);
+  });
+}
+ */
 export class HTMLValidator {
   private readonly voidElements = new Set([
     'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
