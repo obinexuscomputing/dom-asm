@@ -6,6 +6,27 @@ export type ValidationError = {
   node: JSASTNode;
 };
 
+export type NodeType = 
+  | "Program"
+  | "VariableDeclaration"
+  | "InlineConstant"
+  | "Identifier"
+  | "Literal"
+  | "BlockStatement"
+  | "ArrowFunction"
+  | "TemplateLiteral"
+  | "TemplateLiteralExpression"
+  | "ClassDeclaration"
+  | "MethodDefinition"
+  | "PropertyDefinition"
+  | "FunctionExpression"
+  | "AsyncFunction"
+  | "ObjectExpression"
+  | "Property"
+  | "SpreadElement"
+  | "ImportDeclaration"
+  | "ExportDeclaration";
+
 export class JSValidator {
   private errors: ValidationError[];
 
@@ -24,12 +45,56 @@ export class JSValidator {
   }
 
   private traverse(node: JSASTNode): void {
+    const validNodeTypes: NodeType[] = [
+      "Program", "VariableDeclaration", "InlineConstant", "Identifier", 
+      "Literal", "BlockStatement", "ArrowFunction", "TemplateLiteral",
+      "TemplateLiteralExpression", "ClassDeclaration", "MethodDefinition",
+      "PropertyDefinition", "FunctionExpression", "AsyncFunction",
+      "ObjectExpression", "Property", "SpreadElement", "ImportDeclaration",
+      "ExportDeclaration"
+    ];
+
+    if (!validNodeTypes.includes(node.type as NodeType)) {
+      this.addError("E001", `Unknown node type: ${node.type}`, node);
+      return;
+    }
+
     switch (node.type) {
       case "Program":
         this.validateProgram(node);
         break;
       case "VariableDeclaration":
         this.validateVariableDeclaration(node);
+        break;
+      case "BlockStatement":
+        this.validateBlockStatement(node);
+        break;
+      case "ArrowFunction":
+        this.validateArrowFunction(node);
+        break;
+      case "TemplateLiteral":
+        this.validateTemplateLiteral(node);
+        break;
+      case "ClassDeclaration":
+        this.validateClass(node);
+        break;
+      case "MethodDefinition":
+        this.validateMethodDefinition(node);
+        break;
+      case "AsyncFunction":
+        this.validateAsyncFunction(node);
+        break;
+      case "ObjectExpression":
+        this.validateObjectExpression(node);
+        break;
+      case "Property":
+        this.validateProperty(node);
+        break;
+      case "ImportDeclaration":
+        this.validateImport(node);
+        break;
+      case "ExportDeclaration":
+        this.validateExport(node);
         break;
       case "InlineConstant":
         this.validateInlineConstant(node);
@@ -40,41 +105,6 @@ export class JSValidator {
       case "Literal":
         this.validateLiteral(node);
         break;
-      case "ArrowFunction":
-        this.validateArrowFunction(node);
-        break;
-      case "TemplateLiteral":
-        this.validateTemplateLiteral(node);
-        break;
-      case "ObjectExpression":
-        this.validateObjectExpression(node);
-        break;
-      case "ArrayExpression":
-        this.validateArrayExpression(node);
-        break;
-      case "SpreadElement":
-        this.validateSpreadElement(node);
-        break;
-      case "DestructuringPattern":
-        this.validateDestructuring(node);
-        break;
-      case "ImportDeclaration":
-        this.validateImport(node);
-        break;
-      case "ExportDeclaration":
-        this.validateExport(node);
-        break;
-      case "ClassDeclaration":
-        this.validateClass(node);
-        break;
-      case "AsyncFunction":
-        this.validateAsyncFunction(node);
-        break;
-      case "AwaitExpression":
-        this.validateAwaitExpression(node);
-        break;
-      default:
-        this.addError("E001", `Unknown node type: ${node.type}`, node);
     }
 
     if (node.children) {
@@ -88,14 +118,6 @@ export class JSValidator {
     if (!node.children?.length) {
       this.addError("E002", "Program must contain at least one statement.", node);
     }
-
-    // Check for multiple export defaults
-    const defaultExports = node.children?.filter(
-      child => child.type === "ExportDeclaration" && child.value === "default"
-    );
-    if (defaultExports && defaultExports.length > 1) {
-      this.addError("E003", "Multiple default exports are not allowed.", node);
-    }
   }
 
   private validateVariableDeclaration(node: JSASTNode): void {
@@ -104,140 +126,65 @@ export class JSValidator {
       return;
     }
 
-    // Check kind of declaration (let, const, var)
     if (!node.value || !["let", "const", "var"].includes(node.value)) {
       this.addError("E005", "Variable declaration must specify kind (let, const, or var).", node);
     }
+  }
 
-    // Handle destructuring patterns
-    const identifier = node.children[0];
-    if (identifier.type === "DestructuringPattern") {
-      this.validateDestructuring(identifier);
-    } else if (identifier.type !== "Identifier") {
-      this.addError("E006", "VariableDeclaration must have a valid identifier or destructuring pattern.", node);
-    }
+  private validateBlockStatement(node: JSASTNode): void {
+    // Block statements can be empty, no validation needed
   }
 
   private validateArrowFunction(node: JSASTNode): void {
     if (!node.children?.length) {
       this.addError("E007", "Arrow function must have a body.", node);
-      return;
-    }
-
-    // Validate params
-    const params = node.children[0];
-    if (params.type === "DestructuringPattern") {
-      this.validateDestructuring(params);
-    }
-
-    // Check for valid body
-    const body = node.children[node.children.length - 1];
-    if (!body || (body.type !== "BlockStatement" && body.type !== "Expression")) {
-      this.addError("E008", "Arrow function must have a valid body.", node);
     }
   }
 
   private validateTemplateLiteral(node: JSASTNode): void {
-    node.children?.forEach(expression => {
-      if (expression.type === "TemplateLiteralExpression") {
-        if (!expression.value && !expression.children?.length) {
-          this.addError("E009", "Template literal expression must not be empty.", expression);
-        }
-      }
-    });
-  }
-
-  private validateObjectExpression(node: JSASTNode): void {
-    const properties = new Set<string>();
-    
-    node.children?.forEach(prop => {
-      // Check for duplicate keys in object literals
-      if (prop.type === "Property" && prop.value) {
-        if (properties.has(prop.value)) {
-          this.addError("E010", `Duplicate key '${prop.value}' in object literal.`, prop);
-        }
-        properties.add(prop.value);
-      }
-
-      // Validate shorthand and computed properties
-      if (prop.type === "Property") {
-        this.validateProperty(prop);
-      }
-    });
-  }
-
-  private validateProperty(node: JSASTNode): void {
-    if (node.value === "computed" && !node.children?.length) {
-      this.addError("E011", "Computed property name must have an expression.", node);
-    }
-
-    if (node.value === "method" && !node.children?.find(child => child.type === "FunctionExpression")) {
-      this.addError("E012", "Method property must have a function expression.", node);
-    }
-  }
-
-  private validateDestructuring(node: JSASTNode): void {
-    if (!node.children?.length) {
-      this.addError("E013", "Destructuring pattern must not be empty.", node);
-      return;
-    }
-
-    // Check for valid default values
-    node.children.forEach(child => {
-      if (child.type === "AssignmentPattern") {
-        if (!child.children?.length) {
-          this.addError("E014", "Destructuring assignment must have a default value.", child);
-        }
-      }
-    });
+    // Template literals can be empty, no validation needed
   }
 
   private validateClass(node: JSASTNode): void {
     if (!node.value) {
       this.addError("E015", "Class declaration must have a name.", node);
     }
-
-    // Validate class methods and properties
-    node.children?.forEach(child => {
-      if (child.type === "MethodDefinition") {
-        this.validateMethodDefinition(child);
-      } else if (child.type === "PropertyDefinition") {
-        this.validatePropertyDefinition(child);
-      }
-    });
   }
 
   private validateMethodDefinition(node: JSASTNode): void {
     if (!node.value) {
       this.addError("E016", "Class method must have a name.", node);
     }
-
-    if (node.value === "constructor" && node.children?.find(child => child.type === "AsyncFunction")) {
-      this.addError("E017", "Constructor cannot be async.", node);
-    }
-  }
-
-  private validatePropertyDefinition(node: JSASTNode): void {
-    if (!node.value && !node.children?.find(child => child.type === "ComputedPropertyName")) {
-      this.addError("E018", "Class property must have a name or be computed.", node);
-    }
   }
 
   private validateAsyncFunction(node: JSASTNode): void {
-    if (!node.children?.find(child => child.type === "BlockStatement")) {
+    if (!node.children?.some(child => child.type === "BlockStatement")) {
       this.addError("E019", "Async function must have a body.", node);
     }
   }
 
-  private validateAwaitExpression(node: JSASTNode): void {
-    if (!node.children?.length) {
-      this.addError("E020", "Await expression must have an argument.", node);
+  private validateObjectExpression(node: JSASTNode): void {
+    const properties = new Set<string>();
+    
+    node.children?.forEach(prop => {
+      if (prop.type === "Property" && prop.value) {
+        if (properties.has(prop.value)) {
+          this.addError("E010", `Duplicate key '${prop.value}' in object literal.`, prop);
+        }
+        properties.add(prop.value);
+      }
+    });
+  }
+
+  private validateProperty(node: JSASTNode): void {
+    if (!node.value) {
+      this.addError("E011", "Property must have a name.", node);
     }
   }
 
   private validateImport(node: JSASTNode): void {
     if (!node.children?.length) {
-      this.addError("E021", "Import declaration must specify imported values or module.", node);
+      this.addError("E021", "Import declaration must specify imported values.", node);
     }
   }
 
@@ -247,22 +194,6 @@ export class JSValidator {
     }
   }
 
-  private validateSpreadElement(node: JSASTNode): void {
-    if (!node.children?.length) {
-      this.addError("E023", "Spread element must have an argument.", node);
-    }
-  }
-
-  private validateArrayExpression(node: JSASTNode): void {
-    // Validate array element types and spread usage
-    node.children?.forEach(element => {
-      if (element.type === "SpreadElement") {
-        this.validateSpreadElement(element);
-      }
-    });
-  }
-
-  // Original validation methods enhanced with more specific error codes
   private validateInlineConstant(node: JSASTNode): void {
     if (!node.value) {
       this.addError("E024", "InlineConstant must have a value.", node);
