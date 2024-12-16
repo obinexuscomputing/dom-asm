@@ -8,11 +8,11 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-  
+    "test": "jest",
+    "test:watch": "jest --watch",
     "build:ts": "tsc --emitDeclarationOnly",
     "build:rollup": "rollup -c",
     "build": "npm run build:ts && npm run build:rollup",
-    "test": "jest --maxWorkers=2 --testTimeout=60000",
     "lint": "eslint ."
   },
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",

@@ -1,19 +1,21 @@
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  rootDir: '.',
-  moduleNameMapper: {
-    '^src/(.*)$': '<rootDir>/src/$1', // Support path aliases for src
-  },
+  roots: ['<rootDir>/tests'],
   transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        tsconfig: '<rootDir>/tsconfig.json', // Use the project's tsconfig
-      },
-    ],
+    '^.+\\.tsx?$': 'ts-jest',
   },
-  testMatch: [
-    '<rootDir>/tests/**/*.test.ts', // Match test files in the `tests` folder
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.tsx?$',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  // Explicitly set the path for transforming files
+  transformIgnorePatterns: [
+    '/node_modules/',
+    'dist/'
   ],
+  // Ensure ts-jest can find your tsconfig
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.json'
+    }
+  }
 };
