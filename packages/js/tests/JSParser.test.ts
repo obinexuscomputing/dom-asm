@@ -1,172 +1,137 @@
-import { JSParser } from "../src";
-import { TypedJSASTNode } from "../src/types";
+import { JSParser } from "../src/parser/JSParser";
+import { JSToken, JSTokenType } from "../src/types";
+import { NodeType, JSASTNode } from "../src/types";
 
-describe('JSParser', () => {
+describe("JSParser", () => {
   let parser: JSParser;
 
   beforeEach(() => {
     parser = new JSParser();
   });
 
-  describe('Program Node', () => {
-    it('should parse an empty program', () => {
-      const ast: TypedJSASTNode = {
-        type: 'Program',
-        children: []
-      };
-      expect(parser.parse(ast)).toEqual([]);
-    });
+  test("should parse a variable declaration", () => {
+    const tokens: JSToken[] = [
+      { type: JSTokenType.Keyword, value: "const" },
+      { type: JSTokenType.Identifier, value: "x" },
+      { type: JSTokenType.Operator, value: "=" },
+      { type: JSTokenType.Literal, value: "42" },
+      { type: JSTokenType.EndOfStatement, value: ";" },
+    ];
 
-    it('should parse a program with multiple statements', () => {
-      const ast: TypedJSASTNode = {
-        type: 'Program',
-        children: [
-          {
-            type: 'VariableDeclaration',
-            children: [
-              { type: 'Identifier', value: 'x' },
-              { type: 'Literal', value: '42' }
-            ]
-          },
-          {
-            type: 'InlineConstant',
-            value: 'y=10'
-          }
-        ]
-      };
-      expect(parser.parse(ast)).toEqual([
-        'Declare x 42',
-        'Inline y=10'
-      ]);
+    const ast = parser.parse(tokens);
+
+    expect(ast).toEqual({
+      type: NodeType.Program,
+      children: [
+        {
+          type: NodeType.VariableDeclaration,
+          value: "const",
+          children: [
+            { type: NodeType.Identifier, value: "x" },
+            { type: NodeType.Literal, value: "42" },
+          ],
+        },
+      ],
     });
   });
 
-  describe('Statement Nodes', () => {
-    it('should parse a basic statement', () => {
-      const ast: TypedJSASTNode = {
-        type: 'Statement',
-        value: 'test'
-      };
-      expect(parser.parse(ast)).toBe('test');
-    });
+  test("should parse an if statement", () => {
+    const tokens: JSToken[] = [
+      { type: JSTokenType.Keyword, value: "if" },
+      { type: JSTokenType.Delimiter, value: "(" },
+      { type: JSTokenType.Identifier, value: "x" },
+      { type: JSTokenType.Operator, value: "==" },
+      { type: JSTokenType.Literal, value: "42" },
+      { type: JSTokenType.Delimiter, value: ")" },
+      { type: JSTokenType.Delimiter, value: "{" },
+      { type: JSTokenType.Identifier, value: "doSomething" },
+      { type: JSTokenType.Delimiter, value: "(" },
+      { type: JSTokenType.Delimiter, value: ")" },
+      { type: JSTokenType.EndOfStatement, value: ";" },
+      { type: JSTokenType.Delimiter, value: "}" },
+    ];
 
-    it('should parse multiple statements', () => {
-      const ast: TypedJSASTNode = {
-        type: 'Statement',
-        children: [
-          { type: 'Statement', value: 'first' },
-          { type: 'Statement', value: 'second' }
-        ]
-      };
-      expect(parser.parse(ast)).toBe('Statement: first; second');
-    });
-  });
+    const ast = parser.parse(tokens);
 
-  describe('Expression Nodes', () => {
-    it('should parse a binary expression', () => {
-      const ast: TypedJSASTNode = {
-        type: 'BinaryExpression',
-        value: '+',
-        children: [
-          { type: 'Literal', value: '1' },
-          { type: 'Literal', value: '2' }
-        ]
-      };
-      expect(parser.parse(ast)).toBe('(1 + 2)');
-    });
-  });
-
-  describe('Block Statement Nodes', () => {
-    it('should parse an empty block', () => {
-      const ast: TypedJSASTNode = {
-        type: 'BlockStatement',
-        children: []
-      };
-      expect(parser.parse(ast)).toBe('{ }');
-    });
-
-    it('should parse a block with statements', () => {
-      const ast: TypedJSASTNode = {
-        type: 'BlockStatement',
-        children: [
-          {
-            type: 'VariableDeclaration',
-            children: [
-              { type: 'Identifier', value: 'x' },
-              { type: 'Literal', value: '42' }
-            ]
-          }
-        ]
-      };
-      expect(parser.parse(ast)).toBe('{ Declare x 42 }');
+    expect(ast).toEqual({
+      type: NodeType.Program,
+      children: [
+        {
+          type: NodeType.IfStatement,
+          children: [
+            {
+              type: NodeType.BinaryExpression,
+              value: "==",
+              children: [
+                { type: NodeType.Identifier, value: "x" },
+                { type: NodeType.Literal, value: "42" },
+              ],
+            },
+            {
+              type: NodeType.BlockStatement,
+              children: [
+                {
+                  type: NodeType.Identifier,
+                  value: "doSomething",
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
   });
 
-  describe('If Statement Nodes', () => {
-    it('should parse if statement without else', () => {
-      const ast: TypedJSASTNode = {
-        type: 'IfStatement',
-        children: [
-          { type: 'Expression', value: 'condition' },
-          { type: 'Statement', value: 'consequence' }
-        ]
-      };
-      expect(parser.parse(ast)).toBe('if (condition) consequence');
-    });
+  test("should parse a function declaration", () => {
+    const tokens: JSToken[] = [
+      { type: JSTokenType.Keyword, value: "function" },
+      { type: JSTokenType.Identifier, value: "myFunc" },
+      { type: JSTokenType.Delimiter, value: "(" },
+      { type: JSTokenType.Identifier, value: "arg1" },
+      { type: JSTokenType.Delimiter, value: "," },
+      { type: JSTokenType.Identifier, value: "arg2" },
+      { type: JSTokenType.Delimiter, value: ")" },
+      { type: JSTokenType.Delimiter, value: "{" },
+      { type: JSTokenType.Keyword, value: "return" },
+      { type: JSTokenType.Identifier, value: "arg1" },
+      { type: JSTokenType.Operator, value: "+" },
+      { type: JSTokenType.Identifier, value: "arg2" },
+      { type: JSTokenType.EndOfStatement, value: ";" },
+      { type: JSTokenType.Delimiter, value: "}" },
+    ];
 
-    it('should parse if statement with else', () => {
-      const ast: TypedJSASTNode = {
-        type: 'IfStatement',
-        children: [
-          { type: 'Expression', value: 'condition' },
-          { type: 'Statement', value: 'consequence' },
-          { type: 'Statement', value: 'alternate' }
-        ]
-      };
-      expect(parser.parse(ast)).toBe('if (condition) consequence else alternate');
-    });
-  });
+    const ast = parser.parse(tokens);
 
-  describe('Edge Cases', () => {
-    it('should handle empty children', () => {
-      const ast: TypedJSASTNode = {
-        type: 'Statement'
-      };
-      expect(parser.parse(ast)).toBe('Statement: ');
-    });
-
-    it('should handle deeply nested structures', () => {
-      const ast: TypedJSASTNode = {
-        type: 'Program',
-        children: [
-          {
-            type: 'BlockStatement',
-            children: [
-              {
-                type: 'IfStatement',
-                children: [
-                  { type: 'Expression', value: 'true' },
-                  {
-                    type: 'BlockStatement',
-                    children: [
-                      {
-                        type: 'VariableDeclaration',
-                        children: [
-                          { type: 'Identifier', value: 'x' },
-                          { type: 'Literal', value: '42' }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      };
-      expect(parser.parse(ast)).toEqual([
-        '{ if (true) { Declare x 42 } }'
-      ]);
+    expect(ast).toEqual({
+      type: NodeType.Program,
+      children: [
+        {
+          type: NodeType.FunctionDeclaration,
+          value: "myFunc",
+          children: [
+            { type: NodeType.Identifier, value: "arg1" },
+            { type: NodeType.Identifier, value: "arg2" },
+            {
+              type: NodeType.BlockStatement,
+              children: [
+                {
+                  type: NodeType.ReturnStatement,
+                  children: [
+                    {
+                      type: NodeType.BinaryExpression,
+                      value: "+",
+                      children: [
+                        { type: NodeType.Identifier, value: "arg1" },
+                        { type: NodeType.Identifier, value: "arg2" },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
     });
   });
 });
