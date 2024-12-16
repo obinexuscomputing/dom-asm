@@ -9,9 +9,10 @@ export enum JSTokenType {
   EndOfStatement
 }
 
-export interface JSToken {
-  type: JSTokenType;
-  value: string;
+export interface JSASTNode {
+  type: string;
+  value?: string;
+  children?: JSASTNode[];
 }
 
 export class JSTokenizer {

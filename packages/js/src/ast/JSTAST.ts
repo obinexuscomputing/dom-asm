@@ -1,9 +1,4 @@
-import { JSToken, JSTokenType } from "../tokenizer/";
-export interface JSASTNode {
-  type: string;
-  value?: string;
-  children?: JSASTNode[];
-}
+
 
 
 export class JSASTBuilder {
