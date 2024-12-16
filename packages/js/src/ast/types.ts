@@ -1,4 +1,3 @@
-// src/ast/types.ts
 export enum NodeType {
     Program = 'Program',
     Statement = 'Statement',
