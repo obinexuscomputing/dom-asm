@@ -1,5 +1,5 @@
-import { JSToken, JSTokenType } from "../tokenizer/JSTokenizer";
-import { JSASTNode, NodeType } from "../types";
+import { JSToken, JSTokenType } from '../types';
+import { NodeType, JSASTNode } from '../types';
 
 export class JSASTBuilder {
   private tokens: JSToken[];
@@ -26,11 +26,11 @@ export class JSASTBuilder {
   }
 
   private parseProgram(): JSASTNode {
-    const program: JSASTNode = { 
-      type: NodeType.Program, 
-      children: [] 
+    const program: JSASTNode = {
+      type: NodeType.Program,
+      children: []
     };
-    
+
     while (this.position < this.tokens.length - 1) {
       const statement = this.parseStatement();
       if (statement) {

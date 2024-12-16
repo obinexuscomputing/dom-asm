@@ -58,7 +58,6 @@ export interface JSToken {
   line?: number;
   column?: number;
 }
-
 // AST Node Types
 export interface BaseNode {
   type: NodeType;

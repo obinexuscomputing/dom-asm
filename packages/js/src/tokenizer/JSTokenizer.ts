@@ -1,4 +1,4 @@
-
+import { JSToken, JSTokenType } from '../types';
 
 export class JSTokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return']);
@@ -13,33 +13,28 @@ export class JSTokenizer {
       tokens.push({ type, value });
     };
 
-    // Normalize input by removing excessive whitespace
     input = input.trim();
 
     while (current < input.length) {
       const char = input[current];
 
-      // Handle delimiters
       if (this.delimiters.has(char)) {
         addToken(JSTokenType.Delimiter, char);
         current++;
         continue;
       }
 
-      // Skip whitespace
       if (/\s/.test(char)) {
         current++;
         continue;
       }
 
-      // Add semicolon delimiter only when explicitly needed
       if (char === ';') {
         addToken(JSTokenType.Delimiter, char);
         current++;
         continue;
       }
 
-      // Handle keywords and identifiers
       if (/[a-zA-Z_$]/.test(char)) {
         let value = '';
         while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
@@ -53,7 +48,6 @@ export class JSTokenizer {
         continue;
       }
 
-      // Handle numeric literals
       if (/[0-9]/.test(char)) {
         let value = '';
         while (current < input.length && /[0-9.]/.test(input[current])) {
@@ -63,27 +57,22 @@ export class JSTokenizer {
         continue;
       }
 
-      // Handle multi-character operators
-      const remainingInput = input.slice(current);
-      const multiCharOp = this.matchMultiCharOperator(remainingInput);
+      const multiCharOp = this.matchMultiCharOperator(input.slice(current));
       if (multiCharOp) {
         addToken(JSTokenType.Operator, multiCharOp);
         current += multiCharOp.length;
         continue;
       }
 
-      // Handle single-character operators
       if (this.operators.has(char)) {
         addToken(JSTokenType.Operator, char);
         current++;
         continue;
       }
 
-      // Handle unexpected characters
       throw new Error(`Unexpected character: ${char}`);
     }
 
-    // Add EOF token
     addToken(JSTokenType.EndOfStatement, 'EOF');
     return tokens;
   }
@@ -93,3 +82,5 @@ export class JSTokenizer {
     return multiCharOperators.find(op => input.startsWith(op)) || null;
   }
 }
+
+export { JSToken, JSTokenType };
