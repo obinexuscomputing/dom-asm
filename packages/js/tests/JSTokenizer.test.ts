@@ -1,4 +1,4 @@
-import { Tokenizer, TokenType } from '../src/tokenizer';
+import { JSTokenizer } from '../src/tokenizer';
 
 describe('Tokenizer', () => {
   let tokenizer: Tokenizer;
@@ -7,7 +7,6 @@ describe('Tokenizer', () => {
     tokenizer = new Tokenizer();
   });
 
-  // Existing tests...
 
   describe('Comments', () => {
     it('should handle multiple single-line comments', () => {

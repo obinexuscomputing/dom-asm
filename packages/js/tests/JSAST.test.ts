@@ -1,4 +1,3 @@
-// tests/ast.test.ts
 import { JSTokenizer } from '../src/tokenizer/JSTokenizer';
 import { JSASTBuilder } from '../src/ast/JSAst';
 

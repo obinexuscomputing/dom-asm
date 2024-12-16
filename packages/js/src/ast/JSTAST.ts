@@ -3,7 +3,7 @@ import { JSToken, JSTokenType } from "../tokenizer/JSTokenizer";
 export interface JSASTNode {
   type: string;
   value?: string;
-  children: JSASTNode[];
+  children?: JSASTNode[];
 }
 
 export class JSASTBuilder {
@@ -93,3 +93,4 @@ export class JSASTBuilder {
     return this.parseProgram();
   }
 }
+
