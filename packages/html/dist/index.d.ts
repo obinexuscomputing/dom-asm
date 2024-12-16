@@ -153,9 +153,8 @@ declare class HTMLCodeGenerator {
 
 declare class HTMLASTOptimizer {
     optimize(ast: HTMLAST): void;
-    mergeAdjacentTextNodes(node: HTMLASTNode): void;
-    private removeEmptyTextNodes;
     mergeTextNodes(node: HTMLASTNode): void;
+    private removeEmptyTextNodes;
 }
 
 export { type HTMLAST, HTMLASTOptimizer, HTMLCodeGenerator, HTMLParser, HTMLTokenizer, HTMLValidator };

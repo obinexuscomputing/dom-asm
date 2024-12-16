@@ -1,18 +1,14 @@
-import { HTMLAST, HTMLASTNode, HTMLASTBuilder } from "../ast/HTMLAST";
+import { HTMLAST, HTMLASTNode } from "../ast/HTMLAST";
 import { HTMLToken, HTMLTokenizer } from "../tokenizer";
 
 export class HTMLParserError extends Error {
-  public token: HTMLToken;
-  public position: number;
-
-  constructor(message: string, token: HTMLToken, position: number) {
+  constructor(
+    message: string,
+    public token: HTMLToken,
+    public position: number
+  ) {
     super(message);
     this.name = "HTMLParserError";
-    this.token = token;
-    this.position = position;
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, HTMLParserError);
-    }
   }
 }
 
@@ -29,91 +25,179 @@ export class HTMLParser {
     this.tokenizer = new HTMLTokenizer("");
     this.options = options;
   }
+
   public parse(input: string): HTMLAST {
-    const tokenizer = new HTMLTokenizer(input);
-    const tokens = tokenizer.tokenize();
-  
+    this.tokenizer = new HTMLTokenizer(input);
+    const tokens = this.tokenizer.tokenize();
+    
     try {
-      const astBuilder = new HTMLASTBuilder(tokens);
-      return astBuilder.buildAST();
+      const root = this.buildAST(tokens);
+      return {
+        root,
+        metadata: this.computeMetadata(root)
+      };
     } catch (error) {
-      if (this.options.throwOnError) throw error;
-  
+      if (this.options.throwOnError) {
+        throw error;
+      }
+
       if (this.options.errorHandler) {
         this.options.errorHandler(error as HTMLParserError);
       }
-  
-      // Return a partial AST for recovery
+
+      // Return a valid but empty AST for recovery
       return {
-        root: new HTMLASTNode("Element", [], { name: "root" }),
-        metadata: { nodeCount: 0, elementCount: 0, textCount: 0, commentCount: 0 },
+        root: {
+          type: "Element",
+          name: "root",
+          children: [],
+          attributes: {}
+        },
+        metadata: {
+          nodeCount: 1,
+          elementCount: 1,
+          textCount: 0,
+          commentCount: 0
+        }
       };
     }
   }
-  
-  
-  public computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
+
+  private buildAST(tokens: HTMLToken[]): HTMLASTNode {
+    const root: HTMLASTNode = {
+      type: "Element",
+      name: "root",
+      children: [],
+      attributes: {}
+    };
+
+    const stack: HTMLASTNode[] = [root];
+    let currentParent = root;
+
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+
+      try {
+        switch (token.type) {
+          case "StartTag": {
+            const element: HTMLASTNode = {
+              type: "Element",
+              name: token.name,
+              attributes: token.attributes || {},
+              children: []
+            };
+
+            currentParent.children.push(element);
+            
+            if (!token.selfClosing) {
+              stack.push(element);
+              currentParent = element;
+            }
+            break;
+          }
+
+          case "EndTag": {
+            if (stack.length <= 1) {
+              this.handleError(new HTMLParserError(
+                `Unexpected closing tag "${token.name}"`,
+                token,
+                i
+              ));
+              continue;
+            }
+
+            if (currentParent.name !== token.name) {
+              this.handleError(new HTMLParserError(
+                `Mismatched tags: expected "${currentParent.name}", got "${token.name}"`,
+                token,
+                i
+              ));
+              continue;
+            }
+
+            stack.pop();
+            currentParent = stack[stack.length - 1];
+            break;
+          }
+
+          case "Text": {
+            if (token.value?.trim()) {
+              currentParent.children.push({
+                type: "Text",
+                value: token.value
+              });
+            }
+            break;
+          }
+
+          case "Comment": {
+            currentParent.children.push({
+              type: "Comment",
+              value: token.value || ""
+            });
+            break;
+          }
+        }
+      } catch (error) {
+        this.handleError(error as HTMLParserError);
+      }
+    }
+
+    // Handle unclosed tags
+    if (stack.length > 1) {
+      const lastToken = tokens[tokens.length - 1];
+      this.handleError(new HTMLParserError(
+        "Unclosed tags detected",
+        lastToken,
+        tokens.length - 1
+      ));
+    }
+
+    return root;
+  }
+
+  private handleError(error: HTMLParserError): void {
+    if (this.options.errorHandler) {
+      this.options.errorHandler(error);
+    }
+    if (this.options.throwOnError) {
+      throw error;
+    }
+  }
+
+  private computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
     let nodeCount = 0;
     let elementCount = 0;
     let textCount = 0;
     let commentCount = 0;
-  
-    function traverse(node: HTMLASTNode): void {
+
+    const traverse = (node: HTMLASTNode) => {
       nodeCount++;
-      if (node.type === "Element") elementCount++;
-      if (node.type === "Text") textCount++;
-      if (node.type === "Comment") commentCount++;
-      node.children.forEach(traverse);
-    }
-  
+      switch (node.type) {
+        case "Element":
+          elementCount++;
+          node.children?.forEach(traverse);
+          break;
+        case "Text":
+          textCount++;
+          break;
+        case "Comment":
+          commentCount++;
+          break;
+      }
+    };
+
     traverse(root);
-    return { nodeCount, elementCount, textCount, commentCount };
+
+    return {
+      nodeCount,
+      elementCount,
+      textCount,
+      commentCount
+    };
   }
-  
-  
+
   public setErrorHandler(handler: (error: HTMLParserError) => void): void {
     this.options.errorHandler = handler;
   }
-  public buildAST(tokens: HTMLToken[]): HTMLASTNode {
-    const root = new HTMLASTNode("Element", [], { name: "root" });
-    const stack: HTMLASTNode[] = [root];
-    let currentParent = root;
-  
-    for (const token of tokens) {
-      if (token.type === "StartTag") {
-        const newNode = new HTMLASTNode("Element", [], { name: token.name, attributes: token.attributes });
-        currentParent.children.push(newNode);
-        if (!token.selfClosing) {
-          stack.push(newNode);
-          currentParent = newNode;
-        }
-      } else if (token.type === "EndTag") {
-        if (stack.length > 1 && currentParent.name !== token.name) {
-          console.warn(`Skipping unmatched end tag: ${token.name}`);
-          continue;
-        } else if (stack.length > 1) {
-          stack.pop();
-          currentParent = stack[stack.length - 1];
-        } else {
-          console.warn(`Unmatched end tag at root level: ${token.name}`);
-        }
-      } else if (token.type === "Text" || token.type === "Comment") {
-        currentParent.children.push(
-          new HTMLASTNode(token.type, [], { value: token.value })
-        );
-      }
-    }
-  
-    if (stack.length > 1) {
-      const lastToken = tokens[tokens.length - 1] || { name: "unknown", line: -1, column: -1 };
-      throw new HTMLParserError("Unclosed tags detected", lastToken, stack.length);
-    }
-  
-    return root;
-  }
-  
-  
-  
-  
-
 }
