@@ -21,20 +21,20 @@ export class HTMLASTOptimizer {
 
   private mergeTextNodes(node: HTMLASTNode): void {
     if (!node.children) return;
-
+  
     let i = 0;
     while (i < node.children.length - 1) {
       const current = node.children[i];
       const next = node.children[i + 1];
-
+  
       if (current.type === "Text" && next.type === "Text") {
-        current.value = (current.value || "") + (next.value || ""); // Preserve spaces
+        current.value = (current.value || "").trimEnd() + " " + (next.value || "").trimStart();
         node.children.splice(i + 1, 1);
       } else {
         this.mergeTextNodes(current); // Recursively optimize child nodes
         i++;
       }
-      
     }
   }
+  
 }

@@ -22,7 +22,25 @@ describe("HTMLASTOptimizer", () => {
     expect(ast.root.children[0].type).toBe("Text");
     expect(ast.root.children[0].value).toBe("Non-empty");
   });
-
+  it("should throw HTMLParserError for unmatched end tags", () => {
+    const input = `<div><span>Text</div>`;
+    const parser = new HTMLParser({ throwOnError: true });
+  
+    expect(() => parser.parse(input)).toThrow(HTMLParserError);
+  });
+  
+  it("should invoke custom error handler for unmatched end tags", () => {
+    const input = `<div><span>Text</div>`;
+    const parser = new HTMLParser({ throwOnError: false });
+    const mockErrorHandler = jest.fn();
+  
+    parser.setErrorHandler(mockErrorHandler);
+    parser.parse(input);
+  
+    expect(mockErrorHandler).toHaveBeenCalled();
+    expect(mockErrorHandler.mock.calls[0][0]).toBeInstanceOf(HTMLParserError);
+  });
+  
   it("should merge adjacent text nodes and preserve spaces", () => {
     const ast: HTMLAST = {
       root: {
@@ -35,13 +53,14 @@ describe("HTMLASTOptimizer", () => {
         ],
       },
     };
-
+  
     const optimizer = new HTMLASTOptimizer();
     optimizer.optimize(ast);
-
+  
     expect(ast.root.children).toHaveLength(1);
     expect(ast.root.children[0].value).toBe("Hello World");
   });
+  
 
   it("should handle nested elements correctly", () => {
     const ast: HTMLAST = {
