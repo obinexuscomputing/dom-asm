@@ -52,4 +52,4 @@ const Types = { NodeType, JSTokenType };
 export default Types;
 
 // Individual Type Exports
-// export type { JSToken, BaseNode, JSASTNode, ParseOptions };
+export type { JSToken, BaseNode, JSASTNode, ParseOptions };

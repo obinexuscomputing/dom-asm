@@ -1,8 +1,8 @@
 import { JSTokenizer } from "../tokenizer/JSTokenizer";
 import { JSValidator, ValidationError } from "../validator/JSValidator";
 import { JSParser } from "../parser/JSParser";
-import { JSASTBuilder } from "../ast/JSAst";
-import { JSASTNode, TypedJSASTNode, NodeType } from "../types";
+import { JSASTBuilder, JSASTNode } from "../ast/JSAst";
+import { NodeType } from "../types";
 
 export interface GenerationError {
   code: string;
@@ -46,7 +46,7 @@ export class JSGenerator {
     return {
       type: nodeType,
       value: node.value,
-      children: node.children?.map(child => this.convertToTypedNode(child)),
+      children: node.children?.map((child: JSASTNode) => this.convertToTypedNode(child)),
       line: node.line,
       column: node.column
     };
