@@ -1,5 +1,5 @@
-import { JSValidator, ValidationError } from '../src/validator/JSValidator';
-import { JSASTNode } from '../src/ast';
+import { JSValidator } from '../src/validator';
+import { NodeType, JSASTNode } from '../src/types';
 
 describe('JSValidator', () => {
   let validator: JSValidator;
@@ -11,7 +11,7 @@ describe('JSValidator', () => {
   describe('Program Node Validation', () => {
     it('should detect empty program', () => {
       const ast: JSASTNode = {
-        type: 'Program',
+        type: NodeType.Program,
         children: []
       };
 
@@ -22,14 +22,14 @@ describe('JSValidator', () => {
 
     it('should validate a valid program', () => {
       const ast: JSASTNode = {
-        type: 'Program',
+        type: NodeType.Program,
         children: [
           {
-            type: 'VariableDeclaration',
+            type: NodeType.VariableDeclaration,
             value: 'const',
             children: [
-              { type: 'Identifier', value: 'x' },
-              { type: 'Literal', value: '42' }
+              { type: NodeType.Identifier, value: 'x' },
+              { type: NodeType.Literal, value: '42' }
             ]
           }
         ]
@@ -43,10 +43,10 @@ describe('JSValidator', () => {
   describe('Variable Declaration Validation', () => {
     it('should detect missing declaration kind', () => {
       const ast: JSASTNode = {
-        type: 'VariableDeclaration',
+        type: NodeType.VariableDeclaration,
         children: [
-          { type: 'Identifier', value: 'x' },
-          { type: 'Literal', value: '42' }
+          { type: NodeType.Identifier, value: 'x' },
+          { type: NodeType.Literal, value: '42' }
         ]
       };
 
@@ -57,11 +57,11 @@ describe('JSValidator', () => {
 
     it('should validate a proper variable declaration', () => {
       const ast: JSASTNode = {
-        type: 'VariableDeclaration',
+        type: NodeType.VariableDeclaration,
         value: 'const',
         children: [
-          { type: 'Identifier', value: 'x' },
-          { type: 'Literal', value: '42' }
+          { type: NodeType.Identifier, value: 'x' },
+          { type: NodeType.Literal, value: '42' }
         ]
       };
 
@@ -73,11 +73,11 @@ describe('JSValidator', () => {
   describe('Modern JS Features Validation', () => {
     it('should validate a proper arrow function', () => {
       const ast: JSASTNode = {
-        type: 'ArrowFunction',
+        type: NodeType.ArrowFunction,
         children: [
-          { 
-            type: 'BlockStatement',
-            children: [] 
+          {
+            type: NodeType.BlockStatement,
+            children: []
           }
         ]
       };
@@ -88,9 +88,9 @@ describe('JSValidator', () => {
 
     it('should validate template literals', () => {
       const ast: JSASTNode = {
-        type: 'TemplateLiteral',
+        type: NodeType.TemplateLiteral,
         children: [
-          { type: 'Literal', value: 'expression' }
+          { type: NodeType.Literal, value: 'expression' }
         ]
       };
 
@@ -100,11 +100,11 @@ describe('JSValidator', () => {
 
     it('should validate class declarations', () => {
       const ast: JSASTNode = {
-        type: 'ClassDeclaration',
+        type: NodeType.ClassDeclaration,
         value: 'MyClass',
         children: [
           {
-            type: 'MethodDefinition',
+            type: NodeType.MethodDefinition,
             value: 'constructor',
             children: []
           }
@@ -117,7 +117,7 @@ describe('JSValidator', () => {
 
     it('should detect unnamed class declaration', () => {
       const ast: JSASTNode = {
-        type: 'ClassDeclaration',
+        type: NodeType.ClassDeclaration,
         children: []
       };
 
@@ -130,12 +130,12 @@ describe('JSValidator', () => {
   describe('Object Expression Validation', () => {
     it('should validate proper object expressions', () => {
       const ast: JSASTNode = {
-        type: 'ObjectExpression',
+        type: NodeType.ObjectExpression,
         children: [
           {
-            type: 'Property',
+            type: NodeType.Property,
             value: 'prop1',
-            children: [{ type: 'Literal', value: '42' }]
+            children: [{ type: NodeType.Literal, value: '42' }]
           }
         ]
       };
@@ -146,10 +146,10 @@ describe('JSValidator', () => {
 
     it('should detect duplicate object keys', () => {
       const ast: JSASTNode = {
-        type: 'ObjectExpression',
+        type: NodeType.ObjectExpression,
         children: [
-          { type: 'Property', value: 'prop1' },
-          { type: 'Property', value: 'prop1' }
+          { type: NodeType.Property, value: 'prop1' },
+          { type: NodeType.Property, value: 'prop1' }
         ]
       };
 
@@ -163,9 +163,9 @@ describe('JSValidator', () => {
   describe('Import/Export Validation', () => {
     it('should validate proper imports', () => {
       const ast: JSASTNode = {
-        type: 'ImportDeclaration',
+        type: NodeType.ImportDeclaration,
         children: [
-          { type: 'Identifier', value: 'foo' }
+          { type: NodeType.Identifier, value: 'foo' }
         ]
       };
 
@@ -175,7 +175,7 @@ describe('JSValidator', () => {
 
     it('should detect empty imports', () => {
       const ast: JSASTNode = {
-        type: 'ImportDeclaration',
+        type: NodeType.ImportDeclaration,
         children: []
       };
 
@@ -199,18 +199,18 @@ describe('JSValidator', () => {
 
     it('should handle nested valid structures', () => {
       const ast: JSASTNode = {
-        type: 'Program',
+        type: NodeType.Program,
         children: [
           {
-            type: 'ClassDeclaration',
+            type: NodeType.ClassDeclaration,
             value: 'MyClass',
             children: [
               {
-                type: 'MethodDefinition',
+                type: NodeType.MethodDefinition,
                 value: 'method',
                 children: [
                   {
-                    type: 'BlockStatement',
+                    type: NodeType.BlockStatement,
                     children: []
                   }
                 ]
