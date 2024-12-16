@@ -1,7 +1,7 @@
 import { JSTokenizer, JSToken } from "../tokenizer/JSTokenizer";
 import { JSValidator, ValidationError } from "../validator/JSValidator";
-import { JSParser, TypedJSASTNode } from "../parser/JSParser";
-import { JSASTBuilder } from "../ast/JSAst";
+import { JSParser, TypedJSASTNode, NodeType } from "../parser/JSParser";
+import { JSASTBuilder, JSASTNode } from "../ast/JSAst";
 
 export interface GenerationError {
   code: string;
@@ -16,7 +16,7 @@ export interface GenerationResult {
   success: boolean;
   code?: string;
   errors?: GenerationError[];
-  ast?: TypedJSASTNode;
+  ast?: JSASTNode;
 }
 
 export interface GeneratorOptions {
@@ -26,44 +26,61 @@ export interface GeneratorOptions {
 }
 
 export class JSGenerator {
-  private tokenizer: JSTokenizer;
-  private validator: JSValidator;
-  private parser: JSParser;
-
+  private tokenizer: JSTokenizer
+  private validator: JSValidator 
+  private parser: JSParser ;
   constructor() {
     this.tokenizer = new JSTokenizer();
     this.validator = new JSValidator();
     this.parser = new JSParser();
   }
 
+ 
+  private isValidNodeType(type: string): type is NodeType {
+    const validTypes: NodeType[] = [
+      "Program", "Statement", "Expression", "VariableDeclaration",
+      "InlineConstant", "BinaryExpression", "Identifier", "Literal",
+      "FunctionDeclaration", "ReturnStatement", "IfStatement", "BlockStatement"
+    ];
+    return validTypes.includes(type as NodeType);
+  }
+
+  private convertToTypedNode(node: JSASTNode): TypedJSASTNode {
+    if (!this.isValidNodeType(node.type)) {
+      throw new Error(`Invalid node type: ${node.type}`);
+    }
+
+    return {
+      ...node,
+      type: node.type as NodeType,
+      children: node.children?.map(child => this.convertToTypedNode(child))
+    };
+  }
+
   public generateFromSource(source: string, options: GeneratorOptions = {}): GenerationResult {
     try {
-      // Step 1: Tokenize source
       const tokens = this.tokenizer.tokenize(source);
-      
-      // Step 2: Build AST
       const builder = new JSASTBuilder(tokens);
-      const ast = builder.buildAST() as TypedJSASTNode;
+      const rawAst = builder.buildAST();
+      const ast = this.convertToTypedNode(rawAst);
 
-      // Step 3: Validate if requested
       if (options.validate) {
-        const validationErrors = this.validator.validate(ast);
+        const validationErrors = this.validator.validate(rawAst);
         if (validationErrors.length > 0) {
           return {
             success: false,
             errors: this.convertValidationErrors(validationErrors),
-            ast
+            ast: rawAst
           };
         }
       }
 
-      // Step 4: Generate code
       const code = this.generateCode(ast, options);
       
       return {
         success: true,
         code,
-        ast
+        ast: rawAst
       };
 
     } catch (err) {
@@ -77,27 +94,27 @@ export class JSGenerator {
     }
   }
 
-  public generateFromAST(ast: TypedJSASTNode, options: GeneratorOptions = {}): GenerationResult {
+  public generateFromAST(inputAst: JSASTNode, options: GeneratorOptions = {}): GenerationResult {
     try {
-      // Step 1: Validate if requested
+      const ast = this.convertToTypedNode(inputAst);
+
       if (options.validate) {
-        const validationErrors = this.validator.validate(ast);
+        const validationErrors = this.validator.validate(inputAst);
         if (validationErrors.length > 0) {
           return {
             success: false,
             errors: this.convertValidationErrors(validationErrors),
-            ast
+            ast: inputAst
           };
         }
       }
 
-      // Step 2: Generate code
       const code = this.generateCode(ast, options);
       
       return {
         success: true,
         code,
-        ast
+        ast: inputAst
       };
 
     } catch (err) {
@@ -122,6 +139,8 @@ export class JSGenerator {
     }));
   }
 
+
+ 
   private generateCode(ast: TypedJSASTNode, options: GeneratorOptions): string {
     const rawOutput = this.parser.parse(ast);
     
