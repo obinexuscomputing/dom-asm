@@ -174,4 +174,26 @@ describe("JSAstGenerator", () => {
     expect(result.success).toBe(true);
     expect(result.code).toContain("    return arg1 + arg2;");
   });
+
+  it("should handle missing optional fields gracefully", () => {
+    const ast: TypedJSASTNode = {
+      type: NodeType.Program,
+      children: [
+        {
+          type: NodeType.FunctionDeclaration,
+          value: "testFunc",
+          children: [
+            {
+              type: NodeType.BlockStatement,
+              children: [],
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = generator.generateFromAST(ast);
+    expect(result.success).toBe(true);
+    expect(result.code).toBe("function testFunc() {\n}");
+  });
 });
