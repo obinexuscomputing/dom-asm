@@ -115,7 +115,7 @@ export class JSParser {
     };
   }
 
-  private parseBlockStatement(): JSASTNode {
+  private  parseBlockStatement(): JSASTNode {
     if (this.tokens[this.current]?.value !== "{") {
         throw new Error("Expected '{' to start block statement");
     }
