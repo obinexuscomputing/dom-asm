@@ -1,5 +1,4 @@
-import {JSTokenizer} from '../src/index';
-import { JSTokenType } from '../src/tokenizer/JSTokenizer';
+import { JSTokenizer, JSTokenType } from '../src/tokenizer/JSTokenizer';
 
 describe('JSTokenizer', () => {
   let tokenizer: JSTokenizer;
@@ -22,6 +21,10 @@ describe('JSTokenizer', () => {
         { type: JSTokenType.EndOfStatement, value: 'EOF' }
       ]);
     });
+
+  });
+
+
     it('should recognize various delimiters', () => {
         const input = '(); {} []';
         const tokens = tokenizer.tokenize(input);
