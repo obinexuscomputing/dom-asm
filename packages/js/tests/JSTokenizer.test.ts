@@ -140,4 +140,21 @@ describe('JSTokenizer', () => {
       });
     });
   });
+
+  describe('Advanced Operator Recognition', () => {
+    it('should handle multi-character comparison operators', () => {
+      const input = '=== !== == !=';
+      const tokens = tokenizer.tokenize(input);
+  
+      const expectedOperators = ['===', '!==', '==', '!='];
+  
+      expectedOperators.forEach((op, index) => {
+        expect(tokens[index]).toEqual({
+          type: JSTokenType.Operator,
+          value: op
+        });
+      });
+    });
+  });
+  
 });
