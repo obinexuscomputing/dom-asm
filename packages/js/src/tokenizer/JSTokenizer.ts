@@ -1,4 +1,3 @@
-import { JSToken, JSTokenType } from ".";
 
 
 export class JSTokenizer {
