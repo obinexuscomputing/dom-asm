@@ -114,8 +114,7 @@ export class JSParser {
       ],
     };
   }
-
-  private  parseBlockStatement(): JSASTNode {
+  private parseBlockStatement(): JSASTNode {
     if (this.tokens[this.current]?.value !== "{") {
         throw new Error("Expected '{' to start block statement");
     }
@@ -127,7 +126,12 @@ export class JSParser {
         if (this.current >= this.tokens.length) {
             throw new Error("Expected '}' to close block statement");
         }
-        children.push(this.walk());
+
+        const child = this.walk();
+        if (!child) {
+            throw new Error("Unexpected null value inside block statement");
+        }
+        children.push(child);
     }
 
     this.current++; // Skip '}'
@@ -139,33 +143,39 @@ export class JSParser {
 }
 
 
-  private parseIfStatement(): JSASTNode {
-    this.current++; // Skip 'if'
+private parseIfStatement(): JSASTNode {
+  this.current++; // Skip 'if'
 
-    if (this.tokens[this.current]?.value !== "(") {
-        throw new Error("Expected '(' after 'if'");
-    }
+  if (this.tokens[this.current]?.value !== "(") {
+      throw new Error("Expected '(' after 'if'");
+  }
 
-    this.current++; // Skip '('
-    const condition = this.walk();
+  this.current++; // Skip '('
+  const condition = this.walk();
+  if (!condition) {
+      throw new Error("Expected a valid condition expression in 'if' statement");
+  }
 
-    if (this.tokens[this.current]?.value !== ")") {
-        throw new Error("Expected ')' after condition");
-    }
+  if (this.tokens[this.current]?.value !== ")") {
+      throw new Error("Expected ')' after condition");
+  }
 
-    this.current++; // Skip ')'
-    const consequence = this.walk();
+  this.current++; // Skip ')'
+  const consequence = this.walk();
+  if (!consequence) {
+      throw new Error("Expected a valid consequence block in 'if' statement");
+  }
 
-    let alternate: JSASTNode | undefined;
-    if (this.tokens[this.current]?.value === "else") {
-        this.current++; // Skip 'else'
-        alternate = this.walk();
-    }
+  let alternate: JSASTNode | undefined = undefined;
+  if (this.tokens[this.current]?.value === "else") {
+      this.current++; // Skip 'else'
+      alternate = this.walk() || undefined;
+  }
 
-    return {
-        type: NodeType.IfStatement,
-        children: [condition, consequence, ...(alternate ? [alternate] : [])],
-    };
+  return {
+      type: NodeType.IfStatement,
+      children: [condition, consequence, ...(alternate ? [alternate] : [])],
+  };
 }
 
 private parseFunctionDeclaration(): JSASTNode {
