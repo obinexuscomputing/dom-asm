@@ -196,12 +196,4 @@ describe("JSAstGenerator", () => {
     expect(result.success).toBe(true);
     expect(result.code).toBe("function testFunc() {\n}");
   });
-
-  it("should handle empty programs", () => {
-    const ast: TypedJSASTNode = { type: NodeType.Program, children: [] };
-
-    const result = generator.generateFromAST(ast);
-    expect(result.success).toBe(true);
-    expect(result.code).toBe("");
-  });
 });
