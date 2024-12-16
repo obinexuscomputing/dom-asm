@@ -10,9 +10,11 @@
     "dom-asm.ps1": "./bin/dom-asm.ps1",
     "dom-asm.sh": "./bin/dom-asm.sh"
   },
-  "workspaces": [
-    "packages/*"
-  ],
+"workspaces": [
+  ".",
+  "packages/*"
+],
+
   "scripts": {
     "build": "npx rollup -c && npx turbo build",
     "start": "node dist/index.js",
