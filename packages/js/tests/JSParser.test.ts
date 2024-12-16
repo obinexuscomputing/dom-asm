@@ -1,19 +1,19 @@
 import { Token } from "typescript";
 import { JSParser, TypedJSASTNode } from "../src";
-import { JSTokenizer } from "../src/tokenizer/JSTokenizer";
+import { JSToken, JSTokenizer } from "../src/tokenizer/JSTokenizer";
 
 describe("JSParser", () => {
     let parser: JSParser;
     let tokenizer: JSTokenizer;
 
     beforeEach(() => {
-        tokenizer = new Tokenizer();
+        tokenizer = new JSTokenizer();
         parser = new JSParser();
     });
 
     test("parses simple expressions", () => {
         const code = "let x = 10;";
-        const tokens: Token[] = tokenizer.tokenize(code);
+        const tokens: JSToken[] = tokenizer.tokenize(code);
         const ast: TypedJSASTNode = parser.parse();
 
         expect(ast).toBeDefined();
@@ -22,7 +22,7 @@ describe("JSParser", () => {
 
     test("handles missing semicolon gracefully", () => {
         const code = "let x = 10"; // Missing semicolon
-        const tokens: Token[] = tokenizer.tokenize(code);
+        const tokens: JSToken[] = tokenizer.tokenize(code);
         const ast: TypedJSASTNode = parser.parse();
 
         expect(ast).toBeDefined();
@@ -31,14 +31,14 @@ describe("JSParser", () => {
 
     test("throws error for invalid syntax", () => {
         const code = "let = 10;"; // Invalid syntax
-        const tokens: Token[] = tokenizer.tokenize(code);
+        const tokens: JSToken[] = tokenizer.tokenize(code);
 
         expect(() => parser.parse()).toThrow("Unexpected token '='");
     });
 
     test("parses nested blocks", () => {
         const code = "if (true) { let y = 20; }";
-        const tokens: Token[] = tokenizer.tokenize(code);
+        const tokens: JSToken[] = tokenizer.tokenize(code);
         const ast: TypedJSASTNode = parser.parse();
 
         expect(ast).toBeDefined();
@@ -48,7 +48,7 @@ describe("JSParser", () => {
 
     test("handles function declarations", () => {
         const code = "function add(a, b) { return a + b; }";
-        const tokens: Token[] = tokenizer.tokenize(code);
+        const tokens: JSToken[] = tokenizer.tokenize(code);
         const ast: TypedJSASTNode = parser.parse();
 
         expect(ast).toBeDefined();
@@ -58,7 +58,7 @@ describe("JSParser", () => {
 
     test("recovers from syntax errors", () => {
         const code = "if (true { let z = 30; }"; // Missing closing parenthesis
-        const tokens: Token[] = tokenizer.tokenize(code);
+        const tokens: JSToken[] = tokenizer.tokenize(code);
 
         expect(() => parser.parse()).toThrow("Expected ')' after condition");
     });
