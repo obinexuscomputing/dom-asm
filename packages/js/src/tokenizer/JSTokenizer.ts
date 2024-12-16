@@ -23,27 +23,15 @@ export class JSTokenizer {
     const tokens: JSToken[] = [];
     let current = 0;
 
+    // Remove all whitespace and semicolons
+    input = input.replace(/\s+|;/g, '');
+
     const addToken = (type: JSTokenType, value: string) => {
       tokens.push({ type, value });
     };
 
     while (current < input.length) {
       let char = input[current];
-
-      // Skip whitespace
-      if (/\s/.test(char)) {
-        current++;
-        continue;
-      }
-
-      // Check for multi-character operators
-      const remainingInput = input.slice(current);
-      const multiCharOp = this.matchMultiCharOperator(remainingInput);
-      if (multiCharOp) {
-        addToken(JSTokenType.Operator, multiCharOp);
-        current += multiCharOp.length;
-        continue;
-      }
 
       // Identifiers and Keywords
       if (/[a-zA-Z_$]/.test(char)) {
@@ -68,6 +56,15 @@ export class JSTokenizer {
           value += input[current++];
         }
         addToken(JSTokenType.Literal, value);
+        continue;
+      }
+
+      // Check for multi-character operators
+      const remainingInput = input.slice(current);
+      const multiCharOp = this.matchMultiCharOperator(remainingInput);
+      if (multiCharOp) {
+        addToken(JSTokenType.Operator, multiCharOp);
+        current += multiCharOp.length;
         continue;
       }
 
