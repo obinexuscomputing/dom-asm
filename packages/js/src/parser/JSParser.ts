@@ -1,4 +1,4 @@
-import { JSASTNode } from "../ast";
+import { BaseNode, JSASTNode } from "../ast";
 
 
 export type NodeType = 
@@ -15,7 +15,7 @@ export type NodeType =
   | "IfStatement"
   | "BlockStatement";
 
-export interface TypedJSASTNode extends JSASTNode {
+export interface TypedJSASTNode extends JSASTNode,BaseNode {
   type: NodeType;
   value?: string;
   children?: TypedJSASTNode[];

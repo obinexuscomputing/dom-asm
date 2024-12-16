@@ -1,13 +1,5 @@
 import { JSToken, JSTokenType } from "../tokenizer/JSTokenizer";
-export interface JSASTNode {
-  type: string;
-  value?: string;
-  children?: JSASTNode[];
-  line?: number;
-  column?: number;
-}
-
-
+import { NodeType, JSASTNode } from "./types";
 
 export class JSASTBuilder {
   private tokens: JSToken[];
@@ -32,19 +24,22 @@ export class JSASTBuilder {
   private peekToken(): JSToken | null {
     return this.position + 1 < this.tokens.length ? this.tokens[this.position + 1] : null;
   }
-  
+
   private parseProgram(): JSASTNode {
-    const program: JSASTNode = { type: "Program", children: [] }; // Initialize children
-    while (this.position < this.tokens.length - 1) { // Exclude EOF
+    const program: JSASTNode = { 
+      type: NodeType.Program, 
+      children: [] 
+    };
+    
+    while (this.position < this.tokens.length - 1) {
       const statement = this.parseStatement();
       if (statement) {
-        program.children!.push(statement); // Use non-null assertion
+        program.children!.push(statement);
       }
     }
     return program;
   }
-  
-  
+
   private parseStatement(): JSASTNode | null {
     const token = this.currentToken();
     
@@ -83,10 +78,10 @@ export class JSASTBuilder {
     }
 
     return {
-      type: "VariableDeclaration",
+      type: NodeType.VariableDeclaration,
       children: [
-        { type: "Identifier", value: identifier.value, children: [] },
-        { type: "Literal", value: value.value, children: [] },
+        { type: NodeType.Identifier, value: identifier.value, children: [] },
+        { type: NodeType.Literal, value: value.value, children: [] },
       ],
     };
   }
@@ -95,4 +90,3 @@ export class JSASTBuilder {
     return this.parseProgram();
   }
 }
-
