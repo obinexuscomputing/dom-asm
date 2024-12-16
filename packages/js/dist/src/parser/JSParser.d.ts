@@ -4,7 +4,7 @@ export declare class JSParser {
     private tokens;
     private current;
     parse(tokens: JSToken[]): JSASTNode;
-    private walk;
+    walk(): JSASTNode | null;
     private parseKeyword;
     private parseVariableDeclaration;
     private parseBlockStatement;
