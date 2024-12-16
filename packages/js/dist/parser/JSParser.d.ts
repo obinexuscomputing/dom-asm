@@ -1,5 +1,15 @@
-import { JSASTNode } from "../ast";
+import { JSToken, TypedJSASTNode } from "../types";
 export declare class JSParser {
-    parse(ast: JSASTNode): any;
+    private tokens;
+    private current;
+    constructor(tokens?: JSToken[]);
+    setTokens(tokens: JSToken[]): void;
+    parse(tokens?: JSToken[]): TypedJSASTNode;
+    private walk;
+    private parseKeyword;
+    private parseIfStatement;
+    private parseFunctionDeclaration;
+    private parseVariableDeclaration;
+    private parseBlockStatement;
 }
 //# sourceMappingURL=JSParser.d.ts.map

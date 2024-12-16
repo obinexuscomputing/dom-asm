@@ -1,5 +1,37 @@
-import { JSASTNode } from "../ast/";
+import { JSASTNode } from "../types";
+export interface GenerationError {
+    code: string;
+    message: string;
+    location?: {
+        line?: number;
+        column?: number;
+    };
+}
+export interface GenerationResult {
+    success: boolean;
+    code?: string;
+    errors?: GenerationError[];
+    ast?: JSASTNode;
+}
+export interface GeneratorOptions {
+    validate?: boolean;
+    format?: "compact" | "pretty";
+    indent?: string;
+}
 export declare class JSAstGenerator {
-    generate(ast: JSASTNode): string;
+    private tokenizer;
+    private validator;
+    private parser;
+    constructor();
+    private convertToTypedNode;
+    generateFromSource(source: string, options?: GeneratorOptions): GenerationResult;
+    generateFromAST(ast: JSASTNode, options?: GeneratorOptions): GenerationResult;
+    private processAST;
+    private convertValidationErrors;
+    private generateCode;
+    private traverseAST;
+    private formatOutput;
+    private formatCompact;
+    private formatPretty;
 }
 //# sourceMappingURL=JSAstGenerator.d.ts.map

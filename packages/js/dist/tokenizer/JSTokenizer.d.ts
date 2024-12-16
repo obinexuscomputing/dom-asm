@@ -1,21 +1,10 @@
-export declare enum JSTokenType {
-    Keyword = "Keyword",
-    Identifier = "Identifier",
-    Operator = "Operator",
-    Delimiter = "Delimiter",
-    Literal = "Literal",
-    TemplateLiteral = "TemplateLiteral",
-    Comment = "Comment",
-    EndOfStatement = "EndOfStatement"
-}
-export interface JSToken {
-    type: JSTokenType;
-    value: string;
-}
+import { JSToken, JSTokenType } from '../types';
 export declare class JSTokenizer {
     private keywords;
     private operators;
     private delimiters;
     tokenize(input: string): JSToken[];
+    private matchMultiCharOperator;
 }
+export { JSToken, JSTokenType };
 //# sourceMappingURL=JSTokenizer.d.ts.map
