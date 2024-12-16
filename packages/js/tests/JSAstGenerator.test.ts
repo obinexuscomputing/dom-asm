@@ -112,11 +112,15 @@ describe('JSGenerator', () => {
     });
 
     it('should format in pretty mode', () => {
-      const result = generator.generateFromAST(complexAst, { format: 'pretty' });
+      const result = generator.generateFromAST(complexAst, { 
+        format: 'pretty' 
+      });
       
+      const code = result.code as string;
       expect(result.success).toBe(true);
-      expect(result.code).toContain('\n');
-      expect(result.code).toMatch(/\s{2,}/);
+      expect(code).toContain('\n');
+      expect(code.split('\n').length).toBeGreaterThan(1);
+      expect(code).toMatch(/^\s+/m); // Should have indentation
     });
 
     it('should respect custom indentation', () => {
@@ -125,8 +129,9 @@ describe('JSGenerator', () => {
         indent: '    ' 
       });
       
+      const code = result.code as string;
       expect(result.success).toBe(true);
-      expect(result.code).toContain('    ');
+      expect(code.split('\n').some(line => line.startsWith('    '))).toBe(true);
     });
   });
 
@@ -158,6 +163,7 @@ describe('JSGenerator', () => {
       expect(result.success).toBe(false);
       expect(result.errors).toBeDefined();
       expect(result.ast).toBeDefined();
+      expect(result.ast).toBe(invalidAst);
     });
   });
 });

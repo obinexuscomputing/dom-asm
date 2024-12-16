@@ -1,3 +1,4 @@
+// JSGenerator.ts
 import { JSTokenizer, JSToken } from "../tokenizer/JSTokenizer";
 import { JSValidator, ValidationError } from "../validator/JSValidator";
 import { JSParser, TypedJSASTNode, NodeType } from "../parser/JSParser";
@@ -26,16 +27,16 @@ export interface GeneratorOptions {
 }
 
 export class JSGenerator {
-  private tokenizer: JSTokenizer
-  private validator: JSValidator 
-  private parser: JSParser ;
+  private tokenizer: JSTokenizer;
+  private validator: JSValidator;
+  private parser: JSParser;
+
   constructor() {
     this.tokenizer = new JSTokenizer();
     this.validator = new JSValidator();
     this.parser = new JSParser();
   }
 
- 
   private isValidNodeType(type: string): type is NodeType {
     const validTypes: NodeType[] = [
       "Program", "Statement", "Expression", "VariableDeclaration",
@@ -59,28 +60,38 @@ export class JSGenerator {
 
   public generateFromSource(source: string, options: GeneratorOptions = {}): GenerationResult {
     try {
+      // Handle undefined input
+      if (!source) {
+        throw new Error('Source code cannot be undefined or empty');
+      }
+
       const tokens = this.tokenizer.tokenize(source);
       const builder = new JSASTBuilder(tokens);
       const rawAst = builder.buildAST();
-      const ast = this.convertToTypedNode(rawAst);
+
+      // Always store the AST in the result
+      const result: GenerationResult = {
+        success: true,
+        ast: rawAst
+      };
 
       if (options.validate) {
         const validationErrors = this.validator.validate(rawAst);
         if (validationErrors.length > 0) {
           return {
+            ...result,
             success: false,
-            errors: this.convertValidationErrors(validationErrors),
-            ast: rawAst
+            errors: this.convertValidationErrors(validationErrors)
           };
         }
       }
 
+      const ast = this.convertToTypedNode(rawAst);
       const code = this.generateCode(ast, options);
       
       return {
-        success: true,
-        code,
-        ast: rawAst
+        ...result,
+        code
       };
 
     } catch (err) {
@@ -96,25 +107,29 @@ export class JSGenerator {
 
   public generateFromAST(inputAst: JSASTNode, options: GeneratorOptions = {}): GenerationResult {
     try {
-      const ast = this.convertToTypedNode(inputAst);
+      // Always store the input AST in the result
+      const result: GenerationResult = {
+        success: true,
+        ast: inputAst
+      };
 
       if (options.validate) {
         const validationErrors = this.validator.validate(inputAst);
         if (validationErrors.length > 0) {
           return {
+            ...result,
             success: false,
-            errors: this.convertValidationErrors(validationErrors),
-            ast: inputAst
+            errors: this.convertValidationErrors(validationErrors)
           };
         }
       }
 
+      const ast = this.convertToTypedNode(inputAst);
       const code = this.generateCode(ast, options);
       
       return {
-        success: true,
-        code,
-        ast: inputAst
+        ...result,
+        code
       };
 
     } catch (err) {
@@ -123,7 +138,8 @@ export class JSGenerator {
         errors: [{
           code: 'E000',
           message: err instanceof Error ? err.message : 'Unknown error occurred'
-        }]
+        }],
+        ast: inputAst // Keep the AST even in error cases
       };
     }
   }
@@ -139,8 +155,6 @@ export class JSGenerator {
     }));
   }
 
-
- 
   private generateCode(ast: TypedJSASTNode, options: GeneratorOptions): string {
     const rawOutput = this.parser.parse(ast);
     
@@ -169,24 +183,31 @@ export class JSGenerator {
 
   private formatPretty(code: string, indent: string): string {
     let level = 0;
+    const lines = code.split(/[{;}]/g).filter(line => line.trim());
     let result = '';
-    const lines = code.split('\n');
 
     for (const line of lines) {
       const trimmedLine = line.trim();
       if (!trimmedLine) continue;
 
-      if (trimmedLine.endsWith('}')) {
+      // Add closing brace on its own line
+      if (trimmedLine.startsWith('}')) {
         level = Math.max(0, level - 1);
       }
 
       result += `${indent.repeat(level)}${trimmedLine}\n`;
 
+      // Increase indent level after opening brace
       if (trimmedLine.endsWith('{')) {
         level++;
       }
     }
 
-    return result.trimEnd();
+    // Add appropriate braces and semicolons back
+    result = result
+      .replace(/\n(\s*[^}\s])/g, ';\n$1')
+      .replace(/\n\s*([^{;\s].*?)\n/g, ' {\n$1\n}\n');
+
+    return result.trim();
   }
 }
