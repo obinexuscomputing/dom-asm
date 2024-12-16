@@ -158,8 +158,9 @@ export class JSParser {
     let alternate: JSASTNode | undefined;
     if (this.tokens[this.current]?.value === "else") {
       this.current++; // Skip 'else'
-      alternate = this.walk();
+      alternate = this.walk() ?? undefined; // Ensure alternate is either JSASTNode or undefined
     }
+    
 
     return {
       type: NodeType.IfStatement,
