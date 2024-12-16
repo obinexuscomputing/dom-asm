@@ -21,14 +21,16 @@ describe('JSTokenizer', () => {
         { type: JSTokenType.EndOfStatement, value: 'EOF' },
       ]);
     });
-
     it('should recognize various delimiters', () => {
       const input = '(); {} []';
       const tokens = tokenizer.tokenize(input);
     
-      const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
+      // Filter only delimiter tokens
       const actualDelimiters = tokens.filter(token => token.type === JSTokenType.Delimiter);
+      console.log('Actual Delimiters:', JSON.stringify(actualDelimiters, null, 2));
     
+      const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
+      
       expectedDelimiters.forEach((delimiter, index) => {
         expect(actualDelimiters[index]).toEqual({
           type: JSTokenType.Delimiter,

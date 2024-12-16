@@ -27,13 +27,20 @@ export class JSTokenizer {
       tokens.push({ type, value });
     };
   
-    // Retain semicolons and meaningful whitespace
-    input = input.replace(/\s+/g, ' ').trim();
+    // Normalize input by removing excessive whitespace
+    input = input.trim();
   
     while (current < input.length) {
       const char = input[current];
   
-      // Keywords and Identifiers
+      // Handle delimiters
+      if (this.delimiters.has(char)) {
+        addToken(JSTokenType.Delimiter, char);
+        current++;
+        continue;
+      }
+  
+      // Handle keywords and identifiers
       if (/[a-zA-Z_$]/.test(char)) {
         let value = '';
         while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
@@ -47,7 +54,7 @@ export class JSTokenizer {
         continue;
       }
   
-      // Numeric Literals
+      // Handle numeric literals
       if (/[0-9]/.test(char)) {
         let value = '';
         while (current < input.length && /[0-9.]/.test(input[current])) {
@@ -57,7 +64,7 @@ export class JSTokenizer {
         continue;
       }
   
-      // Multi-Character Operators
+      // Handle multi-character operators
       const remainingInput = input.slice(current);
       const multiCharOp = this.matchMultiCharOperator(remainingInput);
       if (multiCharOp) {
@@ -66,16 +73,9 @@ export class JSTokenizer {
         continue;
       }
   
-      // Single-Character Operators
+      // Handle single-character operators
       if (this.operators.has(char)) {
         addToken(JSTokenType.Operator, char);
-        current++;
-        continue;
-      }
-  
-      // Delimiters
-      if (this.delimiters.has(char)) {
-        addToken(JSTokenType.Delimiter, char);
         current++;
         continue;
       }
@@ -86,7 +86,7 @@ export class JSTokenizer {
         continue;
       }
   
-      // Unexpected Character
+      // Handle unexpected characters
       throw new Error(`Unexpected character: ${char}`);
     }
   
