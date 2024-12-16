@@ -1,7 +1,6 @@
 import { Command } from "commander";
 import path from "path";
 import fs from "fs";
-
 import {
   CSSTokenizer,
   CSSParser,
@@ -18,16 +17,26 @@ import {
   HTMLCodeGenerator,
 } from "@obinexuscomputing/html";
 
-import jsPackage from "@obinexuscomputing/js";
-
-const {
+import {
   JSTokenizer,
   JSASTBuilder,
   JSValidator,
-  JSASTOptimizer,
+  JSAstMinimizer,
   JSCodeGenerator,
-} = jsPackage;
+} from "@obinexuscomputing/js";
 
+import {
+  DOMXMLTokenizer,
+  DOMXMLParser,
+  DOMXMLValidator,
+  DOMXMLASTOptimizer,
+  DOMXMLGenerator,
+} from "@obinexuscomputing/xml";
+
+// Fetch package version dynamically
+const packageJsonPath = path.resolve(__dirname, "../package.json");
+const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
+const packageVersion = packageJson.version;
 
 const program = new Command();
 
@@ -115,8 +124,8 @@ async function processFile(
           }
         }
         if (options.optimize) {
-          const optimizer = new JSASTOptimizer();
-          ast = optimizer.optimize(ast);
+          const minimizer = new JSAstMinimizer();
+          ast = minimizer.optimize(ast);
           const generator = new JSCodeGenerator();
           result.optimized = generator.generate(ast);
         }
@@ -213,7 +222,7 @@ registerCommand("asm", "ASM");
 // CLI entry point
 program
   .name("@obinexuscomputing/dom-asm")
-  .version("1.0.0")
+  .version(packageVersion) // Dynamically fetch version from package.json
   .description("DOM ASM CLI tool for parsing and analyzing web assets");
 
 // Parse command-line arguments
