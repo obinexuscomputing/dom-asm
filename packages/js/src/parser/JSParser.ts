@@ -1,5 +1,6 @@
 // Import necessary types and classes
-import { TypedJSASTNode, NodeType, JSToken, JSTokenType } from "../src/types";
+
+import { JSToken, TypedJSASTNode, NodeType, JSTokenType } from "../types";
 
 export class JSParser {
   private tokens: JSToken[];
