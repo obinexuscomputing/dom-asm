@@ -32,7 +32,36 @@ function createTestCase(
 
 describe('HTMLValidator', () => {
   let validator: HTMLValidator;
-
+  function createValidatorTestCase(
+    options: Parameters<HTMLValidator['constructor']>[0],
+    config: {
+      name: string;
+      node: HTMLASTNode;
+      expectedValid: boolean;
+      expectedErrors?: string[];
+      expectedWarnings?: string[];
+    }
+  ) {
+    it(config.name, () => {
+      const validator = new HTMLValidator(options);
+      const result = validator.validate(config.node);
+      
+      expect(result.valid).toBe(config.expectedValid);
+      
+      if (config.expectedErrors) {
+        expect(result.errors.map(e => e.code)).toEqual(
+          expect.arrayContaining(config.expectedErrors)
+        );
+      }
+      
+      if (config.expectedWarnings) {
+        expect(result.warnings.map(w => w.code)).toEqual(
+          expect.arrayContaining(config.expectedWarnings)
+        );
+      }
+    });
+  }
+  
   describe('Language Agnostic Validation', () => {
     beforeEach(() => {
       validator = new HTMLValidator({
