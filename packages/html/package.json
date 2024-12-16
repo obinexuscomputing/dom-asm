@@ -1,16 +1,51 @@
 {
-  "name": "@obinexuscomputing/html",  "version": "1.0.0",
+  "name": "@obinexuscomputing/html",
+  "version": "1.0.0",
   "private": true,
   "description": "A package for HTML parsing, validation, and rendering.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "umd": "./dist/index.umd.js"
+    },
+    "./ast": {
+      "types": "./dist/ast/index.d.ts",
+      "import": "./dist/ast/index.js",
+      "require": "./dist/ast/index.cjs"
+    },
+    "./parser": {
+      "types": "./dist/parser/index.d.ts",
+      "import": "./dist/parser/index.js",
+      "require": "./dist/parser/index.cjs"
+    },
+    "./tokenizer": {
+      "types": "./dist/tokenizer/index.d.ts",
+      "import": "./dist/tokenizer/index.js",
+      "require": "./dist/tokenizer/index.cjs"
+    },
+    "./validator": {
+      "types": "./dist/validator/index.d.ts",
+      "import": "./dist/validator/index.js",
+      "require": "./dist/validator/index.cjs"
+    },
+    "./generator": {
+      "types": "./dist/generator/index.d.ts",
+      "import": "./dist/generator/index.js",
+      "require": "./dist/generator/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
   "scripts": {
-   "test": "jest --no-cache",
-   "build:ts": "tsc --emitDeclarationOnly",
-   "build:rollup": "rollup -c",
-   "build": "npm run build:ts && npm run build:rollup",
+    "test": "jest --no-cache",
+    "build:ts": "tsc --emitDeclarationOnly",
+    "build:rollup": "rollup -c",
+    "build": "npm run build:ts && npm run build:rollup",
     "clean": "rm -rf dist",
     "prebuild": "npm run clean"
   },
