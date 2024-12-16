@@ -1,5 +1,5 @@
 import { HTMLParserError } from "../parser";
-import { HTMLToken } from "../tokenizer";
+import { HTMLToken } from "../tokenizer/HTMLTokenizer";
 
 export interface HTMLAST {
   root: HTMLASTNode; // Root node of the AST

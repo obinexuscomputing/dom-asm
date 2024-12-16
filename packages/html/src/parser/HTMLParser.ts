@@ -1,5 +1,5 @@
 import { HTMLAST, HTMLASTNode } from "../ast/HTMLAST";
-import { HTMLToken, HTMLTokenizer } from "../tokenizer";
+import { HTMLToken, HTMLTokenizer } from "../tokenizer/HTMLTokenizer";
 
 export class HTMLParserError extends Error {
   constructor(

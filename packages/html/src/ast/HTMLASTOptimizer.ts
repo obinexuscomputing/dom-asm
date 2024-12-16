@@ -10,15 +10,13 @@ export class HTMLASTOptimizer {
   private removeEmptyTextNodes(node: HTMLASTNode): void {
     if (!node.children) return;
 
-    // Filter out completely empty text nodes but preserve pure whitespace nodes
     node.children = node.children.filter((child) => {
       if (child.type === "Text") {
-        return child.value !== undefined && child.value !== null;
+        return child.value && child.value.trim() !== "";
       }
       return true;
     });
 
-    // Recursively process remaining children
     node.children.forEach(child => {
       if (child.type === "Element") {
         this.removeEmptyTextNodes(child);
@@ -29,32 +27,31 @@ export class HTMLASTOptimizer {
   private mergeTextNodes(node: HTMLASTNode): void {
     if (!node.children) return;
 
+    // First merge text nodes in all child elements
+    node.children.forEach(child => {
+      if (child.type === "Element") {
+        this.mergeTextNodes(child);
+      }
+    });
+
+    // Then merge adjacent text nodes at this level
     let i = 0;
     while (i < node.children.length - 1) {
       const current = node.children[i];
       const next = node.children[i + 1];
 
       if (current.type === "Text" && next.type === "Text") {
-        const currentText = current.value || "";
-        const nextText = next.value || "";
-        
-        // Preserve all spaces, including trailing ones
-        current.value = currentText + nextText;
-        
-        // Remove the merged node
+        // Combine text nodes while preserving intentional spaces
+        const combinedText = [current.value || "", next.value || ""]
+          .map(text => text.trim())
+          .join(" ")
+          .trim();
+
+        current.value = combinedText;
         node.children.splice(i + 1, 1);
       } else {
-        if (current.type === "Element") {
-          this.mergeTextNodes(current);
-        }
         i++;
       }
-    }
-
-    // Process the last child if it's an element
-    const lastChild = node.children[node.children.length - 1];
-    if (lastChild && lastChild.type === "Element") {
-      this.mergeTextNodes(lastChild);
     }
   }
 }
