@@ -51,7 +51,6 @@ export class JSASTGenerator {
     };
   }
 
- 
   public generateFromSource(source: string, options: GeneratorOptions = {}): GenerationResult {
     try {
         if (!source) {
@@ -64,7 +63,7 @@ export class JSASTGenerator {
         // Parse the tokens into an initial AST
         const rawAst = this.parser.parse(tokens);
 
-        // Convert raw AST to TypedJSASTNode
+        // Ensure the AST conforms to TypedJSASTNode
         const typedAst = this.convertToTypedNode(rawAst);
 
         return this.processAST(typedAst, options);
@@ -81,6 +80,7 @@ export class JSASTGenerator {
         };
     }
 }
+
 
   public generateFromAST(ast: JSASTNode, options: GeneratorOptions = {}): GenerationResult {
     try {
