@@ -1,4 +1,4 @@
-import { TypedJSASTNode, NodeType } from "../types";
+import { TypedJSASTNode, NodeType, JSToken } from "../types";
 
 
 
@@ -108,4 +108,18 @@ export class JSParser {
 
     return `return ${exprStr}`.trimEnd();
   }
+
+public buildASTFromTokens(tokens: JSToken[]): TypedJSASTNode {
+  // Convert tokens into a TypedJSASTNode (mock implementation for illustration)
+  return {
+    type: NodeType.Program,
+    children: tokens.map((token) => ({
+      type: NodeType[token.type as keyof typeof NodeType] || NodeType.Literal,
+      value: token.value,
+      line: token.line,
+      column: token.column,
+    })),
+  } as TypedJSASTNode;
+}
+
 }

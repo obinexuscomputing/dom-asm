@@ -56,10 +56,14 @@ export class JSASTGenerator {
       if (!source) {
         throw new Error("Source code cannot be undefined or empty");
       }
-
+  
+      // Step 1: Tokenize the source code
       const tokens = this.tokenizer.tokenize(source);
-      const ast = this.parser.parse(tokens);
-
+  
+      // Step 2: Convert tokens into an AST
+      const ast = this.parser.buildASTFromTokens(tokens);
+  
+      // Step 3: Validate and generate code from the AST
       return this.processAST(ast, options);
     } catch (err) {
       return {
@@ -74,6 +78,7 @@ export class JSASTGenerator {
       };
     }
   }
+  
 
   public generateFromAST(ast: JSASTNode, options: GeneratorOptions = {}): GenerationResult {
     try {
