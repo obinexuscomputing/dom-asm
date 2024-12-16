@@ -22,17 +22,17 @@ export default {
       file: 'dist/index.js',
       format: 'es',
       sourcemap: true,
-      plugins: [terser()],
-      banner, // Add banner to ES module
-      footer, // Add footer to ES module
+      plugins: [terser()], // Minify the ES module output
+      banner,
+      footer,
     },
     {
       file: 'dist/index.cjs',
       format: 'cjs',
       sourcemap: true,
-      plugins: [terser()],
-      banner, // Add banner to CommonJS module
-      footer, // Add footer to CommonJS module
+      plugins: [terser()], // Minify the CommonJS output
+      banner,
+      footer,
     },
   ],
   external: [
@@ -50,8 +50,7 @@ export default {
     commonjs(),
     json(),
     typescript({
-      tsconfig: './tsconfig.json',
+      tsconfig: './tsconfig.json', // Ensure the path to tsconfig.json is correct
     }),
-    terser(), // Global terser plugin for minification
   ],
 };
