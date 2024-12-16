@@ -1,36 +1,93 @@
-import { TypedJSASTNode, NodeType, JSToken } from "../types";
+import { TypedJSASTNode, NodeType, JSToken, JSASTNode, JSTokenType } from "../types";
 
 
 
 export class JSParser {
- 
-   public parse(ast: TypedJSASTNode): string | string[] | null {
-     switch (ast.type) {
-       case NodeType.Program:
-         return this.parseProgram(ast);
-       case NodeType.Statement:
-         return this.parseStatement(ast);
-       case NodeType.Expression:
-         return this.parseExpression(ast);
-       case NodeType.VariableDeclaration:
-         return this.parseVariableDeclaration(ast);
-       case NodeType.InlineConstant:
-         return this.parseInlineConstant(ast);
-       case NodeType.BinaryExpression:
-         return this.parseBinaryExpression(ast);
-       case NodeType.BlockStatement:
-         return this.parseBlockStatement(ast);
-       case NodeType.IfStatement:
-         return this.parseIfStatement(ast);
-       case NodeType.FunctionDeclaration:
-         return this.parseFunctionDeclaration(ast);
-       case NodeType.ReturnStatement:
-         return this.parseReturnStatement(ast);
-       default:
-         return ast.value || "";
-     }
-   }
- 
+  public current: number=0;
+  public parse(tokens: JSToken[]): JSASTNode {
+    this.current = 0;
+    const ast: JSASTNode = {
+      type: NodeType.Program,
+      children: [],
+    };
+
+    while (this.current < tokens.length) {
+      const node = this.walk(tokens);
+      if (node) {
+        ast.children?.push(node);
+      }
+    }
+
+    return ast;
+  }
+
+   private parseKeyword(tokens: JSToken[]): JSASTNode {
+    const token = tokens[this.current];
+
+    if (token.value === "const" || token.value === "let" || token.value === "var") {
+      this.current++;
+      const identifier = this.consume(tokens, JSTokenType.Identifier, "Expected identifier after declaration keyword");
+      const operator = this.consume(tokens, JSTokenType.Operator, "Expected '=' after identifier");
+
+      if (operator.value !== "=") {
+        throw new Error(`Unexpected operator '${operator.value}', expected '='`);
+      }
+
+      const valueToken = this.consume(tokens, JSTokenType.Literal, "Expected literal value after '='");
+      this.consume(tokens, JSTokenType.Delimiter, "Expected ';' after declaration");
+
+      return {
+        type: NodeType.VariableDeclaration,
+        value: token.value,
+        children: [
+          { type: NodeType.Identifier, value: identifier.value },
+          { type: NodeType.Literal, value: valueToken.value },
+        ],
+      };
+    }
+
+    throw new Error(`Unexpected keyword: ${token.value}`);
+  }
+  private walk(tokens: JSToken[]): JSASTNode {
+    const token = tokens[this.current];
+
+    if (!token) {
+      throw new Error("Unexpected end of input");
+    }
+
+    switch (token.type) {
+      case JSTokenType.Keyword:
+        return this.parseKeyword(tokens);
+
+      case JSTokenType.Identifier:
+        return this.parseIdentifier(tokens);
+
+      case JSTokenType.Literal:
+        return this.parseLiteral(tokens);
+
+      default:
+        throw new Error(`Unexpected token type: ${token.type} at position ${this.current}`);
+    }
+  }
+
+   private consume(tokens: JSToken[], expectedType: JSTokenType, errorMessage: string): JSToken {
+    const token = tokens[this.current];
+    if (!token || token.type !== expectedType) {
+      throw new Error(`${errorMessage}. Found '${token?.value ?? "end of input"}'`);
+    }
+    this.current++;
+    return token;
+  }
+  private parseIdentifier(tokens: JSToken[]): JSASTNode {
+    const token = tokens[this.current++];
+    return { type: NodeType.Identifier, value: token.value };
+  }
+
+  private parseLiteral(tokens: JSToken[]): JSASTNode {
+    const token = tokens[this.current++];
+    return { type: NodeType.Literal, value: token.value };
+  }
+  
    private parseProgram(node: TypedJSASTNode): string[] {
      return node.children?.map((child) => this.parse(child) as string).filter(Boolean) ?? [];
    }
