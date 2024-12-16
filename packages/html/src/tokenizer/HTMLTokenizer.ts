@@ -14,6 +14,114 @@ export type HTMLToken =
       this.input = input;
     }
   
+    public tokenize(): HTMLToken[] {
+      const tokens: HTMLToken[] = [];
+      while (this.position < this.input.length) {
+        const char = this.peek();
+  
+        if (char === "<") {
+          if (this.match("<!--")) {
+            const commentToken = this.readComment();
+            if (commentToken.type === "Comment" && commentToken.value) {
+              tokens.push(commentToken);
+            }
+          } else if (this.match("<!DOCTYPE")) {
+            tokens.push(this.readDoctype());
+          } else if (this.peek(1) === "/") {
+            tokens.push(this.readEndTag());
+          } else {
+            tokens.push(this.readStartTag());
+          }
+        } else {
+          const textToken = this.readText();
+          if (textToken.type === "Text" && textToken.value) {
+            tokens.push(textToken);
+          }
+        }
+      }
+      return tokens;
+    }
+  
+    private readStartTag(): HTMLToken {
+      const { line, column } = this.getCurrentLocation();
+      this.consume(); // Skip '<'
+      
+      const name = this.readTagName();
+      const attributes: Record<string, string> = {};
+      let selfClosing = false;
+      
+      // Track the original position for accurate nested element positioning
+      const startPosition = this.position;
+      
+      while (this.position < this.input.length && !this.match(">")) {
+        this.skipWhitespace();
+        
+        if (this.match("/>")) {
+          selfClosing = true;
+          this.position += 2;
+          this.column += 2;
+          break;
+        }
+        
+        if (this.peek() === "/") {
+          selfClosing = true;
+          this.consume();
+          continue;
+        }
+        
+        // Read attribute
+        const attrName = this.readUntil(/[\s=\/>]/).trim();
+        if (!attrName) break;
+        
+        this.skipWhitespace();
+        
+        if (this.peek() === "=") {
+          this.consume(); // Skip '='
+          this.skipWhitespace();
+          
+          let value: string;
+          const quote = this.peek();
+          
+          if (quote === '"' || quote === "'") {
+            this.consume(); // Skip opening quote
+            value = this.readUntil(quote);
+            this.consume(); // Skip closing quote
+          } else {
+            value = this.readUntil(/[\s\/>]/);
+          }
+          
+          attributes[attrName] = value;
+        } else {
+          attributes[attrName] = "true";
+        }
+        
+        this.skipWhitespace();
+      }
+      
+      if (this.peek() === ">") {
+        this.consume();
+      }
+      
+      return { type: "StartTag", name, attributes, selfClosing, line, column };
+    }
+  
+    private readComment(): HTMLToken {
+      const { line, column } = this.getCurrentLocation();
+      this.consume(4); // Skip '<!--'
+      let value = '';
+      
+      while (this.position < this.input.length) {
+        if (this.match("-->")) {
+          break;
+        }
+        value += this.consume();
+      }
+      
+      this.consume(3); // Skip '-->'
+      return { type: "Comment", value: value.trim(), line, column };
+    }
+  
+  
     private readText(): HTMLToken {
       const { line, column } = this.getCurrentLocation();
       let value = '';
