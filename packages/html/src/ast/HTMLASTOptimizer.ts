@@ -10,12 +10,12 @@ export class HTMLASTOptimizer {
     if (node.children) {
       const mergedChildren = [];
       let lastTextNode: HTMLASTNode | null = null;
-
+  
       for (const child of node.children) {
         if (child.type === "Text") {
-          if (lastTextNode) {
-            lastTextNode.value += child.value;
-          } else {
+          if (lastTextNode && child.value !== undefined) {
+            lastTextNode.value = (lastTextNode.value || "") + child.value;
+          } else if (child.value !== undefined) {
             lastTextNode = { ...child };
             mergedChildren.push(lastTextNode);
           }
@@ -25,11 +25,10 @@ export class HTMLASTOptimizer {
           mergedChildren.push(child);
         }
       }
-
+  
       node.children = mergedChildren;
     }
   }
-
 
   private removeEmptyTextNodes(node: HTMLASTNode): void {
     if (node.children) {
@@ -40,7 +39,7 @@ export class HTMLASTOptimizer {
     }
   }
 
-  private mergeTextNodes(node: HTMLASTNode): void {
+  public mergeTextNodes(node: HTMLASTNode): void {
     if (!node.children) return;
   
     let i = 0;

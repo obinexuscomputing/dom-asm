@@ -1,3 +1,4 @@
+import { HTMLParserError } from "../parser";
 import { HTMLToken } from "../tokenizer";
 
 export interface HTMLAST {
@@ -22,22 +23,24 @@ export interface HTMLAST {
 
 export class HTMLASTNode {
   type: "Element" | "Text" | "Comment" | "Doctype";
-  name?: string; // For "Element" nodes
-  value?: string; // For "Text", "Comment", or "Doctype" nodes
-  attributes?: Record<string, string>; // For "Element" nodes
-  children: HTMLASTNode[]; // For "Element" nodes
+  name?: string;
+  value?: string;
+  attributes?: Record<string, string>;
+  children: HTMLASTNode[];
 
   constructor(
     type: "Element" | "Text" | "Comment" | "Doctype",
+    children: HTMLASTNode[] = [],
     options: { name?: string; value?: string; attributes?: Record<string, string> } = {}
   ) {
     this.type = type;
+    this.children = children;
     this.name = options.name;
     this.value = options.value;
     this.attributes = options.attributes || {};
-    this.children = []; // Initialize children as an empty array by default
   }
 }
+
 
 export class HTMLASTBuilder {
   private tokens: HTMLToken[];
@@ -48,63 +51,43 @@ export class HTMLASTBuilder {
     this.position = 0;
   }
 
-  public buildAST(): HTMLAST {
-    const root: HTMLASTNode = { type: "Element", name: "root", children: [] };
+  public buildAST(tokens: HTMLToken[]): HTMLASTNode {
+    const root = new HTMLASTNode("Element", [], { name: "root" });
     const stack: HTMLASTNode[] = [root];
     let currentParent = root;
-
-    while (this.position < this.tokens.length) {
-      const token = this.tokens[this.position++];
-
-      switch (token.type) {
-        case "StartTag":
-          const elementNode: HTMLASTNode = {
-            type: "Element",
-            name: token.name,
-            attributes: token.attributes,
-            children: [],
-          };
-          currentParent.children?.push(elementNode);
-          stack.push(elementNode);
-          currentParent = elementNode;
-          break;
-
-        case "EndTag":
-          if (stack.length > 1 && currentParent.name === token.name) {
-            stack.pop();
-            currentParent = stack[stack.length - 1];
-          } else if (process.env.NODE_ENV !== "test") {
-            console.warn(`Unmatched end tag: ${token.name}`);
-          }
-          break;
-
-        case "Text":
-        case "Comment":
-          currentParent.children?.push({
-            type: token.type,
-            value: token.value,
-            children: []
-          });
-          break;
-
-        default:
-          if (process.env.NODE_ENV !== "test") {
-            console.warn(`Unexpected token type: ${token.type}`);
-          }
+  
+    for (const token of tokens) {
+      if (token.type === "StartTag") {
+        const newNode = new HTMLASTNode("Element", [], { name: token.name, attributes: token.attributes });
+        currentParent.children.push(newNode);
+        if (!token.selfClosing) {
+          stack.push(newNode);
+          currentParent = newNode;
+        }
+      } else if (token.type === "EndTag") {
+        if (stack.length > 1 && currentParent.name !== token.name) {
+          console.warn(`Skipping unmatched end tag: ${token.name}`);
+        } else if (stack.length > 1) {
+          stack.pop();
+          currentParent = stack[stack.length - 1];
+        } else {
+          console.warn(`Unmatched end tag: ${token.name}`);
+        }
+      } else if (token.type === "Text" || token.type === "Comment") {
+        currentParent.children.push(
+          new HTMLASTNode(token.type, [], { value: token.value })
+        );
       }
     }
-
-    if (stack.length > 1 && process.env.NODE_ENV !== "test") {
-      console.warn(
-        `Unclosed tags detected: ${stack.slice(1).map((node) => node.name)}`
-      );
+  
+    if (stack.length > 1) {
+      const lastToken = tokens[tokens.length - 1] || { name: "unknown", line: -1, column: -1 };
+      throw new HTMLParserError("Unclosed tags detected", lastToken, stack.length);
     }
-
-    return {
-      root,
-      metadata: this.computeMetadata(root),
-    };
+  
+    return root;
   }
+  
 
   private computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
     let nodeCount = 0;
