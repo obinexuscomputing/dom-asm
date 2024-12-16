@@ -16,19 +16,24 @@ export class JSParser {
     this.current = 0;
   }
 
-  public parse(): TypedJSASTNode {
+  public parse(tokens?: JSToken[]): TypedJSASTNode {
+    if (tokens) {
+      this.setTokens(tokens);
+    }
+  
     const children: TypedJSASTNode[] = [];
-
+  
     while (this.current < this.tokens.length) {
       const node = this.walk();
       if (node) {
         children.push(node);
       }
     }
-
+  
     return {
       type: NodeType.Program,
       children,
+      body: children, // Add this line to match the test expectations
     };
   }
 

@@ -12,12 +12,13 @@ describe("JSParser", () => {
     });
 
     test("parses simple expressions", () => {
-        const code = "let x = 10;";
-        const tokens: JSToken[] = tokenizer.tokenize(code);
-        const ast: TypedJSASTNode = parser.parse();
-
-        expect(ast).toBeDefined();
-        expect(ast.body?.length).toBe(1);
+      const code = "let x = 10;";
+      const tokens: JSToken[] = tokenizer.tokenize(code);
+      parser.setTokens(tokens);
+      const ast: TypedJSASTNode = parser.parse();
+    
+      expect(ast).toBeDefined();
+      expect(ast.body?.length).toBe(1);
     });
 
     test("handles missing semicolon gracefully", () => {
