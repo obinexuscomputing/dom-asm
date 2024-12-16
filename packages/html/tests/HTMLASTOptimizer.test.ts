@@ -1,5 +1,4 @@
-import { HTMLAST } from "../src/ast/HTMLAST";
-
+import { HTMLAST, HTMLASTOptimizer } from "../src/ast/";
 
 describe("HTMLASTOptimizer", () => {
   it("should remove empty text nodes", () => {

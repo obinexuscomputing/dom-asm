@@ -128,12 +128,6 @@ declare class HTMLValidator {
     private traverse;
 }
 
-declare class HTMLASTOptimizer {
-    optimize(ast: HTMLAST): HTMLAST;
-    private removeEmptyNodes;
-    private mergeTextNodes;
-}
-
 declare class HTMLCodeGenerator {
     private selfClosingTags;
     constructor(selfClosingTags?: string[]);
@@ -142,4 +136,10 @@ declare class HTMLCodeGenerator {
     private isSelfClosingTag;
 }
 
-export { HTMLASTOptimizer, HTMLCodeGenerator, HTMLParser, HTMLTokenizer, HTMLValidator };
+declare class HTMLASTOptimizer {
+    optimize(ast: HTMLAST): HTMLAST;
+    private removeEmptyNodes;
+    private mergeTextNodes;
+}
+
+export { type HTMLAST, HTMLASTOptimizer, HTMLCodeGenerator, HTMLParser, HTMLTokenizer, HTMLValidator };

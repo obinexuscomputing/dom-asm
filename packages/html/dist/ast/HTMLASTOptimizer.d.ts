@@ -1,7 +1,7 @@
-import { HTMLAST } from "../ast/HTMLAST";
+import { HTMLAST } from "./HTMLAST";
 export declare class HTMLASTOptimizer {
     optimize(ast: HTMLAST): HTMLAST;
     private removeEmptyNodes;
     private mergeTextNodes;
 }
-//# sourceMappingURL=index.d.ts.map
+//# sourceMappingURL=HTMLASTOptimizer.d.ts.map
