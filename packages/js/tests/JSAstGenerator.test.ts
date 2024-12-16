@@ -1,3 +1,4 @@
+import { NodeType } from '../src';
 import { JSGenerator, GeneratorOptions } from '../src/generator';
 import { TypedJSASTNode } from '../src/types';
 
@@ -37,79 +38,81 @@ describe('JSGenerator', () => {
       expect(result.errors!.length).toBeGreaterThan(0);
     });
   });
-
+  
   describe('AST Generation', () => {
     it('should generate code from valid AST', () => {
       const ast: TypedJSASTNode = {
-        type: 'Program',
+        type: NodeType.Program,
         children: [
           {
-            type: 'VariableDeclaration',
+            type: NodeType.VariableDeclaration,
             value: 'const',
             children: [
-              { type: 'Identifier', value: 'x' },
-              { type: 'Literal', value: '42' }
-            ]
-          }
-        ]
+              { type: NodeType.Identifier, value: 'x' },
+              { type: NodeType.Literal, value: '42' },
+            ],
+          },
+        ],
       };
-
+  
       const result = generator.generateFromAST(ast);
-      
+  
       expect(result.success).toBe(true);
       expect(result.code).toBe('Declare x 42');
       expect(result.ast).toBeDefined();
     });
-
+  
     it('should detect invalid AST', () => {
       const ast: TypedJSASTNode = {
-        type: 'Program',
+        type: NodeType.Program,
         children: [
           {
-            type: 'VariableDeclaration',
+            type: NodeType.VariableDeclaration,
             children: [
-              { type: 'Identifier', value: 'x' },
-              { type: 'Literal', value: '42' }
-            ]
-          }
-        ]
+              { type: NodeType.Identifier, value: 'x' },
+              { type: NodeType.Literal, value: '42' },
+            ],
+          },
+        ],
       };
-
+  
       const result = generator.generateFromAST(ast, { validate: true });
-      
+  
       expect(result.success).toBe(false);
       expect(result.errors).toBeDefined();
       expect(result.errors!.length).toBeGreaterThan(0);
     });
   });
-
+  
   describe('Formatting', () => {
     const complexAst: TypedJSASTNode = {
-      type: 'Program',
+      type: NodeType.Program,
       children: [
         {
-          type: 'BlockStatement',
+          type: NodeType.BlockStatement,
           children: [
             {
-              type: 'VariableDeclaration',
+              type: NodeType.VariableDeclaration,
               value: 'const',
               children: [
-                { type: 'Identifier', value: 'x' },
-                { type: 'Literal', value: '42' }
-              ]
-            }
-          ]
-        }
-      ]
+                { type: NodeType.Identifier, value: 'x' },
+                { type: NodeType.Literal, value: '42' },
+              ],
+            },
+          ],
+        },
+      ],
     };
-
+  
     it('should format in compact mode', () => {
       const result = generator.generateFromAST(complexAst, { format: 'compact' });
-      
+  
       expect(result.success).toBe(true);
       expect(result.code).not.toContain('\n');
       expect(result.code).not.toMatch(/\s{2,}/);
     });
+  });
+  
 
     it('should format in pretty mode', () => {
       const result = generator.generateFromAST(complexAst, { 
