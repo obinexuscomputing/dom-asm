@@ -1,4 +1,4 @@
-import { TypedJSASTNode, NodeType, JSToken, JSTokenType } from "../src/types";
+import { TypedJSASTNode, NodeType, JSToken, JSTokenType } from "../types";
 
 export class JSParser {
   private tokens: JSToken[];
@@ -12,7 +12,13 @@ export class JSParser {
     this.current = 0;
   }
 
-  public parse(): TypedJSASTNode {
+ 
+  public parse(tokens?: JSToken[]): TypedJSASTNode {
+    if (tokens) {
+      this.tokens = tokens;
+      this.current = 0; // Reset current position for new input
+    }
+
     const children: TypedJSASTNode[] = [];
 
     while (this.current < this.tokens.length) {
@@ -27,7 +33,6 @@ export class JSParser {
       children,
     };
   }
-
   private walk(): TypedJSASTNode {
     const token = this.tokens[this.current];
 
