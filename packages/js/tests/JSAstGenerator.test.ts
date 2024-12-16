@@ -1,12 +1,48 @@
 import { NodeType } from '../src';
-import { JSGenerator, GeneratorOptions } from '../src/generator';
+import {  GeneratorOptions, JSASTGenerator } from '../src/generator';
 import { TypedJSASTNode } from '../src/types';
 
 describe('JSGenerator', () => {
-  let generator: JSGenerator;
+  let generator: JSASTGenerator;
 
   beforeEach(() => {
-    generator = new JSGenerator();
+    generator = new JSASTGenerator();
+  });
+  it('should generate code from a valid AST', () => {
+    const ast = {
+      type: NodeType.Program,
+      children: [
+        {
+          type: NodeType.VariableDeclaration,
+          value: 'const',
+          children: [
+            { type: NodeType.Identifier, value: 'x' },
+            { type: NodeType.Literal, value: '42' },
+          ],
+        },
+      ],
+    };
+
+    const result = generator.generateFromAST(ast);
+    expect(result.success).toBe(true);
+    expect(result.code).toBe('const x = 42;');
+  });
+
+  it('should validate and reject an invalid AST', () => {
+    const ast = {
+      type: NodeType.Program,
+      children: [
+        {
+          type: NodeType.VariableDeclaration,
+          children: [{ type: NodeType.Identifier, value: 'x' }],
+        },
+      ],
+    };
+
+    const result = generator.generateFromAST(ast, { validate: true });
+    expect(result.success).toBe(false);
+    expect(result.errors).toBeDefined();
+    expect(result.errors?.length).toBeGreaterThan(0);
   });
 
   describe('Source Generation', () => {
@@ -169,4 +205,3 @@ describe('JSGenerator', () => {
       expect(result.ast).toBe(invalidAst);
     });
   });
-});
