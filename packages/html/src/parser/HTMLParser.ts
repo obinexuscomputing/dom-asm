@@ -124,7 +124,8 @@ export class HTMLParser {
             if (token.value?.trim()) {
               currentParent.children.push({
                 type: "Text",
-                value: token.value
+                value: token.value,
+                children: []
               });
             }
             break;
@@ -133,7 +134,8 @@ export class HTMLParser {
           case "Comment": {
             currentParent.children.push({
               type: "Comment",
-              value: token.value || ""
+              value: token.value || "",
+              children: []
             });
             break;
           }
