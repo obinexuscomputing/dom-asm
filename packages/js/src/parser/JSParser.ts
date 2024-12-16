@@ -1,24 +1,21 @@
-import { TypedJSASTNode, NodeType, JSToken, JSTokenType } from "../types";
+// Import necessary types and classes
+import { TypedJSASTNode, NodeType, JSToken, JSTokenType } from "../src/types";
 
 export class JSParser {
   private tokens: JSToken[];
   private current: number;
 
-  constructor(tokens: JSToken[]) {
-    if (!tokens || !Array.isArray(tokens)) {
-      throw new Error("JSParser requires an array of tokens.");
-    }
+  constructor(tokens: JSToken[] = []) {
     this.tokens = tokens;
     this.current = 0;
   }
 
- 
-  public parse(tokens?: JSToken[]): TypedJSASTNode {
-    if (tokens) {
-      this.tokens = tokens;
-      this.current = 0; // Reset current position for new input
-    }
+  public setTokens(tokens: JSToken[]): void {
+    this.tokens = tokens;
+    this.current = 0;
+  }
 
+  public parse(): TypedJSASTNode {
     const children: TypedJSASTNode[] = [];
 
     while (this.current < this.tokens.length) {
@@ -33,6 +30,7 @@ export class JSParser {
       children,
     };
   }
+
   private walk(): TypedJSASTNode {
     const token = this.tokens[this.current];
 
@@ -69,6 +67,79 @@ export class JSParser {
       default:
         throw new Error(`Unexpected keyword: ${token.value}`);
     }
+  }
+
+  private parseIfStatement(): TypedJSASTNode {
+    this.current++; // Skip 'if'
+
+    if (this.tokens[this.current]?.value !== "(") {
+      throw new Error("Expected '(' after 'if'");
+    }
+
+    this.current++; // Skip '('
+    const condition = this.walk();
+
+    if (this.tokens[this.current]?.value !== ")") {
+      throw new Error("Expected ')' after condition");
+    }
+
+    this.current++; // Skip ')'
+    const consequence = this.walk();
+
+    let alternate: TypedJSASTNode | undefined;
+    if (this.tokens[this.current]?.value === "else") {
+      this.current++; // Skip 'else'
+      alternate = this.walk();
+    }
+
+    return {
+      type: NodeType.IfStatement,
+      children: [condition, consequence, ...(alternate ? [alternate] : [])],
+    };
+  }
+
+  private parseFunctionDeclaration(): TypedJSASTNode {
+    this.current++; // Skip 'function'
+
+    const identifier = this.tokens[this.current];
+    if (!identifier || identifier.type !== JSTokenType.Identifier) {
+      throw new Error("Expected function name");
+    }
+
+    this.current++;
+    if (this.tokens[this.current]?.value !== "(") {
+      throw new Error("Expected '(' after function name");
+    }
+
+    this.current++; // Skip '('
+
+    const parameters: TypedJSASTNode[] = [];
+    while (this.current < this.tokens.length && this.tokens[this.current]?.value !== ")") {
+      const param = this.tokens[this.current];
+      if (param.type !== JSTokenType.Identifier) {
+        throw new Error("Expected parameter identifier");
+      }
+
+      parameters.push({ type: NodeType.Identifier, value: param.value });
+      this.current++;
+
+      if (this.tokens[this.current]?.value === ",") {
+        this.current++; // Skip ','
+      }
+    }
+
+    if (this.tokens[this.current]?.value !== ")") {
+      throw new Error("Expected ')' after parameters");
+    }
+
+    this.current++; // Skip ')'
+    const body = this.parseBlockStatement();
+
+    return {
+      type: NodeType.FunctionDeclaration,
+      value: identifier.value,
+      children: [...parameters, body],
+    };
   }
 
   private parseVariableDeclaration(): TypedJSASTNode {
@@ -126,77 +197,4 @@ export class JSParser {
       children,
     };
   }
-  private parseIfStatement(): TypedJSASTNode {
-    this.current++; // Skip 'if'
-
-    if (this.tokens[this.current]?.value !== "(") {
-      throw new Error("Expected '(' after 'if'");
-    }
-
-    this.current++; // Skip '('
-    const condition = this.walk();
-
-    if (this.tokens[this.current]?.value !== ")") {
-      throw new Error("Expected ')' after condition");
-    }
-
-    this.current++; // Skip ')'
-    const consequence = this.walk();
-
-    let alternate: TypedJSASTNode | undefined;
-    if (this.tokens[this.current]?.value === "else") {
-      this.current++; // Skip 'else'
-      alternate = this.walk();
-    }
-
-    return {
-      type: NodeType.IfStatement,
-      children: [condition, consequence, ...(alternate ? [alternate] : [])],
-    };
-  }
-
-private parseFunctionDeclaration(): TypedJSASTNode {
-  this.current++; // Skip 'function'
-
-  const identifier = this.tokens[this.current];
-  if (!identifier || identifier.type !== JSTokenType.Identifier) {
-    throw new Error("Expected function name");
-  }
-
-  this.current++;
-  if (this.tokens[this.current]?.value !== "(") {
-    throw new Error("Expected '(' after function name");
-  }
-
-  this.current++; // Skip '('
-
-  const parameters: TypedJSASTNode[] = [];
-  while (this.current < this.tokens.length && this.tokens[this.current]?.value !== ")") {
-    const param = this.tokens[this.current];
-    if (param.type !== JSTokenType.Identifier) {
-      throw new Error("Expected parameter identifier");
-    }
-
-    parameters.push({ type: NodeType.Identifier, value: param.value });
-    this.current++;
-
-    if (this.tokens[this.current]?.value === ",") {
-      this.current++; // Skip ','
-    }
-  }
-
-  if (this.tokens[this.current]?.value !== ")") {
-    throw new Error("Expected ')' after parameters");
-  }
-
-  this.current++; // Skip ')'
-  const body = this.parseBlockStatement();
-
-  return {
-    type: NodeType.FunctionDeclaration,
-    value: identifier.value,
-    children: [...parameters, body],
-  };
-}
-
 }
