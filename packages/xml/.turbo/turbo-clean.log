@@ -1,3 +1,4 @@
+[1mnpm[22m [33mwarn[39m [94musing --force[39m Recommended protections disabled.
 
 > @obinexuscomputing/xml@1.0.0 clean
 > rimraf dist
