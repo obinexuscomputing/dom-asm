@@ -1,0 +1,1 @@
+{"version":3,"file":"HTMLASTOptimizer.d.ts","sourceRoot":"","sources":["../../src/ast/HTMLASTOptimizer.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAe,MAAM,gBAAgB,CAAC;AAEtD,qBAAa,gBAAgB;IACpB,QAAQ,CAAC,GAAG,EAAE,OAAO,GAAG,IAAI;IAMnC,OAAO,CAAC,oBAAoB;IAiB5B,OAAO,CAAC,cAAc;CA8BvB"}
