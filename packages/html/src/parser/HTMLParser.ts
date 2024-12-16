@@ -74,8 +74,6 @@ export class HTMLParser {
   public setErrorHandler(handler: (error: HTMLParserError) => void): void {
     this.options.errorHandler = handler;
   }
-  
-
   public buildAST(tokens: HTMLToken[]): HTMLASTNode {
     const root = new HTMLASTNode("Element", [], { name: "root" });
     const stack: HTMLASTNode[] = [root];
@@ -92,11 +90,12 @@ export class HTMLParser {
       } else if (token.type === "EndTag") {
         if (stack.length > 1 && currentParent.name !== token.name) {
           console.warn(`Skipping unmatched end tag: ${token.name}`);
+          continue;
         } else if (stack.length > 1) {
           stack.pop();
           currentParent = stack[stack.length - 1];
         } else {
-          console.warn(`Unmatched end tag: ${token.name}`);
+          console.warn(`Unmatched end tag at root level: ${token.name}`);
         }
       } else if (token.type === "Text" || token.type === "Comment") {
         currentParent.children.push(
@@ -112,6 +111,7 @@ export class HTMLParser {
   
     return root;
   }
+  
   
   
   
