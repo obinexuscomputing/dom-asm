@@ -1,10 +1,12 @@
 import { JSToken, JSTokenType } from "../tokenizer/JSTokenizer";
-
 export interface JSASTNode {
   type: string;
   value?: string;
   children?: JSASTNode[];
+  line?: number;
+  column?: number;
 }
+
 
 
 export class JSASTBuilder {

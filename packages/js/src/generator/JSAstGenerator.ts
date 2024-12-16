@@ -3,10 +3,19 @@ import { JSValidator, ValidationError } from "../validator/JSValidator";
 import { JSParser, TypedJSASTNode } from "../parser/JSParser";
 import { JSASTBuilder } from "../ast/JSAst";
 
+export interface GenerationError {
+  code: string;
+  message: string;
+  location?: {
+    line?: number;
+    column?: number;
+  };
+}
+
 export interface GenerationResult {
   success: boolean;
   code?: string;
-  errors?: string[];
+  errors?: GenerationError[];
   ast?: TypedJSASTNode;
 }
 
@@ -42,7 +51,7 @@ export class JSGenerator {
         if (validationErrors.length > 0) {
           return {
             success: false,
-            errors: validationErrors,
+            errors: this.convertValidationErrors(validationErrors),
             ast
           };
         }
@@ -60,7 +69,10 @@ export class JSGenerator {
     } catch (err) {
       return {
         success: false,
-        errors: [err instanceof Error ? err.message : 'Unknown error occurred']
+        errors: [{
+          code: 'E000',
+          message: err instanceof Error ? err.message : 'Unknown error occurred'
+        }]
       };
     }
   }
@@ -73,7 +85,7 @@ export class JSGenerator {
         if (validationErrors.length > 0) {
           return {
             success: false,
-            errors: validationErrors,
+            errors: this.convertValidationErrors(validationErrors),
             ast
           };
         }
@@ -91,9 +103,23 @@ export class JSGenerator {
     } catch (err) {
       return {
         success: false,
-        errors: [err instanceof Error ? err.message : 'Unknown error occurred']
+        errors: [{
+          code: 'E000',
+          message: err instanceof Error ? err.message : 'Unknown error occurred'
+        }]
       };
     }
+  }
+
+  private convertValidationErrors(validationErrors: ValidationError[]): GenerationError[] {
+    return validationErrors.map(error => ({
+      code: error.code,
+      message: error.message,
+      location: {
+        line: error.node.line,
+        column: error.node.column
+      }
+    }));
   }
 
   private generateCode(ast: TypedJSASTNode, options: GeneratorOptions): string {

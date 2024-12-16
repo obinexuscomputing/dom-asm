@@ -1,5 +1,6 @@
 import { JSASTNode } from "../ast";
 
+
 export type NodeType = 
   | "Program"
   | "Statement"
@@ -14,11 +15,14 @@ export type NodeType =
   | "IfStatement"
   | "BlockStatement";
 
-export interface TypedJSASTNode {
+export interface TypedJSASTNode extends JSASTNode {
   type: NodeType;
   value?: string;
   children?: TypedJSASTNode[];
+  line?: number;
+  column?: number;
 }
+
 
 export class JSParser {
   parse(ast: TypedJSASTNode): string | string[] | null {
