@@ -10,8 +10,9 @@ module.exports = {
       isolatedModules: true
     }]
   },
-  testMatch: ['**/tests/**/*.test.ts'],
+  testMatch: ['**/tests/**/*.test.ts'], // Match test files in "tests" directory
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
-  }
+    '^@/(.*)$': '<rootDir>/src/$1', // Alias for `src` directory
+  },
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'], // Optional setup file
 };
