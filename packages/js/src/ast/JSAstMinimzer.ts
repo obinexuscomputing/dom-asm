@@ -1,4 +1,4 @@
-import { JSASTNode } from "./JSASTNode"; // Adjust import path as needed
+import { JSASTNode } from "./JSAst";
 
 export class JSAstMinimizer {
   private uniqueNodes = new Map<string, JSASTNode>();
@@ -28,7 +28,7 @@ export class JSAstMinimizer {
 
     // Optimize and process children if they exist
     if (node.children) {
-      processedNode.children = node.children.map(child => 
+      processedNode.children = node.children.map((child: any) => 
         this.traverse(child, optimize)
       );
     }
