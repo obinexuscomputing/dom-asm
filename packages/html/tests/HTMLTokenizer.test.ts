@@ -94,15 +94,14 @@ describe("HTMLTokenizer", () => {
       { type: "Doctype", value: "html", line: 1, column: 1 }
     ]);
   });
-
   it("should handle attributes with double quotes", () => {
     const input = '<div class="test">Content</div>';
     const tokenizer = new HTMLTokenizer(input);
     const tokens = tokenizer.tokenize();
     expect(tokens).toEqual([
       { type: "StartTag", name: "div", attributes: { class: "test" }, selfClosing: false, line: 1, column: 1 },
-      { type: "Text", value: "Content", line: 1, column: 18 },
-      { type: "EndTag", name: "div", line: 1, column: 25 }
+      { type: "Text", value: "Content", line: 1, column: 19 },  // Adjusted column position
+      { type: "EndTag", name: "div", line: 1, column: 26 }     // Adjusted column position
     ]);
   });
 });
