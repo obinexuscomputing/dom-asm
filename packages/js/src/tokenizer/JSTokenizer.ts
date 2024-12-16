@@ -23,6 +23,10 @@ export class JSTokenizer {
     const tokens: JSToken[] = [];
     let current = 0;
 
+    const addToken = (type: JSTokenType, value: string) => {
+      tokens.push({ type, value });
+    };
+
     while (current < input.length) {
       let char = input[current];
 
@@ -32,58 +36,62 @@ export class JSTokenizer {
         continue;
       }
 
-      // Handle identifiers and keywords
-      if (/[a-zA-Z_$]/.test(char)) {
-        let value = '';
-        while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
-          value += input[current++];
-        }
-        tokens.push({
-          type: this.keywords.has(value) ? JSTokenType.Keyword : JSTokenType.Identifier,
-          value
-        });
-        continue;
-      }
-
-      // Handle numbers
-      if (/[0-9]/.test(char)) {
-        let value = '';
-        while (current < input.length && /[0-9.]/.test(input[current])) {
-          value += input[current++];
-        }
-        tokens.push({ type: JSTokenType.Literal, value });
-        continue;
-      }
-
-      // Handle multi-character operators
+      // Check for multi-character delimiters or operators first
       const remainingInput = input.slice(current);
       const multiCharOp = this.matchMultiCharOperator(remainingInput);
       if (multiCharOp) {
-        tokens.push({ type: JSTokenType.Operator, value: multiCharOp });
+        addToken(JSTokenType.Operator, multiCharOp);
         current += multiCharOp.length;
         continue;
       }
 
-      // Handle single-character operators
-      if (this.operators.has(char)) {
-        tokens.push({ type: JSTokenType.Operator, value: char });
-        current++;
-        continue;
-      }
+      // Handle single-character cases
+      switch (true) {
+        // Identifiers and keywords
+        case /[a-zA-Z_$]/.test(char): {
+          let value = '';
+          while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
+            value += input[current++];
+          }
+          addToken(
+            this.keywords.has(value) ? JSTokenType.Keyword : JSTokenType.Identifier, 
+            value
+          );
+          continue;
+        }
 
-      // Handle delimiters
-      if (this.delimiters.has(char)) {
-        tokens.push({ type: JSTokenType.Delimiter, value: char });
-        current++;
-        continue;
-      }
+        // Numbers
+        case /[0-9]/.test(char): {
+          let value = '';
+          while (current < input.length && /[0-9.]/.test(input[current])) {
+            value += input[current++];
+          }
+          addToken(JSTokenType.Literal, value);
+          continue;
+        }
 
-      // If no pattern matches, throw an error
-      throw new Error(`Unexpected character: ${char}`);
+        // Operators
+        case this.operators.has(char): {
+          addToken(JSTokenType.Operator, char);
+          current++;
+          continue;
+        }
+
+        // Delimiters
+        case this.delimiters.has(char): {
+          addToken(JSTokenType.Delimiter, char);
+          current++;
+          continue;
+        }
+
+        // Unexpected character
+        default:
+          throw new Error(`Unexpected character: ${char}`);
+      }
     }
 
     // Always add EOF token
-    tokens.push({ type: JSTokenType.EndOfStatement, value: 'EOF' });
+    addToken(JSTokenType.EndOfStatement, 'EOF');
     return tokens;
   }
 
