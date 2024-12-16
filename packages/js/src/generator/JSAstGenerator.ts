@@ -6,13 +6,12 @@ import { JSASTBuilder } from "../ast/JSAst";
 export interface GenerationResult {
   success: boolean;
   code?: string;
-  validationErrors?: ValidationError[];
-  error?: string;
+  errors?: string[];
+  ast?: TypedJSASTNode;
 }
 
 export interface GeneratorOptions {
   validate?: boolean;
-  optimize?: boolean;
   format?: 'compact' | 'pretty';
   indent?: string;
 }
@@ -21,92 +20,90 @@ export class JSGenerator {
   private tokenizer: JSTokenizer;
   private validator: JSValidator;
   private parser: JSParser;
-  private builder: JSASTBuilder;
 
   constructor() {
     this.tokenizer = new JSTokenizer();
     this.validator = new JSValidator();
     this.parser = new JSParser();
-    this.builder = new JSASTBuilder([]);
   }
 
   public generateFromSource(source: string, options: GeneratorOptions = {}): GenerationResult {
     try {
-      // Tokenize the source code
+      // Step 1: Tokenize source
       const tokens = this.tokenizer.tokenize(source);
       
-      // Build AST from tokens
-      this.builder = new JSASTBuilder(tokens);
-      const ast = this.builder.buildAST();
+      // Step 2: Build AST
+      const builder = new JSASTBuilder(tokens);
+      const ast = builder.buildAST() as TypedJSASTNode;
 
-      // Validate if requested
+      // Step 3: Validate if requested
       if (options.validate) {
         const validationErrors = this.validator.validate(ast);
         if (validationErrors.length > 0) {
           return {
             success: false,
-            validationErrors
+            errors: validationErrors,
+            ast
           };
         }
       }
 
-      // Parse and generate code
-      const parsedResult = this.parser.parse(ast as TypedJSASTNode);
+      // Step 4: Generate code
+      const code = this.generateCode(ast, options);
       
-      if (Array.isArray(parsedResult)) {
-        return {
-          success: true,
-          code: this.formatOutput(parsedResult.join('\n'), options)
-        };
-      }
-
       return {
         success: true,
-        code: this.formatOutput(parsedResult || '', options)
+        code,
+        ast
       };
 
     } catch (err) {
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Unknown error occurred'
+        errors: [err instanceof Error ? err.message : 'Unknown error occurred']
       };
     }
   }
 
   public generateFromAST(ast: TypedJSASTNode, options: GeneratorOptions = {}): GenerationResult {
     try {
-      // Validate if requested
+      // Step 1: Validate if requested
       if (options.validate) {
         const validationErrors = this.validator.validate(ast);
         if (validationErrors.length > 0) {
           return {
             success: false,
-            validationErrors
+            errors: validationErrors,
+            ast
           };
         }
       }
 
-      // Parse and generate code
-      const parsedResult = this.parser.parse(ast);
+      // Step 2: Generate code
+      const code = this.generateCode(ast, options);
       
-      if (Array.isArray(parsedResult)) {
-        return {
-          success: true,
-          code: this.formatOutput(parsedResult.join('\n'), options)
-        };
-      }
-
       return {
         success: true,
-        code: this.formatOutput(parsedResult || '', options)
+        code,
+        ast
       };
 
     } catch (err) {
       return {
         success: false,
-        error: err instanceof Error ? err.message : 'Unknown error occurred'
+        errors: [err instanceof Error ? err.message : 'Unknown error occurred']
       };
     }
+  }
+
+  private generateCode(ast: TypedJSASTNode, options: GeneratorOptions): string {
+    const rawOutput = this.parser.parse(ast);
+    
+    if (Array.isArray(rawOutput)) {
+      return this.formatOutput(rawOutput.join('\n'), options);
+    }
+
+    return this.formatOutput(rawOutput || '', options);
   }
 
   private formatOutput(code: string, options: GeneratorOptions): string {
@@ -121,55 +118,30 @@ export class JSGenerator {
       .replace(/\s+/g, ' ')
       .replace(/\s*([{}[\],;()])\s*/g, '$1')
       .replace(/\s*=\s*/g, '=')
-      .replace(/\s*:\s*/g, ':')
+      .replace(/;\s*/g, ';')
       .trim();
   }
 
   private formatPretty(code: string, indent: string): string {
     let level = 0;
-    let formatted = '';
-    let inString = false;
-    let lastChar = '';
+    let result = '';
+    const lines = code.split('\n');
 
-    for (const char of code) {
-      // Handle string literals
-      if (char === '"' || char === "'") {
-        if (lastChar !== '\\') {
-          inString = !inString;
-        }
-        formatted += char;
-        continue;
+    for (const line of lines) {
+      const trimmedLine = line.trim();
+      if (!trimmedLine) continue;
+
+      if (trimmedLine.endsWith('}')) {
+        level = Math.max(0, level - 1);
       }
 
-      if (inString) {
-        formatted += char;
-        continue;
-      }
+      result += `${indent.repeat(level)}${trimmedLine}\n`;
 
-      switch (char) {
-        case '{':
-          level++;
-          formatted += '{\n' + indent.repeat(level);
-          break;
-        case '}':
-          level--;
-          formatted = formatted.trimEnd() + '\n' + indent.repeat(level) + '}';
-          break;
-        case ';':
-          formatted += ';\n' + indent.repeat(level);
-          break;
-        case '\n':
-          if (lastChar !== '}') {
-            formatted += '\n' + indent.repeat(level);
-          }
-          break;
-        default:
-          formatted += char;
+      if (trimmedLine.endsWith('{')) {
+        level++;
       }
-
-      lastChar = char;
     }
 
-    return formatted.trim();
+    return result.trimEnd();
   }
 }
