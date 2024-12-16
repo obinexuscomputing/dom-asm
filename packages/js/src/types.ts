@@ -1,3 +1,4 @@
+// NodeType Enum
 export enum NodeType {
   Program = 'Program',
   Statement = 'Statement',
@@ -16,8 +17,12 @@ export enum NodeType {
   Property = 'Property',
   ImportDeclaration = 'ImportDeclaration',
   ExportDeclaration = 'ExportDeclaration',
+  InlineConstant = 'InlineConstant',
+  FunctionDeclaration = 'FunctionDeclaration',
+  ReturnStatement = 'ReturnStatement',
 }
 
+// JSTokenType Enum
 export enum JSTokenType {
   Keyword = 'Keyword',
   Identifier = 'Identifier',
@@ -27,7 +32,6 @@ export enum JSTokenType {
   EndOfStatement = 'EndOfStatement',
 }
 
-
 // Token Interface
 export interface JSToken {
   type: JSTokenType;
@@ -36,7 +40,7 @@ export interface JSToken {
   column?: number;
 }
 
-// AST Node Interfaces
+// BaseNode Interface for AST Nodes
 export interface BaseNode {
   type: NodeType;
   value?: string;
@@ -45,21 +49,33 @@ export interface BaseNode {
   column?: number;
 }
 
+// JSASTNode Interface for JavaScript-Specific AST
 export interface JSASTNode extends BaseNode {
   children?: JSASTNode[];
 }
 
-// Parser Options
+// TypedJSASTNode Interface for Strict Typing
+export interface TypedJSASTNode extends JSASTNode {
+  type: NodeType;
+  children?: TypedJSASTNode[];
+}
+
+// ValidationError Interface
+export interface ValidationError {
+  code: string;
+  message: string;
+  node: JSASTNode;
+}
+
+// ParseOptions Interface
 export interface ParseOptions {
   sourceType?: 'module' | 'script';
   strict?: boolean;
 }
 
-// Default Export Object
-
-// Individual Type Exports
-// Exporting enums and interfaces
+// Export enums for runtime access
 const Types = { NodeType, JSTokenType };
 export default Types;
-export type { JSASTNode, TypedJSASTNode, ParseOptions };
-export {};
+
+// Export types for type-checking
+// export type { JSToken, BaseNode, JSASTNode, TypedJSASTNode, ValidationError, ParseOptions };
