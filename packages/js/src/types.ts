@@ -78,4 +78,4 @@ const Types = { NodeType, JSTokenType };
 export default Types;
 
 // Export types for type-checking
-// export type { JSToken, BaseNode, JSASTNode, TypedJSASTNode, ValidationError, ParseOptions };
+export type { JSToken, BaseNode, JSASTNode, TypedJSASTNode, ValidationError, ParseOptions };
