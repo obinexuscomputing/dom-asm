@@ -59,7 +59,9 @@ export class JSParser {
     }
     const childResults = ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null);
-    return `Statement: ${childResults?.join("; ") || ""}`.trim();
+    return childResults?.length ? 
+      `Statement: ${childResults.join("; ")}` : 
+      "Statement: ";  // Always include space after colon
   }
 
   private parseExpression(ast: TypedJSASTNode): string {
@@ -68,17 +70,19 @@ export class JSParser {
     }
     const childResults = ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null);
-    return `Expression: ${childResults?.join(" ") || ""}`.trim();
+    return childResults?.length ? 
+      `Expression: ${childResults.join(" ")}` : 
+      "Expression: ";  // Always include space after colon
   }
 
   private parseVariableDeclaration(ast: TypedJSASTNode): string {
     const childResults = ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null);
-    return `Declare ${childResults?.join(" ") || ""}`.trim();
+    return `Declare ${childResults?.join(" ") || ""}`.trimEnd();
   }
 
   private parseInlineConstant(ast: TypedJSASTNode): string {
-    return `Inline ${ast.value || ""}`.trim();
+    return `Inline ${ast.value || ""}`.trimEnd();
   }
 
   private parseBinaryExpression(ast: TypedJSASTNode): string {
@@ -89,7 +93,7 @@ export class JSParser {
     const left = leftChild ? this.parse(leftChild) : "";
     const right = rightChild ? this.parse(rightChild) : "";
 
-    return `(${left} ${operator} ${right})`.trim();
+    return `(${left} ${operator} ${right})`.trimEnd();
   }
 
   private parseBlockStatement(ast: TypedJSASTNode): string {
@@ -105,7 +109,7 @@ export class JSParser {
     const thenStr = thenBranch ? this.parse(thenBranch) : "";
     const elseStr = elseBranch ? ` else ${this.parse(elseBranch)}` : "";
 
-    return `if (${conditionStr}) ${thenStr}${elseStr}`.trim();
+    return `if (${conditionStr}) ${thenStr}${elseStr}`;
   }
 
   private parseFunctionDeclaration(ast: TypedJSASTNode): string {
@@ -113,13 +117,13 @@ export class JSParser {
     const body = ast.children?.[0];
     const bodyStr = body ? this.parse(body) : "";
 
-    return `function ${name || ""} ${bodyStr}`.trim();
+    return `function ${name || ""} ${bodyStr}`.trimEnd();
   }
 
   private parseReturnStatement(ast: TypedJSASTNode): string {
     const expression = ast.children?.[0];
     const exprStr = expression ? this.parse(expression) : "";
 
-    return `return ${exprStr}`.trim();
+    return `return ${exprStr}`.trimEnd();
   }
 }
