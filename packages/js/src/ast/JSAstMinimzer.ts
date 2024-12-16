@@ -1,12 +1,12 @@
-import { JSASTNode } from "./JSAst";
+// src/ast/JSAstMinimizer.ts
+import { NodeType } from '../types';
+import { JSASTNode } from './JSAst';
 
 export class JSAstMinimizer {
   private uniqueNodes = new Map<string, JSASTNode>();
 
   public minimize(ast: JSASTNode): JSASTNode {
-    // Reset unique nodes for each minimize operation
     this.uniqueNodes.clear();
-
     return this.traverse(ast);
   }
 
@@ -15,50 +15,41 @@ export class JSAstMinimizer {
   }
 
   private traverse(node: JSASTNode, optimize: boolean = false): JSASTNode {
-    // Generate a unique key for the node
     const key = `${node.type}:${node.value || ""}`;
-
-    // Check for existing unique node
+    
     if (this.uniqueNodes.has(key)) {
       return this.uniqueNodes.get(key)!;
     }
 
-    // Create a new node with processed children
-    let processedNode: JSASTNode = { ...node };
+    const processedNode: JSASTNode = { ...node };
 
-    // Optimize and process children if they exist
     if (node.children) {
-      processedNode.children = node.children.map((child: any) => 
+      processedNode.children = node.children.map(child =>
         this.traverse(child, optimize)
       );
     }
 
-    // Additional optimization steps
     if (optimize) {
-      processedNode = this.performOptimization(processedNode);
+      return this.performOptimization(processedNode);
     }
 
-    // Store and return the processed node
     this.uniqueNodes.set(key, processedNode);
     return processedNode;
   }
 
   private performOptimization(node: JSASTNode): JSASTNode {
-    // Program-level optimization
-    if (node.type === "Program") {
+    if (node.type === NodeType.Program) {
       return {
         ...node,
-        children: node.children?.map(this.simplifyNode) || []
+        children: node.children?.map(child => this.simplifyNode(child)) || []
       };
     }
 
-    // Variable declaration optimization
-    if (node.type === "VariableDeclaration" && node.children) {
+    if (node.type === NodeType.VariableDeclaration && node.children) {
       const [identifier, value] = node.children;
-
-      if (value.type === "Literal") {
+      if (value.type === NodeType.Literal) {
         return {
-          type: "InlineConstant",
+          type: NodeType.InlineConstant,
           value: `${identifier.value}=${value.value}`,
           children: []
         };
@@ -69,12 +60,9 @@ export class JSAstMinimizer {
   }
 
   private simplifyNode(node: JSASTNode): JSASTNode {
-    // Additional node simplification logic
-    if (node.type === "EmptyStatement") {
-      return node; // Remove or skip empty statements
+    if (!Object.values(NodeType).includes(node.type)) {
+      return node;
     }
-
-    // Add more specific node simplification rules as needed
     return node;
   }
 }

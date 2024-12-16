@@ -1,18 +1,5 @@
-export enum JSTokenType {
-  Keyword = 'Keyword',
-  Identifier = 'Identifier',
-  Operator = 'Operator',
-  Delimiter = 'Delimiter',
-  Literal = 'Literal',
-  TemplateLiteral = 'TemplateLiteral',
-  Comment = 'Comment',
-  EndOfStatement = 'EndOfStatement',
-}
+import { JSToken, JSTokenType } from ".";
 
-export interface JSToken {
-  type: JSTokenType;
-  value: string;
-}
 
 export class JSTokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return']);

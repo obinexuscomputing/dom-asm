@@ -1,2 +1,2 @@
-export * from '../types';
-export * from './JSTokenizer';
+export { JSTokenizer } from './JSTokenizer';
+export type { JSToken, JSTokenType } from '../types';

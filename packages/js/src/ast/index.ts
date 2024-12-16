@@ -1,3 +1,2 @@
-
-export * from './JSAstMinimzer';
-export * from './JSAst';
+export { JSAstMinimizer } from './JSAstMinimizer';
+export type { JSASTNode, NodeType } from '../types';
