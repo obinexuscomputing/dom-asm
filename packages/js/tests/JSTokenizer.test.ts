@@ -25,15 +25,18 @@ describe('JSTokenizer', () => {
     it('should recognize various delimiters', () => {
       const input = '(); {} []';
       const tokens = tokenizer.tokenize(input);
-
+    
       const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
+      const actualDelimiters = tokens.filter(token => token.type === JSTokenType.Delimiter);
+    
       expectedDelimiters.forEach((delimiter, index) => {
-        expect(tokens[index]).toEqual({
+        expect(actualDelimiters[index]).toEqual({
           type: JSTokenType.Delimiter,
           value: delimiter,
         });
       });
     });
+    
 
     it('should recognize keywords', () => {
       const input = 'const let var if else function return';
