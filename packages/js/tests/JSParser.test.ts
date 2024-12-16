@@ -1,4 +1,5 @@
-import { JSParser, TypedJSASTNode } from '../src/parser';
+import { JSParser } from "../src";
+import { TypedJSASTNode } from "../src/types";
 
 describe('JSParser', () => {
   let parser: JSParser;

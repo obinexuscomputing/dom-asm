@@ -1,6 +1,8 @@
-import { JSASTBuilder } from '../src/ast';
+import { NodeType } from '../src';
+import { JSAstMinimizer } from '../src/ast';
+import { JSASTBuilder } from '../src/ast/JSAst';
 import { JSToken, JSTokenType } from '../src/tokenizer';
-import { NodeType } from '../src/ast/types';
+import { JSASTNode } from '../src/types';
 
 
 describe('JSAst and JSAstMinimizer', () => {

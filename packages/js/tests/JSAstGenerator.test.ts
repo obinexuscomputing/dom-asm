@@ -1,5 +1,5 @@
 import { JSGenerator, GeneratorOptions } from '../src/generator';
-import { TypedJSASTNode } from '../src/parser';
+import { TypedJSASTNode } from '../src/types';
 
 describe('JSGenerator', () => {
   let generator: JSGenerator;
