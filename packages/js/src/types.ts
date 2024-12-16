@@ -19,6 +19,7 @@ export enum NodeType {
   InlineConstant = 'InlineConstant',
   FunctionDeclaration = 'FunctionDeclaration',
   ReturnStatement = 'ReturnStatement',
+  AsyncFunction= 'AsyncFunction'
 }
 
 export enum JSTokenType {
