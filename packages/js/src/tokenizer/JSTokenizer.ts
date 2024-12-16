@@ -23,18 +23,15 @@ export class JSTokenizer {
     const tokens: JSToken[] = [];
     let current = 0;
 
+    // Remove all whitespace from the input
+    input = input.replace(/\s+/g, '');
+
     const addToken = (type: JSTokenType, value: string) => {
       tokens.push({ type, value });
     };
 
     while (current < input.length) {
       let char = input[current];
-
-      // Skip whitespace
-      if (/\s/.test(char)) {
-        current++;
-        continue;
-      }
 
       // Check for multi-character delimiters or operators first
       const remainingInput = input.slice(current);
@@ -54,7 +51,7 @@ export class JSTokenizer {
             value += input[current++];
           }
           addToken(
-            this.keywords.has(value) ? JSTokenType.Keyword : JSTokenType.Identifier, 
+            this.keywords.has(value) ? JSTokenType.Keyword : JSTokenType.Identifier,
             value
           );
           continue;
@@ -79,6 +76,11 @@ export class JSTokenizer {
 
         // Delimiters
         case this.delimiters.has(char): {
+          // Skip semicolons entirely
+          if (char === ';') {
+            current++;
+            continue;
+          }
           addToken(JSTokenType.Delimiter, char);
           current++;
           continue;
