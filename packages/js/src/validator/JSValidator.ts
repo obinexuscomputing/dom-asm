@@ -1,4 +1,4 @@
-import { JSASTNode } from "../ast/JSAST";
+import { JSASTNode } from "../ast";
 
 export class JSValidator {
   private errors: string[];
