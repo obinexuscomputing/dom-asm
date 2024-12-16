@@ -22,7 +22,21 @@ describe('JSTokenizer', () => {
         { type: JSTokenType.EndOfStatement, value: 'EOF' }
       ]);
     });
-
+    it('should recognize various delimiters', () => {
+        const input = '(); {} []';
+        const tokens = tokenizer.tokenize(input);
+      
+        console.log('Generated tokens:', JSON.stringify(tokens, null, 2));
+      
+        const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
+      
+        expectedDelimiters.forEach((delimiter, index) => {
+          expect(tokens[index]).toEqual({
+            type: JSTokenType.Delimiter,
+            value: delimiter
+          });
+        });
+      });
     it('should recognize keywords', () => {
       const input = 'const let var if else function return';
       const tokens = tokenizer.tokenize(input);
@@ -129,9 +143,9 @@ describe('JSTokenizer', () => {
     it('should recognize various delimiters', () => {
       const input = '(); {} []';
       const tokens = tokenizer.tokenize(input);
-
+  
       const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
-
+  
       expectedDelimiters.forEach((delimiter, index) => {
         expect(tokens[index]).toEqual({
           type: JSTokenType.Delimiter,
@@ -156,5 +170,5 @@ describe('JSTokenizer', () => {
       });
     });
   });
-  
+
 });
