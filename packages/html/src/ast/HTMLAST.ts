@@ -1,11 +1,13 @@
 import { HTMLToken } from "../tokenizer";
 
-export interface HTMLASTNode {
-  type: "Element" | "Text" | "Comment" | "Doctype";
-  name?: string; // For "Element" nodes
-  value?: string; // For "Text", "Comment", or "Doctype" nodes
-  attributes?: Record<string, string>; // For "Element" nodes
-  children?: HTMLASTNode[]; // For "Element" nodes
+export interface HTMLAST {
+  root: HTMLASTNode; // Root node of the AST
+  metadata?: {
+    nodeCount: number; // Total number of nodes in the AST
+    elementCount: number; // Count of "Element" nodes
+    textCount: number; // Count of "Text" nodes
+    commentCount: number; // Count of "Comment" nodes
+  };
 }
 
 export interface HTMLAST {
@@ -17,6 +19,7 @@ export interface HTMLAST {
     commentCount: number; // Count of "Comment" nodes
   };
 }
+
 export class HTMLASTNode {
   type: "Element" | "Text" | "Comment" | "Doctype";
   name?: string; // For "Element" nodes
@@ -26,17 +29,15 @@ export class HTMLASTNode {
 
   constructor(
     type: "Element" | "Text" | "Comment" | "Doctype",
-    children: HTMLASTNode[] = [],
     options: { name?: string; value?: string; attributes?: Record<string, string> } = {}
   ) {
     this.type = type;
     this.name = options.name;
     this.value = options.value;
     this.attributes = options.attributes || {};
-    this.children = children;
+    this.children = []; // Initialize children as an empty array by default
   }
 }
-
 
 export class HTMLASTBuilder {
   private tokens: HTMLToken[];
@@ -82,6 +83,7 @@ export class HTMLASTBuilder {
           currentParent.children?.push({
             type: token.type,
             value: token.value,
+            children: []
           });
           break;
 
