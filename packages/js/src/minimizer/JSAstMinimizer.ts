@@ -1,3 +1,5 @@
+import { JSASTNode } from "../ast/JSAST"; // Import missing type
+
 export class JSAstMinimizer {
   public minimize(ast: JSASTNode): JSASTNode {
     const uniqueNodes = new Map<string, JSASTNode>();

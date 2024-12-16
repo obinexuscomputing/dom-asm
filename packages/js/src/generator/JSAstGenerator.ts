@@ -7,8 +7,8 @@ export class JSAstGenerator {
     }
 
     if (ast.type === "VariableDeclaration") {
-      const identifier = ast.children?.find((child) => child.type === "Identifier");
-      const value = ast.children?.find((child) => child.type === "Literal");
+      const identifier = ast.children?.find((child: JSASTNode) => child.type === "Identifier");
+      const value = ast.children?.find((child: JSASTNode) => child.type === "Literal");
       return `const ${identifier?.value} = ${value?.value};`;
     }
 

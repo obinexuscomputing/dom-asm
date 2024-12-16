@@ -29,20 +29,17 @@ export class JSASTBuilder {
   private peekToken(): JSToken | null {
     return this.position + 1 < this.tokens.length ? this.tokens[this.position + 1] : null;
   }
-
   private parseProgram(): JSASTNode {
-    const program: JSASTNode = { type: "Program", children: [] };
-    
+    const program: JSASTNode = { type: "Program", children: [] }; // Ensure children is initialized
     while (this.position < this.tokens.length - 1) { // -1 to exclude EOF
       const statement = this.parseStatement();
       if (statement) {
-        program.children.push(statement);
+        program.children!.push(statement); // Use non-null assertion since children is always initialized
       }
     }
-    
     return program;
   }
-
+  
   private parseStatement(): JSASTNode | null {
     const token = this.currentToken();
     

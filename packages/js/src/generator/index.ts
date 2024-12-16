@@ -1,1 +1,1 @@
-export * from './JSASTGenerator'
+export * from './JSAstGenerator'

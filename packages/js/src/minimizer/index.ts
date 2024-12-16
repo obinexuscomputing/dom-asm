@@ -1,0 +1,1 @@
+export {JSAstMinimizer} from './JSAstMinimizer'
