@@ -16,21 +16,24 @@ const footer = `/*!
  */`;
 
 export default {
-  input: 'src/index.ts',
+  input: {
+    main: 'src/index.ts',
+    cli: 'src/cli/index.ts', // CLI entry point (if applicable)
+  },
   output: [
     {
-      file: 'dist/index.js',
+      dir: 'dist',
+      entryFileNames: '[name].js',
       format: 'es',
       sourcemap: true,
-      plugins: [terser()], // Minify the ES module output
       banner,
       footer,
     },
     {
-      file: 'dist/index.cjs',
+      dir: 'dist',
+      entryFileNames: '[name].cjs',
       format: 'cjs',
       sourcemap: true,
-      plugins: [terser()], // Minify the CommonJS output
       banner,
       footer,
     },
@@ -50,7 +53,8 @@ export default {
     commonjs(),
     json(),
     typescript({
-      tsconfig: './tsconfig.json', // Ensure the path to tsconfig.json is correct
+      tsconfig: './tsconfig.json', // Ensure TypeScript is configured properly
     }),
+    terser(), // Minify all outputs
   ],
 };
