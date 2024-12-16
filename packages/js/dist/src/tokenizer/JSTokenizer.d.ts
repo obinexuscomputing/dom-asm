@@ -17,5 +17,6 @@ export declare class JSTokenizer {
     private operators;
     private delimiters;
     tokenize(input: string): JSToken[];
+    private matchMultiCharOperator;
 }
 //# sourceMappingURL=JSTokenizer.d.ts.map

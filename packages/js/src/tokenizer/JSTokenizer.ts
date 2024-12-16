@@ -23,9 +23,6 @@ export class JSTokenizer {
     const tokens: JSToken[] = [];
     let current = 0;
 
-    // Remove all whitespace from the input
-    input = input.replace(/\s+/g, '');
-
     const addToken = (type: JSTokenType, value: string) => {
       tokens.push({ type, value });
     };
@@ -33,7 +30,13 @@ export class JSTokenizer {
     while (current < input.length) {
       let char = input[current];
 
-      // Check for multi-character delimiters or operators first
+      // Skip whitespace
+      if (/\s/.test(char)) {
+        current++;
+        continue;
+      }
+
+      // Check for multi-character operators
       const remainingInput = input.slice(current);
       const multiCharOp = this.matchMultiCharOperator(remainingInput);
       if (multiCharOp) {
@@ -42,57 +45,51 @@ export class JSTokenizer {
         continue;
       }
 
-      // Handle single-character cases
-      switch (true) {
-        // Identifiers and keywords
-        case /[a-zA-Z_$]/.test(char): {
-          let value = '';
-          while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
-            value += input[current++];
-          }
-          addToken(
-            this.keywords.has(value) ? JSTokenType.Keyword : JSTokenType.Identifier,
-            value
-          );
-          continue;
+      // Identifiers and Keywords
+      if (/[a-zA-Z_$]/.test(char)) {
+        let value = '';
+        while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
+          value += input[current++];
         }
-
-        // Numbers
-        case /[0-9]/.test(char): {
-          let value = '';
-          while (current < input.length && /[0-9.]/.test(input[current])) {
-            value += input[current++];
-          }
-          addToken(JSTokenType.Literal, value);
-          continue;
+        
+        // Separate keywords from identifiers
+        if (this.keywords.has(value)) {
+          addToken(JSTokenType.Keyword, value);
+        } else {
+          addToken(JSTokenType.Identifier, value);
         }
-
-        // Operators
-        case this.operators.has(char): {
-          addToken(JSTokenType.Operator, char);
-          current++;
-          continue;
-        }
-
-        // Delimiters
-        case this.delimiters.has(char): {
-          // Skip semicolons entirely
-          if (char === ';') {
-            current++;
-            continue;
-          }
-          addToken(JSTokenType.Delimiter, char);
-          current++;
-          continue;
-        }
-
-        // Unexpected character
-        default:
-          throw new Error(`Unexpected character: ${char}`);
+        continue;
       }
+
+      // Numbers
+      if (/[0-9]/.test(char)) {
+        let value = '';
+        while (current < input.length && /[0-9.]/.test(input[current])) {
+          value += input[current++];
+        }
+        addToken(JSTokenType.Literal, value);
+        continue;
+      }
+
+      // Operators
+      if (this.operators.has(char)) {
+        addToken(JSTokenType.Operator, char);
+        current++;
+        continue;
+      }
+
+      // Delimiters
+      if (this.delimiters.has(char)) {
+        addToken(JSTokenType.Delimiter, char);
+        current++;
+        continue;
+      }
+
+      // Unexpected character
+      throw new Error(`Unexpected character: ${char}`);
     }
 
-    // Always add EOF token
+    // Add EOF token
     addToken(JSTokenType.EndOfStatement, 'EOF');
     return tokens;
   }
