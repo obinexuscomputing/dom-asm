@@ -18,7 +18,7 @@ export interface GeneratorOptions {
     format?: "compact" | "pretty";
     indent?: string;
 }
-export declare class JSASTGenerator {
+export declare class JSAstGenerator {
     private tokenizer;
     private validator;
     private parser;
