@@ -4,6 +4,7 @@ export type ValidationError = {
     message: string;
     node: JSASTNode;
 };
+export type NodeType = "Program" | "VariableDeclaration" | "InlineConstant" | "Identifier" | "Literal" | "BlockStatement" | "ArrowFunction" | "TemplateLiteral" | "TemplateLiteralExpression" | "ClassDeclaration" | "MethodDefinition" | "PropertyDefinition" | "FunctionExpression" | "AsyncFunction" | "ObjectExpression" | "Property" | "SpreadElement" | "ImportDeclaration" | "ExportDeclaration";
 export declare class JSValidator {
     private errors;
     constructor();
@@ -12,20 +13,16 @@ export declare class JSValidator {
     private traverse;
     private validateProgram;
     private validateVariableDeclaration;
+    private validateBlockStatement;
     private validateArrowFunction;
     private validateTemplateLiteral;
-    private validateObjectExpression;
-    private validateProperty;
-    private validateDestructuring;
     private validateClass;
     private validateMethodDefinition;
-    private validatePropertyDefinition;
     private validateAsyncFunction;
-    private validateAwaitExpression;
+    private validateObjectExpression;
+    private validateProperty;
     private validateImport;
     private validateExport;
-    private validateSpreadElement;
-    private validateArrayExpression;
     private validateInlineConstant;
     private validateIdentifier;
     private validateLiteral;

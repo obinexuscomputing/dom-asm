@@ -3,6 +3,8 @@ export interface JSASTNode {
     type: string;
     value?: string;
     children?: JSASTNode[];
+    line?: number;
+    column?: number;
 }
 export declare class JSASTBuilder {
     private tokens;

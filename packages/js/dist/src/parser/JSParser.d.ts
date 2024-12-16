@@ -1,8 +1,11 @@
+import { JSASTNode } from "../ast";
 export type NodeType = "Program" | "Statement" | "Expression" | "VariableDeclaration" | "InlineConstant" | "BinaryExpression" | "Identifier" | "Literal" | "FunctionDeclaration" | "ReturnStatement" | "IfStatement" | "BlockStatement";
-export interface TypedJSASTNode {
+export interface TypedJSASTNode extends JSASTNode {
     type: NodeType;
     value?: string;
     children?: TypedJSASTNode[];
+    line?: number;
+    column?: number;
 }
 export declare class JSParser {
     parse(ast: TypedJSASTNode): string | string[] | null;
