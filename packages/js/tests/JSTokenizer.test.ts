@@ -22,24 +22,21 @@ describe('JSTokenizer', () => {
       ]);
     });
 
-  });
-
-
     it('should recognize various delimiters', () => {
-        const input = '(); {} []';
-        const tokens = tokenizer.tokenize(input);
-      
-        console.log('Generated tokens:', JSON.stringify(tokens, null, 2));
-      
-        const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
-      
-        expectedDelimiters.forEach((delimiter, index) => {
-          expect(tokens[index]).toEqual({
-            type: JSTokenType.Delimiter,
-            value: delimiter
-          });
+      const input = '(); {} []';
+      const tokens = tokenizer.tokenize(input);
+    
+      console.log('Generated tokens:', JSON.stringify(tokens, null, 2));
+    
+      const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
+    
+      expectedDelimiters.forEach((delimiter, index) => {
+        expect(tokens[index]).toEqual({
+          type: JSTokenType.Delimiter,
+          value: delimiter
         });
       });
+    });
 
     it('should recognize keywords', () => {
       const input = 'const let var if else function return';
@@ -142,33 +139,34 @@ describe('JSTokenizer', () => {
       });
     });
   });
-describe('Delimiter Recognition', () => {
-  it('should recognize various delimiters', () => {
-    const input = '(); {} []';
-    const tokens = tokenizer.tokenize(input);
 
-    // Log the actual tokens for debugging
-    console.log('Generated tokens:', JSON.stringify(tokens, null, 2));
+  describe('Delimiter Recognition', () => {
+    it('should recognize various delimiters', () => {
+      const input = '(); {} []';
+      const tokens = tokenizer.tokenize(input);
 
-    const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
+      // Log the actual tokens for debugging
+      console.log('Generated tokens:', JSON.stringify(tokens, null, 2));
 
-    // Print out both actual and expected tokens for comparison
-    tokens.forEach((token, index) => {
-      console.log(`Token ${index}:`, 
-        `Actual: ${JSON.stringify(token)}, `, 
-        `Expected: ${expectedDelimiters[index] ? 
-          `{type: "Delimiter", value: "${expectedDelimiters[index]}"}` : 'N/A'}`
-      );
-    });
+      const expectedDelimiters = ['(', ')', '{', '}', '[', ']'];
 
-    expectedDelimiters.forEach((delimiter, index) => {
-      expect(tokens[index]).toEqual({
-        type: JSTokenType.Delimiter,
-        value: delimiter
+      // Print out both actual and expected tokens for comparison
+      tokens.forEach((token, index) => {
+        console.log(`Token ${index}:`, 
+          `Actual: ${JSON.stringify(token)}, `, 
+          `Expected: ${expectedDelimiters[index] ? 
+            `{type: "Delimiter", value: "${expectedDelimiters[index]}"}` : 'N/A'}`
+        );
+      });
+
+      expectedDelimiters.forEach((delimiter, index) => {
+        expect(tokens[index]).toEqual({
+          type: JSTokenType.Delimiter,
+          value: delimiter
+        });
       });
     });
   });
-});
 
   describe('Advanced Operator Recognition', () => {
     it('should handle multi-character comparison operators', () => {
@@ -185,5 +183,4 @@ describe('Delimiter Recognition', () => {
       });
     });
   });
-
 });
