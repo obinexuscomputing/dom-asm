@@ -102,49 +102,68 @@ declare class HTMLParser {
     setErrorHandler(handler: (error: HTMLParserError) => void): void;
 }
 
-/**
- * import { HTMLTokenizer } from "./tokenizer/index";
-import { AST } from "./ast/index";
-import { Validator } from "./validator/index";
-
-const htmlInput = `
-<html:html>
-  <html:head>
-    <html:title>Sample HTML6 Document</html:title>
-  </html:head>
-  <html:body>
-    <html:media src="logo.png" type="image" />
-    <html:p>This is a sample document.</html:p>
-    <invalid:tag>Oops!</invalid:tag>
-  </html:body>
-</html:html>
-`;
-
-const tokenizer = new HTMLTokenizer(htmlInput);
-const tokens = tokenizer.tokenize();
-
-const astBuilder = new AST();
-const ast = astBuilder.buildAST(tokens);
-
-const validator = new Validator();
-const validationResult = validator.validateAST(ast);
-
-if (validationResult.valid) {
-  console.log("The document is valid.");
-} else {
-  console.error("Validation errors:");
-  validationResult.errors.forEach((error) => console.error(error));
+type HTMLSpec = 'html5' | 'html6-xml';
+interface ValidationOptions {
+    spec?: HTMLSpec;
+    strictMode?: boolean;
+    allowCustomElements?: boolean;
+    allowNamespaces?: boolean;
+    customNamespaces?: string[];
 }
-
- */
-
 interface HTMLValidationResult {
     valid: boolean;
-    errors: string[];
+    errors: ValidationError[];
+    warnings: ValidationWarning[];
 }
+interface ValidationError {
+    type: 'error';
+    message: string;
+    node?: HTMLASTNode;
+    code: string;
+}
+interface ValidationWarning {
+    type: 'warning';
+    message: string;
+    node?: HTMLASTNode;
+    code: string;
+}
+/**
+ * const validator = new HTMLValidator({
+  spec: 'html6-xml',
+  strictMode: true,
+  allowCustomElements: true,
+  allowNamespaces: true,
+  customNamespaces: ['html', 'custom']
+});
+
+const result = validator.validate(ast);
+if (!result.valid) {
+  result.errors.forEach(error => {
+    console.error(`${error.code}: ${error.message}`);
+  });
+  result.warnings.forEach(warning => {
+    console.warn(`${warning.code}: ${warning.message}`);
+  });
+}
+ */
 declare class HTMLValidator {
+    private options;
+    private readonly voidElements;
+    private readonly flowContent;
+    private readonly metadataContent;
+    private readonly defaultOptions;
+    constructor(options?: ValidationOptions);
     validate(ast: HTMLASTNode): HTMLValidationResult;
-    private traverse;
+    private validateNode;
+    private validateElement;
+    private validateTagName;
+    private validateAttributes;
+    private validateContentModel;
+    private updateDocumentContext;
+    private validateDocumentStructure;
+    private isValidHTML5TagName;
+    private isValidEventHandler;
+    private isValidChild;
 }
 
 declare class HTMLCodeGenerator {
