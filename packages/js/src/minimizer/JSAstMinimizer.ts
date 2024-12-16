@@ -1,4 +1,4 @@
-import { JSASTNode } from "../ast/JSAST"; // Import missing type
+import { JSASTNode } from "../ast";
 
 export class JSAstMinimizer {
   public minimize(ast: JSASTNode): JSASTNode {

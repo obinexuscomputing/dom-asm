@@ -1,4 +1,4 @@
-import { JSASTNode } from "../ast/JSAST";
+import { JSASTNode } from "../ast/";
 
 export class JSAstGenerator {
   public generate(ast: JSASTNode): string {
