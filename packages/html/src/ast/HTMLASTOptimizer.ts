@@ -13,7 +13,6 @@ export class HTMLASTOptimizer {
       for (const child of node.children) {
         if (child.type === "Text") {
           if (lastTextNode) {
-            // Preserve spaces when merging
             lastTextNode.value = (lastTextNode.value || "") + (child.value || "");
           } else {
             lastTextNode = { ...child };

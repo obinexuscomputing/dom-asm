@@ -29,24 +29,54 @@ export class HTMLParser {
     this.tokenizer = new HTMLTokenizer("");
     this.options = options;
   }
-  
   public parse(input: string): HTMLAST {
+    // Step 1: Tokenize the input
     const tokenizer = new HTMLTokenizer(input);
     const tokens = tokenizer.tokenize();
   
+    // Step 2: Try building the AST
     try {
       const astBuilder = new HTMLASTBuilder(tokens);
-      return astBuilder.buildAST();
-    } catch (error) {
-      if (this.options.throwOnError) throw error;
-      if (this.options.errorHandler) this.options.errorHandler(error as HTMLParserError);
+      const ast = astBuilder.buildAST();
   
-      // Return a partial AST for recovery
+      // Compute metadata if necessary
+      if (!ast.metadata) {
+        ast.metadata = this.computeMetadata(ast.root);
+      }
+  
+      return ast;
+    } catch (error) {
+      // Handle errors based on parser options
+      if (this.options.throwOnError) throw error;
+  
+      if (this.options.errorHandler) {
+        this.options.errorHandler(error as HTMLParserError);
+      }
+  
+      // Step 3: Return a partial AST for recovery
       return {
         root: new HTMLASTNode("Element", [], { name: "root" }),
         metadata: { nodeCount: 0, elementCount: 0, textCount: 0, commentCount: 0 },
       };
     }
+  }
+  
+  private computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
+    let nodeCount = 0;
+    let elementCount = 0;
+    let textCount = 0;
+    let commentCount = 0;
+  
+    function traverse(node: HTMLASTNode): void {
+      nodeCount++;
+      if (node.type === "Element") elementCount++;
+      if (node.type === "Text") textCount++;
+      if (node.type === "Comment") commentCount++;
+      node.children.forEach(traverse);
+    }
+  
+    traverse(root);
+    return { nodeCount, elementCount, textCount, commentCount };
   }
   
   
