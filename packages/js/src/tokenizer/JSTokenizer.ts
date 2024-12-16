@@ -17,7 +17,7 @@ export interface JSToken {
 export class JSTokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '==', '!=']);
-  private delimiters = new Set(['(', ')', '{', '}', '[', ']']);
+  private delimiters = new Set([';', '(', ')', '{', '}', '[', ']']);
 
   public tokenize(input: string): JSToken[] {
     const tokens: JSToken[] = [];
@@ -27,13 +27,13 @@ export class JSTokenizer {
       tokens.push({ type, value });
     };
 
-    // Remove leading and trailing whitespace
+    // Normalize input by removing excessive whitespace
     input = input.trim();
 
     while (current < input.length) {
       const char = input[current];
 
-      // Handle standard delimiters
+      // Handle delimiters
       if (this.delimiters.has(char)) {
         addToken(JSTokenType.Delimiter, char);
         current++;
@@ -46,7 +46,6 @@ export class JSTokenizer {
         while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
           value += input[current++];
         }
-        
         if (this.keywords.has(value)) {
           addToken(JSTokenType.Keyword, value);
         } else {
