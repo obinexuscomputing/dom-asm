@@ -28,32 +28,21 @@ export class HTMLParser {
   constructor(options: HTMLParserOptions = { throwOnError: true }) {
     this.tokenizer = new HTMLTokenizer("");
     this.options = options;
-  }
-  public parse(input: string): HTMLAST {
-    // Step 1: Tokenize the input
+  }public parse(input: string): HTMLAST {
     const tokenizer = new HTMLTokenizer(input);
     const tokens = tokenizer.tokenize();
   
-    // Step 2: Try building the AST
     try {
       const astBuilder = new HTMLASTBuilder(tokens);
-      const ast = astBuilder.buildAST();
-  
-      // Compute metadata if necessary
-      if (!ast.metadata) {
-        ast.metadata = this.computeMetadata(ast.root);
-      }
-  
-      return ast;
+      return astBuilder.buildAST();
     } catch (error) {
-      // Handle errors based on parser options
       if (this.options.throwOnError) throw error;
   
       if (this.options.errorHandler) {
         this.options.errorHandler(error as HTMLParserError);
       }
   
-      // Step 3: Return a partial AST for recovery
+      // Return a partial AST for recovery
       return {
         root: new HTMLASTNode("Element", [], { name: "root" }),
         metadata: { nodeCount: 0, elementCount: 0, textCount: 0, commentCount: 0 },
@@ -61,7 +50,8 @@ export class HTMLParser {
     }
   }
   
-  private computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
+  
+  public computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
     let nodeCount = 0;
     let elementCount = 0;
     let textCount = 0;

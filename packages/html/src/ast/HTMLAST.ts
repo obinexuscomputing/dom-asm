@@ -56,26 +56,34 @@ export class HTMLASTBuilder {
 
     for (const token of this.tokens) {
       if (token.type === "StartTag") {
-        const newNode = new HTMLASTNode("Element", [], { name: token.name, attributes: token.attributes });
+        const newNode = new HTMLASTNode("Element", [], {
+          name: token.name,
+          attributes: token.attributes,
+        });
         currentParent.children.push(newNode);
+      
         if (!token.selfClosing) {
           stack.push(newNode);
           currentParent = newNode;
         }
-      } else if (token.type === "EndTag") {
+      }
+      else if (token.type === "EndTag") {
         if (stack.length > 1 && currentParent.name !== token.name) {
           console.warn(`Skipping unmatched end tag: ${token.name}`);
+          continue; // Skip unmatched end tag
         } else if (stack.length > 1) {
           stack.pop();
           currentParent = stack[stack.length - 1];
         } else {
-          console.warn(`Unmatched end tag: ${token.name}`);
+          console.warn(`Unmatched end tag at root level: ${token.name}`);
         }
-      } else if (token.type === "Text" || token.type === "Comment") {
+      }
+       else if (token.type === "Text" || token.type === "Comment") {
         currentParent.children.push(
           new HTMLASTNode(token.type, [], { value: token.value })
         );
       }
+      
     }
 
     if (stack.length > 1) {

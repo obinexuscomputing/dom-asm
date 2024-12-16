@@ -5,30 +5,31 @@ export class HTMLASTOptimizer {
     this.removeEmptyTextNodes(ast.root);
     this.mergeAdjacentTextNodes(ast.root);
   }
+
   public mergeAdjacentTextNodes(node: HTMLASTNode): void {
-    if (node.children) {
-      const mergedChildren = [];
-      let lastTextNode: HTMLASTNode | null = null;
-  
-      for (const child of node.children) {
-        if (child.type === "Text") {
-          if (lastTextNode) {
-            lastTextNode.value = (lastTextNode.value || "") + (child.value || "");
-          } else {
-            lastTextNode = { ...child };
-            mergedChildren.push(lastTextNode);
-          }
+  if (node.children) {
+    const mergedChildren = [];
+    let lastTextNode: HTMLASTNode | null = null;
+
+    for (const child of node.children) {
+      if (child.type === "Text") {
+        if (lastTextNode) {
+          lastTextNode.value = (lastTextNode.value || "") + (child.value || "");
         } else {
-          lastTextNode = null;
-          this.mergeAdjacentTextNodes(child);
-          mergedChildren.push(child);
+          lastTextNode = { ...child };
+          mergedChildren.push(lastTextNode);
         }
+      } else {
+        lastTextNode = null;
+        this.mergeAdjacentTextNodes(child);
+        mergedChildren.push(child);
       }
-  
-      node.children = mergedChildren;
     }
+
+    node.children = mergedChildren;
   }
-  
+}
+
 
   private removeEmptyTextNodes(node: HTMLASTNode): void {
     if (node.children) {
