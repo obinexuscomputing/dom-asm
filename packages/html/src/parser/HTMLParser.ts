@@ -55,69 +55,43 @@ export class HTMLParser {
   
 
   public buildAST(tokens: HTMLToken[]): HTMLASTNode {
-    const root: HTMLASTNode = { type: "Element", name: "root", children: [] };
+    const root = new HTMLASTNode("Element", [], { name: "root" });
     const stack: HTMLASTNode[] = [root];
     let currentParent = root;
-
+  
     for (const token of tokens) {
-      switch (token.type) {
-        case "Doctype":
-          currentParent.children?.push({
-            type: "Doctype",
-            value: token.value,
-          });
-          break;
-
-        case "StartTag":
-          const elementNode: HTMLASTNode = {
-            type: "Element",
-            name: token.name,
-            attributes: token.attributes,
-            children: [],
-          };
-          currentParent.children?.push(elementNode);
-          stack.push(elementNode);
-          currentParent = elementNode;
-          break;
-
-        case "EndTag":
-          if (stack.length > 1) {
-            stack.pop();
-            currentParent = stack[stack.length - 1];
-          } else {
-            if (this.options.errorHandler) {
-              const error = new HTMLParserError(`Unmatched end tag: ${token.name}`, token, stack.length);
-              this.options.errorHandler(error);
-            }
-          }
-          break;
-
-        case "Text":
-        case "Comment":
-          currentParent.children?.push({
-            type: token.type,
-            value: token.value,
-          });
-          break;
+      if (token.type === "StartTag") {
+        const newNode = new HTMLASTNode("Element", [], { name: token.name, attributes: token.attributes });
+        currentParent.children.push(newNode);
+        if (!token.selfClosing) {
+          stack.push(newNode);
+          currentParent = newNode;
+        }
+      } else if (token.type === "EndTag") {
+        if (stack.length > 1 && currentParent.name !== token.name) {
+          console.warn(`Skipping unmatched end tag: ${token.name}`);
+        } else if (stack.length > 1) {
+          stack.pop();
+          currentParent = stack[stack.length - 1];
+        } else {
+          console.warn(`Unmatched end tag: ${token.name}`);
+        }
+      } else if (token.type === "Text" || token.type === "Comment") {
+        currentParent.children.push(
+          new HTMLASTNode(token.type, [], { value: token.value })
+        );
       }
     }
-    
-    if (stack.length > 1 && currentParent.name !== token.name) {
-      // Skip unmatched end tag
-      console.warn(`Skipping unmatched end tag: ${token.name}`);
-    } else if (stack.length > 1) {
-      stack.pop();
-      currentParent = stack[stack.length - 1];
-    } else {
-      console.warn(`Unmatched end tag: ${token.name}`);
-    }
-    
+  
     if (stack.length > 1) {
-      throw new HTMLParserError("Unclosed tags detected", tokens[tokens.length - 1], stack.length);
+      const lastToken = tokens[tokens.length - 1] || { name: "unknown", line: -1, column: -1 };
+      throw new HTMLParserError("Unclosed tags detected", lastToken, stack.length);
     }
   
     return root;
   }
-
+  
+  
+  
 
 }

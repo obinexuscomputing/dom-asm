@@ -17,6 +17,26 @@ export interface HTMLAST {
     commentCount: number; // Count of "Comment" nodes
   };
 }
+export class HTMLASTNode {
+  type: "Element" | "Text" | "Comment" | "Doctype";
+  name?: string; // For "Element" nodes
+  value?: string; // For "Text", "Comment", or "Doctype" nodes
+  attributes?: Record<string, string>; // For "Element" nodes
+  children: HTMLASTNode[]; // For "Element" nodes
+
+  constructor(
+    type: "Element" | "Text" | "Comment" | "Doctype",
+    children: HTMLASTNode[] = [],
+    options: { name?: string; value?: string; attributes?: Record<string, string> } = {}
+  ) {
+    this.type = type;
+    this.name = options.name;
+    this.value = options.value;
+    this.attributes = options.attributes || {};
+    this.children = children;
+  }
+}
+
 
 export class HTMLASTBuilder {
   private tokens: HTMLToken[];
@@ -31,10 +51,10 @@ export class HTMLASTBuilder {
     const root: HTMLASTNode = { type: "Element", name: "root", children: [] };
     const stack: HTMLASTNode[] = [root];
     let currentParent = root;
-  
+
     while (this.position < this.tokens.length) {
       const token = this.tokens[this.position++];
-  
+
       switch (token.type) {
         case "StartTag":
           const elementNode: HTMLASTNode = {
@@ -47,7 +67,7 @@ export class HTMLASTBuilder {
           stack.push(elementNode);
           currentParent = elementNode;
           break;
-  
+
         case "EndTag":
           if (stack.length > 1 && currentParent.name === token.name) {
             stack.pop();
@@ -56,7 +76,7 @@ export class HTMLASTBuilder {
             console.warn(`Unmatched end tag: ${token.name}`);
           }
           break;
-  
+
         case "Text":
         case "Comment":
           currentParent.children?.push({
@@ -64,26 +84,25 @@ export class HTMLASTBuilder {
             value: token.value,
           });
           break;
-  
+
         default:
           if (process.env.NODE_ENV !== "test") {
             console.warn(`Unexpected token type: ${token.type}`);
           }
       }
     }
-  
+
     if (stack.length > 1 && process.env.NODE_ENV !== "test") {
       console.warn(
         `Unclosed tags detected: ${stack.slice(1).map((node) => node.name)}`
       );
     }
-  
+
     return {
       root,
       metadata: this.computeMetadata(root),
     };
   }
-  
 
   private computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
     let nodeCount = 0;
