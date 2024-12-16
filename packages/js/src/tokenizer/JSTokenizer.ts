@@ -1,14 +1,13 @@
 export enum JSTokenType {
-  Keyword,
-  Identifier,
-  Operator,
-  Delimiter,
-  Literal,
-  TemplateLiteral,
-  Comment,
-  EndOfStatement,
+  Keyword = 'Keyword',
+  Identifier = 'Identifier',
+  Operator = 'Operator',
+  Delimiter = 'Delimiter',
+  Literal = 'Literal',
+  TemplateLiteral = 'TemplateLiteral',
+  Comment = 'Comment',
+  EndOfStatement = 'EndOfStatement',
 }
-
 export interface JSToken {
   type: JSTokenType;
   value: string;
