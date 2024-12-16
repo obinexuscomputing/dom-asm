@@ -5,11 +5,26 @@ import json from '@rollup/plugin-json';
 
 export default {
   input: 'src/index.ts',
-  output: {
-    file: 'dist/index.js',
-    format: 'es',
-    sourcemap: true,
-  },
+  output: [
+    {
+      file: 'dist/index.js',
+      format: 'es', // ES Module
+      sourcemap: true,
+    },
+    {
+      file: 'dist/index.cjs',
+      format: 'cjs', // CommonJS Module
+      sourcemap: true,
+    },
+  ],
+  external: [
+    '@obinexuscomputing/css',
+    '@obinexuscomputing/html',
+    '@obinexuscomputing/js',
+    '@obinexuscomputing/xml',
+    'fs',
+    'path',
+  ],
   plugins: [
     resolve({
       extensions: ['.js', '.ts', '.json'],

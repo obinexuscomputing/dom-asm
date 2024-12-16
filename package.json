@@ -13,14 +13,23 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {
-    "build": "turbo build",
-    "test": "turbo test",
-    "lint": "turbo lint",
-    "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "cli": "node bin/dom-asm"
-  },
+"scripts": {
+  "build": "rollup -c && turbo build",     
+  "start": "node dist/index.js",         
+  "dev": "rollup -c -w",                   
+  "test": "turbo test",                  
+  "lint": "turbo lint && eslint . --fix",    
+  "format": "prettier --write \"**/*.{ts,tsx,md}\"", 
+  "clean": "turbo clean && rm -rf node_modules packages/*/node_modules dist",
+  "cli": "node bin/dom-asm",                 
+  "prebuild": "npm run clean",             
+  "postbuild": "npm run lint && npm run test",
+  "prepare": "npm run build",                
+  "release": "npm run clean && npm run build && npm publish", 
+  "analyze": "rollup -c --bundle-stats",     
+  "prettify": "prettier --check \"**/*.{ts,tsx,md}\"" 
+},
+
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-json": "^6.1.0",
