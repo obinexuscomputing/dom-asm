@@ -55,7 +55,7 @@
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
+[1mTests:       [22m[1m[32m5 passed[39m[22m, 5 total
 [1mSnapshots:   [22m0 total
 [1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
@@ -65,29 +65,9 @@
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
+[1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        5 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLAST.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        6 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLAST.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
-
-[1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
-[1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLAST.test.ts[22m
+[1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
@@ -96,9 +76,9 @@
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
+[1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
@@ -106,75 +86,140 @@
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m0 of 5 total
-[1mTests:       [22m0 total
+[1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
+[1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLAST.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
 [1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m ([0m[1m[41m5.266 s[49m[22m[0m)
-
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLValidator.test.ts[22m
+[1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLAST.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
 [1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[1mTime:[22m        5 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLAST.test.ts[22m
+
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLAST.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
-[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 5 total
-[1mTests:       [22m[1m[32m14 passed[39m[22m, 14 total
+[1mTest Suites: [22m[1m[32m1 passed[39m[22m, 1 of 5 total
+[1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m ([0m[1m[41m5.547 s[49m[22m[0m)
-
+[1mTime:[22m        5 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 5 total
-[1mTests:       [22m[1m[32m14 passed[39m[22m, 14 total
+[1mTests:       [22m[1m[32m13 passed[39m[22m, 13 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m ([0m[1m[41m5.632 s[49m[22m[0m)
-
+[1mTime:[22m        5 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
 
 [1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 5 total
-[1mTests:       [22m[1m[32m14 passed[39m[22m, 14 total
+[1mTests:       [22m[1m[32m13 passed[39m[22m, 13 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        6 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 5 total
+[1mTests:       [22m[1m[32m13 passed[39m[22m, 13 total
 [1mSnapshots:   [22m0 total
 [1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 5 total
+[1mTests:       [22m[1m[32m15 passed[39m[22m, 15 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m ([0m[1m[41m6.669 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLParser.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m2 passed[39m[22m, 2 of 5 total
+[1mTests:       [22m[1m[32m15 passed[39m[22m, 15 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m3 passed[39m[22m, 3 of 5 total
+[1mTests:       [22m[1m[32m17 passed[39m[22m, 17 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m3 passed[39m[22m, 3 of 5 total
+[1mTests:       [22m[1m[32m17 passed[39m[22m, 17 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        8 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m3 passed[39m[22m, 3 of 5 total
+[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        8 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m ([0m[1m[41m7.656 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLASTOptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m3 passed[39m[22m, 3 of 5 total
+[1mTests:       [22m[1m[32m18 passed[39m[22m, 18 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        8 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
 
 [1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
 [1mTests:       [22m[1m[32m24 passed[39m[22m, 24 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m ([0m[1m[41m5.743 s[49m[22m[0m)
+[1mTime:[22m        8 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
+[1mTests:       [22m[1m[32m33 passed[39m[22m, 33 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        9 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m ([0m[1m[41m8.134 s[49m[22m[0m)
 
 [0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mHTMLTokenizer.test.ts[22m
 
 [1mTest Suites: [22m[1m[32m4 passed[39m[22m, 4 of 5 total
-[1mTests:       [22m[1m[32m24 passed[39m[22m, 24 total
+[1mTests:       [22m[1m[32m33 passed[39m[22m, 33 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[1mTime:[22m        9 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
 
 [1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
 [1mTests:       [22m[1m[32m33 passed[39m[22m, 33 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        8 s[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
+[1mTime:[22m        9 s[K[1A[K[1A[K[1A[K[1A[K[1A[33mA worker process has failed to exit gracefully and has been force exited. This is likely caused by tests leaking due to improper teardown. Try running with --detectOpenHandles to find leaks. Active timers can also cause this, ensure that .unref() was called on them.[39m
+
+
 [1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
 [1mTests:       [22m[1m[32m33 passed[39m[22m, 33 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        8.664 s
+[1mTime:[22m        9 s[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
+[1mTest Suites: [22m[1m[32m5 passed[39m[22m, 5 total
+[1mTests:       [22m[1m[32m33 passed[39m[22m, 33 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        10.129 s
 [2mRan all test suites[22m[2m.[22m
 [1G[0K⠙[1G[0K
