@@ -110,7 +110,7 @@ export class JSParser {
     let alternate: TypedJSASTNode | undefined;
     if (this.tokens[this.current]?.value === "else") {
       this.current++; // Skip 'else'
-      alternate = this.walk();
+      alternate = this.walk()!; // Non-null assertion
     }
 
     return {
