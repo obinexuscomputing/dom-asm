@@ -1,23 +1,36 @@
-import { JSASTNode } from "../ast/JSAst";
+// src/optimizer/JSASTOptimizer.ts
+import { JSASTNode } from "./JSAST";
 
 export class JSASTOptimizer {
   constructor() {}
 
   public optimize(ast: JSASTNode): JSASTNode {
     function simplify(node: JSASTNode): JSASTNode {
+      if (node.type === "Program") {
+        return {
+          type: "Program",
+          children: node.children.map(simplify)
+        };
+      }
+
       if (node.type === "VariableDeclaration" && node.children) {
+        const identifier = node.children[0];
         const value = node.children[1];
+        
         if (value.type === "Literal") {
           return {
             type: "InlineConstant",
-            value: `${node.children[0].value}=${value.value}`,
-            children: [],
+            value: `${identifier.value}=${value.value}`,
+            children: []
           };
         }
       }
 
       if (node.children) {
-        node.children = node.children.map(simplify);
+        return {
+          ...node,
+          children: node.children.map(simplify)
+        };
       }
 
       return node;

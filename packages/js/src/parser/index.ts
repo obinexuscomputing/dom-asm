@@ -1,4 +1,4 @@
-import { JSASTNode } from "../ast/JSAst";
+import { JSASTNode } from "../ast/JSAST";
 
 export class JSParser {
   parse(ast: JSASTNode): any {

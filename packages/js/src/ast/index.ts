@@ -1,1 +1,2 @@
-export * from './JSAst';
+export * from './JSAST';
+export * from './JSASTOptimizer';
