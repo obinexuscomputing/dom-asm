@@ -51,34 +51,36 @@ export class JSASTGenerator {
     };
   }
 
+ 
   public generateFromSource(source: string, options: GeneratorOptions = {}): GenerationResult {
     try {
-      if (!source) {
-        throw new Error("Source code cannot be undefined or empty");
-      }
-  
-      // Step 1: Tokenize the source code
-      const tokens = this.tokenizer.tokenize(source);
-  
-      // Step 2: Convert tokens into an AST
-      const ast = this.parser.buildASTFromTokens(tokens);
-  
-      // Step 3: Validate and generate code from the AST
-      return this.processAST(ast, options);
+        if (!source) {
+            throw new Error("Source code cannot be undefined or empty");
+        }
+
+        // Tokenize the source code
+        const tokens = this.tokenizer.tokenize(source);
+
+        // Parse the tokens into an initial AST
+        const rawAst = this.parser.parse(tokens);
+
+        // Convert raw AST to TypedJSASTNode
+        const typedAst = this.convertToTypedNode(rawAst);
+
+        return this.processAST(typedAst, options);
     } catch (err) {
-      return {
-        success: false,
-        errors: [
-          {
-            code: "E000",
-            message: err instanceof Error ? err.message : "Unknown error occurred",
-          },
-        ],
-        ast: undefined,
-      };
+        return {
+            success: false,
+            errors: [
+                {
+                    code: "E000",
+                    message: err instanceof Error ? err.message : "Unknown error occurred",
+                },
+            ],
+            ast: undefined,
+        };
     }
-  }
-  
+}
 
   public generateFromAST(ast: JSASTNode, options: GeneratorOptions = {}): GenerationResult {
     try {
@@ -146,10 +148,36 @@ export class JSASTGenerator {
   }
 
   private generateCode(ast: JSASTNode, options: GeneratorOptions): string {
-    const typedAst = this.convertToTypedNode(ast);
-    const rawOutput = this.parser.parse(typedAst);
-    const code = Array.isArray(rawOutput) ? rawOutput.join("\n") : rawOutput || "";
-    return this.formatOutput(code, options);
+    const codeParts: string[] = [];
+    this.traverseAST(ast, codeParts);
+    const rawCode = codeParts.join(" ").trim();
+    return this.formatOutput(rawCode, options);
+  }
+
+  private traverseAST(node: JSASTNode, codeParts: string[]): void {
+    switch (node.type) {
+      case NodeType.Program:
+        node.children?.forEach((child) => this.traverseAST(child, codeParts));
+        break;
+      case NodeType.VariableDeclaration:
+        codeParts.push(`${node.value} `);
+        node.children?.forEach((child) => this.traverseAST(child, codeParts));
+        codeParts.push(";");
+        break;
+      case NodeType.Identifier:
+      case NodeType.Literal:
+        codeParts.push(node.value || "");
+        break;
+      case NodeType.BinaryExpression:
+        if (node.children && node.children.length === 2) {
+          this.traverseAST(node.children[0], codeParts);
+          codeParts.push(` ${node.value} `);
+          this.traverseAST(node.children[1], codeParts);
+        }
+        break;
+      default:
+        throw new Error(`Unsupported node type: ${node.type}`);
+    }
   }
 
   private formatOutput(code: string, options: GeneratorOptions): string {
