@@ -77,6 +77,28 @@ declare class JSParser {
     private parseBlockStatement;
 }
 
+declare class JSASTBuilder {
+    private tokens;
+    private position;
+    constructor(tokens: JSToken[]);
+    private currentToken;
+    private consumeToken;
+    private peekToken;
+    private parseProgram;
+    private parseStatement;
+    private parseVariableDeclaration;
+    buildAST(): JSASTNode;
+}
+
+declare class JSAstMinimizer {
+    private uniqueNodes;
+    minimize(ast: JSASTNode): JSASTNode;
+    optimize(ast: JSASTNode): JSASTNode;
+    private traverse;
+    private performOptimization;
+    private simplifyNode;
+}
+
 type ValidationError = {
     code: string;
     message: string;
@@ -141,4 +163,4 @@ declare class JSAstGenerator {
     private formatPretty;
 }
 
-export { type BaseNode, type GenerationError, type GenerationResult, type GeneratorOptions, type JSASTNode, JSAstGenerator, JSParser, type JSToken, JSTokenType, JSValidator, NodeType, type ParseOptions, type TypedJSASTNode, Types, type ValidationError$1 as ValidationError };
+export { type BaseNode, type GenerationError, type GenerationResult, type GeneratorOptions, JSASTBuilder, type JSASTNode, JSAstGenerator, JSAstMinimizer, JSParser, type JSToken, JSTokenType, JSValidator, NodeType, type ParseOptions, type TypedJSASTNode, Types, type ValidationError$1 as ValidationError };
