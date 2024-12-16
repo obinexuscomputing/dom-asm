@@ -2,6 +2,7 @@ import typescript from '@rollup/plugin-typescript';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
+import { terser } from '@rollup/plugin-terser';
 
 export default {
   input: 'src/index.ts',
@@ -10,11 +11,13 @@ export default {
       file: 'dist/index.js',
       format: 'es', // ES Module
       sourcemap: true,
+      plugins: [terser()], // Minify output
     },
     {
       file: 'dist/index.cjs',
       format: 'cjs', // CommonJS Module
       sourcemap: true,
+      plugins: [terser()], // Minify output
     },
   ],
   external: [
@@ -24,6 +27,8 @@ export default {
     '@obinexuscomputing/xml',
     'fs',
     'path',
+    'os',
+    'util',
   ],
   plugins: [
     resolve({
@@ -34,5 +39,6 @@ export default {
     typescript({
       tsconfig: './tsconfig.json',
     }),
+    terser(), // Minify output
   ],
 };
