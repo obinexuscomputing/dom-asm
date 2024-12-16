@@ -28,7 +28,8 @@ export class HTMLParser {
   constructor(options: HTMLParserOptions = { throwOnError: true }) {
     this.tokenizer = new HTMLTokenizer("");
     this.options = options;
-  }public parse(input: string): HTMLAST {
+  }
+  public parse(input: string): HTMLAST {
     const tokenizer = new HTMLTokenizer(input);
     const tokens = tokenizer.tokenize();
   

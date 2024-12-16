@@ -7,29 +7,29 @@ export class HTMLASTOptimizer {
   }
 
   public mergeAdjacentTextNodes(node: HTMLASTNode): void {
-  if (node.children) {
-    const mergedChildren = [];
-    let lastTextNode: HTMLASTNode | null = null;
-
-    for (const child of node.children) {
-      if (child.type === "Text") {
-        if (lastTextNode) {
-          lastTextNode.value = (lastTextNode.value || "") + (child.value || "");
+    if (node.children) {
+      const mergedChildren = [];
+      let lastTextNode: HTMLASTNode | null = null;
+  
+      for (const child of node.children) {
+        if (child.type === "Text") {
+          if (lastTextNode) {
+            lastTextNode.value = (lastTextNode.value || "") + (child.value || "");
+          } else {
+            lastTextNode = { ...child };
+            mergedChildren.push(lastTextNode);
+          }
         } else {
-          lastTextNode = { ...child };
-          mergedChildren.push(lastTextNode);
+          lastTextNode = null;
+          this.mergeAdjacentTextNodes(child);
+          mergedChildren.push(child);
         }
-      } else {
-        lastTextNode = null;
-        this.mergeAdjacentTextNodes(child);
-        mergedChildren.push(child);
       }
+  
+      node.children = mergedChildren;
     }
-
-    node.children = mergedChildren;
   }
-}
-
+  
 
   private removeEmptyTextNodes(node: HTMLASTNode): void {
     if (node.children) {

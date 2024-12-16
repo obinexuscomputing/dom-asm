@@ -70,7 +70,7 @@ export class HTMLASTBuilder {
       else if (token.type === "EndTag") {
         if (stack.length > 1 && currentParent.name !== token.name) {
           console.warn(`Skipping unmatched end tag: ${token.name}`);
-          continue; // Skip unmatched end tag
+          continue;
         } else if (stack.length > 1) {
           stack.pop();
           currentParent = stack[stack.length - 1];
@@ -78,6 +78,7 @@ export class HTMLASTBuilder {
           console.warn(`Unmatched end tag at root level: ${token.name}`);
         }
       }
+      
        else if (token.type === "Text" || token.type === "Comment") {
         currentParent.children.push(
           new HTMLASTNode(token.type, [], { value: token.value })
