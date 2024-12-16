@@ -10,21 +10,79 @@ export class JSParser {
     this.tokens = [];
     this.current = 0;
   }
-
-  public parse(tokens: JSToken[]): JSASTNode {
-    this.tokens = tokens;
-    this.current = 0;
-
-    const ast: JSASTNode = {
+  public parse(tokens: JSToken[]): TypedJSASTNode {
+    const ast: TypedJSASTNode = {
       type: NodeType.Program,
       children: [],
     };
 
-    while (this.current < this.tokens.length) {
-      const node = this.walk();
-      if (node) {
-        ast.children?.push(node);
+    let current = 0;
+
+    const walk = (): TypedJSASTNode => {
+      const token = tokens[current];
+
+      if (!token) {
+        throw new Error("Unexpected end of input");
       }
+
+      switch (token.type) {
+        case JSTokenType.Keyword:
+          if (token.value === "const" || token.value === "let" || token.value === "var") {
+            current++;
+            const identifier = tokens[current];
+
+            if (!identifier || identifier.type !== JSTokenType.Identifier) {
+              throw new Error("Expected identifier after declaration keyword");
+            }
+
+            current++;
+            const operator = tokens[current];
+
+            if (!operator || operator.value !== "=") {
+              throw new Error("Expected '=' after identifier");
+            }
+
+            current++;
+            const valueToken = tokens[current];
+
+            if (!valueToken || valueToken.type !== JSTokenType.Literal) {
+              throw new Error("Expected literal value after '='");
+            }
+
+            current++;
+            if (tokens[current]?.value !== ";") {
+              throw new Error("Expected ';' after declaration");
+            }
+
+            current++;
+
+            return {
+              type: NodeType.VariableDeclaration,
+              value: token.value,
+              children: [
+                { type: NodeType.Identifier, value: identifier.value },
+                { type: NodeType.Literal, value: valueToken.value },
+              ],
+            };
+          }
+          throw new Error(`Unexpected keyword: ${token.value}`);
+
+        case JSTokenType.Identifier:
+          current++;
+          return { type: NodeType.Identifier, value: token.value, children: [] };
+
+        case JSTokenType.Literal:
+          current++;
+          return { type: NodeType.Literal, value: token.value, children: [] };
+
+        default:
+          throw new Error(`Unexpected token type: ${token.type}`);
+      }
+    };
+
+    while (current < tokens.length) {
+      const node = walk();
+      ast.children?.push(node);
     }
 
     return ast;
@@ -166,7 +224,7 @@ export class JSParser {
       children: [...params, ...body],
     };
   }
-  
+
   private handleKeyword(): JSASTNode {
     const token = this.tokens[this.current];
 
@@ -250,7 +308,7 @@ export class JSParser {
    private parseVariableDeclaration(node: TypedJSASTNode): string {
      const [identifier, value] = node.children ?? [];
      return `${node.value} ${this.parse(identifier as TypedJSASTNode)} = ${this.parse(
-       value as TypedJSASTNode
+       value
      )};`;
    }
  
@@ -261,7 +319,7 @@ export class JSParser {
    private parseBinaryExpression(node: TypedJSASTNode): string {
      if (node.children?.length === 2) {
        const [left, right] = node.children;
-       return `${this.parse(left as TypedJSASTNode)} ${node.value} ${this.parse(right as TypedJSASTNode)}`;
+       return `${this.parse(left)} ${node.value} ${this.parse(right )}`;
      }
      return "";
    }
@@ -273,22 +331,22 @@ export class JSParser {
  
    private parseIfStatement(node: TypedJSASTNode): string {
      const [condition, consequence, alternate] = node.children ?? [];
-     const ifPart = `if (${this.parse(condition as TypedJSASTNode)}) ${this.parse(
-       consequence as TypedJSASTNode
+     const ifPart = `if (${this.parse(condition)}) ${this.parse(
+       consequence
      )}`;
-     const elsePart = alternate ? ` else ${this.parse(alternate as TypedJSASTNode)}` : "";
+     const elsePart = alternate ? ` else ${this.parse(alternate)}` : "";
      return `${ifPart}${elsePart}`;
    }
  
    private parseFunctionDeclaration(node: TypedJSASTNode): string {
      const [identifier, ...paramsAndBody] = node.children ?? [];
      const params = paramsAndBody.slice(0, paramsAndBody.length - 1).map((param) => this.parse(param));
-     const body = this.parse(paramsAndBody[paramsAndBody.length - 1] as TypedJSASTNode);
-     return `function ${this.parse(identifier as TypedJSASTNode)}(${params.join(", ")}) ${body}`;
+     const body = this.parse(paramsAndBody[paramsAndBody.length - 1] );
+     return `function ${this.parse(identifier )}(${params.join(", ")}) ${body}`;
    }
  
-   private parseReturnStatement(node: TypedJSASTNode): string {
-     return `return ${this.parse(node.children?.[0] as TypedJSASTNode)};`;
+   private parseReturnStatement(node): string {
+     return `return ${this.parse(node.children?.[0] )};`;
    }
    
 public buildASTFromTokens(tokens: JSToken[]): TypedJSASTNode {
