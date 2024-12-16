@@ -10,10 +10,10 @@ export class HTMLASTOptimizer {
   private removeEmptyTextNodes(node: HTMLASTNode): void {
     if (!node.children) return;
 
-    // Filter out empty text nodes
+    // Filter out completely empty text nodes but preserve pure whitespace nodes
     node.children = node.children.filter((child) => {
       if (child.type === "Text") {
-        return child.value && child.value.trim() !== "";
+        return child.value !== undefined && child.value !== null;
       }
       return true;
     });
@@ -35,19 +35,13 @@ export class HTMLASTOptimizer {
       const next = node.children[i + 1];
 
       if (current.type === "Text" && next.type === "Text") {
-        // Preserve spaces between merged text nodes
         const currentText = current.value || "";
         const nextText = next.value || "";
         
-        // Handle space preservation
-        let mergedText = currentText;
-        if (currentText.endsWith(" ") || nextText.startsWith(" ")) {
-          mergedText += nextText;
-        } else {
-          mergedText += " " + nextText;
-        }
+        // Preserve all spaces, including trailing ones
+        current.value = currentText + nextText;
         
-        current.value = mergedText.trim();
+        // Remove the merged node
         node.children.splice(i + 1, 1);
       } else {
         if (current.type === "Element") {
