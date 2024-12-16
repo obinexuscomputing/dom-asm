@@ -41,17 +41,15 @@ export interface JSASTNode extends BaseNode {
   children?: JSASTNode[];
 }
 
-export interface TypedJSASTNode extends JSASTNode {
-  children?: TypedJSASTNode[];
-}
-
 // Parser Options
 export interface ParseOptions {
   sourceType?: 'module' | 'script';
   strict?: boolean;
 }
 
-// Export for Runtime and Types
+// Default Export Object
 const Types = { NodeType, JSTokenType };
 export default Types;
-// export type { JSToken, BaseNode, JSASTNode, TypedJSASTNode, ParseOptions } ;
+
+// Individual Type Exports
+// export type { JSToken, BaseNode, JSASTNode, ParseOptions };
