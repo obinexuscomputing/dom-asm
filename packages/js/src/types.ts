@@ -51,7 +51,7 @@ export interface JSASTNode extends BaseNode {
 }
 
 export interface TypedJSASTNode extends JSASTNode {
-  body?: TypedJSASTNode[]; // Make it optional and of type TypedJSASTNode[]
+  body?: TypedJSASTNode[]; 
   type: NodeType;
 }
 

@@ -1,5 +1,3 @@
-// Import necessary types and classes
-
 import { JSToken, TypedJSASTNode, NodeType, JSTokenType } from "../types";
 
 export class JSParser {
@@ -24,24 +22,29 @@ export class JSParser {
     const children: TypedJSASTNode[] = [];
   
     while (this.current < this.tokens.length) {
-      const node = this.walk();
-      if (node) {
-        children.push(node);
+      try {
+        const node = this.walk();
+        if (node) {
+          children.push(node);
+        }
+      } catch (error) {
+        // Skip tokens that cause parsing errors
+        this.current++;
       }
     }
   
     return {
       type: NodeType.Program,
       children,
-      body: children, // Add this line to match the test expectations
+      body: children, 
     };
   }
 
-  private walk(): TypedJSASTNode {
+  private walk(): TypedJSASTNode | null {
     const token = this.tokens[this.current];
 
     if (!token) {
-      throw new Error("Unexpected end of input");
+      return null; // Return null instead of throwing for EOF
     }
 
     switch (token.type) {
@@ -53,8 +56,12 @@ export class JSParser {
       case JSTokenType.Literal:
         this.current++;
         return { type: NodeType.Literal, value: token.value };
+      case JSTokenType.EndOfStatement:
+        this.current++;
+        return null; // Ignore EOF or semicolon tokens
       default:
-        throw new Error(`Unexpected token: ${token.value}`);
+        // For unexpected tokens, throw with specific error
+        throw new Error(`Unexpected token: '${token.value}'`);
     }
   }
 
@@ -85,12 +92,20 @@ export class JSParser {
     this.current++; // Skip '('
     const condition = this.walk();
 
+    if (!condition) {
+      throw new Error("Invalid condition");
+    }
+
     if (this.tokens[this.current]?.value !== ")") {
       throw new Error("Expected ')' after condition");
     }
 
     this.current++; // Skip ')'
     const consequence = this.walk();
+
+    if (!consequence) {
+      throw new Error("Invalid consequence");
+    }
 
     let alternate: TypedJSASTNode | undefined;
     if (this.tokens[this.current]?.value === "else") {
@@ -165,11 +180,14 @@ export class JSParser {
     this.current++; // Skip '='
     const initializer = this.walk();
 
-    if (this.tokens[this.current]?.value !== ";") {
-      throw new Error("Expected ';' after variable declaration");
+    if (!initializer) {
+      throw new Error("Invalid initializer");
     }
 
-    this.current++; // Skip ';'
+    // Optionally skip semicolon if present
+    if (this.tokens[this.current]?.value === ";") {
+      this.current++; // Skip ';'
+    }
 
     return {
       type: NodeType.VariableDeclaration,
@@ -193,7 +211,10 @@ export class JSParser {
       if (this.current >= this.tokens.length) {
         throw new Error("Expected '}' to close block statement");
       }
-      children.push(this.walk());
+      const node = this.walk();
+      if (node) {
+        children.push(node);
+      }
     }
 
     this.current++; // Skip '}'

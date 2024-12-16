@@ -46,6 +46,7 @@ export interface JSASTNode extends BaseNode {
     children?: JSASTNode[];
 }
 export interface TypedJSASTNode extends JSASTNode {
+    body?: TypedJSASTNode[];
     type: NodeType;
 }
 export interface ValidationError {
