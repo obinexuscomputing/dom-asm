@@ -1,10 +1,10 @@
-import { JSParser } from "../JSParser";
-import { Tokenizer } from "../JSTokenizer";
-import { Token, TypedJSASTNode } from "../types";
+import { Token } from "typescript";
+import { JSParser, TypedJSASTNode } from "../src";
+import { JSTokenizer } from "../src/tokenizer/JSTokenizer";
 
 describe("JSParser", () => {
     let parser: JSParser;
-    let tokenizer: Tokenizer;
+    let tokenizer: JSTokenizer;
 
     beforeEach(() => {
         tokenizer = new Tokenizer();
