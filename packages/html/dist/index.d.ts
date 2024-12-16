@@ -158,7 +158,9 @@ declare class HTMLCodeGenerator {
 declare class HTMLASTOptimizer {
     optimize(ast: HTMLAST): void;
     private removeEmptyTextNodes;
+    private isSignificantWhitespace;
     private mergeTextNodes;
+    private shouldPreserveWhitespace;
 }
 
 export { type HTMLAST, HTMLASTOptimizer, HTMLCodeGenerator, HTMLParser, HTMLTokenizer, HTMLValidator };
