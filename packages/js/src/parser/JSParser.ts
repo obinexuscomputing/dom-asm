@@ -3,16 +3,25 @@ import { TypedJSASTNode, NodeType, JSToken, JSASTNode, JSTokenType } from "../ty
 
 
 export class JSParser {
-  public current: number=0;
-  public parse(tokens: JSToken[]): JSASTNode {
+  private tokens: JSToken[];
+  private current: number;
+
+  constructor() {
+    this.tokens = [];
     this.current = 0;
+  }
+
+  public parse(tokens: JSToken[]): JSASTNode {
+    this.tokens = tokens;
+    this.current = 0;
+
     const ast: JSASTNode = {
       type: NodeType.Program,
       children: [],
     };
 
-    while (this.current < tokens.length) {
-      const node = this.walk(tokens);
+    while (this.current < this.tokens.length) {
+      const node = this.walk();
       if (node) {
         ast.children?.push(node);
       }
@@ -48,8 +57,133 @@ export class JSParser {
 
     throw new Error(`Unexpected keyword: ${token.value}`);
   }
-  private walk(tokens: JSToken[]): JSASTNode {
-    const token = tokens[this.current];
+
+  
+  private handleVariableDeclaration(keyword: string): JSASTNode {
+    this.current++;
+    const identifier = this.tokens[this.current];
+
+    if (!identifier || identifier.type !== JSTokenType.Identifier) {
+      throw new Error("Expected identifier after declaration keyword");
+    }
+
+    this.current++;
+    const operator = this.tokens[this.current];
+
+    if (!operator || operator.value !== "=") {
+      throw new Error("Expected '=' after identifier");
+    }
+
+    this.current++;
+    const valueToken = this.tokens[this.current];
+
+    if (!valueToken || valueToken.type !== JSTokenType.Literal) {
+      throw new Error("Expected literal value after '='");
+    }
+
+    this.current++;
+    if (this.tokens[this.current]?.value !== ";") {
+      throw new Error("Expected ';' after declaration");
+    }
+
+    this.current++;
+
+    return {
+      type: NodeType.VariableDeclaration,
+      value: keyword,
+      children: [
+        { type: NodeType.Identifier, value: identifier.value },
+        { type: NodeType.Literal, value: valueToken.value },
+      ],
+    };
+  }
+  
+  private handleBinaryExpression(): JSASTNode {
+    const leftToken = this.tokens[this.current - 1];
+    const operatorToken = this.tokens[this.current];
+    const rightToken = this.tokens[this.current + 1];
+
+    if (!leftToken || !rightToken || operatorToken.type !== JSTokenType.Operator) {
+      throw new Error("Invalid binary expression");
+    }
+
+    this.current += 2;
+
+    return {
+      type: NodeType.BinaryExpression,
+      value: operatorToken.value,
+      children: [
+        { type: NodeType.Literal, value: leftToken.value },
+        { type: NodeType.Literal, value: rightToken.value },
+      ],
+    };
+  }
+  
+  private handleFunctionDeclaration(): JSASTNode {
+    this.current++;
+    const identifier = this.tokens[this.current];
+
+    if (!identifier || identifier.type !== JSTokenType.Identifier) {
+      throw new Error("Expected identifier after 'function'");
+    }
+
+    this.current++;
+    if (this.tokens[this.current]?.value !== "(") {
+      throw new Error("Expected '(' after function name");
+    }
+
+    this.current++;
+    const params: JSASTNode[] = [];
+
+    while (this.tokens[this.current]?.value !== ")") {
+      const param = this.tokens[this.current];
+      if (!param || param.type !== JSTokenType.Identifier) {
+        throw new Error("Expected identifier in function parameters");
+      }
+      params.push({ type: NodeType.Identifier, value: param.value });
+      this.current++;
+      if (this.tokens[this.current]?.value === ",") {
+        this.current++;
+      }
+    }
+
+    this.current++;
+    if (this.tokens[this.current]?.value !== "{") {
+      throw new Error("Expected '{' after function parameters");
+    }
+
+    this.current++;
+    const body: JSASTNode[] = [];
+    while (this.tokens[this.current]?.value !== "}") {
+      body.push(this.walk()!);
+    }
+
+    this.current++;
+
+    return {
+      type: NodeType.FunctionDeclaration,
+      value: identifier.value,
+      children: [...params, ...body],
+    };
+  }
+  
+  private handleKeyword(): JSASTNode {
+    const token = this.tokens[this.current];
+
+    if (token.value === "const" || token.value === "let" || token.value === "var") {
+      return this.handleVariableDeclaration(token.value);
+    }
+
+    if (token.value === "function") {
+      return this.handleFunctionDeclaration();
+    }
+
+    throw new Error(`Unexpected keyword: ${token.value}`);
+  }
+
+
+  private walk(): JSASTNode | null {
+    const token = this.tokens[this.current];
 
     if (!token) {
       throw new Error("Unexpected end of input");
@@ -57,18 +191,31 @@ export class JSParser {
 
     switch (token.type) {
       case JSTokenType.Keyword:
-        return this.parseKeyword(tokens);
+        return this.handleKeyword();
 
       case JSTokenType.Identifier:
-        return this.parseIdentifier(tokens);
+        this.current++;
+        return { type: NodeType.Identifier, value: token.value };
 
       case JSTokenType.Literal:
-        return this.parseLiteral(tokens);
+        this.current++;
+        return { type: NodeType.Literal, value: token.value };
+
+      case JSTokenType.Operator:
+        return this.handleBinaryExpression();
+
+      case JSTokenType.Delimiter:
+        if (token.value === ";") {
+          this.current++;
+          return null;
+        }
+        throw new Error(`Unexpected delimiter: ${token.value}`);
 
       default:
-        throw new Error(`Unexpected token type: ${token.type} at position ${this.current}`);
+        throw new Error(`Unexpected token type: ${token.type}`);
     }
   }
+
 
    private consume(tokens: JSToken[], expectedType: JSTokenType, errorMessage: string): JSToken {
     const token = tokens[this.current];
