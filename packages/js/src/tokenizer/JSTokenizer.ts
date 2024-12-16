@@ -23,24 +23,23 @@ export class JSTokenizer {
     const tokens: JSToken[] = [];
     let current = 0;
 
-    // Remove all whitespace and semicolons
-    input = input.replace(/\s+|;/g, '');
-
     const addToken = (type: JSTokenType, value: string) => {
       tokens.push({ type, value });
     };
 
+    // Simplify input by trimming extra spaces but preserve semicolons and meaningful characters
+    input = input.replace(/\s+/g, '');
+
     while (current < input.length) {
       let char = input[current];
 
-      // Identifiers and Keywords
+      // Handle keywords and identifiers
       if (/[a-zA-Z_$]/.test(char)) {
         let value = '';
         while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
           value += input[current++];
         }
-        
-        // Separate keywords from identifiers
+
         if (this.keywords.has(value)) {
           addToken(JSTokenType.Keyword, value);
         } else {
@@ -49,7 +48,7 @@ export class JSTokenizer {
         continue;
       }
 
-      // Numbers
+      // Handle numbers (Literals)
       if (/[0-9]/.test(char)) {
         let value = '';
         while (current < input.length && /[0-9.]/.test(input[current])) {
@@ -59,7 +58,7 @@ export class JSTokenizer {
         continue;
       }
 
-      // Check for multi-character operators
+      // Handle multi-character operators
       const remainingInput = input.slice(current);
       const multiCharOp = this.matchMultiCharOperator(remainingInput);
       if (multiCharOp) {
@@ -68,14 +67,14 @@ export class JSTokenizer {
         continue;
       }
 
-      // Operators
+      // Handle single-character operators
       if (this.operators.has(char)) {
         addToken(JSTokenType.Operator, char);
         current++;
         continue;
       }
 
-      // Delimiters
+      // Handle delimiters
       if (this.delimiters.has(char)) {
         addToken(JSTokenType.Delimiter, char);
         current++;
