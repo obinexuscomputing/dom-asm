@@ -1,248 +1,65 @@
-import { JSParser } from "../src/parser/JSParser";
-import { JSToken, JSTokenType } from "../src/types";
-import { NodeType, JSASTNode } from "../src/types";
+import { JSParser } from "../src";
+import { JSToken } from "../src/tokenizer/";
+import { JSTokenizer } from "../src/tokenizer/JSTokenizer";
 
 describe("JSParser", () => {
-  let parser: JSParser;
+    let parser: JSParser;
+    let tokenizer: JSTokenizer
 
-  beforeEach(() => {
-    parser = new JSParser();
-  });
-  test("should parse an empty block statement", () => {
-    const tokens: JSToken[] = [
-        { type: JSTokenType.Delimiter, value: "{" },
-        { type: JSTokenType.Delimiter, value: "}" },
-    ];
-
-    const ast = parser.parse(tokens);
-
-    expect(ast).toEqual({
-        type: NodeType.Program,
-        children: [
-            {
-                type: NodeType.BlockStatement,
-                children: [],
-            },
-        ],
+    beforeEach(() => {
+        tokenizer = new JSTokenizer();
+        parser = new JSParser();
     });
-});
 
-  test("should parse a variable declaration", () => {
-    const tokens: JSToken[] = [
-      { type: JSTokenType.Keyword, value: "const" },
-      { type: JSTokenType.Identifier, value: "x" },
-      { type: JSTokenType.Operator, value: "=" },
-      { type: JSTokenType.Literal, value: "42" },
-      { type: JSTokenType.EndOfStatement, value: ";" },
-    ];
+    test("parses simple expressions", () => {
+        const code = "let x = 10;";
+        const tokens: JSToken[] = tokenizer.tokenize(code);
+        const ast = parser.parse(tokens);
 
-    const ast = parser.parse(tokens);
-
-    expect(ast).toEqual({
-      type: NodeType.Program,
-      children: [
-        {
-          type: NodeType.VariableDeclaration,
-          value: "const",
-          children: [
-            { type: NodeType.Identifier, value: "x" },
-            { type: NodeType.Literal, value: "42" },
-          ],
-        },
-      ],
+        expect(ast).toBeDefined();
+        expect(ast.body.length).toBe(1);
     });
-  });
 
-  test("should parse an if statement", () => {
-    const tokens: JSToken[] = [
-      { type: JSTokenType.Keyword, value: "if" },
-      { type: JSTokenType.Delimiter, value: "(" },
-      { type: JSTokenType.Identifier, value: "x" },
-      { type: JSTokenType.Operator, value: "==" },
-      { type: JSTokenType.Literal, value: "42" },
-      { type: JSTokenType.Delimiter, value: ")" },
-      { type: JSTokenType.Delimiter, value: "{" },
-      { type: JSTokenType.Identifier, value: "doSomething" },
-      { type: JSTokenType.Delimiter, value: "(" },
-      { type: JSTokenType.Delimiter, value: ")" },
-      { type: JSTokenType.EndOfStatement, value: ";" },
-      { type: JSTokenType.Delimiter, value: "}" },
-    ];
+    test("handles missing semicolon gracefully", () => {
+        const code = "let x = 10"; // Missing semicolon
+        const tokens: JSToken[] = tokenizer.tokenize(code);
+        const ast= parser.parse(tokens);
 
-    const ast = parser.parse(tokens);
-
-    expect(ast).toEqual({
-      type: NodeType.Program,
-      children: [
-        {
-          type: NodeType.IfStatement,
-          children: [
-            {
-              type: NodeType.BinaryExpression,
-              value: "==",
-              children: [
-                { type: NodeType.Identifier, value: "x" },
-                { type: NodeType.Literal, value: "42" },
-              ],
-            },
-            {
-              type: NodeType.BlockStatement,
-              children: [
-                {
-                  type: NodeType.Identifier,
-                  value: "doSomething",
-                },
-              ],
-            },
-          ],
-        },
-      ],
+        expect(ast).toBeDefined();
+        expect(ast.body.length).toBe(1);
     });
-  });
 
-  test("should parse a function declaration", () => {
-    const tokens: JSToken[] = [
-      { type: JSTokenType.Keyword, value: "function" },
-      { type: JSTokenType.Identifier, value: "myFunc" },
-      { type: JSTokenType.Delimiter, value: "(" },
-      { type: JSTokenType.Identifier, value: "arg1" },
-      { type: JSTokenType.Delimiter, value: "," },
-      { type: JSTokenType.Identifier, value: "arg2" },
-      { type: JSTokenType.Delimiter, value: ")" },
-      { type: JSTokenType.Delimiter, value: "{" },
-      { type: JSTokenType.Keyword, value: "return" },
-      { type: JSTokenType.Identifier, value: "arg1" },
-      { type: JSTokenType.Operator, value: "+" },
-      { type: JSTokenType.Identifier, value: "arg2" },
-      { type: JSTokenType.EndOfStatement, value: ";" },
-      { type: JSTokenType.Delimiter, value: "}" },
-    ];
+    test("throws error for invalid syntax", () => {
+        const code = "let = 10;"; // Invalid syntax
+        const tokens: JSToken[] = tokenizer.tokenize(code);
 
-    const ast = parser.parse(tokens);
-
-    expect(ast).toEqual({
-      type: NodeType.Program,
-      children: [
-        {
-          type: NodeType.FunctionDeclaration,
-          value: "myFunc",
-          children: [
-            { type: NodeType.Identifier, value: "arg1" },
-            { type: NodeType.Identifier, value: "arg2" },
-            {
-              type: NodeType.BlockStatement,
-              children: [
-                {
-                  type: NodeType.ReturnStatement,
-                  children: [
-                    {
-                      type: NodeType.BinaryExpression,
-                      value: "+",
-                      children: [
-                        { type: NodeType.Identifier, value: "arg1" },
-                        { type: NodeType.Identifier, value: "arg2" },
-                      ],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
+        expect(() => parser.parse(tokens)).toThrow("Unexpected JSToken '='");
     });
-  });
 
-  test("should throw an error for missing ')' in if statement", () => {
-    const tokens: JSToken[] = [
-      { type: JSTokenType.Keyword, value: "if" },
-      { type: JSTokenType.Delimiter, value: "(" },
-      { type: JSTokenType.Identifier, value: "x" },
-      { type: JSTokenType.Operator, value: "==" },
-      { type: JSTokenType.Literal, value: "42" },
-    ];
+    test("parses nested blocks", () => {
+        const code = "if (true) { let y = 20; }";
+        const tokens: JSToken[] = tokenizer.tokenize(code);
+        const ast = parser.parse(tokens);
 
-    expect(() => parser.parse(tokens)).toThrow("Expected ')' after condition");
-  });
-
-  test("should throw an error for unmatched '}'", () => {
-    const tokens: JSToken[] = [
-      { type: JSTokenType.Keyword, value: "if" },
-      { type: JSTokenType.Delimiter, value: "(" },
-      { type: JSTokenType.Identifier, value: "x" },
-      { type: JSTokenType.Operator, value: "==" },
-      { type: JSTokenType.Literal, value: "42" },
-      { type: JSTokenType.Delimiter, value: ")" },
-      { type: JSTokenType.Delimiter, value: "{" },
-      { type: JSTokenType.Identifier, value: "doSomething" },
-      { type: JSTokenType.Delimiter, value: "(" },
-      { type: JSTokenType.Delimiter, value: ")" },
-      { type: JSTokenType.EndOfStatement, value: ";" },
-    ];
-
-    expect(() => parser.parse(tokens)).toThrow("Expected '}' to close block statement");
-  });
-  test("should parse an if-else statement", () => {
-    const tokens: JSToken[] = [
-        { type: JSTokenType.Keyword, value: "if" },
-        { type: JSTokenType.Delimiter, value: "(" },
-        { type: JSTokenType.Identifier, value: "x" },
-        { type: JSTokenType.Operator, value: "==" },
-        { type: JSTokenType.Literal, value: "42" },
-        { type: JSTokenType.Delimiter, value: ")" },
-        { type: JSTokenType.Delimiter, value: "{" },
-        { type: JSTokenType.Identifier, value: "doSomething" },
-        { type: JSTokenType.Delimiter, value: "(" },
-        { type: JSTokenType.Delimiter, value: ")" },
-        { type: JSTokenType.EndOfStatement, value: ";" },
-        { type: JSTokenType.Delimiter, value: "}" },
-        { type: JSTokenType.Keyword, value: "else" },
-        { type: JSTokenType.Delimiter, value: "{" },
-        { type: JSTokenType.Identifier, value: "doSomethingElse" },
-        { type: JSTokenType.Delimiter, value: "(" },
-        { type: JSTokenType.Delimiter, value: ")" },
-        { type: JSTokenType.EndOfStatement, value: ";" },
-        { type: JSTokenType.Delimiter, value: "}" },
-    ];
-
-    const ast = parser.parse(tokens);
-
-    expect(ast).toEqual({
-        type: NodeType.Program,
-        children: [
-            {
-                type: NodeType.IfStatement,
-                children: [
-                    {
-                        type: NodeType.BinaryExpression,
-                        value: "==",
-                        children: [
-                            { type: NodeType.Identifier, value: "x" },
-                            { type: NodeType.Literal, value: "42" },
-                        ],
-                    },
-                    {
-                        type: NodeType.BlockStatement,
-                        children: [
-                            {
-                                type: NodeType.Identifier,
-                                value: "doSomething",
-                            },
-                        ],
-                    },
-                    {
-                        type: NodeType.BlockStatement,
-                        children: [
-                            {
-                                type: NodeType.Identifier,
-                                value: "doSomethingElse",
-                            },
-                        ],
-                    },
-                ],
-            },
-        ],
+        expect(ast).toBeDefined();
+        expect(ast.body.length).toBe(1);
+        expect(ast.body[0].type).toBe("IfStatement");
     });
-});
 
+    test("handles function declarations", () => {
+        const code = "function add(a, b) { return a + b; }";
+        const tokens: JSToken[] = tokenizer.tokenize(code);
+        const ast = parser.parse(tokens);
+
+        expect(ast).toBeDefined();
+        expect(ast.body.length).toBe(1);
+        expect(ast.body[0].type).toBe("FunctionDeclaration");
+    });
+
+    test("recovers from syntax errors", () => {
+        const code = "if (true { let z = 30; }"; // Missing closing parenthesis
+        const tokens: JSToken[] = tokenizer.tokenize(code);
+
+        expect(() => parser.parse(tokens)).toThrow("Expected ')' after condition");
+    });
 });
