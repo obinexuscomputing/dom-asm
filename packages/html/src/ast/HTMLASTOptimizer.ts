@@ -1,22 +1,43 @@
 import { HTMLAST, HTMLASTNode } from "./HTMLAST";
 
 export class HTMLASTOptimizer {
-  public optimize(ast: HTMLAST): HTMLAST {
-    this.removeEmptyNodes(ast.root);
-    this.mergeTextNodes(ast.root);
-    return ast;
+  public optimize(ast: HTMLAST): void {
+    this.removeEmptyTextNodes(ast.root);
+    this.mergeAdjacentTextNodes(ast.root);
   }
 
-  private removeEmptyNodes(node: HTMLASTNode): void {
-    if (!node.children) return;
+  public mergeAdjacentTextNodes(node: HTMLASTNode): void {
+    if (node.children) {
+      const mergedChildren = [];
+      let lastTextNode: HTMLASTNode | null = null;
 
-    node.children = node.children.filter((child: HTMLASTNode) => {
-      if (child.type === "Text" && (child.value?.trim() === "" || !child.value)) {
-        return false; // Remove empty text nodes
+      for (const child of node.children) {
+        if (child.type === "Text") {
+          if (lastTextNode) {
+            lastTextNode.value += child.value;
+          } else {
+            lastTextNode = { ...child };
+            mergedChildren.push(lastTextNode);
+          }
+        } else {
+          lastTextNode = null;
+          this.mergeAdjacentTextNodes(child);
+          mergedChildren.push(child);
+        }
       }
-      this.removeEmptyNodes(child); // Recursively clean children
-      return true; // Retain non-empty nodes
-    });
+
+      node.children = mergedChildren;
+    }
+  }
+
+
+  private removeEmptyTextNodes(node: HTMLASTNode): void {
+    if (node.children) {
+      node.children = node.children.filter(
+        (child) => !(child.type === "Text" && (!child.value || child.value.trim() === ""))
+      );
+      node.children.forEach((child) => this.removeEmptyTextNodes(child));
+    }
   }
 
   private mergeTextNodes(node: HTMLASTNode): void {
