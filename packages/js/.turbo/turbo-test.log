@@ -1,45 +1,237 @@
 
 > @obinexuscomputing/js@1.0.0 test
-> jest --maxWorkers=2 --testTimeout=60000
+> jest
 
 [1G[0K[1m[2mDetermining test suites to run...[22m[22m[999D[K
 
-[1mTest Suites: [22m0 of 4 total
+[1mTest Suites: [22m0 of 2 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
 [1mTime:[22m        0 s[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
 
-[1mTest Suites: [22m0 of 4 total
+[1mTest Suites: [22m0 of 2 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
 [1mTime:[22m        0 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
 
-[1mTest Suites: [22m0 of 4 total
+[1mTest Suites: [22m0 of 2 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
 [1mTime:[22m        1 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
 
-[1mTest Suites: [22m0 of 4 total
+[1mTest Suites: [22m0 of 2 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
 [1mTime:[22m        2 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
 
-[1mTest Suites: [22m0 of 4 total
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1Ats-jest[ts-jest-transformer] (WARN) Define `ts-jest` config under `globals` is deprecated. Please do
+transform: {
+    <transform_regex>: ['ts-jest', { /* ts-jest config goes here in Jest */ }],
+},
+See more at https://kulshekhar.github.io/ts-jest/docs/getting-started/presets#advanced
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
 [1mTime:[22m        3 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mtokenizer.test.ts[22m
-[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1moptimizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
 
-[1mTest Suites: [22m0 of 4 total
+[1mTest Suites: [22m0 of 2 total
 [1mTests:       [22m0 total
 [1mSnapshots:   [22m0 total
-[1mTime:[22m        4 s
+[1mTime:[22m        4 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        5 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        6 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        7 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        8 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        9 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        10 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        11 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        12 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        13 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        14 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        15 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        16 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        17 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        18 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        19 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[31m FAIL [39m[22m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        19 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A  [1m● [22mTest suite failed to run
+
+    Your test suite must contain at least one test.
+
+      [2mat onResult ([22m../../node_modules/@jest/core/build/TestScheduler.js[2m:133:18)[22m
+      [2mat [22m../../node_modules/@jest/core/build/TestScheduler.js[2m:254:19[22m
+      [2mat [22m../../node_modules/emittery/index.js[2m:363:13[22m
+          at Array.map (<anonymous>)
+      [2mat Emittery.emit ([22m../../node_modules/emittery/index.js[2m:361:23)[22m
+
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        19 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSAst.test.ts[22m
+
+[1mTest Suites: [22m0 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        19 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        20 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[0m[7m[1m[32m PASS [39m[22m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m ([0m[1m[41m18.422 s[49m[22m[0m)
+
+[0m[7m[33m[1m RUNS [22m[39m[27m[0m [2mtests/[22m[1mJSTokenizer.test.ts[22m
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, 1 of 2 total
+[1mTests:       [22m0 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        20 s[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A
+
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[32m1 passed[39m[22m, 2 total
+[1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        20 s[K[1A[K[1A[K[1A[K[1A[K[1A[999D[K
+[1mTest Suites: [22m[1m[31m1 failed[39m[22m, [1m[32m1 passed[39m[22m, 2 total
+[1mTests:       [22m[1m[32m7 passed[39m[22m, 7 total
+[1mSnapshots:   [22m0 total
+[1mTime:[22m        20.683 s
+[2mRan all test suites[22m[2m.[22m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m Lifecycle script `test` failed with error:
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcode[39m [33m1[39m
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mpath[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mworkspace[39m @obinexuscomputing/js@1.0.0
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mlocation[39m /home/nnamdi/projects/obinexuscomputing/pkg/dom-asm/packages/js
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m command failed
+[1G[0K⠙[1G[0K[1mnpm[22m [31merror[39m [94mcommand[39m sh -c jest
+[1G[0K⠙[1G[0K
