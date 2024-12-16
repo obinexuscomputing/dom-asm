@@ -29,13 +29,12 @@ export class HTMLParser {
     this.tokenizer = new HTMLTokenizer("");
     this.options = options;
   }
-
   public parse(input: string): HTMLAST {
     const tokenizer = new HTMLTokenizer(input);
     const tokens = tokenizer.tokenize();
   
     try {
-      const astBuilder = new HTMLASTBuilder(tokens);
+      const astBuilder = new HTMLASTBuilder(tokens); // Pass tokens to the constructor
       return astBuilder.buildAST();
     } catch (error) {
       if (this.options.throwOnError) throw error;
@@ -43,11 +42,12 @@ export class HTMLParser {
   
       // Return a default AST for recovery
       return {
-        root: { type: "Element", name: "root", children: [] },
+        root: new HTMLASTNode("Element", [], { name: "root" }),
         metadata: { nodeCount: 0, elementCount: 0, textCount: 0, commentCount: 0 },
       };
     }
   }
+  
   
   public setErrorHandler(handler: (error: HTMLParserError) => void): void {
     this.options.errorHandler = handler;

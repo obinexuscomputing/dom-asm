@@ -44,19 +44,17 @@ export class HTMLASTNode {
 
 export class HTMLASTBuilder {
   private tokens: HTMLToken[];
-  private position: number;
 
   constructor(tokens: HTMLToken[]) {
     this.tokens = tokens;
-    this.position = 0;
   }
 
-  public buildAST(tokens: HTMLToken[]): HTMLASTNode {
+  public buildAST(): HTMLAST {
     const root = new HTMLASTNode("Element", [], { name: "root" });
     const stack: HTMLASTNode[] = [root];
     let currentParent = root;
-  
-    for (const token of tokens) {
+
+    for (const token of this.tokens) {
       if (token.type === "StartTag") {
         const newNode = new HTMLASTNode("Element", [], { name: token.name, attributes: token.attributes });
         currentParent.children.push(newNode);
@@ -79,15 +77,17 @@ export class HTMLASTBuilder {
         );
       }
     }
-  
+
     if (stack.length > 1) {
-      const lastToken = tokens[tokens.length - 1] || { name: "unknown", line: -1, column: -1 };
+      const lastToken = this.tokens[this.tokens.length - 1] || { name: "unknown", line: -1, column: -1 };
       throw new HTMLParserError("Unclosed tags detected", lastToken, stack.length);
     }
-  
-    return root;
+
+    return {
+      root,
+      metadata: this.computeMetadata(root),
+    };
   }
-  
 
   private computeMetadata(root: HTMLASTNode): HTMLAST["metadata"] {
     let nodeCount = 0;
@@ -100,7 +100,7 @@ export class HTMLASTBuilder {
       if (node.type === "Element") elementCount++;
       if (node.type === "Text") textCount++;
       if (node.type === "Comment") commentCount++;
-      node.children?.forEach(traverse);
+      node.children.forEach(traverse);
     }
 
     traverse(root);
