@@ -13,18 +13,50 @@ export type HTMLToken =
     constructor(input: string) {
       this.input = input;
     }
-  
+    private createTextToken(content: string, startPos: number): HTMLToken {
+      let column = 1;
+      let line = 1;
+      
+      // Calculate correct line and column by scanning from input start
+      for (let i = 0; i < startPos; i++) {
+        if (this.input[i] === '\n') {
+          line++;
+          column = 1;
+        } else {
+          column++;
+        }
+      }
+      
+      return {
+        type: "Text",
+        value: content.trim(),
+        line,
+        column
+      };
+    }
     public tokenize(): HTMLToken[] {
+      this.position = 0;
+      this.line = 1;
+      this.column = 1;
+      
       const tokens: HTMLToken[] = [];
+      let textStart = 0;
+      
       while (this.position < this.input.length) {
         const char = this.peek();
   
         if (char === "<") {
-          if (this.match("<!--")) {
-            const commentToken = this.readComment();
-            if (commentToken.type === "Comment" && commentToken.value) {
-              tokens.push(commentToken);
+          // Read any accumulated text before processing tag
+          if (textStart < this.position) {
+            const textContent = this.input.slice(textStart, this.position);
+            const textToken = this.createTextToken(textContent, textStart);
+            if (textToken.value) {
+              tokens.push(textToken);
             }
+          }
+  
+          if (this.match("<!--")) {
+            tokens.push(this.readComment());
           } else if (this.match("<!DOCTYPE")) {
             tokens.push(this.readDoctype());
           } else if (this.peek(1) === "/") {
@@ -32,13 +64,27 @@ export type HTMLToken =
           } else {
             tokens.push(this.readStartTag());
           }
+          textStart = this.position;
         } else {
-          const textToken = this.readText();
-          if (textToken.type === "Text" && textToken.value) {
-            tokens.push(textToken);
+          this.position++;
+          if (char === '\n') {
+            this.line++;
+            this.column = 1;
+          } else {
+            this.column++;
           }
         }
       }
+  
+      // Handle any remaining text
+      if (textStart < this.position) {
+        const textContent = this.input.slice(textStart, this.position);
+        const textToken = this.createTextToken(textContent, textStart);
+        if (textToken.value) {
+          tokens.push(textToken);
+        }
+      }
+  
       return tokens;
     }
   
@@ -147,24 +193,24 @@ export type HTMLToken =
       
       return result;
     }
-  
     private readEndTag(): HTMLToken {
       const { line, column } = this.getCurrentLocation();
-      const startPos = this.position;
+      const startPosition = this.position;
       
-      this.position += 2; // Skip '</'
-      this.column += 2;
-      
+      this.consume(2); // Skip '</'
       const name = this.readTagName();
       this.skipWhitespace();
       
-      // Skip '>'
-      if (this.position < this.input.length) {
-        this.position++;
-        this.column++;
+      if (this.peek() === '>') {
+        this.consume();
       }
       
-      return { type: "EndTag", name, line, column };
+      return {
+        type: "EndTag",
+        name,
+        line,
+        column: startPosition === 0 ? 1 : column
+      };
     }
   
     private readTagName(): string {
