@@ -14,14 +14,18 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "build:ts": "tsc --emitDeclarationOnly",
-    "build:rollup": "rollup -c",
-    "build": "npm run build:ts && npm run build:rollup",
-    "lint": "eslint ."
-  },
+"scripts": {
+  "clean": "rimraf dist",
+  "prebuild": "npm run clean",
+  "build": "rollup -c && turbo build",
+  "build:ts": "tsc --emitDeclarationOnly",
+  "build:rollup": "rollup -c",
+  "test": "jest --config jest.config.cjs",
+  "lint": "eslint . --ext .ts",
+  "lint:fix": "eslint . --ext .ts --fix",
+  "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+}
+,
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
   "license": "ISC",
   "dependencies": {

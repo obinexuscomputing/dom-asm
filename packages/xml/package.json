@@ -18,24 +18,17 @@
     }
   },
 "scripts": {
-  "clean": "rimraf dist",                              
-  "prebuild": "npm run clean",                        
-  "type-check": "tsc --noEmit",                         
-  "build:ts": "tsc --emitDeclarationOnly",             
-  "build:rollup": "rollup -c",                          
-  "build": "npm run build:ts && npm run build:rollup", 
-  "test": "jest --config jest.config.cjs",              
-  "test:watch": "jest --config jest.config.cjs --watch", 
-  "test:coverage": "jest --config jest.config.cjs --coverage", 
-  "lint": "eslint . --ext .ts",                       
-  "lint:fix": "eslint . --ext .ts --fix",               
-  "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"", 
-  "prepare": "npm run build",                         
-  "prepublishOnly": "npm test && npm run lint",       
-  "preversion": "npm run lint",                         
-  "version": "npm run format && git add -A src",       
-  "postversion": "git push && git push --tags"          
-},
+  "clean": "rimraf dist",
+  "prebuild": "npm run clean",
+  "build": "rollup -c && turbo build",
+  "build:ts": "tsc --emitDeclarationOnly",
+  "build:rollup": "rollup -c",
+  "test": "jest --config jest.config.cjs",
+  "lint": "eslint . --ext .ts",
+  "lint:fix": "eslint . --ext .ts --fix",
+  "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+}
+,
 
   "keywords": [
     "xml",
