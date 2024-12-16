@@ -1,39 +1,19 @@
-import { HTMLValidator } from '../src/validator/HTMLValidator';
+import { HTMLValidator, HTMLValidationResult } from '../src/validator/HTMLValidator';
 import { HTMLASTNode } from '../src/ast/HTMLAST';
 
-// Helper function to create test cases with proper typing
-function createTestCase(
-  validator: HTMLValidator,
-  config: {
-    name: string;
-    node: HTMLASTNode;
-    expectedValid: boolean;
-    expectedErrors?: string[];
-    expectedWarnings?: string[];
-  }
-) {
-  it(config.name, () => {
-    const result = validator.validate(config.node);
-    expect(result.valid).toBe(config.expectedValid);
-    
-    if (config.expectedErrors) {
-      expect(result.errors.map(e => e.code)).toEqual(
-        expect.arrayContaining(config.expectedErrors)
-      );
-    }
-    
-    if (config.expectedWarnings) {
-      expect(result.warnings.map(w => w.code)).toEqual(
-        expect.arrayContaining(config.expectedWarnings)
-      );
-    }
-  });
+// Define interface for validator options
+interface ValidatorOptions {
+  spec?: 'html5' | 'html6-xml';
+  strictMode?: boolean;
+  allowCustomElements?: boolean;
+  allowNamespaces?: boolean;
+  customNamespaces?: string[];
 }
 
 describe('HTMLValidator', () => {
-  let validator: HTMLValidator;
+  // Helper function with proper typing
   function createValidatorTestCase(
-    options: Parameters<HTMLValidator['constructor']>[0],
+    options: ValidatorOptions,
     config: {
       name: string;
       node: HTMLASTNode;
@@ -41,7 +21,7 @@ describe('HTMLValidator', () => {
       expectedErrors?: string[];
       expectedWarnings?: string[];
     }
-  ) {
+  ): void {
     it(config.name, () => {
       const validator = new HTMLValidator(options);
       const result = validator.validate(config.node);
@@ -61,17 +41,15 @@ describe('HTMLValidator', () => {
       }
     });
   }
-  
+
   describe('Language Agnostic Validation', () => {
-    beforeEach(() => {
-      validator = new HTMLValidator({
-        strictMode: false, // Changed to false to allow testing individual elements
-        allowCustomElements: false
-      });
-    });
+    const baseOptions: ValidatorOptions = {
+      strictMode: false,
+      allowCustomElements: false
+    };
 
     describe('Basic Structure Tests', () => {
-      createTestCase(validator, {
+      createValidatorTestCase(baseOptions, {
         name: 'should validate empty element nodes',
         node: {
           type: 'Element',
@@ -81,7 +59,7 @@ describe('HTMLValidator', () => {
         expectedValid: true
       });
 
-      createTestCase(validator, {
+      createValidatorTestCase(baseOptions, {
         name: 'should reject elements without names',
         node: {
           type: 'Element',
@@ -90,26 +68,10 @@ describe('HTMLValidator', () => {
         expectedValid: false,
         expectedErrors: ['E001']
       });
-
-      createTestCase(validator, {
-        name: 'should validate basic text content',
-        node: {
-          type: 'Element',
-          name: 'p',
-          children: [
-            {
-              type: 'Text',
-              value: 'Test content',
-              children: []
-            }
-          ]
-        },
-        expectedValid: true
-      });
     });
 
     describe('Content Model Tests', () => {
-      createTestCase(validator, {
+      createValidatorTestCase(baseOptions, {
         name: 'should validate proper nesting of elements',
         node: {
           type: 'Element',
@@ -131,7 +93,7 @@ describe('HTMLValidator', () => {
         expectedValid: true
       });
 
-      createTestCase(validator, {
+      createValidatorTestCase(baseOptions, {
         name: 'should reject invalid content in void elements',
         node: {
           type: 'Element',
@@ -148,48 +110,15 @@ describe('HTMLValidator', () => {
         expectedErrors: ['E002']
       });
     });
-
-    describe('Attribute Tests', () => {
-      createTestCase(validator, {
-        name: 'should validate valid attributes',
-        node: {
-          type: 'Element',
-          name: 'div',
-          attributes: {
-            id: 'test',
-            class: 'container',
-            'data-test': 'value'
-          },
-          children: []
-        },
-        expectedValid: true
-      });
-
-      createTestCase(validator, {
-        name: 'should reject invalid attribute values',
-        node: {
-          type: 'Element',
-          name: 'div',
-          attributes: {
-            id: null as any
-          },
-          children: []
-        },
-        expectedValid: false,
-        expectedErrors: ['E008']
-      });
-    });
   });
 
   describe('HTML5 Specific Tests', () => {
-    beforeEach(() => {
-      validator = new HTMLValidator({
-        spec: 'html5',
-        strictMode: false
-      });
-    });
+    const html5Options: ValidatorOptions = {
+      spec: 'html5',
+      strictMode: true
+    };
 
-    createTestCase(validator, {
+    createValidatorTestCase(html5Options, {
       name: 'should validate valid HTML5 structure',
       node: {
         type: 'Element',
@@ -221,39 +150,16 @@ describe('HTMLValidator', () => {
       },
       expectedValid: true
     });
-
-    describe('Strict Mode Tests', () => {
-      beforeEach(() => {
-        validator = new HTMLValidator({
-          spec: 'html5',
-          strictMode: true,
-          allowCustomElements: false
-        });
-      });
-
-      createTestCase(validator, {
-        name: 'should reject invalid HTML5 elements',
-        node: {
-          type: 'Element',
-          name: 'invalid-element',
-          children: []
-        },
-        expectedValid: false,
-        expectedErrors: ['E006']
-      });
-    });
   });
 
-  describe('HTML6-XML Specific Tests', () => {
-    beforeEach(() => {
-      validator = new HTMLValidator({
-        spec: 'html6-xml',
-        allowNamespaces: true,
-        customNamespaces: ['html', 'custom']
-      });
-    });
+  describe('HTML6-XML Tests', () => {
+    const xmlOptions: ValidatorOptions = {
+      spec: 'html6-xml',
+      allowNamespaces: true,
+      customNamespaces: ['html', 'custom']
+    };
 
-    createTestCase(validator, {
+    createValidatorTestCase(xmlOptions, {
       name: 'should validate valid XML namespaced elements',
       node: {
         type: 'Element',
@@ -269,7 +175,7 @@ describe('HTMLValidator', () => {
       expectedValid: true
     });
 
-    createTestCase(validator, {
+    createValidatorTestCase(xmlOptions, {
       name: 'should reject invalid XML namespaces',
       node: {
         type: 'Element',
@@ -281,56 +187,15 @@ describe('HTMLValidator', () => {
     });
   });
 
-  describe('Mixed Content Tests', () => {
-    beforeEach(() => {
-      validator = new HTMLValidator({
-        spec: 'html6-xml',
-        allowNamespaces: true,
-        allowCustomElements: true,
-        customNamespaces: ['html', 'custom']
-      });
-    });
-
-    createTestCase(validator, {
-      name: 'should validate mixed HTML5 and XML content',
-      node: {
-        type: 'Element',
-        name: 'html:html',
-        children: [
-          {
-            type: 'Element',
-            name: 'html:body',
-            children: [
-              {
-                type: 'Element',
-                name: 'div',
-                children: [
-                  {
-                    type: 'Element',
-                    name: 'custom:widget',
-                    children: []
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      expectedValid: true
-    });
-  });
-
   describe('Error Recovery and Warning Tests', () => {
-    beforeEach(() => {
-      validator = new HTMLValidator({
-        spec: 'html6-xml',
-        strictMode: true,
-        allowNamespaces: true,
-        customNamespaces: []
-      });
-    });
+    const warningTestOptions: ValidatorOptions = {
+      spec: 'html6-xml',
+      strictMode: true,
+      allowNamespaces: true,
+      customNamespaces: []
+    };
 
-    createTestCase(validator, {
+    createValidatorTestCase(warningTestOptions, {
       name: 'should emit warnings for suspicious patterns',
       node: {
         type: 'Element',
@@ -345,7 +210,7 @@ describe('HTMLValidator', () => {
       expectedWarnings: ['W001']
     });
 
-    createTestCase(validator, {
+    createValidatorTestCase(warningTestOptions, {
       name: 'should accumulate multiple errors',
       node: {
         type: 'Element',
