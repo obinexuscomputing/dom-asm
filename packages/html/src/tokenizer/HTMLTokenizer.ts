@@ -23,7 +23,6 @@ export class HTMLTokenizer {
       if (char === "<") {
         if (this.match("<!--")) {
           const commentToken = this.readComment();
-          // Type guard to check if it's a comment token with value
           if (commentToken.type === "Comment" && commentToken.value) {
             tokens.push(commentToken);
           }
@@ -36,7 +35,6 @@ export class HTMLTokenizer {
         }
       } else {
         const textToken = this.readText();
-        // Type guard to check if it's a text token with value
         if (textToken.type === "Text" && textToken.value) {
           tokens.push(textToken);
         }
@@ -48,8 +46,8 @@ export class HTMLTokenizer {
   private readComment(): HTMLToken {
     const { line, column } = this.getCurrentLocation();
     this.consume(4); // Skip '<!--'
-    
     let value = '';
+    
     while (this.position < this.input.length) {
       if (this.match("-->")) {
         break;
@@ -57,21 +55,8 @@ export class HTMLTokenizer {
       value += this.consume();
     }
     
-    if (this.position >= this.input.length) {
-      throw new Error(`Unclosed comment at line ${line}, column ${column}`);
-    }
-    
     this.consume(3); // Skip '-->'
     return { type: "Comment", value: value.trim(), line, column };
-  }
-
-  // Rest of the implementation remains the same...
-  private readDoctype(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(9); // Skip '<!DOCTYPE'
-    const value = this.readUntil(">").trim();
-    this.consume(); // Skip '>'
-    return { type: "Doctype", value, line, column };
   }
 
   private readStartTag(): HTMLToken {
@@ -79,59 +64,45 @@ export class HTMLTokenizer {
     this.consume(); // Skip '<'
     
     const name = this.readUntil(/[\s\/>]/).toLowerCase().trim();
-    if (!name) {
-      throw new Error(`Invalid start tag at line ${line}, column ${column}`);
-    }
-    
     const attributes: Record<string, string> = {};
     let selfClosing = false;
     
-    this.skipWhitespace();
-    
     while (this.position < this.input.length && !this.match(">")) {
-      if (this.match("/>") || this.peek() === "/") {
+      this.skipWhitespace();
+      
+      if (this.peek() === "/" && this.peek(1) === ">") {
         selfClosing = true;
-        this.consume();
+        this.consume(); // Skip '/'
         break;
       }
       
-      if (!/[a-zA-Z_]/.test(this.peek())) {
-        this.consume();
-        continue;
-      }
-      
+      // Read attribute name
       const attrName = this.readUntil(/[\s=\/>]/).trim();
       if (!attrName) break;
       
       this.skipWhitespace();
       
+      // Handle attribute value
       if (this.peek() === "=") {
         this.consume(); // Skip '='
         this.skipWhitespace();
         
-        let value: string;
         const quote = this.peek();
-        
         if (quote === '"' || quote === "'") {
           this.consume(); // Skip opening quote
-          value = this.readUntil(quote);
+          attributes[attrName] = this.readUntil(quote);
           this.consume(); // Skip closing quote
         } else {
-          value = this.readUntil(/[\s\/>]/);
+          attributes[attrName] = this.readUntil(/[\s\/>]/);
         }
-        
-        attributes[attrName] = value;
       } else {
-        attributes[attrName] = "true"; // Boolean attribute
+        attributes[attrName] = "true";
       }
       
       this.skipWhitespace();
     }
     
-    if (this.peek() === ">") {
-      this.consume();
-    }
-    
+    this.consume(); // Skip closing '>'
     return { type: "StartTag", name, attributes, selfClosing, line, column };
   }
 
@@ -140,32 +111,29 @@ export class HTMLTokenizer {
     this.consume(2); // Skip '</'
     const name = this.readUntil(/[\s>]/).toLowerCase().trim();
     this.skipWhitespace();
-    if (this.peek() === ">") {
-      this.consume();
-    }
+    this.consume(); // Skip '>'
     return { type: "EndTag", name, line, column };
   }
 
   private readText(): HTMLToken {
     const { line, column } = this.getCurrentLocation();
     let value = '';
+    let textLine = line;
+    let textColumn = column;
     
     while (this.position < this.input.length && this.peek() !== "<") {
       value += this.consume();
     }
     
-    return { type: "Text", value: value.trim(), line, column };
+    return { type: "Text", value: value.trim(), line: textLine, column: textColumn };
   }
-  private readUntil(stop: string | RegExp): string {
-    const start = this.position;
-    while (this.position < this.input.length) {
-      const char = this.peek();
-      if (typeof stop === "string" ? char === stop : stop.test(char)) {
-        break;
-      }
-      this.consume();
-    }
-    return this.input.slice(start, this.position);
+
+  private readDoctype(): HTMLToken {
+    const { line, column } = this.getCurrentLocation();
+    this.consume(9); // Skip '<!DOCTYPE'
+    const value = this.readUntil(">").trim();
+    this.consume(); // Skip '>'
+    return { type: "Doctype", value, line, column };
   }
 
   private peek(offset: number = 0): string {
@@ -174,6 +142,18 @@ export class HTMLTokenizer {
 
   private match(str: string): boolean {
     return this.input.startsWith(str, this.position);
+  }
+
+  private readUntil(stop: string | RegExp): string {
+    const start = this.position;
+    while (this.position < this.input.length) {
+      const char = this.peek();
+      if (typeof stop === 'string' ? char === stop : stop.test(char)) {
+        break;
+      }
+      this.consume();
+    }
+    return this.input.slice(start, this.position);
   }
 
   private consume(count: number = 1): string {
