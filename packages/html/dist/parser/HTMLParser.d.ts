@@ -14,6 +14,7 @@ export declare class HTMLParser {
     private options;
     constructor(options?: HTMLParserOptions);
     parse(input: string): HTMLAST;
+    private computeMetadata;
     setErrorHandler(handler: (error: HTMLParserError) => void): void;
     buildAST(tokens: HTMLToken[]): HTMLASTNode;
 }
