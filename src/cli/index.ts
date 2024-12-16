@@ -26,6 +26,14 @@ import {
   JSCodeGenerator,
 } from "@obinexuscomputing/js";
 
+import {
+  DOMXMLTokenizer,
+  DOMXMLParser,
+  DOMXMLValidator,
+  DOMXMLASTOptimizer,
+  DOMXMLGenerator,
+} from "@obinexuscomputing/xml";
+
 const program = new Command();
 
 // Validation helpers
@@ -45,16 +53,16 @@ interface ProcessOptions {
   debug?: boolean;
 }
 
-// Generic file processing function
+// Unified file processing function
 async function processFile(
   file: string,
-  type: "css" | "html" | "js",
-  options: ProcessOptions
+  type: "css" | "html" | "js" | "xml" | "asm",
+  options: ProcessOptions,
 ) {
   const filePath = validateFile(file);
   const content = fs.readFileSync(filePath, "utf-8");
 
-  let result: any = {};
+  const result: any = {};
   let tokens: any, ast: any;
 
   try {
@@ -62,15 +70,15 @@ async function processFile(
       case "css":
         tokens = new CSSTokenizer(content).tokenize();
         ast = new CSSParser(tokens).parse();
-
         if (options.validate) {
           const validator = new CSSValidator(ast);
           const validationErrors = validator.validate();
           if (validationErrors.length > 0) {
-            throw new Error(`Validation errors:\n${validationErrors.join("\n")}`);
+            throw new Error(
+              `Validation errors:\n${validationErrors.join("\n")}`,
+            );
           }
         }
-
         if (options.optimize) {
           const optimizer = new CSSASTOptimizer(ast);
           ast = optimizer.optimize();
@@ -79,41 +87,38 @@ async function processFile(
         }
         break;
 
-        case "html":
-          tokens = new HTMLTokenizer(content).tokenize();
-          ast = new HTMLParser().parse(tokens);
-        
-          if (options.validate) {
-            const validator = new HTMLValidator();
-            const validationResult = validator.validate(ast); // Validate the AST
-            if (!validationResult.valid) {
-              throw new Error(
-                `Validation errors:\n${validationResult.errors.join("\n")}`
-              );
-            }
+      case "html":
+        tokens = new HTMLTokenizer(content).tokenize();
+        ast = new HTMLParser().parse(tokens);
+        if (options.validate) {
+          const validator = new HTMLValidator();
+          const validationResult = validator.validate(ast);
+          if (!validationResult.valid) {
+            throw new Error(
+              `Validation errors:\n${validationResult.errors.join("\n")}`,
+            );
           }
-        
-          if (options.optimize) {
-            const optimizer = new HTMLASTOptimizer();
-            ast = optimizer.optimize(ast);
-            const generator = new HTMLCodeGenerator();
-            result.optimized = generator.generateHTML(ast); // Generate optimized HTML
-          }
-          break;
-        
+        }
+        if (options.optimize) {
+          const optimizer = new HTMLASTOptimizer();
+          ast = optimizer.optimize(ast);
+          const generator = new HTMLCodeGenerator();
+          result.optimized = generator.generateHTML(ast);
+        }
+        break;
 
       case "js":
         tokens = new JSTokenizer().tokenize(content);
         ast = new JSASTBuilder(tokens).buildAST();
-
         if (options.validate) {
           const validator = new JSValidator();
           const validationErrors = validator.validate(ast);
           if (validationErrors.length > 0) {
-            throw new Error(`Validation errors:\n${validationErrors.join("\n")}`);
+            throw new Error(
+              `Validation errors:\n${validationErrors.join("\n")}`,
+            );
           }
         }
-
         if (options.optimize) {
           const optimizer = new JSASTOptimizer();
           ast = optimizer.optimize(ast);
@@ -121,6 +126,32 @@ async function processFile(
           result.optimized = generator.generate(ast);
         }
         break;
+
+      case "xml":
+        tokens = new DOMXMLTokenizer(content).tokenize();
+        ast = new DOMXMLParser(tokens).parse();
+        if (options.validate) {
+          const validator = new DOMXMLValidator();
+          const validationResult = validator.validate(ast);
+          if (!validationResult.valid) {
+            throw new Error(
+              `Validation errors:\n${validationResult.errors
+                .map((e) => `${e.code}: ${e.message}`)
+                .join("\n")}`,
+            );
+          }
+        }
+        if (options.optimize) {
+          const optimizer = new DOMXMLASTOptimizer();
+          ast = optimizer.optimize(ast);
+          const generator = new DOMXMLGenerator();
+          result.optimized = generator.generate(ast);
+        }
+        break;
+
+      case "asm":
+        // Placeholder for ASM processing logic
+        throw new Error("ASM processing is not implemented yet.");
     }
 
     result.tokens = tokens;
@@ -132,14 +163,12 @@ async function processFile(
     }
 
     const output =
-      options.format === "text"
-        ? JSON.stringify(result, null, 2)
-        : result;
+      options.format === "text" ? JSON.stringify(result, null, 2) : result;
 
     if (options.output) {
       fs.writeFileSync(
         options.output,
-        typeof output === "string" ? output : JSON.stringify(output, null, 2)
+        typeof output === "string" ? output : JSON.stringify(output, null, 2),
       );
     } else {
       console.log(output);
@@ -155,8 +184,13 @@ async function processFile(
 }
 
 // Command registration function
-const registerCommand = (type: "css" | "html" | "js", description: string) => {
-  const cmd = program.command(type).description(`${description} processing commands`);
+const registerCommand = (
+  type: "css" | "html" | "js" | "xml" | "asm",
+  description: string,
+) => {
+  const cmd = program
+    .command(type)
+    .description(`${description} processing commands`);
   cmd
     .command("parse")
     .argument("<file>", `${description} file to parse`)
@@ -174,10 +208,12 @@ const registerCommand = (type: "css" | "html" | "js", description: string) => {
     });
 };
 
-// Register commands for CSS, HTML, and JavaScript
+// Register commands for each type
 registerCommand("css", "CSS");
 registerCommand("html", "HTML");
 registerCommand("js", "JavaScript");
+registerCommand("xml", "XML");
+registerCommand("asm", "ASM");
 
 // CLI entry point
 program
