@@ -28,12 +28,13 @@ export class HTMLASTOptimizer {
       const next = node.children[i + 1];
 
       if (current.type === "Text" && next.type === "Text") {
-        current.value = (current.value || "") + (next.value || ""); // Concatenate adjacent text nodes
-        node.children.splice(i + 1, 1); // Remove the merged node
+        current.value = (current.value || "") + (next.value || ""); // Preserve spaces
+        node.children.splice(i + 1, 1);
       } else {
-        this.mergeTextNodes(current); // Recurse on non-text nodes
+        this.mergeTextNodes(current); // Recursively optimize child nodes
         i++;
       }
+      
     }
   }
 }

@@ -1,4 +1,5 @@
-import { HTMLAST, HTMLASTOptimizer } from "../src/ast/";
+import { HTMLASTOptimizer } from "../src/ast/HTMLASTOptimizer";
+import { HTMLAST } from "../src/ast/HTMLAST";
 
 describe("HTMLASTOptimizer", () => {
   it("should remove empty text nodes", () => {
@@ -22,7 +23,7 @@ describe("HTMLASTOptimizer", () => {
     expect(ast.root.children[0].value).toBe("Non-empty");
   });
 
-  it("should merge adjacent text nodes", () => {
+  it("should merge adjacent text nodes and preserve spaces", () => {
     const ast: HTMLAST = {
       root: {
         type: "Element",
@@ -68,7 +69,7 @@ describe("HTMLASTOptimizer", () => {
     expect(spanNode.children[0].value).toBe("Nested Content");
   });
 
-  it("should gracefully handle nodes without children", () => {
+  it("should handle empty children gracefully", () => {
     const ast: HTMLAST = {
       root: {
         type: "Element",

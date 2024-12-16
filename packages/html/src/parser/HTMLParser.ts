@@ -101,7 +101,17 @@ export class HTMLParser {
           break;
       }
     }
-
+    
+    if (stack.length > 1 && currentParent.name !== token.name) {
+      // Skip unmatched end tag
+      console.warn(`Skipping unmatched end tag: ${token.name}`);
+    } else if (stack.length > 1) {
+      stack.pop();
+      currentParent = stack[stack.length - 1];
+    } else {
+      console.warn(`Unmatched end tag: ${token.name}`);
+    }
+    
     if (stack.length > 1) {
       throw new HTMLParserError("Unclosed tags detected", tokens[tokens.length - 1], stack.length);
     }
