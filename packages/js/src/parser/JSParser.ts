@@ -1,8 +1,7 @@
 import { JSASTNode } from "../ast";
 
-
 // Define specific node types for better type safety
-type NodeType = 
+export type NodeType = 
   | "Program"
   | "Statement"
   | "Expression"
@@ -16,8 +15,10 @@ type NodeType =
   | "IfStatement"
   | "BlockStatement";
 
-interface TypedJSASTNode extends JSASTNode {
+export interface TypedJSASTNode {
   type: NodeType;
+  value?: string;
+  children?: TypedJSASTNode[];
 }
 
 export class JSParser {
@@ -59,30 +60,30 @@ export class JSParser {
   }
 
   private parseProgram(ast: TypedJSASTNode): string[] {
-    return ast.children?.map(child => this.parse(child as TypedJSASTNode))
+    return ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null) || [];
   }
 
   private parseStatement(ast: TypedJSASTNode): string {
-    const childResults = ast.children?.map(child => this.parse(child as TypedJSASTNode))
+    const childResults = ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null);
-    return `Statement: ${childResults?.join("; ")}`;
+    return `Statement: ${childResults?.join("; ") || ""}`;
   }
 
   private parseExpression(ast: TypedJSASTNode): string {
-    const childResults = ast.children?.map(child => this.parse(child as TypedJSASTNode))
+    const childResults = ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null);
-    return `Expression: ${childResults?.join(" ")}`;
+    return `Expression: ${childResults?.join(" ") || ""}`;
   }
 
   private parseVariableDeclaration(ast: TypedJSASTNode): string {
-    const childResults = ast.children?.map(child => this.parse(child as TypedJSASTNode))
+    const childResults = ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null);
-    return `Declare ${childResults?.join(" ")}`;
+    return `Declare ${childResults?.join(" ") || ""}`;
   }
 
   private parseInlineConstant(ast: TypedJSASTNode): string {
-    return `Inline ${ast.value}`;
+    return `Inline ${ast.value || ""}`;
   }
 
   private parseBinaryExpression(ast: TypedJSASTNode): string {
@@ -90,24 +91,24 @@ export class JSParser {
     const rightChild = ast.children?.[1];
     const operator = ast.value;
 
-    const left = leftChild ? this.parse(leftChild as TypedJSASTNode) : "";
-    const right = rightChild ? this.parse(rightChild as TypedJSASTNode) : "";
+    const left = leftChild ? this.parse(leftChild) : "";
+    const right = rightChild ? this.parse(rightChild) : "";
 
     return `(${left} ${operator} ${right})`;
   }
 
   private parseBlockStatement(ast: TypedJSASTNode): string {
-    const childResults = ast.children?.map(child => this.parse(child as TypedJSASTNode))
+    const childResults = ast.children?.map(child => this.parse(child))
       .filter((result): result is string => result !== null);
-    return `{ ${childResults?.join("; ")} }`;
+    return `{ ${childResults?.join("; ") || ""} }`;
   }
 
   private parseIfStatement(ast: TypedJSASTNode): string {
     const [condition, thenBranch, elseBranch] = ast.children || [];
     
-    const conditionStr = condition ? this.parse(condition as TypedJSASTNode) : "";
-    const thenStr = thenBranch ? this.parse(thenBranch as TypedJSASTNode) : "";
-    const elseStr = elseBranch ? this.parse(elseBranch as TypedJSASTNode) : "";
+    const conditionStr = condition ? this.parse(condition) : "";
+    const thenStr = thenBranch ? this.parse(thenBranch) : "";
+    const elseStr = elseBranch ? this.parse(elseBranch) : "";
 
     return `if (${conditionStr}) ${thenStr}${elseStr ? ` else ${elseStr}` : ""}`;
   }
@@ -115,14 +116,14 @@ export class JSParser {
   private parseFunctionDeclaration(ast: TypedJSASTNode): string {
     const name = ast.value;
     const body = ast.children?.[0];
-    const bodyStr = body ? this.parse(body as TypedJSASTNode) : "";
+    const bodyStr = body ? this.parse(body) : "";
 
-    return `function ${name} ${bodyStr}`;
+    return `function ${name || ""} ${bodyStr}`;
   }
 
   private parseReturnStatement(ast: TypedJSASTNode): string {
     const expression = ast.children?.[0];
-    const exprStr = expression ? this.parse(expression as TypedJSASTNode) : "";
+    const exprStr = expression ? this.parse(expression) : "";
 
     return `return ${exprStr}`;
   }
