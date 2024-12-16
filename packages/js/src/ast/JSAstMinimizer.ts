@@ -1,4 +1,3 @@
-// src/ast/JSAstMinimizer.ts
 import { NodeType } from '../types';
 import { JSASTNode } from './JSAst';
 
