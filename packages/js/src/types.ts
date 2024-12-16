@@ -1,4 +1,3 @@
-// NodeType Enum
 export enum NodeType {
   Program = 'Program',
   Statement = 'Statement',
@@ -9,16 +8,25 @@ export enum NodeType {
   Literal = 'Literal',
   BlockStatement = 'BlockStatement',
   IfStatement = 'IfStatement',
+  ArrowFunction = 'ArrowFunction',
+  TemplateLiteral = 'TemplateLiteral',
+  ClassDeclaration = 'ClassDeclaration',
+  MethodDefinition = 'MethodDefinition',
+  ObjectExpression = 'ObjectExpression',
+  Property = 'Property',
+  ImportDeclaration = 'ImportDeclaration',
+  ExportDeclaration = 'ExportDeclaration',
 }
 
-// JSTokenType Enum
 export enum JSTokenType {
   Keyword = 'Keyword',
   Identifier = 'Identifier',
   Operator = 'Operator',
   Delimiter = 'Delimiter',
   Literal = 'Literal',
+  EndOfStatement = 'EndOfStatement',
 }
+
 
 // Token Interface
 export interface JSToken {
@@ -48,8 +56,9 @@ export interface ParseOptions {
 }
 
 // Default Export Object
-const Types = { NodeType, JSTokenType };
-export default Types;
 
 // Individual Type Exports
-export type { JSToken, BaseNode, JSASTNode, ParseOptions };
+// Exporting enums and interfaces
+const Types = { NodeType, JSTokenType };
+export default Types;
+export type { JSASTNode, TypedJSASTNode, ParseOptions };
