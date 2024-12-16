@@ -27,19 +27,18 @@ export class JSTokenizer {
       tokens.push({ type, value });
     };
 
-    // Simplify input by trimming extra spaces but preserve semicolons and meaningful characters
-    input = input.replace(/\s+/g, '');
+    // Normalize input by trimming unnecessary whitespace
+    input = input.replace(/\s+/g, ' ').trim();
 
     while (current < input.length) {
-      let char = input[current];
+      const char = input[current];
 
-      // Handle keywords and identifiers
+      // Keywords and Identifiers
       if (/[a-zA-Z_$]/.test(char)) {
         let value = '';
         while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
           value += input[current++];
         }
-
         if (this.keywords.has(value)) {
           addToken(JSTokenType.Keyword, value);
         } else {
@@ -48,7 +47,7 @@ export class JSTokenizer {
         continue;
       }
 
-      // Handle numbers (Literals)
+      // Numeric Literals
       if (/[0-9]/.test(char)) {
         let value = '';
         while (current < input.length && /[0-9.]/.test(input[current])) {
@@ -58,7 +57,7 @@ export class JSTokenizer {
         continue;
       }
 
-      // Handle multi-character operators
+      // Multi-Character Operators
       const remainingInput = input.slice(current);
       const multiCharOp = this.matchMultiCharOperator(remainingInput);
       if (multiCharOp) {
@@ -67,21 +66,27 @@ export class JSTokenizer {
         continue;
       }
 
-      // Handle single-character operators
+      // Single-Character Operators
       if (this.operators.has(char)) {
         addToken(JSTokenType.Operator, char);
         current++;
         continue;
       }
 
-      // Handle delimiters
+      // Delimiters
       if (this.delimiters.has(char)) {
         addToken(JSTokenType.Delimiter, char);
         current++;
         continue;
       }
 
-      // Unexpected character
+      // Skip whitespace
+      if (/\s/.test(char)) {
+        current++;
+        continue;
+      }
+
+      // Unexpected Character
       throw new Error(`Unexpected character: ${char}`);
     }
 
