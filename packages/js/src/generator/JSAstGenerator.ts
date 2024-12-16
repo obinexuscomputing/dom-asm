@@ -25,7 +25,7 @@ export interface GeneratorOptions {
   indent?: string;
 }
 
-export class JSASTGenerator {
+export class JSAstGenerator {
   private tokenizer: JSTokenizer;
   private validator: JSValidator;
   private parser: JSParser;
