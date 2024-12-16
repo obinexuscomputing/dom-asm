@@ -1,4 +1,4 @@
 
-export * from './types';
-export * from './JSAst';
 export * from './JSAstMinimzer';
+export * from './JSAst';
+export * from './types';

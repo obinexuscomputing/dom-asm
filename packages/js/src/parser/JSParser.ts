@@ -1,51 +1,29 @@
-import { BaseNode, JSASTNode } from "../ast";
+import { BaseNode, JSASTNode, NodeType } from "../ast";
 
-
-export type NodeType = 
-  | "Program"
-  | "Statement"
-  | "Expression"
-  | "VariableDeclaration"
-  | "InlineConstant"
-  | "BinaryExpression"
-  | "Identifier"
-  | "Literal"
-  | "FunctionDeclaration"
-  | "ReturnStatement"
-  | "IfStatement"
-  | "BlockStatement";
-
-export interface TypedJSASTNode extends JSASTNode,BaseNode {
-  type: NodeType;
-  value?: string;
-  children?: TypedJSASTNode[];
-  line?: number;
-  column?: number;
-}
 
 
 export class JSParser {
   parse(ast: TypedJSASTNode): string | string[] | null {
     switch (ast.type) {
-      case "Program":
+      case NodeType.Program:
         return this.parseProgram(ast);
-      case "Statement":
+      case NodeType.Statement:
         return this.parseStatement(ast);
-      case "Expression":
+      case NodeType.Expression:
         return this.parseExpression(ast);
-      case "VariableDeclaration":
+      case NodeType.VariableDeclaration:
         return this.parseVariableDeclaration(ast);
-      case "InlineConstant":
+      case NodeType.InlineConstant:
         return this.parseInlineConstant(ast);
-      case "BinaryExpression":
+      case NodeType.BinaryExpression:
         return this.parseBinaryExpression(ast);
-      case "BlockStatement":
+      case NodeType.BlockStatement:
         return this.parseBlockStatement(ast);
-      case "IfStatement":
+      case NodeType.IfStatement:
         return this.parseIfStatement(ast);
-      case "FunctionDeclaration":
+      case NodeType.FunctionDeclaration:
         return this.parseFunctionDeclaration(ast);
-      case "ReturnStatement":
+      case NodeType.ReturnStatement:
         return this.parseReturnStatement(ast);
       default:
         return ast.value || "";
