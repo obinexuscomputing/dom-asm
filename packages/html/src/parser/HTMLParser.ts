@@ -29,18 +29,19 @@ export class HTMLParser {
     this.tokenizer = new HTMLTokenizer("");
     this.options = options;
   }
+  
   public parse(input: string): HTMLAST {
     const tokenizer = new HTMLTokenizer(input);
     const tokens = tokenizer.tokenize();
   
     try {
-      const astBuilder = new HTMLASTBuilder(tokens); // Pass tokens to the constructor
+      const astBuilder = new HTMLASTBuilder(tokens);
       return astBuilder.buildAST();
     } catch (error) {
       if (this.options.throwOnError) throw error;
       if (this.options.errorHandler) this.options.errorHandler(error as HTMLParserError);
   
-      // Return a default AST for recovery
+      // Return a partial AST for recovery
       return {
         root: new HTMLASTNode("Element", [], { name: "root" }),
         metadata: { nodeCount: 0, elementCount: 0, textCount: 0, commentCount: 0 },

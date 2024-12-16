@@ -5,7 +5,6 @@ export class HTMLASTOptimizer {
     this.removeEmptyTextNodes(ast.root);
     this.mergeAdjacentTextNodes(ast.root);
   }
-
   public mergeAdjacentTextNodes(node: HTMLASTNode): void {
     if (node.children) {
       const mergedChildren = [];
@@ -13,9 +12,10 @@ export class HTMLASTOptimizer {
   
       for (const child of node.children) {
         if (child.type === "Text") {
-          if (lastTextNode && child.value !== undefined) {
-            lastTextNode.value = (lastTextNode.value || "") + child.value;
-          } else if (child.value !== undefined) {
+          if (lastTextNode) {
+            // Preserve spaces when merging
+            lastTextNode.value = (lastTextNode.value || "") + (child.value || "");
+          } else {
             lastTextNode = { ...child };
             mergedChildren.push(lastTextNode);
           }
@@ -29,6 +29,7 @@ export class HTMLASTOptimizer {
       node.children = mergedChildren;
     }
   }
+  
 
   private removeEmptyTextNodes(node: HTMLASTNode): void {
     if (node.children) {
