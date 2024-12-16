@@ -10,8 +10,8 @@ export class JSParser {
     this.tokens = [];
     this.current = 0;
   }
-  public parse(tokens: JSToken[]): TypedJSASTNode {
-    const ast: TypedJSASTNode = {
+  public parse(tokens: JSToken[]): JSASTNode {
+    const ast: JSASTNode = {
       type: NodeType.Program,
       children: [],
     };
@@ -20,87 +20,37 @@ export class JSParser {
 
     const walk = (): JSASTNode => {
       const token = tokens[current];
-    
+
       if (!token) {
         throw new Error("Unexpected end of input");
       }
-    
+
       switch (token.type) {
         case JSTokenType.Keyword:
-          if (["const", "let", "var"].includes(token.value)) {
-            current++;
-            const identifier = tokens[current];
-    
-            if (!identifier || identifier.type !== JSTokenType.Identifier) {
-              throw new Error("Expected identifier after declaration keyword");
-            }
-    
-            current++;
-            const operator = tokens[current];
-    
-            if (!operator || operator.value !== "=") {
-              throw new Error("Expected '=' after identifier");
-            }
-    
-            current++;
-            const valueToken = tokens[current];
-    
-            if (!valueToken || valueToken.type !== JSTokenType.Literal) {
-              throw new Error("Expected literal value after '='");
-            }
-    
-            current++;
-            if (tokens[current]?.value !== ";") {
-              throw new Error("Expected ';' after declaration");
-            }
-    
-            current++;
-    
-            return {
-              type: NodeType.VariableDeclaration,
-              value: token.value,
-              children: [
-                { type: NodeType.Identifier, value: identifier.value },
-                { type: NodeType.Literal, value: valueToken.value },
-              ],
-            };
-          }
-          throw new Error(`Unexpected keyword: ${token.value}`);
-    
+          return this.parseDeclaration();
+
         case JSTokenType.Identifier:
           current++;
           return { type: NodeType.Identifier, value: token.value };
-    
+
         case JSTokenType.Literal:
           current++;
           return { type: NodeType.Literal, value: token.value };
-    
+
         case JSTokenType.Operator:
-          if (token.value === "=" || token.value === "+") {
-            const left = walk();
-            current++;
-            const right = walk();
-    
-            return {
-              type: NodeType.BinaryExpression,
-              value: token.value,
-              children: [left, right],
-            };
-          }
-          throw new Error(`Unexpected operator: ${token.value}`);
-    
+          return this.parseExpression();
+
         case JSTokenType.Delimiter:
           if (token.value === ";") {
             current++;
-            return { type: NodeType.InlineConstant, value: token.value };
+            return { type: NodeType.InlineConstant, value: ";" };
           }
           throw new Error(`Unexpected delimiter: ${token.value}`);
-    
+
         default:
           throw new Error(`Unexpected token type: ${token.type}`);
       }
     };
-    
 
     while (current < tokens.length) {
       ast.children?.push(walk());
@@ -260,7 +210,8 @@ export class JSParser {
     throw new Error(`Unexpected keyword: ${token.value}`);
   }
 
-
+  
+  
   private walk(): JSASTNode | null {
     const token = this.tokens[this.current];
 
@@ -304,6 +255,7 @@ export class JSParser {
     this.current++;
     return token;
   }
+
   private parseIdentifier(tokens: JSToken[]): JSASTNode {
     const token = tokens[this.current++];
     return { type: NodeType.Identifier, value: token.value };
@@ -315,20 +267,47 @@ export class JSParser {
   }
   
    private parseProgram(node: TypedJSASTNode): string[] {
-     return node.children?.map((child) => this.parse(child) as string).filter(Boolean) ?? [];
+     return node.children?.map((child : TypedJSASTNode) => this.parse(child ) as unknown as string).filter(Boolean) ?? [];
    }
  
    private parseStatement(node: TypedJSASTNode): string {
-     return node.children?.map((child) => this.parse(child)).join("; ") + ";";
+     return node.children?.map((child) => this.parse(child )).join("; ") + ";";
    }
  
-   private parseExpression(node: TypedJSASTNode): string {
-     return node.children?.map((child) => this.parse(child)).join(" ") ?? "";
-   }
+ 
+   private parseExpression(): JSASTNode {
+    const left = this.walkExpression();
+    const operator = this.tokens[this.current];
+    if (!operator || operator.type !== JSTokenType.Operator) {
+      throw new Error(`Expected operator, got: ${operator?.value}`);
+    }
+
+    this.current++;
+    const right = this.walkExpression();
+
+    return {
+      type: NodeType.BinaryExpression,
+      value: operator.value,
+      children: [left, right],
+    };
+  }
+
+  private walkExpression(): JSASTNode {
+    const token = this.tokens[this.current];
+    if (token.type === JSTokenType.Identifier) {
+      this.current++;
+      return { type: NodeType.Identifier, value: token.value };
+    } else if (token.type === JSTokenType.Literal) {
+      this.current++;
+      return { type: NodeType.Literal, value: token.value };
+    } else {
+      throw new Error(`Unexpected token in expression: ${token.type}`);
+    }
+  }
  
    private parseVariableDeclaration(node: TypedJSASTNode): string {
      const [identifier, value] = node.children ?? [];
-     return `${node.value} ${this.parse(identifier as TypedJSASTNode)} = ${this.parse(
+     return `${node.value} ${this.parse(identifier )} = ${this.parse(
        value
      )};`;
    }
@@ -366,10 +345,49 @@ export class JSParser {
      return `function ${this.parse(identifier )}(${params.join(", ")}) ${body}`;
    }
  
-   private parseReturnStatement(node): string {
+   private parseReturnStatement(node: { children: JSToken[][]; }): string {
      return `return ${this.parse(node.children?.[0] )};`;
-   }
-   
+   } private parseDeclaration(): JSASTNode {
+    const token = this.tokens[this.current];
+    if (!["const", "let", "var"].includes(token.value)) {
+      throw new Error(`Unexpected keyword: ${token.value}`);
+    }
+
+    this.current++;
+    const identifier = this.tokens[this.current];
+    if (!identifier || identifier.type !== JSTokenType.Identifier) {
+      throw new Error("Expected identifier after declaration keyword");
+    }
+
+    this.current++;
+    const operator = this.tokens[this.current];
+    if (!operator || operator.value !== "=") {
+      throw new Error("Expected '=' after identifier");
+    }
+
+    this.current++;
+    const valueToken = this.tokens[this.current];
+    if (!valueToken || valueToken.type !== JSTokenType.Literal) {
+      throw new Error("Expected literal value after '='");
+    }
+
+    this.current++;
+    if (this.tokens[this.current]?.value !== ";") {
+      throw new Error("Expected ';' after declaration");
+    }
+
+    this.current++;
+
+    return {
+      type: NodeType.VariableDeclaration,
+      value: token.value,
+      children: [
+        { type: NodeType.Identifier, value: identifier.value },
+        { type: NodeType.Literal, value: valueToken.value },
+      ],
+    };
+  }
+
 public buildASTFromTokens(tokens: JSToken[]): TypedJSASTNode {
   // Convert tokens into a TypedJSASTNode (mock implementation for illustration)
   return {
