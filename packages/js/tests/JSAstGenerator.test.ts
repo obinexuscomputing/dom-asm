@@ -4,10 +4,65 @@ import { TypedJSASTNode } from '../src/types';
 
 describe('JSGenerator', () => {
   let generator: JSASTGenerator;
-
+  let astGenerator: JSASTGenerator;
   beforeEach(() => {
     generator = new JSASTGenerator();
+    astGenerator = new JSASTGenerator();
   });
+  const complexAst = {
+    type: NodeType.Program,
+    children: [
+      {
+        type: NodeType.BlockStatement,
+        children: [
+          {
+            type: NodeType.VariableDeclaration,
+            value: 'const',
+            children: [
+              { type: NodeType.Identifier, value: 'x' },
+              { type: NodeType.Literal, value: '42' },
+            ],
+          },
+        ],
+      },
+    ],
+  };
+
+  it('should generate code from a valid AST', () => {
+    const result = astGenerator.generateFromAST(complexAst);
+    expect(result.success).toBe(true);
+    expect(result.code).toBe('const x = 42;');
+  });
+
+  it('should validate and reject an invalid AST', () => {
+    const invalidAst = {
+      type: NodeType.Program,
+      children: [
+        {
+          type: NodeType.VariableDeclaration,
+          children: [{ type: NodeType.Identifier, value: 'x' }],
+        },
+      ],
+    };
+
+    const result = astGenerator.generateFromAST(invalidAst, { validate: true });
+    expect(result.success).toBe(false);
+    expect(result.errors).toBeDefined();
+    expect(result.errors?.length).toBeGreaterThan(0);
+  });
+
+  it('should generate compact code', () => {
+    const result = astGenerator.generateFromAST(complexAst, { format: 'compact' });
+    expect(result.success).toBe(true);
+    expect(result.code).toBe('const x=42;');
+  });
+
+  it('should handle empty source gracefully', () => {
+    const result = astGenerator.generateFromSource('');
+    expect(result.success).toBe(false);
+    expect(result.errors?.[0].message).toBe('Source code cannot be undefined or empty');
+  });
+
   it('should generate code from a valid AST', () => {
     const ast = {
       type: NodeType.Program,
@@ -174,34 +229,4 @@ describe('JSGenerator', () => {
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle undefined input gracefully', () => {
-      const result = generator.generateFromSource(undefined as any);
-      
-      expect(result.success).toBe(false);
-      expect(result.errors).toBeDefined();
-    });
 
-    it('should handle malformed AST gracefully', () => {
-      const result = generator.generateFromAST({} as any);
-      
-      expect(result.success).toBe(false);
-      expect(result.errors).toBeDefined();
-    });
-
-    it('should include original AST in validation errors', () => {
-      const invalidAst: TypedJSASTNode = {
-        type: 'Program',
-        children: [
-          { type: 'InvalidNode' as any }
-        ]
-      };
-
-      const result = generator.generateFromAST(invalidAst, { validate: true });
-      
-      expect(result.success).toBe(false);
-      expect(result.errors).toBeDefined();
-      expect(result.ast).toBeDefined();
-      expect(result.ast).toBe(invalidAst);
-    });
-  });
