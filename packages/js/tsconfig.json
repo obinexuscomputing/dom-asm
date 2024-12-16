@@ -14,7 +14,7 @@
     "strictFunctionTypes": true,
     "strictBindCallApply": true,
     "module": "ESNext",
-    "emitDeclarationOnly": false  // Important for testing
+    "emitDeclarationOnly": false 
   },
   "include": ["src/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist"]

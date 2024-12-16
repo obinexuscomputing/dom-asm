@@ -15,7 +15,11 @@ module.exports = {
   // Ensure ts-jest can find your tsconfig
   globals: {
     'ts-jest': {
-      tsconfig: 'tsconfig.json'
-    }
+      tsconfig: 'tsconfig.json',
+    },
+    "transform": {
+  "^.+\\.tsx?$": ["ts-jest", { "isolatedModules": true }]
+}
+
   }
 };

@@ -1,5 +1,3 @@
-// src/types.ts
-
 // Common Node Types
 export enum NodeType {
   // Program Structure
@@ -37,7 +35,7 @@ export enum NodeType {
 
   // Modules
   ImportDeclaration = 'ImportDeclaration',
-  ExportDeclaration = 'ExportDeclaration'
+  ExportDeclaration = 'ExportDeclaration',
 }
 
 // Tokenizer Types
@@ -49,9 +47,10 @@ export enum JSTokenType {
   Literal = 'Literal',
   TemplateLiteral = 'TemplateLiteral',
   Comment = 'Comment',
-  EndOfStatement = 'EndOfStatement'
+  EndOfStatement = 'EndOfStatement',
 }
 
+// Token Interface
 export interface JSToken {
   type: JSTokenType;
   value: string;
@@ -59,7 +58,7 @@ export interface JSToken {
   column?: number;
 }
 
-// AST Node Types
+// Base Node Interface
 export interface BaseNode {
   type: NodeType;
   value?: string;
@@ -68,32 +67,44 @@ export interface BaseNode {
   column?: number;
 }
 
+// Abstract Syntax Tree (AST) Node Interface
 export interface JSASTNode extends BaseNode {
   children?: JSASTNode[];
 }
 
+// Typed AST Node Interface
 export interface TypedJSASTNode extends JSASTNode {
-  type: NodeType;
+  type: NodeType; // Redundant here but included for strict typing
   children?: TypedJSASTNode[];
 }
 
-// Validator Types
+// Validation Error Interface
 export interface ValidationError {
   code: string;
   message: string;
   node: JSASTNode;
 }
 
-// Parser Types
+// Parser Options Interface
 export interface ParseOptions {
-  sourceType?: 'module' | 'script';
-  strict?: boolean;
+  sourceType?: 'module' | 'script'; // Default is 'script' if not provided
+  strict?: boolean; // Whether strict mode parsing is enabled
 }
 
-// Export enums only in default export since they are both types and values
-export default {
+// Export enums and types together
+const Types = {
   NodeType,
-  JSTokenType
+  JSTokenType,
 };
 
-// Type exports are handled by the individual interface/type declarations above
+export default Types; // Single export object for enums and runtime references
+
+// Individual exports for types/interfaces
+export type {
+  JSToken,
+  BaseNode,
+  JSASTNode,
+  TypedJSASTNode,
+  ValidationError,
+  ParseOptions,
+};
