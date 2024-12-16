@@ -1,11 +1,5 @@
-import { JSToken } from "../tokenizer/JSTokenizer";
-export interface JSASTNode {
-    type: string;
-    value?: string;
-    children?: JSASTNode[];
-    line?: number;
-    column?: number;
-}
+import { JSToken } from '../types';
+import { JSASTNode } from '../types';
 export declare class JSASTBuilder {
     private tokens;
     private position;
@@ -18,4 +12,5 @@ export declare class JSASTBuilder {
     private parseVariableDeclaration;
     buildAST(): JSASTNode;
 }
+export { JSASTNode };
 //# sourceMappingURL=JSAst.d.ts.map

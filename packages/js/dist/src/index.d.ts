@@ -1,6 +1,6 @@
-export * from './ast/';
-export * from './generator/JSAstGenerator';
-export * from './tokenizer/';
-export * from './validator/index';
-export * from './parser/';
+export * from './tokenizer';
+export * from './parser';
+export * from './validator';
+export * from './generator';
+export * from './types';
 //# sourceMappingURL=index.d.ts.map

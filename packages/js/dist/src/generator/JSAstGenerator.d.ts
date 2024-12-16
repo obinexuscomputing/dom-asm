@@ -1,4 +1,4 @@
-import { TypedJSASTNode } from "../parser/JSParser";
+import { JSASTNode } from "../types";
 export interface GenerationError {
     code: string;
     message: string;
@@ -11,22 +11,25 @@ export interface GenerationResult {
     success: boolean;
     code?: string;
     errors?: GenerationError[];
-    ast?: TypedJSASTNode;
+    ast?: JSASTNode;
 }
 export interface GeneratorOptions {
     validate?: boolean;
-    format?: 'compact' | 'pretty';
+    format?: "compact" | "pretty";
     indent?: string;
 }
-export declare class JSGenerator {
+export declare class JSASTGenerator {
     private tokenizer;
     private validator;
     private parser;
     constructor();
+    private convertToTypedNode;
     generateFromSource(source: string, options?: GeneratorOptions): GenerationResult;
-    generateFromAST(ast: TypedJSASTNode, options?: GeneratorOptions): GenerationResult;
+    generateFromAST(ast: JSASTNode, options?: GeneratorOptions): GenerationResult;
+    private processAST;
     private convertValidationErrors;
     private generateCode;
+    private traverseAST;
     private formatOutput;
     private formatCompact;
     private formatPretty;

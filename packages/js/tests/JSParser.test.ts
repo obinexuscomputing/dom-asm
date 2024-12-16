@@ -134,4 +134,34 @@ describe("JSParser", () => {
       ],
     });
   });
+
+  test("should throw an error for missing ')' in if statement", () => {
+    const tokens: JSToken[] = [
+      { type: JSTokenType.Keyword, value: "if" },
+      { type: JSTokenType.Delimiter, value: "(" },
+      { type: JSTokenType.Identifier, value: "x" },
+      { type: JSTokenType.Operator, value: "==" },
+      { type: JSTokenType.Literal, value: "42" },
+    ];
+
+    expect(() => parser.parse(tokens)).toThrow("Expected ')' after condition");
+  });
+
+  test("should throw an error for unmatched '}'", () => {
+    const tokens: JSToken[] = [
+      { type: JSTokenType.Keyword, value: "if" },
+      { type: JSTokenType.Delimiter, value: "(" },
+      { type: JSTokenType.Identifier, value: "x" },
+      { type: JSTokenType.Operator, value: "==" },
+      { type: JSTokenType.Literal, value: "42" },
+      { type: JSTokenType.Delimiter, value: ")" },
+      { type: JSTokenType.Delimiter, value: "{" },
+      { type: JSTokenType.Identifier, value: "doSomething" },
+      { type: JSTokenType.Delimiter, value: "(" },
+      { type: JSTokenType.Delimiter, value: ")" },
+      { type: JSTokenType.EndOfStatement, value: ";" },
+    ];
+
+    expect(() => parser.parse(tokens)).toThrow("Expected '}' to close block statement");
+  });
 });
