@@ -53,17 +53,23 @@ export class JSValidator {
   }
 
   private validateVariableDeclaration(node: JSASTNode): void {
-    const [identifier, value] = node.children;
-
+    // Check if children exist and have at least two elements
+    if (!node.children || node.children.length < 2) {
+      this.errors.push("Invalid VariableDeclaration: insufficient children.");
+      return;
+    }
+  
+    const identifier = node.children[0];
+    const value = node.children[1];
+  
     if (!identifier || identifier.type !== "Identifier") {
       this.errors.push("VariableDeclaration must have a valid identifier.");
     }
-
+  
     if (!value || value.type !== "Literal") {
       this.errors.push("VariableDeclaration must have a valid literal value.");
     }
   }
-
   private validateInlineConstant(node: JSASTNode): void {
     if (!node.value) {
       this.errors.push("InlineConstant must have a value.");
