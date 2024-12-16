@@ -1,4 +1,10 @@
+import { JSToken, JSTokenType } from "../tokenizer/JSTokenizer";
 
+export interface JSASTNode {
+  type: string;
+  value?: string;
+  children?: JSASTNode[];
+}
 
 
 export class JSASTBuilder {
@@ -24,16 +30,18 @@ export class JSASTBuilder {
   private peekToken(): JSToken | null {
     return this.position + 1 < this.tokens.length ? this.tokens[this.position + 1] : null;
   }
+  
   private parseProgram(): JSASTNode {
-    const program: JSASTNode = { type: "Program", children: [] }; // Ensure children is initialized
-    while (this.position < this.tokens.length - 1) { // -1 to exclude EOF
+    const program: JSASTNode = { type: "Program", children: [] }; // Initialize children
+    while (this.position < this.tokens.length - 1) { // Exclude EOF
       const statement = this.parseStatement();
       if (statement) {
-        program.children!.push(statement); // Use non-null assertion since children is always initialized
+        program.children!.push(statement); // Use non-null assertion
       }
     }
     return program;
   }
+  
   
   private parseStatement(): JSASTNode | null {
     const token = this.currentToken();

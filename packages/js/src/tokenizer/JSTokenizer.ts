@@ -1,19 +1,20 @@
 export enum JSTokenType {
   Keyword,
-  Identifier, 
+  Identifier,
   Operator,
   Delimiter,
   Literal,
   TemplateLiteral,
   Comment,
-  EndOfStatement
+  EndOfStatement,
 }
 
-export interface JSASTNode {
-  type: string;
-  value?: string;
-  children?: JSASTNode[];
+export interface JSToken {
+  type: JSTokenType;
+  value: string;
 }
+
+
 
 export class JSTokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return']);

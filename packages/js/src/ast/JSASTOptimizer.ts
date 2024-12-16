@@ -1,5 +1,4 @@
-// src/optimizer/JSASTOptimizer.ts
-import { JSASTNode } from "./JSAST";
+import { JSASTNode } from "./JSAst";
 
 export class JSASTOptimizer {
   constructor() {}
