@@ -1,5 +1,4 @@
-import { HTMLTokenizer } from "./HTMLTokenizer";
-
+import {HTMLTokenizer} from '../src';
 describe("HTMLTokenizer", () => {
   it("should tokenize a basic HTML element with text content", () => {
     const input = "<div>Hello World</div>";
