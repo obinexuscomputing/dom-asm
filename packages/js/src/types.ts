@@ -62,3 +62,4 @@ export interface ParseOptions {
 const Types = { NodeType, JSTokenType };
 export default Types;
 export type { JSASTNode, TypedJSASTNode, ParseOptions };
+export {};
