@@ -17,8 +17,7 @@ export interface JSToken {
 export class JSTokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '==', '!=']);
-  private standardDelimiters = new Set(['(', ')', '{', '}', '[', ']']);
-  private allDelimiters = new Set([';', '(', ')', '{', '}', '[', ']']);
+  private delimiters = new Set(['(', ')', '{', '}', '[', ']']);
 
   public tokenize(input: string): JSToken[] {
     const tokens: JSToken[] = [];
@@ -34,14 +33,20 @@ export class JSTokenizer {
     while (current < input.length) {
       const char = input[current];
 
-      // Handle standard delimiters first (excluding semicolon)
-      if (this.standardDelimiters.has(char)) {
+      // Handle delimiters
+      if (this.delimiters.has(char)) {
         addToken(JSTokenType.Delimiter, char);
         current++;
         continue;
       }
 
-      // Handle semicolon only in specific contexts (like end of statements)
+      // Skip whitespace
+      if (/\s/.test(char)) {
+        current++;
+        continue;
+      }
+
+      // Add semicolon delimiter only when explicitly needed
       if (char === ';') {
         addToken(JSTokenType.Delimiter, char);
         current++;
@@ -84,12 +89,6 @@ export class JSTokenizer {
       // Handle single-character operators
       if (this.operators.has(char)) {
         addToken(JSTokenType.Operator, char);
-        current++;
-        continue;
-      }
-
-      // Skip whitespace
-      if (/\s/.test(char)) {
         current++;
         continue;
       }
