@@ -4,131 +4,73 @@ export type HTMLToken =
   | { type: "EndTag"; name: string; line: number; column: number }
   | { type: "Text"; value: string; line: number; column: number }
   | { type: "Comment"; value: string; line: number; column: number };
-
-export class HTMLTokenizer {
-  private input: string;
-  private position: number = 0;
-  private line: number = 1;
-  private column: number = 1;
-
-  constructor(input: string) {
-    this.input = input;
-  }
-
-  public tokenize(): HTMLToken[] {
-    const tokens: HTMLToken[] = [];
-    while (this.position < this.input.length) {
-      const char = this.peek();
-
-      if (char === "<") {
-        if (this.match("<!--")) {
-          const commentToken = this.readComment();
-          if (commentToken.type === "Comment" && commentToken.value) {
-            tokens.push(commentToken);
-          }
-        } else if (this.match("<!DOCTYPE")) {
-          tokens.push(this.readDoctype());
-        } else if (this.peek(1) === "/") {
-          tokens.push(this.readEndTag());
+  export class HTMLTokenizer {
+    private input: string;
+    private position: number = 0;
+    private line: number = 1;
+    private column: number = 1;
+  
+    constructor(input: string) {
+      this.input = input;
+    }
+  
+    private readText(): HTMLToken {
+      const { line, column } = this.getCurrentLocation();
+      let value = '';
+      const startPos = this.position;
+      
+      while (this.position < this.input.length && this.peek() !== "<") {
+        value += this.input[this.position];
+        this.position++;
+      }
+      
+      // Don't adjust column/line position while collecting text
+      const result = { type: "Text" as const, value: value.trim(), line, column };
+      
+      // Now update positions after collecting text
+      for (let i = startPos; i < this.position; i++) {
+        if (this.input[i] === '\n') {
+          this.line++;
+          this.column = 1;
         } else {
-          tokens.push(this.readStartTag());
-        }
-      } else {
-        const textToken = this.readText();
-        if (textToken.type === "Text" && textToken.value) {
-          tokens.push(textToken);
+          this.column++;
         }
       }
+      
+      return result;
     }
-    return tokens;
-  }
-
-  private readComment(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(4); // Skip '<!--'
-    let value = '';
-    
-    while (this.position < this.input.length) {
-      if (this.match("-->")) {
-        break;
-      }
-      value += this.consume();
-    }
-    
-    this.consume(3); // Skip '-->'
-    return { type: "Comment", value: value.trim(), line, column };
-  }
-
-  private readStartTag(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(); // Skip '<'
-    
-    const name = this.readUntil(/[\s\/>]/).toLowerCase().trim();
-    const attributes: Record<string, string> = {};
-    let selfClosing = false;
-    
-    while (this.position < this.input.length && !this.match(">")) {
+  
+    private readEndTag(): HTMLToken {
+      const { line, column } = this.getCurrentLocation();
+      const startPos = this.position;
+      
+      this.position += 2; // Skip '</'
+      this.column += 2;
+      
+      const name = this.readTagName();
       this.skipWhitespace();
       
-      if (this.peek() === "/" && this.peek(1) === ">") {
-        selfClosing = true;
-        this.consume(); // Skip '/'
-        break;
+      // Skip '>'
+      if (this.position < this.input.length) {
+        this.position++;
+        this.column++;
       }
       
-      // Read attribute name
-      const attrName = this.readUntil(/[\s=\/>]/).trim();
-      if (!attrName) break;
-      
-      this.skipWhitespace();
-      
-      // Handle attribute value
-      if (this.peek() === "=") {
-        this.consume(); // Skip '='
-        this.skipWhitespace();
-        
-        const quote = this.peek();
-        if (quote === '"' || quote === "'") {
-          this.consume(); // Skip opening quote
-          attributes[attrName] = this.readUntil(quote);
-          this.consume(); // Skip closing quote
-        } else {
-          attributes[attrName] = this.readUntil(/[\s\/>]/);
-        }
-      } else {
-        attributes[attrName] = "true";
+      return { type: "EndTag", name, line, column };
+    }
+  
+    private readTagName(): string {
+      let name = '';
+      while (this.position < this.input.length && !/[\s>\/]/.test(this.peek())) {
+        name += this.input[this.position];
+        this.position++;
+        this.column++;
       }
-      
-      this.skipWhitespace();
+      return name.toLowerCase().trim();
     }
-    
-    this.consume(); // Skip closing '>'
-    return { type: "StartTag", name, attributes, selfClosing, line, column };
-  }
+  
 
-  private readEndTag(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(2); // Skip '</'
-    const name = this.readUntil(/[\s>]/).toLowerCase().trim();
-    this.skipWhitespace();
-    this.consume(); // Skip '>'
-    return { type: "EndTag", name, line, column };
-  }
-
-  private readText(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    let value = '';
-    let textLine = line;
-    let textColumn = column;
-    
-    while (this.position < this.input.length && this.peek() !== "<") {
-      value += this.consume();
-    }
-    
-    return { type: "Text", value: value.trim(), line: textLine, column: textColumn };
-  }
-
-  private readDoctype(): HTMLToken {
+  public readDoctype(): HTMLToken {
     const { line, column } = this.getCurrentLocation();
     this.consume(9); // Skip '<!DOCTYPE'
     const value = this.readUntil(">").trim();

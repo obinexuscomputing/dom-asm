@@ -10,13 +10,16 @@ export class HTMLASTOptimizer {
   private removeEmptyTextNodes(node: HTMLASTNode): void {
     if (!node.children) return;
 
+    // Filter out only completely empty text nodes
     node.children = node.children.filter((child) => {
       if (child.type === "Text") {
-        return child.value && child.value.trim() !== "";
+        // Keep nodes that have content, even if it's just whitespace
+        return child.value != null;
       }
       return true;
     });
 
+    // Process children recursively
     node.children.forEach(child => {
       if (child.type === "Element") {
         this.removeEmptyTextNodes(child);
@@ -27,31 +30,42 @@ export class HTMLASTOptimizer {
   private mergeTextNodes(node: HTMLASTNode): void {
     if (!node.children) return;
 
-    // First merge text nodes in all child elements
+    // Process child elements first
     node.children.forEach(child => {
       if (child.type === "Element") {
         this.mergeTextNodes(child);
       }
     });
 
-    // Then merge adjacent text nodes at this level
     let i = 0;
     while (i < node.children.length - 1) {
       const current = node.children[i];
       const next = node.children[i + 1];
 
       if (current.type === "Text" && next.type === "Text") {
-        // Combine text nodes while preserving intentional spaces
-        const combinedText = [current.value || "", next.value || ""]
-          .map(text => text.trim())
-          .join(" ")
-          .trim();
-
-        current.value = combinedText;
+        // Preserve the original text values including their whitespace
+        const currentText = current.value || "";
+        const nextText = next.value || "";
+        
+        // Simply concatenate the text values to preserve all spaces
+        current.value = currentText + nextText;
+        
+        // Remove the merged node
         node.children.splice(i + 1, 1);
       } else {
         i++;
       }
     }
+
+    // Final pass to ensure no null values
+    node.children = node.children.map(child => {
+      if (child.type === "Text" && child.value != null) {
+        return {
+          ...child,
+          value: child.value
+        };
+      }
+      return child;
+    });
   }
 }
