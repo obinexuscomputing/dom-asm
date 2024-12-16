@@ -1,0 +1,5 @@
+
+> @obinexuscomputing/xml@1.0.0 test
+> jest --config jest.config.cjs
+
+[1G[0K
