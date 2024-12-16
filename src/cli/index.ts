@@ -18,21 +18,16 @@ import {
   HTMLCodeGenerator,
 } from "@obinexuscomputing/html";
 
-import {
+import jsPackage from "@obinexuscomputing/js";
+
+const {
   JSTokenizer,
   JSASTBuilder,
   JSValidator,
   JSASTOptimizer,
   JSCodeGenerator,
-} from "@obinexuscomputing/js";
+} = jsPackage;
 
-import {
-  DOMXMLTokenizer,
-  DOMXMLParser,
-  DOMXMLValidator,
-  DOMXMLASTOptimizer,
-  DOMXMLGenerator,
-} from "@obinexuscomputing/xml";
 
 const program = new Command();
 
