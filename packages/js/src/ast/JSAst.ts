@@ -1,5 +1,5 @@
 import { JSToken, JSTokenType } from "../tokenizer/JSTokenizer";
-import { NodeType, JSASTNode } from "./types";
+import { JSASTNode, NodeType } from "../types";
 
 export class JSASTBuilder {
   private tokens: JSToken[];
@@ -90,3 +90,5 @@ export class JSASTBuilder {
     return this.parseProgram();
   }
 }
+
+export { JSASTNode };

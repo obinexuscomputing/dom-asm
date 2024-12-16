@@ -1,4 +1,4 @@
-import { BaseNode, JSASTNode, NodeType } from "../ast";
+import { TypedJSASTNode, NodeType } from "../types";
 
 
 

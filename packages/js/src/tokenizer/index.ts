@@ -1,1 +1,2 @@
-export { JSTokenizer} from './JSTokenizer';
+export * from '../types';
+export * from './JSTokenizer';
