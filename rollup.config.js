@@ -1,6 +1,6 @@
+import typescript from "@rollup/plugin-typescript";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
 import json from "@rollup/plugin-json";
 import terser from "@rollup/plugin-terser";
 import pkg from "./package.json" assert { type: "json" };
@@ -8,7 +8,7 @@ import pkg from "./package.json" assert { type: "json" };
 // Detect production mode
 const production = process.env.NODE_ENV === "production";
 
-// Banner and footer
+// Banner and footer for metadata
 const banner = `/*!
  * @obinexuscomputing/dom-asm v${pkg.version}
  * (c) ${new Date().getFullYear()} Obinexus Computing
@@ -30,41 +30,58 @@ const externalDeps = [
   "commander",
 ];
 
+// Common plugins for both builds
 const plugins = [
   typescript({
-    tsconfig: "./tsconfig.json", // Process TypeScript before anything else
-    exclude: ["**/*.d.ts", "**/*.test.ts"],
+    tsconfig: "./tsconfig.json",
+    include: ["src/**/*.ts"], // Include all source files
+    exclude: ["**/*.d.ts", "**/*.test.ts"], // Exclude unnecessary files
   }),
-  resolve({ extensions: [".ts", ".js", ".json"] }),
+  resolve({
+    extensions: [".ts", ".js", ".json"],
+  }),
   commonjs(),
   json(),
-  production && terser(),
+  production && terser(), // Minify only in production
 ];
 
 // Main Library Configuration
 const libraryConfig = {
-  input: "src/index.ts",
+  input: "src/index.ts", // Entry point for the library
   output: [
-    { file: "dist/index.cjs", format: "cjs", sourcemap: true, exports: "auto", banner, footer },
-    { file: "dist/index.js", format: "esm", sourcemap: true, banner, footer },
+    {
+      file: "dist/index.cjs", // CommonJS output
+      format: "cjs",
+      sourcemap: true,
+      exports: "auto",
+      banner,
+      footer,
+    },
+    {
+      file: "dist/index.js", // ESM output
+      format: "esm",
+      sourcemap: true,
+      banner,
+      footer,
+    },
   ],
-  external: externalDeps,
+  external: externalDeps, // Do not bundle external dependencies
   plugins,
 };
 
-// CLI Configuration
+// CLI Build Configuration
 const cliConfig = {
-  input: "src/cli/index.ts",
+  input: "src/cli/index.ts", // Entry point for the CLI
   output: {
-    file: "dist/cli/index.js",
+    file: "dist/cli/index.js", // CommonJS output for CLI
     format: "cjs",
     sourcemap: true,
     banner,
     footer,
   },
-  external: externalDeps,
+  external: externalDeps, // Do not bundle external dependencies
   plugins,
 };
 
-// Export configs
+// Export configurations
 export default [libraryConfig, cliConfig];
