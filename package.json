@@ -26,8 +26,8 @@
       "require": "./dist/index.cjs"
     }
   },
-  "scripts": {
-  "link:local"  :"",
+"scripts": {
+  "link:local": "cd packages/css && npm link && cd ../html && npm link && cd ../js && npm link && cd ../xml && npm link && cd ../../ && npm setup",
   "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml",
   "local:clean": "rm -rf dist && rm -rf build",
   "clean": "npm run local:clean",
@@ -43,8 +43,8 @@
   "prebuild": "npm run local:clean",
   "prepublishOnly": "npm run build",
   "release": "npm run local:clean && npm run build && npm publish --access public"
-}
-,
+},
+
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-json": "^6.1.0",
