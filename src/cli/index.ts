@@ -34,14 +34,7 @@ import {
   DOMXMLASTOptimizer,
   DOMXMLGenerator,
 } from "@obinexuscomputing/xml";
-
-export interface ProcessOptions {
-  optimize?: boolean;
-  validate?: boolean;
-  format?: "json" | "text";
-  output?: string;
-  debug?: boolean;
-}
+import { ProcessOptions } from "../types";
 
 
 
