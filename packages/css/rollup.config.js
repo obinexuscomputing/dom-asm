@@ -30,7 +30,6 @@ export default [
       },
     ],
     plugins: [
-      vue(), // Handles .vue files
       resolve(), // Resolves node_modules imports
       commonjs(), // Converts CommonJS modules to ES Modules
       typescript({ tsconfig: './tsconfig.json' }), // TypeScript support
