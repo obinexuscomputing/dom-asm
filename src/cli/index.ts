@@ -36,9 +36,6 @@ import {
 } from "@obinexuscomputing/xml";
 import { ProcessOptions } from "../types";
 
-
-
-
 // Fetch package version dynamically
 const packageJsonPath = path.resolve(__dirname, "../package.json");
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
@@ -116,9 +113,11 @@ async function processFile(
           ast = new JSAstMinimizer().optimize(ast);
           const generationResult = new JSAstGenerator().generateFromAST(ast);
           if (!generationResult.success) {
-            throw new Error(
-              generationResult.errors.map((e) => `${e.code}: ${e.message}`).join("\n"),
-            );
+            const errorMessages =
+              generationResult.errors
+                ?.map((e) => `${e.code}: ${e.message}`)
+                .join("\n") || "No errors reported.";
+            throw new Error(errorMessages);
           }
           result.optimized = generationResult.output;
         }
@@ -131,7 +130,9 @@ async function processFile(
           const validationResult = new DOMXMLValidator().validate(ast);
           if (!validationResult.valid) {
             throw new Error(
-              validationResult.errors.map((e) => `${e.code}: ${e.message}`).join("\n"),
+              validationResult.errors
+                .map((e) => `${e.code}: ${e.message}`)
+                .join("\n"),
             );
           }
         }
