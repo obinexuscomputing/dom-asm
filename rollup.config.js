@@ -74,12 +74,13 @@ const libraryConfig = {
 const cliConfig = {
   input: "src/cli/index.ts", // Entry point for the CLI
   output: {
-    file: "dist/cli/index.cjs", // CommonJS output for CLI
+    file: "dist/cli/index.cjs",
     format: "cjs",
     sourcemap: true,
     banner,
     footer,
   },
+  
   external: externalDeps, // Do not bundle external dependencies
   plugins,
 };
