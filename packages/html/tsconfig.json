@@ -1,11 +1,22 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "NodeNext",
-    "rootDir": "src",
     "outDir": "dist",
     "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "dist",
     "sourceMap": true,
-    "strict": true
-  }
+    "noEmitOnError": true,
+    "rootDir": ".",                     // Use root directory to cover all files
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "module": "NodeNext",               // Required for ESNext module resolution
+    "moduleResolution": "NodeNext",
+    "emitDeclarationOnly": true
+  },
+  "include": ["src/**/*", "tests/**/*"], // Include both source and test files
+  "exclude": ["node_modules", "dist"]
 }

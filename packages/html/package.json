@@ -44,7 +44,7 @@
   "scripts": {
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "build":"npm run build:ts && npm run build:rollup", 
+    "build": "npm run build:ts && npm run build:rollup",
     "build:ts": "tsc --emitDeclarationOnly",
     "build:rollup": "rollup -c",
     "test": "jest --config jest.config.cjs",
@@ -52,9 +52,7 @@
     "lint:fix": "eslint . --ext .ts --fix",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
     "prepare": "npm run build"
-  }
-
-  ,
+  },
   "author": "Nnamdi Okpala <okpalan@protonmail.com>",
   "license": "ISC",
   "dependencies": {
