@@ -1,1 +1,2 @@
-export * from "./cli/index";
+#!/usr/bin/env node
+export {};
