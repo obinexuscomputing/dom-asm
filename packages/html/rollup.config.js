@@ -1,10 +1,8 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import vue from 'rollup-plugin-vue'; 
 import dts from 'rollup-plugin-dts';
-import { terser } from 'rollup-plugin-terser';
-
+import {terser} from '@rollup/plugin-terser';
 export default [
   // Main build configuration for JavaScript
   {
@@ -24,18 +22,20 @@ export default [
       {
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
-        name: 'DOMHTML', // Replace with 'DOMCSS', 'DOMJS', or 'DOMHTML' based on the package
-      
+        name: 'DOMHTML', 
+        globals: {
+          vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
+        },
         sourcemap: true,
       },
     ],
     plugins: [
+      vue(), // Handles .vue files
       resolve(), // Resolves node_modules imports
       commonjs(), // Converts CommonJS modules to ES Modules
       typescript({ tsconfig: './tsconfig.json' }), // TypeScript support
       terser(), // Minifies the output for production
     ],
-    external: ['vue'], // Treat Vue as an external dependency
   },
 
   // Configuration for TypeScript declarations
