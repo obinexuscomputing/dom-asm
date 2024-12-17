@@ -18,6 +18,8 @@
       "require": "./dist/index.cjs"
     }
   },  "scripts": {
+    "local:link":"npm link",
+
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build":"npm run build:ts && npm run build:rollup", 
