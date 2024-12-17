@@ -1,6 +1,7 @@
 {
   "name": "@obinexuscomputing/xml",
   "version": "1.0.0",
+  "private":"false",
   "description": "A robust XML parsing and manipulation library",
   "main": "dist/index.js",
   "module": "dist/index.js",
