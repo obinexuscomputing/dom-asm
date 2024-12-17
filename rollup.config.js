@@ -5,12 +5,12 @@ import json from "@rollup/plugin-json";
 import terser from "@rollup/plugin-terser";
 import pkg from "./package.json" assert { type: "json" };
 
-// Detect if we're in production mode
+// Detect production mode
 const production = process.env.NODE_ENV === "production";
 
-// Banner and footer for output files
+// Banner and footer for the output files
 const banner = `/*!
- * @obinexuscomputing/dom-asm ${pkg.version}
+ * @obinexuscomputing/dom-asm v${pkg.version}
  * (c) ${new Date().getFullYear()} Obinexus Computing
  * Released under the ISC License
  */`;
@@ -19,55 +19,58 @@ const footer = `/*!
  * End of bundle for @obinexuscomputing/dom-asm
  */`;
 
+// Common plugin configuration
+const plugins = [
+  resolve({
+    extensions: [".js", ".ts", ".json", ".mjs"],
+  }),
+  commonjs(),
+  json(),
+  typescript({
+    tsconfig: "./tsconfig.json",
+    exclude: ["**/*.d.ts", "**/*.test.ts"], // Exclude declarations and tests
+  }),
+  production && terser(), // Minify in production mode
+];
+
+// External dependencies to exclude from the bundle
+const externalDeps = [
+  "@obinexuscomputing/css",
+  "@obinexuscomputing/html",
+  "@obinexuscomputing/js",
+  "@obinexuscomputing/xml",
+  "fs",
+  "path",
+  "commander",
+];
+
 export default [
   // **Main Library Build**
   {
-    input: "src/index.ts", // Main entry point
+    input: "src/index.ts",
     output: [
       {
-        file: "dist/index.js", // ES Module
+        file: "dist/index.js",
         format: "es",
         sourcemap: true,
         banner,
         footer,
       },
       {
-        file: "dist/index.cjs", // CommonJS Module
+        file: "dist/index.cjs",
         format: "cjs",
         sourcemap: true,
         banner,
         footer,
       },
     ],
-    external: [
-      "@obinexuscomputing/css",
-      "@obinexuscomputing/html",
-      "@obinexuscomputing/js",
-      "@obinexuscomputing/xml",
-      "fs",
-      "path",
-    ],
-    plugins: [
-      // Resolve modules from node_modules
-      resolve({
-        extensions: [".js", ".ts", ".json"],
-      }),
-      // Convert CommonJS modules to ES6
-      commonjs(),
-      // Include JSON files
-      json(),
-      // TypeScript compilation
-      typescript({
-        tsconfig: "./tsconfig.json",
-      }),
-      // Minify in production mode
-      production && terser(),
-    ],
+    external: externalDeps, // Mark dependencies as external
+    plugins,
   },
 
   // **CLI Build**
   {
-    input: "src/cli/index.ts", // CLI entry point
+    input: "src/cli/index.ts",
     output: {
       file: "dist/cli/index.js",
       format: "cjs",
@@ -75,17 +78,7 @@ export default [
       banner,
       footer,
     },
-    external: ["commander", "fs", "path"], // Exclude dependencies
-    plugins: [
-      resolve({
-        extensions: [".js", ".ts", ".json", ".mjs"],
-      }),
-      commonjs(),
-      json(),
-      typescript({
-        tsconfig: "./tsconfig.json",
-      }),
-      production && terser(),
-    ],
+    external: externalDeps,
+    plugins,
   },
 ];
