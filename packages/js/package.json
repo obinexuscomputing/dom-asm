@@ -36,6 +36,10 @@
     "rimraf": "^6.0.1",
     "rollup": "^4.28.1",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "rollup-plugin-dts":"*",
+    "@rollup/plugin-terser":"*",
+    "@rollup/plugin-node-resolve":"*",
+   "rollup/plugin-commonjs":"*"
   }
 }
