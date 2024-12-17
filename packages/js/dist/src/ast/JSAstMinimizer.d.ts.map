@@ -1,0 +1,1 @@
+{"version":3,"file":"JSAstMinimizer.d.ts","sourceRoot":"","sources":["../../../src/ast/JSAstMinimizer.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,SAAS,EAAE,MAAM,SAAS,CAAC;AAEpC,qBAAa,cAAc;IACzB,OAAO,CAAC,WAAW,CAAgC;IAE5C,QAAQ,CAAC,GAAG,EAAE,SAAS,GAAG,SAAS;IAKnC,QAAQ,CAAC,GAAG,EAAE,SAAS,GAAG,SAAS;IAI1C,OAAO,CAAC,QAAQ;IAuBhB,OAAO,CAAC,mBAAmB;IAsB3B,OAAO,CAAC,YAAY;CAMrB"}
