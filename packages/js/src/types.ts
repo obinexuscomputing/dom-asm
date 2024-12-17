@@ -1,26 +1,31 @@
 export enum NodeType {
   Program = 'Program',
-  Statement = 'Statement',
-  Expression = 'Expression',
   VariableDeclaration = 'VariableDeclaration',
-  BinaryExpression = 'BinaryExpression',
+  InlineConstant = 'InlineConstant',
   Identifier = 'Identifier',
   Literal = 'Literal',
   BlockStatement = 'BlockStatement',
-  IfStatement = 'IfStatement',
   ArrowFunction = 'ArrowFunction',
   TemplateLiteral = 'TemplateLiteral',
+  TemplateLiteralExpression = 'TemplateLiteralExpression',
   ClassDeclaration = 'ClassDeclaration',
   MethodDefinition = 'MethodDefinition',
+  PropertyDefinition = 'PropertyDefinition',
+  FunctionExpression = 'FunctionExpression',
+  AsyncFunction = 'AsyncFunction',
   ObjectExpression = 'ObjectExpression',
   Property = 'Property',
+  SpreadElement = 'SpreadElement',
   ImportDeclaration = 'ImportDeclaration',
   ExportDeclaration = 'ExportDeclaration',
-  InlineConstant = 'InlineConstant',
-  FunctionDeclaration = 'FunctionDeclaration',
   ReturnStatement = 'ReturnStatement',
-  AsyncFunction= 'AsyncFunction'
+  Statement = 'Statement',
+  Expression = 'Expression',
+  BinaryExpression = 'BinaryExpression',
+  IfStatement = 'IfStatement',
+  FunctionDeclaration = 'FunctionDeclaration'
 }
+
 
 export enum JSTokenType {
   Keyword = 'Keyword',

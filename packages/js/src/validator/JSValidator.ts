@@ -1,31 +1,32 @@
-import { JSASTNode } from "../ast";
 
-export type ValidationError = {
-  code: string;
-  message: string;
-  node: JSASTNode;
-};
+// export type ValidationError = {
+//   code: string;
+//   message: string;
+//   node: JSASTNode;
+// };
 
-export type NodeType = 
-  | "Program"
-  | "VariableDeclaration"
-  | "InlineConstant"
-  | "Identifier"
-  | "Literal"
-  | "BlockStatement"
-  | "ArrowFunction"
-  | "TemplateLiteral"
-  | "TemplateLiteralExpression"
-  | "ClassDeclaration"
-  | "MethodDefinition"
-  | "PropertyDefinition"
-  | "FunctionExpression"
-  | "AsyncFunction"
-  | "ObjectExpression"
-  | "Property"
-  | "SpreadElement"
-  | "ImportDeclaration"
-  | "ExportDeclaration";
+import { ValidationError, JSASTNode, NodeType } from "../types";
+
+// export type NodeType = 
+//   | "Program"
+//   | "VariableDeclaration"
+//   | "InlineConstant"
+//   | "Identifier"
+//   | "Literal"
+//   | "BlockStatement"
+//   | "ArrowFunction"
+//   | "TemplateLiteral"
+//   | "TemplateLiteralExpression"
+//   | "ClassDeclaration"
+//   | "MethodDefinition"
+//   | "PropertyDefinition"
+//   | "FunctionExpression"
+//   | "AsyncFunction"
+//   | "ObjectExpression"
+//   | "Property"
+//   | "SpreadElement"
+//   | "ImportDeclaration"
+//   | "ExportDeclaration";
 
 export class JSValidator {
   private errors: ValidationError[];
