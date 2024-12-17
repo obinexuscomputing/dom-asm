@@ -14,7 +14,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build && npm run build:rollup",
     "build:rollup": "turbo run build:rollup",
     "start": "turbo run start",
     "dev": "turbo run dev",
