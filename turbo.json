@@ -1,0 +1,42 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "tasks": {
+      "clean": {
+        "cache": false
+      },
+      "build": {
+        "outputs": ["dist/**", "lib/**"],
+        "dependsOn": ["^build"],
+        "cache": true
+      },
+      "build:rollup": {
+        "cache": true
+      },
+      "start": {
+        "cache": false
+      },
+      "dev": {
+        "cache": false
+      },
+      "lint": {
+        "cache": true
+      },
+      "lint:fix": {
+        "cache": false
+      },
+      "test": {
+        "cache": false
+      },
+      "format": {
+        "cache": false
+      },
+      "prepare": {
+        "cache": true
+      },
+      "release": {
+        "cache": false
+      }
+    }
+    ,"extends":[]
+  }
+  
