@@ -76,13 +76,14 @@
     "minimatch": "^5.1.6"
 
   },
-  "dependencies": {
-    "@obinexuscomputing/css": "./packages/css",
-    "@obinexuscomputing/html": "./packages/html",
-    "@obinexuscomputing/js": "./packages/js",
-    "@obinexuscomputing/xml": "./packages/xml",
-    "@obinexuscomputing/asm": "./packages/asm"
-  },
+"dependencies": {
+    "@obinexuscomputing/css": "file:./packages/css",
+    "@obinexuscomputing/html": "file:./packages/html",
+    "@obinexuscomputing/js": "file:./packages/js",
+    "@obinexuscomputing/xml": "file:./packages/xml",
+    "@obinexuscomputing/asm": "file:./packages/asm"
+},
+
   "packageManager": "npm@10.9.2",
   "license": "ISC",
   "volta": {
