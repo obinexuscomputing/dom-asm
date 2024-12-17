@@ -1,48 +1,54 @@
-import resolve from '@rollup/plugin-node-resolve';
-import commonjs from '@rollup/plugin-commonjs';
-import typescript from '@rollup/plugin-typescript';
-import dts from 'rollup-plugin-dts';
-import terser from '@rollup/plugin-terser';
+import resolve from "@rollup/plugin-node-resolve";
+import commonjs from "@rollup/plugin-commonjs";
+import typescript from "@rollup/plugin-typescript";
+import dts from "rollup-plugin-dts";
+import terser from "@rollup/plugin-terser";
 
+// Determine production mode for minification
+const production = process.env.NODE_ENV === "production";
 
 export default [
-  // Main build configuration for JavaScript
+  // **Main Build Configuration for JavaScript**
   {
-    input: 'src/index.ts', // Entry point for your library
+    input: "src/index.ts", // Entry point
     output: [
       {
-        file: 'dist/index.cjs', // CommonJS output
-        format: 'cjs',
+        file: "dist/index.cjs", // CommonJS output
+        format: "cjs",
         sourcemap: true,
-        exports: 'auto',
+        exports: "auto",
       },
       {
-        file: 'dist/index.js', // ES Module output
-        format: 'esm',
+        file: "dist/index.js", // ES Module output
+        format: "esm",
         sourcemap: true,
       },
       {
-        file: 'dist/index.umd.js', // UMD output for browsers
-        format: 'umd',
-        name: 'DOMXML', 
-      
+        file: "dist/index.umd.js", // UMD output for browsers
+        format: "umd",
+        name: "DOMXML", // Global name for UMD
         sourcemap: true,
       },
     ],
     plugins: [
-      resolve(), // Resolves node_modules imports
-      commonjs(), // Converts CommonJS modules to ES Modules
-      typescript({ tsconfig: './tsconfig.json' }), // TypeScript support
-      terser(), // Minifies the output for production
+      resolve({
+        extensions: [".js", ".ts"], // Support resolving .ts files
+      }),
+      commonjs(), // Convert CommonJS to ES Modules
+      typescript({
+        tsconfig: "./tsconfig.json", // Use project-specific TypeScript configuration
+      }),
+      production && terser(), // Minify in production mode
     ],
+    external: ["fs", "path"], // Exclude built-in Node.js modules
   },
 
-  // Configuration for TypeScript declarations
+  // **TypeScript Declarations Build**
   {
-    input: 'dist/index.d.ts',
+    input: "src/index.ts", // Input must point to the TypeScript source
     output: {
-      file: 'dist/index.d.ts',
-      format: 'es',
+      file: "dist/index.d.ts", // Single declaration file output
+      format: "es",
     },
     plugins: [dts()],
   },

@@ -1,25 +1,14 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "ES2020",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",   // Output declarations in the dist folder
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "./dist",
-    "declaration": true,
-    "declarationMap": true,
-    "baseUrl": ".",
-    "paths": {
-      "src/*": ["src/*"]
-    },
-    "sourceMap": true
+    "skipLibCheck": true
   },
-  "include": [
-    "src/**/*",
-    "tests/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
