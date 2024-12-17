@@ -2,6 +2,7 @@
   "name": "@obinexuscomputing/dom-asm",
   "version": "1.0.0",
   "private": false,
+  "funding":["https://buymeacoffee.com/obinexuscomputing"],
   "description": "A unified library for DOM manipulation and compilation.",
   "bin": {
     "dom-asm": "./bin/dom-asm",

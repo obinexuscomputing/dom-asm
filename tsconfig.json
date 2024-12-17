@@ -1,4 +1,7 @@
 {
+  "files": [
+     "package.json"
+  ],
   "compilerOptions": {
     "target": "esnext",
     "module": "ESNext",
@@ -9,6 +12,6 @@
     "outDir": "./dist",
     "sourceMap": true
   },
-  "include": ["src/**/*.ts", "package.json"],
+  "include": ["src/**/*.ts",],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
