@@ -1,2 +1,760 @@
-var e,t;!function(e){e.Program="Program",e.VariableDeclaration="VariableDeclaration",e.InlineConstant="InlineConstant",e.Identifier="Identifier",e.Literal="Literal",e.BlockStatement="BlockStatement",e.ArrowFunction="ArrowFunction",e.TemplateLiteral="TemplateLiteral",e.TemplateLiteralExpression="TemplateLiteralExpression",e.ClassDeclaration="ClassDeclaration",e.MethodDefinition="MethodDefinition",e.PropertyDefinition="PropertyDefinition",e.FunctionExpression="FunctionExpression",e.AsyncFunction="AsyncFunction",e.ObjectExpression="ObjectExpression",e.Property="Property",e.SpreadElement="SpreadElement",e.ImportDeclaration="ImportDeclaration",e.ExportDeclaration="ExportDeclaration",e.ReturnStatement="ReturnStatement",e.Statement="Statement",e.Expression="Expression",e.BinaryExpression="BinaryExpression",e.IfStatement="IfStatement",e.FunctionDeclaration="FunctionDeclaration"}(e||(e={})),function(e){e.Keyword="Keyword",e.Identifier="Identifier",e.Operator="Operator",e.Delimiter="Delimiter",e.Literal="Literal",e.EndOfStatement="EndOfStatement"}(t||(t={}));const r={NodeType:e,JSTokenType:t};class n{constructor(){this.keywords=new Set(["const","let","var","if","else","function","return"]),this.operators=new Set(["=","+","-","*","/","%","===","!==","<",">","==","!="]),this.delimiters=new Set(["(",")","{","}","[","]"])}tokenize(e){const r=[];let n=0;const i=(e,t)=>{r.push({type:e,value:t})};for(e=e.trim();n<e.length;){const r=e[n];if(this.delimiters.has(r)){i(t.Delimiter,r),n++;continue}if(/\s/.test(r)){n++;continue}if(";"===r){i(t.Delimiter,r),n++;continue}if(/[a-zA-Z_$]/.test(r)){let r="";for(;n<e.length&&/[a-zA-Z0-9_$]/.test(e[n]);)r+=e[n++];this.keywords.has(r)?i(t.Keyword,r):i(t.Identifier,r);continue}if(/[0-9]/.test(r)){let r="";for(;n<e.length&&/[0-9.]/.test(e[n]);)r+=e[n++];i(t.Literal,r);continue}const a=this.matchMultiCharOperator(e.slice(n));if(a)i(t.Operator,a),n+=a.length;else{if(!this.operators.has(r))throw new Error(`Unexpected character: ${r}`);i(t.Operator,r),n++}}return i(t.EndOfStatement,"EOF"),r}matchMultiCharOperator(e){return["===","!==","==","!="].find((t=>e.startsWith(t)))||null}}class i{constructor(e=[]){this.tokens=e,this.current=0}setTokens(e){this.tokens=e,this.current=0}parse(t){t&&this.setTokens(t);const r=[];for(;this.current<this.tokens.length;)try{const e=this.walk();e&&r.push(e)}catch(e){this.current++}return{type:e.Program,children:r,body:r}}walk(){const r=this.tokens[this.current];if(!r)return null;switch(r.type){case t.Keyword:return this.parseKeyword();case t.Identifier:return this.current++,{type:e.Identifier,value:r.value};case t.Literal:return this.current++,{type:e.Literal,value:r.value};case t.EndOfStatement:return this.current++,null;default:throw new Error(`Unexpected token: '${r.value}'`)}}parseKeyword(){const e=this.tokens[this.current];switch(e.value){case"if":return this.parseIfStatement();case"function":return this.parseFunctionDeclaration();case"const":case"let":case"var":return this.parseVariableDeclaration();default:throw new Error(`Unexpected keyword: ${e.value}`)}}parseIfStatement(){if(this.current++,"("!==this.tokens[this.current]?.value)throw new Error("Expected '(' after 'if'");this.current++;const t=this.walk();if(!t)throw new Error("Invalid condition");if(")"!==this.tokens[this.current]?.value)throw new Error("Expected ')' after condition");this.current++;const r=this.walk();if(!r)throw new Error("Invalid consequence");let n;return"else"===this.tokens[this.current]?.value&&(this.current++,n=this.walk()),{type:e.IfStatement,children:[t,r,...n?[n]:[]]}}parseFunctionDeclaration(){this.current++;const r=this.tokens[this.current];if(!r||r.type!==t.Identifier)throw new Error("Expected function name");if(this.current++,"("!==this.tokens[this.current]?.value)throw new Error("Expected '(' after function name");this.current++;const n=[];for(;this.current<this.tokens.length&&")"!==this.tokens[this.current]?.value;){const r=this.tokens[this.current];if(r.type!==t.Identifier)throw new Error("Expected parameter identifier");n.push({type:e.Identifier,value:r.value}),this.current++,","===this.tokens[this.current]?.value&&this.current++}if(")"!==this.tokens[this.current]?.value)throw new Error("Expected ')' after parameters");this.current++;const i=this.parseBlockStatement();return{type:e.FunctionDeclaration,value:r.value,children:[...n,i]}}parseVariableDeclaration(){const r=this.tokens[this.current];this.current++;const n=this.tokens[this.current];if(!n||n.type!==t.Identifier)throw new Error("Expected variable name");if(this.current++,"="!==this.tokens[this.current]?.value)throw new Error("Expected '=' after variable name");this.current++;const i=this.walk();if(!i)throw new Error("Invalid initializer");return";"===this.tokens[this.current]?.value&&this.current++,{type:e.VariableDeclaration,value:r.value,children:[{type:e.Identifier,value:n.value},i]}}parseBlockStatement(){if("{"!==this.tokens[this.current]?.value)throw new Error("Expected '{' to start block statement");this.current++;const t=[];for(;"}"!==this.tokens[this.current]?.value;){if(this.current>=this.tokens.length)throw new Error("Expected '}' to close block statement");const e=this.walk();e&&t.push(e)}return this.current++,{type:e.BlockStatement,children:t}}}class a{constructor(){this.errors=[]}validate(e){return this.errors=[],this.traverse(e),this.errors}addError(e,t,r){this.errors.push({code:e,message:t,node:r})}traverse(e){if(["Program","VariableDeclaration","InlineConstant","Identifier","Literal","BlockStatement","ArrowFunction","TemplateLiteral","TemplateLiteralExpression","ClassDeclaration","MethodDefinition","PropertyDefinition","FunctionExpression","AsyncFunction","ObjectExpression","Property","SpreadElement","ImportDeclaration","ExportDeclaration"].includes(e.type)){switch(e.type){case"Program":this.validateProgram(e);break;case"VariableDeclaration":this.validateVariableDeclaration(e);break;case"BlockStatement":this.validateBlockStatement(e);break;case"ArrowFunction":this.validateArrowFunction(e);break;case"TemplateLiteral":this.validateTemplateLiteral(e);break;case"ClassDeclaration":this.validateClass(e);break;case"MethodDefinition":this.validateMethodDefinition(e);break;case"AsyncFunction":this.validateAsyncFunction(e);break;case"ObjectExpression":this.validateObjectExpression(e);break;case"Property":this.validateProperty(e);break;case"ImportDeclaration":this.validateImport(e);break;case"ExportDeclaration":this.validateExport(e);break;case"InlineConstant":this.validateInlineConstant(e);break;case"Identifier":this.validateIdentifier(e);break;case"Literal":this.validateLiteral(e)}if(e.children)for(const t of e.children)this.traverse(t)}else this.addError("E001",`Unknown node type: ${e.type}`,e)}validateProgram(e){e.children?.length||this.addError("E002","Program must contain at least one statement.",e)}validateVariableDeclaration(e){e.children?.length?e.value&&["let","const","var"].includes(e.value)||this.addError("E005","Variable declaration must specify kind (let, const, or var).",e):this.addError("E004","Invalid VariableDeclaration: insufficient children.",e)}validateBlockStatement(e){}validateArrowFunction(e){e.children?.length||this.addError("E007","Arrow function must have a body.",e)}validateTemplateLiteral(e){}validateClass(e){e.value||this.addError("E015","Class declaration must have a name.",e)}validateMethodDefinition(e){e.value||this.addError("E016","Class method must have a name.",e)}validateAsyncFunction(e){e.children?.some((e=>"BlockStatement"===e.type))||this.addError("E019","Async function must have a body.",e)}validateObjectExpression(e){const t=new Set;e.children?.forEach((e=>{"Property"===e.type&&e.value&&(t.has(e.value)&&this.addError("E010",`Duplicate key '${e.value}' in object literal.`,e),t.add(e.value))}))}validateProperty(e){e.value||this.addError("E011","Property must have a name.",e)}validateImport(e){e.children?.length||this.addError("E021","Import declaration must specify imported values.",e)}validateExport(e){e.children?.length||e.value||this.addError("E022","Export declaration must have exported values.",e)}validateInlineConstant(e){e.value||this.addError("E024","InlineConstant must have a value.",e)}validateIdentifier(e){e.value&&/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(e.value)||this.addError("E025",`Invalid identifier name: ${e.value}`,e)}validateLiteral(e){e.value||this.addError("E026","Literal must have a value.",e)}}class s{constructor(){this.tokenizer=new n,this.validator=new a,this.parser=new i}convertToTypedNode(t){const r=e[t.type];if(!r)throw new Error(`Invalid node type: ${t.type}`);return{type:r,value:t.value,children:t.children?.map((e=>this.convertToTypedNode(e))),line:t.line,column:t.column}}generateFromSource(e,t={}){try{if(!e)throw new Error("Source code cannot be undefined or empty");const r=this.tokenizer.tokenize(e),n=this.parser.parse(r),i=this.convertToTypedNode(n);return this.processAST(i,t)}catch(e){return{success:!1,errors:[{code:"E000",message:e instanceof Error?e.message:"Unknown error occurred"}],ast:void 0}}}generateFromAST(e,t={}){try{return this.processAST(e,t)}catch(t){return{success:!1,errors:[{code:"E000",message:t instanceof Error?t.message:"Unknown error occurred"}],ast:e}}}processAST(e,t){const r={success:!0,ast:e};if(t.validate){const t=this.validator.validate(e);if(t.length>0)return{success:!1,errors:this.convertValidationErrors(t),ast:e}}try{const n=this.generateCode(e,t);return{...r,code:n}}catch(t){return{success:!1,errors:[{code:"E001",message:t instanceof Error?t.message:"Code generation failed"}],ast:e}}}convertValidationErrors(e){return e.map((e=>({code:e.code,message:e.message,location:{line:e.node.line,column:e.node.column}})))}generateCode(e,t){const r=[];this.traverseAST(e,r);const n=r.join(" ").trim();return this.formatOutput(n,t)}traverseAST(t,r){switch(t.type){case e.Program:t.children?.forEach((e=>this.traverseAST(e,r)));break;case e.VariableDeclaration:r.push(`${t.value} `),t.children?.forEach((e=>this.traverseAST(e,r))),r.push(";");break;case e.Identifier:case e.Literal:r.push(t.value||"");break;case e.BinaryExpression:t.children&&2===t.children.length&&(this.traverseAST(t.children[0],r),r.push(` ${t.value} `),this.traverseAST(t.children[1],r));break;default:throw new Error(`Unsupported node type: ${t.type}`)}}formatOutput(e,t){return"compact"===t.format?this.formatCompact(e):this.formatPretty(e,t.indent||"  ")}formatCompact(e){return e.replace(/\s+/g," ").replace(/\s*([{}[\],;()])\s*/g,"$1").replace(/\s*=\s*/g,"=").replace(/;\s*/g,";").trim()}formatPretty(e,t){const r=e.split(/({|}|;)/).filter(Boolean);let n=0,i="";for(const e of r){const r=e.trim();r&&("}"===r?(n=Math.max(0,n-1),i+=`${t.repeat(n)}}\n`):"{"===r?(i+=" {\n",n++):i+=";"===r?";\n":`${t.repeat(n)}${r}\n`)}return i.trimEnd()}}class o{constructor(e){this.tokens=e,this.position=0}currentToken(){return this.position<this.tokens.length?this.tokens[this.position]:null}consumeToken(){if(this.position>=this.tokens.length)throw new Error("Unexpected end of input");return this.tokens[this.position++]}peekToken(){return this.position+1<this.tokens.length?this.tokens[this.position+1]:null}parseProgram(){const t={type:e.Program,children:[]};for(;this.position<this.tokens.length-1;){const e=this.parseStatement();e&&t.children.push(e)}return t}parseStatement(){const e=this.currentToken();if(!e)return null;if(e.type===t.Keyword&&"const"===e.value)return this.parseVariableDeclaration();throw new Error(`Unexpected token: ${e.value}`)}parseVariableDeclaration(){this.consumeToken();const r=this.consumeToken();if(!r||r.type!==t.Identifier)throw new Error("Expected identifier after 'const'");const n=this.consumeToken();if(!n||n.type!==t.Operator||"="!==n.value)throw new Error("Expected '=' after identifier");const i=this.consumeToken();if(!i||i.type!==t.Literal)throw new Error("Expected literal value after '='");const a=this.consumeToken();if(!a||a.type!==t.Delimiter||";"!==a.value)throw new Error("Expected ';' after value");return{type:e.VariableDeclaration,children:[{type:e.Identifier,value:r.value,children:[]},{type:e.Literal,value:i.value,children:[]}]}}buildAST(){return this.parseProgram()}}class c{constructor(){this.uniqueNodes=new Map}minimize(e){return this.uniqueNodes.clear(),this.traverse(e)}optimize(e){return this.traverse(e,!0)}traverse(e,t=!1){const r=`${e.type}:${e.value||""}`;if(this.uniqueNodes.has(r))return this.uniqueNodes.get(r);const n={...e};return e.children&&(n.children=e.children.map((e=>this.traverse(e,t)))),t?this.performOptimization(n):(this.uniqueNodes.set(r,n),n)}performOptimization(t){if(t.type===e.Program)return{...t,children:t.children?.map((e=>this.simplifyNode(e)))||[]};if(t.type===e.VariableDeclaration&&t.children){const[r,n]=t.children;if(n.type===e.Literal)return{type:e.InlineConstant,value:`${r.value}=${n.value}`,children:[]}}return t}simplifyNode(t){return Object.values(e).includes(t.type),t}}export{o as JSASTBuilder,s as JSAstGenerator,c as JSAstMinimizer,i as JSParser,t as JSTokenType,n as JSTokenizer,a as JSValidator,e as NodeType,r as Types};
+var NodeType;
+(function (NodeType) {
+    NodeType["Program"] = "Program";
+    NodeType["VariableDeclaration"] = "VariableDeclaration";
+    NodeType["InlineConstant"] = "InlineConstant";
+    NodeType["Identifier"] = "Identifier";
+    NodeType["Literal"] = "Literal";
+    NodeType["BlockStatement"] = "BlockStatement";
+    NodeType["ArrowFunction"] = "ArrowFunction";
+    NodeType["TemplateLiteral"] = "TemplateLiteral";
+    NodeType["TemplateLiteralExpression"] = "TemplateLiteralExpression";
+    NodeType["ClassDeclaration"] = "ClassDeclaration";
+    NodeType["MethodDefinition"] = "MethodDefinition";
+    NodeType["PropertyDefinition"] = "PropertyDefinition";
+    NodeType["FunctionExpression"] = "FunctionExpression";
+    NodeType["AsyncFunction"] = "AsyncFunction";
+    NodeType["ObjectExpression"] = "ObjectExpression";
+    NodeType["Property"] = "Property";
+    NodeType["SpreadElement"] = "SpreadElement";
+    NodeType["ImportDeclaration"] = "ImportDeclaration";
+    NodeType["ExportDeclaration"] = "ExportDeclaration";
+    NodeType["ReturnStatement"] = "ReturnStatement";
+    NodeType["Statement"] = "Statement";
+    NodeType["Expression"] = "Expression";
+    NodeType["BinaryExpression"] = "BinaryExpression";
+    NodeType["IfStatement"] = "IfStatement";
+    NodeType["FunctionDeclaration"] = "FunctionDeclaration";
+})(NodeType || (NodeType = {}));
+var JSTokenType;
+(function (JSTokenType) {
+    JSTokenType["Keyword"] = "Keyword";
+    JSTokenType["Identifier"] = "Identifier";
+    JSTokenType["Operator"] = "Operator";
+    JSTokenType["Delimiter"] = "Delimiter";
+    JSTokenType["Literal"] = "Literal";
+    JSTokenType["EndOfStatement"] = "EndOfStatement";
+})(JSTokenType || (JSTokenType = {}));
+const Types = { NodeType, JSTokenType };
+
+class JSTokenizer {
+    constructor() {
+        this.keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return']);
+        this.operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '==', '!=']);
+        this.delimiters = new Set(['(', ')', '{', '}', '[', ']']);
+    }
+    tokenize(input) {
+        const tokens = [];
+        let current = 0;
+        const addToken = (type, value) => {
+            tokens.push({ type, value });
+        };
+        input = input.trim();
+        while (current < input.length) {
+            const char = input[current];
+            if (this.delimiters.has(char)) {
+                addToken(JSTokenType.Delimiter, char);
+                current++;
+                continue;
+            }
+            if (/\s/.test(char)) {
+                current++;
+                continue;
+            }
+            if (char === ';') {
+                addToken(JSTokenType.Delimiter, char);
+                current++;
+                continue;
+            }
+            if (/[a-zA-Z_$]/.test(char)) {
+                let value = '';
+                while (current < input.length && /[a-zA-Z0-9_$]/.test(input[current])) {
+                    value += input[current++];
+                }
+                if (this.keywords.has(value)) {
+                    addToken(JSTokenType.Keyword, value);
+                }
+                else {
+                    addToken(JSTokenType.Identifier, value);
+                }
+                continue;
+            }
+            if (/[0-9]/.test(char)) {
+                let value = '';
+                while (current < input.length && /[0-9.]/.test(input[current])) {
+                    value += input[current++];
+                }
+                addToken(JSTokenType.Literal, value);
+                continue;
+            }
+            const multiCharOp = this.matchMultiCharOperator(input.slice(current));
+            if (multiCharOp) {
+                addToken(JSTokenType.Operator, multiCharOp);
+                current += multiCharOp.length;
+                continue;
+            }
+            if (this.operators.has(char)) {
+                addToken(JSTokenType.Operator, char);
+                current++;
+                continue;
+            }
+            throw new Error(`Unexpected character: ${char}`);
+        }
+        addToken(JSTokenType.EndOfStatement, 'EOF');
+        return tokens;
+    }
+    matchMultiCharOperator(input) {
+        const multiCharOperators = ['===', '!==', '==', '!='];
+        return multiCharOperators.find(op => input.startsWith(op)) || null;
+    }
+}
+
+class JSParser {
+    constructor(tokens = []) {
+        this.tokens = tokens;
+        this.current = 0;
+    }
+    setTokens(tokens) {
+        this.tokens = tokens;
+        this.current = 0;
+    }
+    parse(tokens) {
+        if (tokens) {
+            this.setTokens(tokens);
+        }
+        const children = [];
+        while (this.current < this.tokens.length) {
+            try {
+                const node = this.walk();
+                if (node) {
+                    children.push(node);
+                }
+            }
+            catch (error) {
+                // Skip tokens that cause parsing errors
+                this.current++;
+            }
+        }
+        return {
+            type: NodeType.Program,
+            children,
+            body: children,
+        };
+    }
+    walk() {
+        const token = this.tokens[this.current];
+        if (!token) {
+            return null; // Return null instead of throwing for EOF
+        }
+        switch (token.type) {
+            case JSTokenType.Keyword:
+                return this.parseKeyword();
+            case JSTokenType.Identifier:
+                this.current++;
+                return { type: NodeType.Identifier, value: token.value };
+            case JSTokenType.Literal:
+                this.current++;
+                return { type: NodeType.Literal, value: token.value };
+            case JSTokenType.EndOfStatement:
+                this.current++;
+                return null; // Ignore EOF or semicolon tokens
+            default:
+                // For unexpected tokens, throw with specific error
+                throw new Error(`Unexpected token: '${token.value}'`);
+        }
+    }
+    parseKeyword() {
+        const token = this.tokens[this.current];
+        switch (token.value) {
+            case "if":
+                return this.parseIfStatement();
+            case "function":
+                return this.parseFunctionDeclaration();
+            case "const":
+            case "let":
+            case "var":
+                return this.parseVariableDeclaration();
+            default:
+                throw new Error(`Unexpected keyword: ${token.value}`);
+        }
+    }
+    parseIfStatement() {
+        this.current++; // Skip 'if'
+        if (this.tokens[this.current]?.value !== "(") {
+            throw new Error("Expected '(' after 'if'");
+        }
+        this.current++; // Skip '('
+        const condition = this.walk();
+        if (!condition) {
+            throw new Error("Invalid condition");
+        }
+        if (this.tokens[this.current]?.value !== ")") {
+            throw new Error("Expected ')' after condition");
+        }
+        this.current++; // Skip ')'
+        const consequence = this.walk();
+        if (!consequence) {
+            throw new Error("Invalid consequence");
+        }
+        let alternate;
+        if (this.tokens[this.current]?.value === "else") {
+            this.current++; // Skip 'else'
+            alternate = this.walk(); // Non-null assertion
+        }
+        return {
+            type: NodeType.IfStatement,
+            children: [condition, consequence, ...(alternate ? [alternate] : [])],
+        };
+    }
+    parseFunctionDeclaration() {
+        this.current++; // Skip 'function'
+        const identifier = this.tokens[this.current];
+        if (!identifier || identifier.type !== JSTokenType.Identifier) {
+            throw new Error("Expected function name");
+        }
+        this.current++;
+        if (this.tokens[this.current]?.value !== "(") {
+            throw new Error("Expected '(' after function name");
+        }
+        this.current++; // Skip '('
+        const parameters = [];
+        while (this.current < this.tokens.length && this.tokens[this.current]?.value !== ")") {
+            const param = this.tokens[this.current];
+            if (param.type !== JSTokenType.Identifier) {
+                throw new Error("Expected parameter identifier");
+            }
+            parameters.push({ type: NodeType.Identifier, value: param.value });
+            this.current++;
+            if (this.tokens[this.current]?.value === ",") {
+                this.current++; // Skip ','
+            }
+        }
+        if (this.tokens[this.current]?.value !== ")") {
+            throw new Error("Expected ')' after parameters");
+        }
+        this.current++; // Skip ')'
+        const body = this.parseBlockStatement();
+        return {
+            type: NodeType.FunctionDeclaration,
+            value: identifier.value,
+            children: [...parameters, body],
+        };
+    }
+    parseVariableDeclaration() {
+        const keyword = this.tokens[this.current];
+        this.current++; // Skip 'const', 'let', or 'var'
+        const identifier = this.tokens[this.current];
+        if (!identifier || identifier.type !== JSTokenType.Identifier) {
+            throw new Error("Expected variable name");
+        }
+        this.current++;
+        if (this.tokens[this.current]?.value !== "=") {
+            throw new Error("Expected '=' after variable name");
+        }
+        this.current++; // Skip '='
+        const initializer = this.walk();
+        if (!initializer) {
+            throw new Error("Invalid initializer");
+        }
+        // Optionally skip semicolon if present
+        if (this.tokens[this.current]?.value === ";") {
+            this.current++; // Skip ';'
+        }
+        return {
+            type: NodeType.VariableDeclaration,
+            value: keyword.value,
+            children: [
+                { type: NodeType.Identifier, value: identifier.value },
+                initializer,
+            ],
+        };
+    }
+    parseBlockStatement() {
+        if (this.tokens[this.current]?.value !== "{") {
+            throw new Error("Expected '{' to start block statement");
+        }
+        this.current++; // Skip '{'
+        const children = [];
+        while (this.tokens[this.current]?.value !== "}") {
+            if (this.current >= this.tokens.length) {
+                throw new Error("Expected '}' to close block statement");
+            }
+            const node = this.walk();
+            if (node) {
+                children.push(node);
+            }
+        }
+        this.current++; // Skip '}'
+        return {
+            type: NodeType.BlockStatement,
+            children,
+        };
+    }
+}
+
+class JSValidator {
+    constructor() {
+        this.errors = [];
+    }
+    validate(ast) {
+        this.errors = [];
+        this.traverse(ast);
+        return this.errors;
+    }
+    addError(code, message, node) {
+        this.errors.push({ code, message, node });
+    }
+    traverse(node) {
+        const validNodeTypes = [
+            "Program", "VariableDeclaration", "InlineConstant", "Identifier",
+            "Literal", "BlockStatement", "ArrowFunction", "TemplateLiteral",
+            "TemplateLiteralExpression", "ClassDeclaration", "MethodDefinition",
+            "PropertyDefinition", "FunctionExpression", "AsyncFunction",
+            "ObjectExpression", "Property", "SpreadElement", "ImportDeclaration",
+            "ExportDeclaration"
+        ];
+        if (!validNodeTypes.includes(node.type)) {
+            this.addError("E001", `Unknown node type: ${node.type}`, node);
+            return;
+        }
+        switch (node.type) {
+            case "Program":
+                this.validateProgram(node);
+                break;
+            case "VariableDeclaration":
+                this.validateVariableDeclaration(node);
+                break;
+            case "BlockStatement":
+                this.validateBlockStatement(node);
+                break;
+            case "ArrowFunction":
+                this.validateArrowFunction(node);
+                break;
+            case "TemplateLiteral":
+                this.validateTemplateLiteral(node);
+                break;
+            case "ClassDeclaration":
+                this.validateClass(node);
+                break;
+            case "MethodDefinition":
+                this.validateMethodDefinition(node);
+                break;
+            case "AsyncFunction":
+                this.validateAsyncFunction(node);
+                break;
+            case "ObjectExpression":
+                this.validateObjectExpression(node);
+                break;
+            case "Property":
+                this.validateProperty(node);
+                break;
+            case "ImportDeclaration":
+                this.validateImport(node);
+                break;
+            case "ExportDeclaration":
+                this.validateExport(node);
+                break;
+            case "InlineConstant":
+                this.validateInlineConstant(node);
+                break;
+            case "Identifier":
+                this.validateIdentifier(node);
+                break;
+            case "Literal":
+                this.validateLiteral(node);
+                break;
+        }
+        if (node.children) {
+            for (const child of node.children) {
+                this.traverse(child);
+            }
+        }
+    }
+    validateProgram(node) {
+        if (!node.children?.length) {
+            this.addError("E002", "Program must contain at least one statement.", node);
+        }
+    }
+    validateVariableDeclaration(node) {
+        if (!node.children?.length) {
+            this.addError("E004", "Invalid VariableDeclaration: insufficient children.", node);
+            return;
+        }
+        if (!node.value || !["let", "const", "var"].includes(node.value)) {
+            this.addError("E005", "Variable declaration must specify kind (let, const, or var).", node);
+        }
+    }
+    validateBlockStatement(node) {
+        // Block statements can be empty, no validation needed
+    }
+    validateArrowFunction(node) {
+        if (!node.children?.length) {
+            this.addError("E007", "Arrow function must have a body.", node);
+        }
+    }
+    validateTemplateLiteral(node) {
+        // Template literals can be empty, no validation needed
+    }
+    validateClass(node) {
+        if (!node.value) {
+            this.addError("E015", "Class declaration must have a name.", node);
+        }
+    }
+    validateMethodDefinition(node) {
+        if (!node.value) {
+            this.addError("E016", "Class method must have a name.", node);
+        }
+    }
+    validateAsyncFunction(node) {
+        if (!node.children?.some(child => child.type === "BlockStatement")) {
+            this.addError("E019", "Async function must have a body.", node);
+        }
+    }
+    validateObjectExpression(node) {
+        const properties = new Set();
+        node.children?.forEach(prop => {
+            if (prop.type === "Property" && prop.value) {
+                if (properties.has(prop.value)) {
+                    this.addError("E010", `Duplicate key '${prop.value}' in object literal.`, prop);
+                }
+                properties.add(prop.value);
+            }
+        });
+    }
+    validateProperty(node) {
+        if (!node.value) {
+            this.addError("E011", "Property must have a name.", node);
+        }
+    }
+    validateImport(node) {
+        if (!node.children?.length) {
+            this.addError("E021", "Import declaration must specify imported values.", node);
+        }
+    }
+    validateExport(node) {
+        if (!node.children?.length && !node.value) {
+            this.addError("E022", "Export declaration must have exported values.", node);
+        }
+    }
+    validateInlineConstant(node) {
+        if (!node.value) {
+            this.addError("E024", "InlineConstant must have a value.", node);
+        }
+    }
+    validateIdentifier(node) {
+        if (!node.value || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(node.value)) {
+            this.addError("E025", `Invalid identifier name: ${node.value}`, node);
+        }
+    }
+    validateLiteral(node) {
+        if (!node.value) {
+            this.addError("E026", "Literal must have a value.", node);
+        }
+    }
+}
+
+class JSAstGenerator {
+    constructor() {
+        this.tokenizer = new JSTokenizer();
+        this.validator = new JSValidator();
+        this.parser = new JSParser();
+    }
+    convertToTypedNode(node) {
+        const nodeType = NodeType[node.type];
+        if (!nodeType) {
+            throw new Error(`Invalid node type: ${node.type}`);
+        }
+        return {
+            type: nodeType,
+            value: node.value,
+            children: node.children?.map((child) => this.convertToTypedNode(child)),
+            line: node.line,
+            column: node.column,
+        };
+    }
+    generateFromSource(source, options = {}) {
+        try {
+            if (!source) {
+                throw new Error("Source code cannot be undefined or empty");
+            }
+            // Tokenize the source code
+            const tokens = this.tokenizer.tokenize(source);
+            // Parse the tokens into an initial AST
+            const rawAst = this.parser.parse(tokens);
+            // Ensure the AST conforms to TypedJSASTNode
+            const typedAst = this.convertToTypedNode(rawAst);
+            return this.processAST(typedAst, options);
+        }
+        catch (err) {
+            return {
+                success: false,
+                errors: [
+                    {
+                        code: "E000",
+                        message: err instanceof Error ? err.message : "Unknown error occurred",
+                    },
+                ],
+                ast: undefined,
+            };
+        }
+    }
+    generateFromAST(ast, options = {}) {
+        try {
+            return this.processAST(ast, options);
+        }
+        catch (err) {
+            return {
+                success: false,
+                errors: [
+                    {
+                        code: "E000",
+                        message: err instanceof Error ? err.message : "Unknown error occurred",
+                    },
+                ],
+                ast: ast,
+            };
+        }
+    }
+    processAST(ast, options) {
+        const result = {
+            success: true,
+            ast: ast,
+        };
+        if (options.validate) {
+            const validationErrors = this.validator.validate(ast);
+            if (validationErrors.length > 0) {
+                return {
+                    success: false,
+                    errors: this.convertValidationErrors(validationErrors),
+                    ast: ast,
+                };
+            }
+        }
+        try {
+            const code = this.generateCode(ast, options);
+            return {
+                ...result,
+                code,
+            };
+        }
+        catch (err) {
+            return {
+                success: false,
+                errors: [
+                    {
+                        code: "E001",
+                        message: err instanceof Error ? err.message : "Code generation failed",
+                    },
+                ],
+                ast: ast,
+            };
+        }
+    }
+    convertValidationErrors(validationErrors) {
+        return validationErrors.map((error) => ({
+            code: error.code,
+            message: error.message,
+            location: {
+                line: error.node.line,
+                column: error.node.column,
+            },
+        }));
+    }
+    generateCode(ast, options) {
+        const codeParts = [];
+        this.traverseAST(ast, codeParts);
+        const rawCode = codeParts.join(" ").trim();
+        return this.formatOutput(rawCode, options);
+    }
+    traverseAST(node, codeParts) {
+        switch (node.type) {
+            case NodeType.Program:
+                node.children?.forEach((child) => this.traverseAST(child, codeParts));
+                break;
+            case NodeType.VariableDeclaration:
+                codeParts.push(`${node.value} `);
+                node.children?.forEach((child) => this.traverseAST(child, codeParts));
+                codeParts.push(";");
+                break;
+            case NodeType.Identifier:
+            case NodeType.Literal:
+                codeParts.push(node.value || "");
+                break;
+            case NodeType.BinaryExpression:
+                if (node.children && node.children.length === 2) {
+                    this.traverseAST(node.children[0], codeParts);
+                    codeParts.push(` ${node.value} `);
+                    this.traverseAST(node.children[1], codeParts);
+                }
+                break;
+            default:
+                throw new Error(`Unsupported node type: ${node.type}`);
+        }
+    }
+    formatOutput(code, options) {
+        if (options.format === "compact") {
+            return this.formatCompact(code);
+        }
+        return this.formatPretty(code, options.indent || "  ");
+    }
+    formatCompact(code) {
+        return code
+            .replace(/\s+/g, " ")
+            .replace(/\s*([{}[\],;()])\s*/g, "$1")
+            .replace(/\s*=\s*/g, "=")
+            .replace(/;\s*/g, ";")
+            .trim();
+    }
+    formatPretty(code, indent) {
+        const segments = code.split(/({|}|;)/).filter(Boolean);
+        let level = 0;
+        let result = "";
+        for (const segment of segments) {
+            const trimmed = segment.trim();
+            if (!trimmed)
+                continue;
+            if (trimmed === "}") {
+                level = Math.max(0, level - 1);
+                result += `${indent.repeat(level)}}\n`;
+            }
+            else if (trimmed === "{") {
+                result += " {\n";
+                level++;
+            }
+            else if (trimmed === ";") {
+                result += ";\n";
+            }
+            else {
+                result += `${indent.repeat(level)}${trimmed}\n`;
+            }
+        }
+        return result.trimEnd();
+    }
+}
+
+class JSASTBuilder {
+    constructor(tokens) {
+        this.tokens = tokens;
+        this.position = 0;
+    }
+    currentToken() {
+        return this.position < this.tokens.length ? this.tokens[this.position] : null;
+    }
+    consumeToken() {
+        if (this.position >= this.tokens.length) {
+            throw new Error('Unexpected end of input');
+        }
+        return this.tokens[this.position++];
+    }
+    peekToken() {
+        return this.position + 1 < this.tokens.length ? this.tokens[this.position + 1] : null;
+    }
+    parseProgram() {
+        const program = {
+            type: NodeType.Program,
+            children: []
+        };
+        while (this.position < this.tokens.length - 1) {
+            const statement = this.parseStatement();
+            if (statement) {
+                program.children.push(statement);
+            }
+        }
+        return program;
+    }
+    parseStatement() {
+        const token = this.currentToken();
+        if (!token) {
+            return null;
+        }
+        if (token.type === JSTokenType.Keyword && token.value === "const") {
+            return this.parseVariableDeclaration();
+        }
+        throw new Error(`Unexpected token: ${token.value}`);
+    }
+    parseVariableDeclaration() {
+        this.consumeToken(); // Consume 'const'
+        const identifier = this.consumeToken();
+        if (!identifier || identifier.type !== JSTokenType.Identifier) {
+            throw new Error("Expected identifier after 'const'");
+        }
+        const equals = this.consumeToken();
+        if (!equals || equals.type !== JSTokenType.Operator || equals.value !== "=") {
+            throw new Error("Expected '=' after identifier");
+        }
+        const value = this.consumeToken();
+        if (!value || value.type !== JSTokenType.Literal) {
+            throw new Error("Expected literal value after '='");
+        }
+        const semicolon = this.consumeToken();
+        if (!semicolon || semicolon.type !== JSTokenType.Delimiter || semicolon.value !== ";") {
+            throw new Error("Expected ';' after value");
+        }
+        return {
+            type: NodeType.VariableDeclaration,
+            children: [
+                { type: NodeType.Identifier, value: identifier.value, children: [] },
+                { type: NodeType.Literal, value: value.value, children: [] },
+            ],
+        };
+    }
+    buildAST() {
+        return this.parseProgram();
+    }
+}
+
+class JSAstMinimizer {
+    constructor() {
+        this.uniqueNodes = new Map();
+    }
+    minimize(ast) {
+        this.uniqueNodes.clear();
+        return this.traverse(ast);
+    }
+    optimize(ast) {
+        return this.traverse(ast, true);
+    }
+    traverse(node, optimize = false) {
+        const key = `${node.type}:${node.value || ""}`;
+        if (this.uniqueNodes.has(key)) {
+            return this.uniqueNodes.get(key);
+        }
+        const processedNode = { ...node };
+        if (node.children) {
+            processedNode.children = node.children.map(child => this.traverse(child, optimize));
+        }
+        if (optimize) {
+            return this.performOptimization(processedNode);
+        }
+        this.uniqueNodes.set(key, processedNode);
+        return processedNode;
+    }
+    performOptimization(node) {
+        if (node.type === NodeType.Program) {
+            return {
+                ...node,
+                children: node.children?.map(child => this.simplifyNode(child)) || []
+            };
+        }
+        if (node.type === NodeType.VariableDeclaration && node.children) {
+            const [identifier, value] = node.children;
+            if (value.type === NodeType.Literal) {
+                return {
+                    type: NodeType.InlineConstant,
+                    value: `${identifier.value}=${value.value}`,
+                    children: []
+                };
+            }
+        }
+        return node;
+    }
+    simplifyNode(node) {
+        if (!Object.values(NodeType).includes(node.type)) {
+            return node;
+        }
+        return node;
+    }
+}
+
+export { JSASTBuilder, JSAstGenerator, JSAstMinimizer, JSParser, JSTokenType, JSTokenizer, JSValidator, NodeType, Types };
 //# sourceMappingURL=index.js.map
