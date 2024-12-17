@@ -38,11 +38,10 @@
   "test": "turbo run test",
   "dev": "turbo run dev",
   "start": "turbo run start",
-  "build": "npm run local:clean && npm run build:rollup",
+  "build": " npm run local:clean && npm run local:link && npm run build:rollup",
   "build:rollup": "rollup -c",
   "prebuild": "npm run local:clean",
-  "prepublishOnly": "npm run build",
-  "release": "npm run local:clean && npm run build && npm publish --access public"
+  "prepublishOnly": "npm run build"
 },
 
   "devDependencies": {
