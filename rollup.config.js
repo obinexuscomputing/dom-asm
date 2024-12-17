@@ -1,10 +1,9 @@
-#!/usr/bin/env node
-
 const typescript = require("@rollup/plugin-typescript");
 const resolve = require("@rollup/plugin-node-resolve");
 const commonjs = require("@rollup/plugin-commonjs");
 const json = require("@rollup/plugin-json");
-const terser = require("@rollup/plugin-terser");
+const { terser } = require("@rollup/plugin-terser");
+const copy = require("rollup-plugin-copy");
 const pkg = require("./package.json");
 
 // Detect production mode
@@ -13,7 +12,7 @@ const production = process.env.NODE_ENV === "production";
 // Banner and footer for metadata
 const banner = `/*!
  * @obinexuscomputing/dom-asm v${pkg.version}
- * (c) ${new Date().getFullYear()} Obinexus Computing
+ * (c) ${new Date().getFullYear()} OBINexus Computing
  * Released under the ISC License
  */`;
 
@@ -33,18 +32,18 @@ const externalDeps = [
 ];
 
 // Common plugins for both builds
-const plugins = [
+const basePlugins = [
   typescript({
     tsconfig: "./tsconfig.json",
-    include: ["src/**/*.ts"], // Include all source files
-    exclude: ["**/*.d.ts", "**/*.test.ts"], // Exclude unnecessary files
+    include: ["src/**/*.ts"],
+    exclude: ["**/*.d.ts", "**/*.test.ts"],
   }),
   resolve({
     extensions: [".ts", ".js", ".json"],
   }),
-  commonjs(), // Convert CommonJS modules to ES Modules
-  json(), // Allow importing JSON files
-  production && terser(), // Minify only in production
+  commonjs(),
+  json(),
+  production && terser(),
 ];
 
 // Main Library Configuration
@@ -67,8 +66,15 @@ const libraryConfig = {
       footer,
     },
   ],
-  external: externalDeps, // Do not bundle external dependencies
-  plugins,
+  external: externalDeps,
+  plugins: [
+    ...basePlugins,
+    // Copy package.json so dist includes it
+    copy({
+      targets: [{ src: "package.json", dest: "dist" }],
+      hook: "writeBundle",
+    }),
+  ],
 };
 
 // CLI Build Configuration
@@ -81,9 +87,8 @@ const cliConfig = {
     banner,
     footer,
   },
-  external: externalDeps, // Do not bundle external dependencies
-  plugins,
+  external: externalDeps,
+  plugins: basePlugins,
 };
 
-// Export configurations
 module.exports = [libraryConfig, cliConfig];
