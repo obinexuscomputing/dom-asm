@@ -38,7 +38,7 @@ export default [
 
   // Configuration for TypeScript declarations
   {
-    input: 'src/index.js',
+    input: 'src/index.ts',
     output: {
       file: 'dist/index.d.ts',
       format: 'es',
