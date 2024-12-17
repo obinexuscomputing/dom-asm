@@ -6,4 +6,3 @@ export declare class CSSASTOptimizer {
     private mergeAdjacentRules;
     optimize(): ASTNode;
 }
-//# sourceMappingURL=index.d.ts.map

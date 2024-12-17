@@ -8,4 +8,3 @@ export declare class CSSCodeGenerator {
     private generateDeclaration;
     generate(): string;
 }
-//# sourceMappingURL=index.d.ts.map

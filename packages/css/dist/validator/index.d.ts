@@ -8,4 +8,3 @@ export declare class CSSValidator {
     private validateDeclaration;
     validate(): string[];
 }
-//# sourceMappingURL=index.d.ts.map

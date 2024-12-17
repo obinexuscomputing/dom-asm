@@ -5,4 +5,3 @@ export declare class CSSParser {
     constructor(input: string, validate?: boolean);
     parse(): ASTNode;
 }
-//# sourceMappingURL=index.d.ts.map

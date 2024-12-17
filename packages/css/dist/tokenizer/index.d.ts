@@ -21,4 +21,3 @@ export declare class CSSTokenizer {
     private consumeOther;
     tokenize(): Token[];
 }
-//# sourceMappingURL=index.d.ts.map
