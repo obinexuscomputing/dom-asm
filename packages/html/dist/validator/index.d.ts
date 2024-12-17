@@ -1,0 +1,1 @@
+export { HTMLValidator } from './HTMLValidator';
