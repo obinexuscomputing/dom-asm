@@ -24,7 +24,7 @@ import {
   JSASTBuilder,
   JSValidator,
   JSAstMinimizer,
-  JSCodeGenerator,
+  JSAstGenerator, // Corrected import
 } from "@obinexuscomputing/js";
 
 import {
@@ -42,7 +42,9 @@ const packageVersion = packageJson.version;
 
 const program = new Command();
 
-// Validation helpers
+/**
+ * Validate the existence of a file.
+ */
 function validateFile(filePath: string): string {
   const absolutePath = path.resolve(filePath);
   if (!fs.existsSync(absolutePath)) {
@@ -59,7 +61,9 @@ interface ProcessOptions {
   debug?: boolean;
 }
 
-// Unified file processing function
+/**
+ * Unified file processing function for all supported file types.
+ */
 async function processFile(
   file: string,
   type: "css" | "html" | "js" | "xml" | "asm",
@@ -80,9 +84,7 @@ async function processFile(
           const validator = new CSSValidator(ast);
           const validationErrors = validator.validate();
           if (validationErrors.length > 0) {
-            throw new Error(
-              `Validation errors:\n${validationErrors.join("\n")}`,
-            );
+            throw new Error(`Validation errors:\n${validationErrors.join("\n")}`);
           }
         }
         if (options.optimize) {
@@ -100,9 +102,7 @@ async function processFile(
           const validator = new HTMLValidator();
           const validationResult = validator.validate(ast);
           if (!validationResult.valid) {
-            throw new Error(
-              `Validation errors:\n${validationResult.errors.join("\n")}`,
-            );
+            throw new Error(`Validation errors:\n${validationResult.errors.join("\n")}`);
           }
         }
         if (options.optimize) {
@@ -120,15 +120,13 @@ async function processFile(
           const validator = new JSValidator();
           const validationErrors = validator.validate(ast);
           if (validationErrors.length > 0) {
-            throw new Error(
-              `Validation errors:\n${validationErrors.join("\n")}`,
-            );
+            throw new Error(`Validation errors:\n${validationErrors.join("\n")}`);
           }
         }
         if (options.optimize) {
           const minimizer = new JSAstMinimizer();
           ast = minimizer.optimize(ast);
-          const generator = new JSCodeGenerator();
+          const generator = new JSAstGenerator(); // Corrected usage
           result.optimized = generator.generate(ast);
         }
         break;
@@ -156,7 +154,6 @@ async function processFile(
         break;
 
       case "asm":
-        // Placeholder for ASM processing logic
         throw new Error("ASM processing is not implemented yet.");
     }
 
@@ -180,27 +177,23 @@ async function processFile(
       console.log(output);
     }
   } catch (error) {
-    if (error instanceof Error) {
-      console.error(`[Error] ${error.message}`);
-    } else {
-      console.error("[Error] Unknown error occurred");
-    }
+    console.error(`[Error] ${error.message}`);
     throw error;
   }
 }
 
-// Command registration function
+/**
+ * Register commands dynamically for file processing types.
+ */
 const registerCommand = (
   type: "css" | "html" | "js" | "xml" | "asm",
   description: string,
 ) => {
-  const cmd = program
+  program
     .command(type)
-    .description(`${description} processing commands`);
-  cmd
+    .description(`${description} processing commands`)
     .command("parse")
     .argument("<file>", `${description} file to parse`)
-    .description(`Parse a ${description} file`)
     .option("-o, --optimize", "Optimize the AST")
     .option("-v, --validate", "Validate the AST")
     .option("-f, --format <format>", "Output format (json or text)", "json")
@@ -208,13 +201,12 @@ const registerCommand = (
     .option("-d, --debug", "Enable debug output")
     .action((file, options) => {
       processFile(file, type, options).catch((error) => {
-        console.error("Error:", error.message);
         process.exit(1);
       });
     });
 };
 
-// Register commands for each type
+// Register commands for supported file types
 registerCommand("css", "CSS");
 registerCommand("html", "HTML");
 registerCommand("js", "JavaScript");
@@ -224,8 +216,7 @@ registerCommand("asm", "ASM");
 // CLI entry point
 program
   .name("@obinexuscomputing/dom-asm")
-  .version(packageVersion) // Dynamically fetch version from package.json
+  .version(packageVersion)
   .description("DOM ASM CLI tool for parsing and analyzing web assets");
 
-// Parse command-line arguments
 program.parse(process.argv);
