@@ -13,14 +13,19 @@
     "dom-asm.sh": "./bin/dom-asm.sh"
   },
   "workspaces": [
-    "packages/*"
+    "packages/"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist",
-    "src"
+    "src",
+    "bin",
+    "docs",
+    "examples",
+    "images",
+    "packages"
   ],
   "exports": {
     ".": {
@@ -67,15 +72,18 @@
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
     "turbo": "^2.3.3",
-    "typescript": "^5.7.2"
-  },
-  "dependencies": {
-    "@obinexuscomputing/css": "workspace:*",
-    "@obinexuscomputing/html": "workspace:*",
-    "@obinexuscomputing/js": "workspace:*",
-    "@obinexuscomputing/xml": "workspace:*",
+    "typescript": "^5.7.2",
     "minimatch": "^5.1.6"
+
   },
+"dependencies": {
+    "@obinexuscomputing/css": "file:./packages/css",
+    "@obinexuscomputing/html": "file:./packages/html",
+    "@obinexuscomputing/js": "file:./packages/js",
+    "@obinexuscomputing/xml": "file:./packages/xml",
+    "@obinexuscomputing/asm": "file:./packages/asm"
+},
+
   "packageManager": "npm@10.9.2",
   "license": "ISC",
   "volta": {
