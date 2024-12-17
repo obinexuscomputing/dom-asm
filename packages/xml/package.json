@@ -17,11 +17,12 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
-  },"scripts": {
+  },
+  "scripts": {
   "clean": "rimraf dist",
   "prebuild": "npm run clean",
   "build": "npm run build:ts && npm run build:rollup",
-  "build:ts": "tsc --emitDeclarationOnly",
+  "build:ts": "tsc",
   "build:rollup": "rollup -c",           
   "prepare": "npm run build"
 },
