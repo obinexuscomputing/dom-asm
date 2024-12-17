@@ -39,7 +39,7 @@
     "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml @obinexuscomputing/asm" ,
     "local:clean": "rm -rf dist && rm -rf build",
     "clean": "npm run local:clean",
-    "postinstall": "npm run setup",
+    "preinstall": "npm run link:local",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "turbo run format",
