@@ -17,6 +17,7 @@ export interface GenerationResult {
   code?: string;
   errors?: GenerationError[];
   ast?: JSASTNode;
+  output?: string;
 }
 
 export interface GeneratorOptions {

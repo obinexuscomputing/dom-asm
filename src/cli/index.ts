@@ -35,6 +35,16 @@ import {
   DOMXMLGenerator,
 } from "@obinexuscomputing/xml";
 
+
+interface ProcessOptions {
+  optimize?: boolean;
+  validate?: boolean;
+  format?: "json" | "text";
+  output?: string;
+  debug?: boolean;
+}
+
+
 // Fetch package version dynamically
 const packageJsonPath = path.resolve(__dirname, "../package.json");
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
