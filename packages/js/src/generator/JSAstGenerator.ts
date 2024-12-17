@@ -1,7 +1,7 @@
 import { JSTokenizer } from "../tokenizer/JSTokenizer";
-import { JSValidator, ValidationError } from "../validator/JSValidator";
 import { JSParser } from "../parser/JSParser";
-import { NodeType, TypedJSASTNode, JSASTNode } from "../types";
+import { NodeType, TypedJSASTNode, JSASTNode, ValidationError } from "../types";
+import { JSValidator } from "../validator/JSValidator";
 
 export interface GenerationError {
   code: string;
