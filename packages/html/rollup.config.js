@@ -24,9 +24,7 @@ export default [
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
         name: 'DOMHTML', 
-        globals: {
-          vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
-        },
+  
         sourcemap: true,
       },
     ],

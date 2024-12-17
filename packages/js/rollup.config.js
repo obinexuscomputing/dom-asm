@@ -1,43 +1,47 @@
-import typescript from "@rollup/plugin-typescript";
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
-import dts from "rollup-plugin-dts";
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
+import dts from 'rollup-plugin-dts';
+import terser from '@rollup/plugin-terser';
 
 export default [
-  // Main JS build
+  // Main build configuration for JavaScript
   {
-    input: "src/index.ts", // Entry point for the library
+    input: 'src/index.ts', // Entry point for your library
     output: [
       {
-        file: "dist/index.cjs", // CommonJS output
-        format: "cjs",
+        file: 'dist/index.cjs', // CommonJS output
+        format: 'cjs',
         sourcemap: true,
-        exports: "auto",
+        exports: 'auto',
       },
       {
-        file: "dist/index.js", // ES Module output
-        format: "esm",
+        file: 'dist/index.js', // ES Module output
+        format: 'esm',
+        sourcemap: true,
+      },
+      {
+        file: 'dist/index.umd.js', // UMD output for browsers
+        format: 'umd',
+        name: 'DOMJS', 
+     
         sourcemap: true,
       },
     ],
     plugins: [
-      resolve({ extensions: [".ts", ".js"] }),
-      commonjs(),
-      json(),
-      typescript({
-        tsconfig: "./tsconfig.json", // Use tsconfig for compilation
-      }),
+      resolve(), // Resolves node_modules imports
+      commonjs(), // Converts CommonJS modules to ES Modules
+      typescript({ tsconfig: './tsconfig.json' }), // TypeScript support
+      terser(), // Minifies the output for production
     ],
-    external: ["fs", "path"], // Exclude Node.js built-ins
   },
 
-  // TypeScript declaration build
+  // Configuration for TypeScript declarations
   {
-    input: "src/index.ts", // Source entry point
+    input: 'dist/index.d.ts',
     output: {
-      file: "dist/index.d.ts", // Output TypeScript declarations
-      format: "es",
+      file: 'dist/index.d.ts',
+      format: 'es',
     },
     plugins: [dts()],
   },
