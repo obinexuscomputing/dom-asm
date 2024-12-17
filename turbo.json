@@ -1,27 +1,27 @@
 {
-    "tasks": {
-      "build": {
-        "dependsOn": ["^build"],
-        "outputs": ["dist/**", "build/**"],
-        "cache": true
-      },
-      "test": {
-        "dependsOn": ["build"],
-        "outputs": [],
-        "cache": true
-      },
-      "lint": {
-        "outputs": [],
-        "cache": true
-      },
-      "format": {
-        "outputs": [],
-        "cache": false
-      }
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", "build/**"],
+      "cache": true
     },
-    "globalDependencies": [
-      "package-lock.json",
-      "turbo.json"
-    ]
-  }
-  
+    "test": {
+      "dependsOn": ["build"],
+      "outputs": [],
+      "cache": true
+    },
+    "lint": {
+      "outputs": [],
+      "cache": true
+    },
+    "format": {
+      "outputs": [],
+      "cache": false
+    }
+  },
+  "globalDependencies": [
+    "package-lock.json",
+    "turbo.json"
+  ]
+}
