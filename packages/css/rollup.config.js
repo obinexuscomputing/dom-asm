@@ -1,7 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
-import vue from 'rollup-plugin-vue'; 
 import dts from 'rollup-plugin-dts';
 import {terser} from '@rollup/plugin-terser';
 export default [
@@ -37,7 +36,6 @@ export default [
       typescript({ tsconfig: './tsconfig.json' }), // TypeScript support
       terser(), // Minifies the output for production
     ],
-    external: ['vue'], // Treat Vue as an external dependency
   },
 
   // Configuration for TypeScript declarations
