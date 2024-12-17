@@ -1,21 +1,24 @@
+#!/usr/bin/env node
 /*!
  * @obinexuscomputing/dom-asm v1.0.0
  * (c) 2024 Obinexus Computing
  * Released under the ISC License
  */
-import { Command } from 'commander';
-import path from 'path';
-import fs from 'fs';
-import { CSSTokenizer, CSSParser, CSSValidator, CSSASTOptimizer, CSSCodeGenerator } from '@obinexuscomputing/css';
-import { HTMLTokenizer, HTMLParser, HTMLValidator, HTMLASTOptimizer, HTMLCodeGenerator } from '@obinexuscomputing/html';
-import { JSTokenizer, JSASTBuilder, JSValidator, JSAstMinimizer, JSAstGenerator } from '@obinexuscomputing/js';
-import { DOMXMLTokenizer, DOMXMLParser, DOMXMLValidator, DOMXMLASTOptimizer, DOMXMLGenerator } from '@obinexuscomputing/xml';
+'use strict';
+
+var commander = require('commander');
+var path = require('path');
+var fs = require('fs');
+var css = require('@obinexuscomputing/css');
+var html = require('@obinexuscomputing/html');
+var js = require('@obinexuscomputing/js');
+var xml = require('@obinexuscomputing/xml');
 
 // Fetch package version dynamically
 const packageJsonPath = path.resolve(__dirname, "../package.json");
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf-8"));
 const packageVersion = packageJson.version;
-const program = new Command();
+const program = new commander.Command();
 /**
  * Validate the existence of a file and return its absolute path.
  */
@@ -37,45 +40,45 @@ async function processFile(file, type, options) {
     try {
         switch (type) {
             case "css":
-                tokens = new CSSTokenizer(content).tokenize();
-                ast = new CSSParser(tokens).parse();
+                tokens = new css.CSSTokenizer(content).tokenize();
+                ast = new css.CSSParser(tokens).parse();
                 if (options.validate) {
-                    const validationErrors = new CSSValidator(ast).validate();
+                    const validationErrors = new css.CSSValidator(ast).validate();
                     if (validationErrors.length) {
                         throw new Error(validationErrors.join("\n"));
                     }
                 }
                 if (options.optimize) {
-                    ast = new CSSASTOptimizer(ast).optimize();
-                    result.optimized = new CSSCodeGenerator(ast).generate();
+                    ast = new css.CSSASTOptimizer(ast).optimize();
+                    result.optimized = new css.CSSCodeGenerator(ast).generate();
                 }
                 break;
             case "html":
-                tokens = new HTMLTokenizer(content).tokenize();
-                ast = new HTMLParser().parse(tokens);
+                tokens = new html.HTMLTokenizer(content).tokenize();
+                ast = new html.HTMLParser().parse(tokens);
                 if (options.validate) {
-                    const validationResult = new HTMLValidator().validate(ast);
+                    const validationResult = new html.HTMLValidator().validate(ast);
                     if (!validationResult.valid) {
                         throw new Error(validationResult.errors.join("\n"));
                     }
                 }
                 if (options.optimize) {
-                    ast = new HTMLASTOptimizer().optimize(ast);
-                    result.optimized = new HTMLCodeGenerator().generateHTML(ast);
+                    ast = new html.HTMLASTOptimizer().optimize(ast);
+                    result.optimized = new html.HTMLCodeGenerator().generateHTML(ast);
                 }
                 break;
             case "js":
-                tokens = new JSTokenizer().tokenize(content);
-                ast = new JSASTBuilder(tokens).buildAST();
+                tokens = new js.JSTokenizer().tokenize(content);
+                ast = new js.JSASTBuilder(tokens).buildAST();
                 if (options.validate) {
-                    const validationErrors = new JSValidator().validate(ast);
+                    const validationErrors = new js.JSValidator().validate(ast);
                     if (validationErrors.length) {
                         throw new Error(validationErrors.join("\n"));
                     }
                 }
                 if (options.optimize) {
-                    ast = new JSAstMinimizer().optimize(ast);
-                    const generationResult = new JSAstGenerator().generateFromAST(ast);
+                    ast = new js.JSAstMinimizer().optimize(ast);
+                    const generationResult = new js.JSAstGenerator().generateFromAST(ast);
                     if (!generationResult.success) {
                         const errorMessages = generationResult.errors
                             ?.map((e) => `${e.code}: ${e.message}`)
@@ -86,10 +89,10 @@ async function processFile(file, type, options) {
                 }
                 break;
             case "xml":
-                tokens = new DOMXMLTokenizer(content).tokenize();
-                ast = new DOMXMLParser(tokens).parse();
+                tokens = new xml.DOMXMLTokenizer(content).tokenize();
+                ast = new xml.DOMXMLParser(tokens).parse();
                 if (options.validate) {
-                    const validationResult = new DOMXMLValidator().validate(ast);
+                    const validationResult = new xml.DOMXMLValidator().validate(ast);
                     if (!validationResult.valid) {
                         throw new Error(validationResult.errors
                             .map((e) => `${e.code}: ${e.message}`)
@@ -97,8 +100,8 @@ async function processFile(file, type, options) {
                     }
                 }
                 if (options.optimize) {
-                    ast = new DOMXMLASTOptimizer().optimize(ast);
-                    result.optimized = new DOMXMLGenerator().generate(ast);
+                    ast = new xml.DOMXMLASTOptimizer().optimize(ast);
+                    result.optimized = new xml.DOMXMLGenerator().generate(ast);
                 }
                 break;
             case "asm":
