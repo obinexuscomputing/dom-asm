@@ -35,14 +35,15 @@ import {
   DOMXMLGenerator,
 } from "@obinexuscomputing/xml";
 
-
-interface ProcessOptions {
+export interface ProcessOptions {
   optimize?: boolean;
   validate?: boolean;
   format?: "json" | "text";
   output?: string;
   debug?: boolean;
 }
+
+
 
 
 // Fetch package version dynamically
