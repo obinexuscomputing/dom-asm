@@ -19,13 +19,17 @@
     }
   },
   "scripts": {
-  "clean": "rimraf dist",
-  "prebuild": "npm run clean",
-  "build": "npm run build:ts && npm run build:rollup",
-  "build:ts": "tsc",
-  "build:rollup": "rollup -c",           
-  "prepare": "npm run build"
-},
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build":"npm run build:ts && npm run build:rollup", 
+    "build:ts": "tsc --emitDeclarationOnly",
+    "build:rollup": "rollup -c",
+    "test": "jest --config jest.config.cjs",
+    "lint": "eslint . ",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\"",
+    "prepare": "npm run build"
+  },
   "keywords": [
     "xml",
     "parser",
