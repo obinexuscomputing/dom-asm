@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ES2020",
-    "outDir": "./dist",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "declaration": true
+    "target": "ES2020",                       // Target modern JS features
+    "module": "NodeNext",                     // Use Node's ES module resolution
+    "moduleResolution": "NodeNext",           // Node.js-style module resolution
+    "outDir": "./dist",                       // Output directory for compiled files
+    "strict": true,                           // Enable all strict type-checking options
+    "esModuleInterop": true,                  // Compatibility with CommonJS modules
+    "skipLibCheck": true,                     // Skip type checking in libraries
+    "resolveJsonModule": true,                // Allow importing JSON files
+    "declaration": true,                      // Generate .d.ts files
+    "forceConsistentCasingInFileNames": true  // Enforce case-sensitive file imports
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*.ts"],                 // Include all TypeScript files in src/
+  "exclude": ["node_modules", "dist"]         // Exclude unnecessary directories
 }
