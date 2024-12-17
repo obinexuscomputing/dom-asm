@@ -1,5 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["package.json"],
   "tasks": {
     "clean": {
       "cache": false
@@ -9,7 +10,12 @@
       "outputs": ["dist/**", "lib/**"],
       "cache": true
     },
+    "build:ts": {
+      "outputs": ["dist/**"],
+      "cache": true
+    },
     "build:rollup": {
+      "outputs": ["dist/**"],
       "cache": true
     },
     "start": {
@@ -19,22 +25,29 @@
       "cache": false
     },
     "lint": {
-      "cache": false
+      "cache": true
     },
     "lint:fix": {
-      "cache": false
+      "cache": true
     },
     "test": {
-      "cache": false
+      "outputs": ["coverage/**"],
+      "cache": true
     },
     "format": {
-      "cache": false
+      "cache": true
     },
     "prepare": {
+      "dependsOn": ["clean", "build"],
       "cache": true
     },
     "release": {
-      "cache": false
+      "dependsOn": ["build"],
+      "cache": true
+    },
+    "prepublishOnly": {
+      "dependsOn": ["prepare"],
+      "cache": true
     }
   }
 }
