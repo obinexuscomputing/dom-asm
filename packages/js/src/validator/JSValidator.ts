@@ -1,5 +1,5 @@
 
-
+//@ts-nocheck(for now)
 import { ValidationError, JSASTNode, NodeType } from "../types";
 
 
