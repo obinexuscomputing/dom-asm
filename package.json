@@ -75,10 +75,12 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@obinexuscomputing/css": "workspace:*",
-    "@obinexuscomputing/html": "workspace:*",
-    "@obinexuscomputing/js": "workspace:*",
-    "@obinexuscomputing/xml": "workspace:*",
+    "@obinexuscomputing/css": "workspace:./packages/css",
+    "@obinexuscomputing/html": "workspace:./packages/html",
+    "@obinexuscomputing/js": "workspace:./packages/js",
+    "@obinexuscomputing/xml": "workspace:./packages/xml",
+    "@obinexuscomputing/asm": "workspace:./packages/asm",
+
     "minimatch": "^5.1.6"
   },
   "packageManager": "npm@10.9.2",
