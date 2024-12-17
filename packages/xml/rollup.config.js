@@ -4,7 +4,6 @@ import typescript from '@rollup/plugin-typescript';
 import dts from 'rollup-plugin-dts';
 import terser from '@rollup/plugin-terser';
 
-
 export default [
   // Main build configuration for JavaScript
   {
@@ -25,7 +24,7 @@ export default [
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
         name: 'DOMXML', 
-      
+     
         sourcemap: true,
       },
     ],
@@ -39,7 +38,7 @@ export default [
 
   // Configuration for TypeScript declarations
   {
-    input: 'dist/index.ts',
+    input: 'dist/index.d.ts',
     output: {
       file: 'dist/index.d.ts',
       format: 'es',
