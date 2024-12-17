@@ -63,6 +63,7 @@
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
     "turbo": "^2.3.3",
+    "rollup-plugin-copy": "^3.5.0",
     "typescript": "^5.7.2",
     "@rollup/plugin-terser": "^0.4.4",
     "commander": "^11.1.0"
