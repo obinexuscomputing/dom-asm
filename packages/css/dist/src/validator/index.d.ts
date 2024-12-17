@@ -1,4 +1,4 @@
-import { ASTNode } from "../ast";
+import { ASTNode } from "../ast/index";
 export declare class CSSValidator {
     private ast;
     private errors;

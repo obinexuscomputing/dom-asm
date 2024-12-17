@@ -1,4 +1,4 @@
-import { ASTNode } from "../ast";
+import { ASTNode } from "../ast/index";
 export declare class CSSParser {
     private input;
     private validate;
