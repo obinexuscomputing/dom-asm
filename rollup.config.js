@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import typescript from "@rollup/plugin-typescript";
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import json from "@rollup/plugin-json";
-import terser from "@rollup/plugin-terser";
-import pkg from "./package.json" assert { type: "json" };
+
+const typescript = require("@rollup/plugin-typescript");
+const resolve = require("@rollup/plugin-node-resolve");
+const commonjs = require("@rollup/plugin-commonjs");
+const json = require("@rollup/plugin-json");
+const terser = require("@rollup/plugin-terser");
+const pkg = require("./package.json");
 
 // Detect production mode
 const production = process.env.NODE_ENV === "production";
@@ -41,8 +42,8 @@ const plugins = [
   resolve({
     extensions: [".ts", ".js", ".json"],
   }),
-  commonjs(),
-  json(),
+  commonjs(), // Convert CommonJS modules to ES Modules
+  json(), // Allow importing JSON files
   production && terser(), // Minify only in production
 ];
 
@@ -74,16 +75,15 @@ const libraryConfig = {
 const cliConfig = {
   input: "src/cli/index.ts", // Entry point for the CLI
   output: {
-    file: "dist/cli/index.cjs",
+    file: "dist/cli/index.cjs", // Output in CommonJS format
     format: "cjs",
     sourcemap: true,
     banner,
     footer,
   },
-  
   external: externalDeps, // Do not bundle external dependencies
   plugins,
 };
 
 // Export configurations
-export default [libraryConfig, cliConfig];
+module.exports = [libraryConfig, cliConfig];
