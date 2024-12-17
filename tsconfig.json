@@ -9,6 +9,6 @@
     "outDir": "./dist",
     "sourceMap": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "package.json"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
 }
