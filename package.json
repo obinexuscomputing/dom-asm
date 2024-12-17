@@ -9,6 +9,9 @@
     "dom-asm.ps1": "./bin/dom-asm.ps1",
     "dom-asm.sh": "./bin/dom-asm.sh"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,6 +27,7 @@
     }
   },
   "scripts": {
+    "setup": "npm install && npx turbo run build && cd packages/dom-asm && npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js",
   "local:clean": "rm -rf dist && rm -rf build",
   "clean": "npm run local:clean",
   "lint": "turbo run lint",
