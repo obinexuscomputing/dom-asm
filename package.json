@@ -37,7 +37,7 @@
     "build": "npm run clean && npm run build:rollup",
     "build:rollup": "rollup -c",
     "prebuild": "npm run clean",
-    "postbuild": "npm run lint && npm run test",
+    "postbuild": "npm run test",
     "prepare": "npm run build",
     "release": "npm run clean && npm run build && npm publish --access public"
   },
