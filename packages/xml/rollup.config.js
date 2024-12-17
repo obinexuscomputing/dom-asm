@@ -3,6 +3,8 @@ import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import dts from 'rollup-plugin-dts';
 import {terser} from '@rollup/plugin-terser';
+
+
 export default [
   // Main build configuration for JavaScript
   {
@@ -22,7 +24,7 @@ export default [
       {
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
-        name: 'DOMCSS', 
+        name: 'DOMXML', 
         globals: {
           vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
         },

@@ -1,8 +1,9 @@
-import { DOMXMLASTOptimizer, DOMXMLAST } from "./ast";
-import { GeneratorOptions, DOMXMLGenerator } from "./generator";
-import { DOMXMLParser } from "./parser/index";
-import { DOMXMLTokenizer } from "./tokenizer";
-import { ValidationOptions, DOMXMLValidator, ValidationResult } from "./validator";
+import { DOMXMLAST } from "./ast/DOMXMLAST";
+import { DOMXMLASTOptimizer } from "./ast/DOMXMLASTOptimizer";
+import { GeneratorOptions, DOMXMLGenerator } from "./generator/DOMXMLGenerator";
+import { DOMXMLParser } from "./parser/DOMXMLParser";
+import { DOMXMLTokenizer } from "./tokenizer/DOMXMLTokenizer";
+import { ValidationOptions, DOMXMLValidator, ValidationResult } from "./validator/DOMXMLValidator";
 
 // Export AST types and components
 export type { DOMXMLAST, DOMXMLASTNode } from "./ast/DOMXMLAST";
