@@ -27,21 +27,22 @@
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {
-    "build": "turbo run build && npm run build:rollup",
-    "build:rollup": "turbo run build:rollup",
-    "start": "turbo run start",
-    "dev": "turbo run dev",
-    "test": "turbo run test",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "format": "turbo run format",
-    "clean": "turbo run clean",
-    "prebuild": "turbo run clean",
-    "postbuild": "turbo run lint && turbo run test",
-    "prepare": "turbo run build",
-    "release": "turbo run clean && turbo run build && npm publish"
-  },
+ "scripts": {
+  "clean": "turbo run clean",                         
+  "lint": "turbo run lint",                         
+  "lint:fix": "turbo run lint:fix",                   
+  "format": "turbo run format",                       
+  "test": "turbo run test",                           
+  "dev": "turbo run dev",                             
+  "start": "turbo run start",                         
+  "build": "npm run clean && npm run build:rollup",    
+  "build:rollup": "rollup -c",                         
+  "prebuild": "npm run clean",                         
+  "postbuild": "npm run lint && npm run test",         
+  "prepare": "npm run build",                          
+  "release": "npm run clean && npm run build && npm publish --access public"
+},
+
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-json": "^6.1.0",

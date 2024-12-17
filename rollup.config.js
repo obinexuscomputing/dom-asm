@@ -5,8 +5,10 @@ import json from "@rollup/plugin-json";
 import { terser } from "@rollup/plugin-terser";
 import pkg from "./package.json";
 
+// Detect if we're in production mode
 const production = process.env.NODE_ENV === "production";
 
+// Banner and footer for output files
 const banner = `/*!
  * @obinexuscomputing/dom-asm ${pkg.version}
  * (c) ${new Date().getFullYear()} Obinexus Computing
@@ -18,19 +20,19 @@ const footer = `/*!
  */`;
 
 export default [
-  // Main Library Build
+  // **Main Library Build**
   {
-    input: "src/index.ts",
+    input: "src/index.ts", // Main entry point
     output: [
       {
-        file: "dist/index.js",
+        file: "dist/index.js", // ES Module
         format: "es",
         sourcemap: true,
         banner,
         footer,
       },
       {
-        file: "dist/index.cjs",
+        file: "dist/index.cjs", // CommonJS Module
         format: "cjs",
         sourcemap: true,
         banner,
@@ -46,21 +48,26 @@ export default [
       "path",
     ],
     plugins: [
+      // Resolve modules from node_modules
       resolve({
-        extensions: [".js", ".ts", ".json", ".mjs"],
+        extensions: [".js", ".ts", ".json"],
       }),
+      // Convert CommonJS modules to ES6
       commonjs(),
+      // Include JSON files
       json(),
+      // TypeScript compilation
       typescript({
         tsconfig: "./tsconfig.json",
       }),
-      production && terser(), // Minify in production
+      // Minify in production mode
+      production && terser(),
     ],
   },
 
-  // CLI Build
+  // **CLI Build**
   {
-    input: "src/cli/index.ts",
+    input: "src/cli/index.ts", // CLI entry point
     output: {
       file: "dist/cli/index.js",
       format: "cjs",
@@ -68,7 +75,7 @@ export default [
       banner,
       footer,
     },
-    external: ["commander", "fs", "path"],
+    external: ["commander", "fs", "path"], // Exclude dependencies
     plugins: [
       resolve({
         extensions: [".js", ".ts", ".json", ".mjs"],
@@ -78,7 +85,7 @@ export default [
       typescript({
         tsconfig: "./tsconfig.json",
       }),
-      production && terser(), // Minify in production
+      production && terser(),
     ],
   },
 ];
