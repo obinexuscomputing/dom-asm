@@ -66,6 +66,7 @@ export interface ValidationError {
   node: JSASTNode;
 }
 
+
 export interface ParseOptions {
   sourceType?: 'module' | 'script';
   strict?: boolean;

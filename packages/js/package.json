@@ -13,8 +13,7 @@
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
     }
-  },
-  "scripts": {
+  },  "scripts": {
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build":"npm run build:ts && npm run build:rollup", 
