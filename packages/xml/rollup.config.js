@@ -2,7 +2,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import typescript from '@rollup/plugin-typescript';
 import dts from 'rollup-plugin-dts';
-import terser from 'rollup-plugin-terser';
+import {terser} from '@rollup/plugin-terser';
 export default [
   // Main build configuration for JavaScript
   {
@@ -22,7 +22,10 @@ export default [
       {
         file: 'dist/index.umd.js', // UMD output for browsers
         format: 'umd',
-        name: 'DOMXML',
+        name: 'DOMCSS', 
+        globals: {
+          vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
+        },
         sourcemap: true,
       },
     ],
@@ -42,13 +45,5 @@ export default [
       format: 'es',
     },
     plugins: [dts()],
-    onwarn(warning, warn) {
-      // Log unresolved import warnings for debugging
-      if (warning.code === 'UNRESOLVED_IMPORT') {
-        console.error('Unresolved Import:', warning.source);
-      } else {
-        warn(warning);
-      }
-    },
   },
 ];
