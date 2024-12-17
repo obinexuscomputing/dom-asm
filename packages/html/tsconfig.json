@@ -1,16 +1,26 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "strict": true,
-    "noImplicitAny": false, // Temporarily disable to allow compilation
-    "outDir": "./dist",
+    "outDir": "dist",
     "declaration": true,
-    "declarationDir": "./dist",
+    "declarationMap": true,
+    "declarationDir": "dist",
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "rootDir": ".",                     
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "emitDeclarationOnly": true,
+    "resolveJsonModule": true,           // Allow importing JSON files
+    "esModuleInterop": true,             // Improve compatibility with CommonJS
     "allowSyntheticDefaultImports": true,
-    "target": "ES2020"
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "include": ["src/**/*", "tests/**/*"], // Include source and test files
+  "exclude": ["node_modules", "dist"]    // Exclude unnecessary directories
 }
