@@ -19,8 +19,19 @@ const footer = `/*!
  * End of bundle for @obinexuscomputing/dom-asm
  */`;
 
-// Common plugin configuration
-const plugins = [
+// External dependencies to exclude from the bundle
+const externalDeps = [
+  "@obinexuscomputing/css",
+  "@obinexuscomputing/html",
+  "@obinexuscomputing/js",
+  "@obinexuscomputing/xml",
+  "fs",
+  "path",
+  "commander",
+];
+
+// Common plugins configuration
+const commonPlugins = [
   resolve({
     extensions: [".js", ".ts", ".json", ".mjs"],
   }),
@@ -33,52 +44,43 @@ const plugins = [
   production && terser(), // Minify in production mode
 ];
 
-// External dependencies to exclude from the bundle
-const externalDeps = [
-  "@obinexuscomputing/css",
-  "@obinexuscomputing/html",
-  "@obinexuscomputing/js",
-  "@obinexuscomputing/xml",
-  "fs",
-  "path",
-  "commander",
-];
-
-export default [
-  // **Main Library Build**
-  {
-    input: "src/index.ts",
-    output: [
-      {
-        file: "dist/index.js",
-        format: "es",
-        sourcemap: true,
-        banner,
-        footer,
-      },
-      {
-        file: "dist/index.cjs",
-        format: "cjs",
-        sourcemap: true,
-        banner,
-        footer,
-      },
-    ],
-    external: externalDeps, // Mark dependencies as external
-    plugins,
-  },
-
-  // **CLI Build**
-  {
-    input: "src/cli/index.ts",
-    output: {
-      file: "dist/cli/index.js",
+// Main Library Build Configuration
+const libraryConfig = {
+  input: "src/index.ts",
+  output: [
+    {
+      file: "dist/index.js",
+      format: "es",
+      sourcemap: true,
+      banner,
+      footer,
+    },
+    {
+      file: "dist/index.cjs",
       format: "cjs",
       sourcemap: true,
       banner,
       footer,
     },
-    external: externalDeps,
-    plugins,
+  ],
+  external: externalDeps,
+  plugins: commonPlugins,
+};
+
+// CLI Build Configuration
+const cliConfig = {
+  input: "src/cli/index.ts",
+  output: {
+    file: "dist/cli/index.js",
+    format: "cjs",
+    sourcemap: true,
+    banner,
+    footer,
   },
-];
+  external: externalDeps,
+  plugins: commonPlugins,
+};
+
+// Export the configurations
+const config = [libraryConfig, cliConfig];
+export default config;
