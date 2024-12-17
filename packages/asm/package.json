@@ -1,7 +1,7 @@
 {
   "name": "@obinexuscomputing/asm",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "description": "A package for CSS parsing and validation.",
   "main": "dist/index.js",
   "module": "dist/index.js",
