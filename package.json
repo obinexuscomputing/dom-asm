@@ -63,14 +63,16 @@
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
     "turbo": "^2.3.3",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "@rollup/plugin-terser": "^0.4.4",
+    "commander": "^11.1.0"
+
   },
   "dependencies": {
     "@obinexuscomputing/css": "workspace:*",
     "@obinexuscomputing/html": "workspace:*",
     "@obinexuscomputing/js": "workspace:*",
-    "@rollup/plugin-terser": "^0.4.4",
-    "commander": "^11.1.0"
+    "@obinexuscomputing/xml": "workspace:*"
   },
   "packageManager": "npm@10.9.2",
   "license": "ISC",
