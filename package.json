@@ -23,21 +23,22 @@
       "require": "./dist/index.cjs"
     }
   },
-  
   "scripts": {
-    "clean": "turbo run clean",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "format": "turbo run format",
-    "test": "turbo run test",
-    "dev": "turbo run dev",
-    "start": "turbo run start",
-    "build": "npm run clean && npm run build:rollup",
-    "build:rollup": "rollup -c",
-    "prebuild": "npm run clean",
-    "prepublishOnly": "npm run build",
-    "release": "npm run clean && npm run build && npm publish --access public"
-  },
+  "local:clean": "rm -rf dist && rm -rf build",
+  "clean": "npm run local:clean",
+  "lint": "turbo run lint",
+  "lint:fix": "turbo run lint:fix",
+  "format": "turbo run format",
+  "test": "turbo run test",
+  "dev": "turbo run dev",
+  "start": "turbo run start",
+  "build": "npm run local:clean && npm run build:rollup",
+  "build:rollup": "rollup -c",
+  "prebuild": "npm run local:clean",
+  "prepublishOnly": "npm run build",
+  "release": "npm run local:clean && npm run build && npm publish --access public"
+}
+,
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-json": "^6.1.0",

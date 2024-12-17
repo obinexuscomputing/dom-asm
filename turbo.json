@@ -20,7 +20,6 @@
     },
     "lint": {
       "cache": false
-     
     },
     "lint:fix": {
       "cache": false
