@@ -27,7 +27,8 @@
     }
   },
   "scripts": {
-    "setup": "npm install && turbo run build && cd packages/asm && npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js",
+  "link:local"  :"",
+  "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml",
   "local:clean": "rm -rf dist && rm -rf build",
   "clean": "npm run local:clean",
   "postinstall": "npm run setup",
