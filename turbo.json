@@ -1,12 +1,12 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "tasks": {
+  "pipeline": {
     "clean": {
       "cache": false
     },
     "build": {
-      "outputs": ["dist/**", "lib/**"],
       "dependsOn": ["^build"],
+      "outputs": ["dist/**", "lib/**"],
       "cache": true
     },
     "build:rollup": {
@@ -19,7 +19,8 @@
       "cache": false
     },
     "lint": {
-      "cache": true
+      "cache": true,
+      "filter": ["!@obinexuscomputing/asm","!@obinexuscomputing/css","!@obinexuscomputing/js","!@obinexuscomputing/xml"]
     },
     "lint:fix": {
       "cache": false
