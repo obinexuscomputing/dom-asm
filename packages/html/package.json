@@ -1,21 +1,23 @@
 {
   "name": "@obinexuscomputing/html",
   "version": "1.0.0",
-  "private": true,
+  "private": false,
   "description": "A package for HTML parsing, validation, and rendering.",
-  "main": "dist/index.cjs",
+
+  "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
-      "umd": "./dist/index.umd.js"
-    },
-
-    "./package.json": "./package.json"
+      "require": "./dist/index.cjs"
+    }
   },
   "scripts": {
     "clean": "rimraf dist",

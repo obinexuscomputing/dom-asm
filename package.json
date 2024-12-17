@@ -2,13 +2,27 @@
   "name": "@obinexuscomputing/dom-asm",
   "version": "1.0.0",
   "private": false,
-  "type": "module",
   "description": "A unified library for DOM manipulation and compilation.",
   "bin": {
     "dom-asm": "./bin/dom-asm",
     "dom-asm.bat": "./bin/dom-asm.bat",
     "dom-asm.ps1": "./bin/dom-asm.ps1",
     "dom-asm.sh": "./bin/dom-asm.sh"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
   "workspaces": [
     "packages/*"

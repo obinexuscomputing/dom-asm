@@ -23,14 +23,14 @@ export default [
     input: "src/index.ts",
     output: [
       {
-        file: "dist/index.esm.js",
+        file: "dist/index.js",
         format: "es",
         sourcemap: true,
         banner,
         footer,
       },
       {
-        file: "dist/index.cjs.js",
+        file: "dist/index.cjs",
         format: "cjs",
         sourcemap: true,
         banner,
