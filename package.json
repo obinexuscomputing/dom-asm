@@ -23,9 +23,7 @@
       "require": "./dist/index.cjs"
     }
   },
-  "workspaces": [
-    "packages/*"
-  ],
+  
   "scripts": {
     "clean": "turbo run clean",
     "lint": "turbo run lint",
