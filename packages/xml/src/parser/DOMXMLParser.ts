@@ -1,5 +1,5 @@
-import { DOMXMLToken } from "..";
-import { DOMXMLAST, DOMXMLASTNode } from "../ast";
+import { DOMXMLAST, DOMXMLASTNode } from "../ast/DOMXMLAST";
+import { DOMXMLToken } from "../tokenizer/DOMXMLTokenizer";
 
 export class DOMXMLParser {
   private tokens: DOMXMLToken[];
