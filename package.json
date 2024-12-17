@@ -2,7 +2,9 @@
   "name": "@obinexuscomputing/dom-asm",
   "version": "1.0.0",
   "private": false,
-  "funding":["https://buymeacoffee.com/obinexuscomputing"],
+  "funding": [
+    "https://buymeacoffee.com/obinexuscomputing"
+  ],
   "description": "A unified library for DOM manipulation and compilation.",
   "bin": {
     "dom-asm": "./bin/dom-asm",
@@ -27,53 +29,52 @@
       "require": "./dist/index.cjs"
     }
   },
-"scripts": {
-  "link:local": "cd packages/css && npm link && cd ../html && npm link && cd ../js && npm link && cd ../xml && npm link && cd ../../ && npm run setup",
-  "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml",
-  "local:clean": "rm -rf dist && rm -rf build",
-  "clean": "npm run local:clean",
-  "postinstall": "npm run setup",
-  "lint": "turbo run lint",
-  "lint:fix": "turbo run lint:fix",
-  "format": "turbo run format",
-  "test": "turbo run test",
-  "dev": "turbo run dev",
-  "start": "turbo run start",
-  "build": " npm run local:clean && npm run link:local && npm run build:rollup",
-  "build:rollup": "rollup -c",
-  "prebuild": "npm run local:clean",
-  "prepublishOnly": "npm run build"
-},
-
+  "scripts": {
+    "link:local": "cd packages/css && npm link && cd ../html && npm link && cd ../js && npm link && cd ../xml && npm link && cd ../../ && npm run setup",
+    "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml",
+    "local:clean": "rm -rf dist && rm -rf build",
+    "clean": "npm run local:clean",
+    "postinstall": "npm run setup",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "turbo run format",
+    "test": "turbo run test",
+    "dev": "turbo run dev",
+    "start": "turbo run start",
+    "build": " npm run local:clean && npm run link:local && npm run build:rollup",
+    "build:rollup": "rollup -c",
+    "prebuild": "npm run local:clean",
+    "prepublishOnly": "npm run build"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.8",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.3.1",
+    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^20.11.0",
     "@typescript-eslint/eslint-plugin": "^6.18.0",
     "@typescript-eslint/parser": "^6.18.0",
+    "commander": "^11.1.0",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "jest": "^29.7.0",
     "prettier": "^3.1.1",
     "rollup": "^4.28.1",
+    "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-dts": "^6.1.1",
     "ts-jest": "^29.1.1",
     "tslib": "^2.6.0",
     "turbo": "^2.3.3",
-    "rollup-plugin-copy": "^3.5.0",
-    "typescript": "^5.7.2",
-    "@rollup/plugin-terser": "^0.4.4",
-    "commander": "^11.1.0"
-
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@obinexuscomputing/css": "workspace:*",
     "@obinexuscomputing/html": "workspace:*",
     "@obinexuscomputing/js": "workspace:*",
-    "@obinexuscomputing/xml": "workspace:*"
+    "@obinexuscomputing/xml": "workspace:*",
+    "minimatch": "^5.1.6"
   },
   "packageManager": "npm@10.9.2",
   "license": "ISC",
