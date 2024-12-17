@@ -7,10 +7,10 @@
 //   color: black;
 // }`;
 
-import { ASTNode, ASTBuilder } from "../ast";
-import { CSSASTOptimizer } from "../optimizer";
-import { CSSTokenizer } from "../tokenizer";
-import { CSSValidator } from "../validator";
+import { ASTNode, ASTBuilder } from "../ast/index";
+import { CSSTokenizer, CSSValidator, CSSASTOptimizer } from "../index";
+
+
 
 // try {
 //   const parser = new Parser(cssInput, true); // Enable validation

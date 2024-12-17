@@ -2,6 +2,8 @@
 // import { Tokenizer } from "../tokenizer";
 // import { ASTBuilder } from "../ast";
 
+import { ASTNode } from "../ast/index";
+
 // const cssInput = `/* Example CSS */
 // body {
 //   background: white;
@@ -19,7 +21,6 @@
 // } else {
 //   console.log("CSS is valid.");
 // }
-import { ASTNode } from "../ast";
 
 export class CSSValidator {
   private ast: ASTNode;
