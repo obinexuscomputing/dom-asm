@@ -36,7 +36,7 @@
   },
   "scripts": {
     "link:local": "cd packages/css && npm link && cd ../html && npm link && cd ../js && npm link && cd ../xml && npm link && cd ../../ && npm run setup",
-    "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml",
+    "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml @obinexuscomputing/asm" ,
     "local:clean": "rm -rf dist && rm -rf build",
     "clean": "npm run local:clean",
     "postinstall": "npm run setup",
@@ -82,8 +82,8 @@
     "@obinexuscomputing/js": "file:./packages/js",
     "@obinexuscomputing/xml": "file:./packages/xml",
     "@obinexuscomputing/asm": "file:./packages/asm"
-},
-
+}
+,
   "packageManager": "npm@10.9.2",
   "license": "ISC",
   "volta": {
