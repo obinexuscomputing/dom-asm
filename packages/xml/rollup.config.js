@@ -1,70 +1,51 @@
-import resolve from "@rollup/plugin-node-resolve";
-import commonjs from "@rollup/plugin-commonjs";
-import typescript from "@rollup/plugin-typescript";
-import json from "@rollup/plugin-json";
-import terser from "@rollup/plugin-terser";
-import pkg from "./package.json" assert { type: "json" };
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import typescript from '@rollup/plugin-typescript';
+import dts from 'rollup-plugin-dts';
+import terser from '@rollup/plugin-terser';
 
-// Detect production mode
-const production = process.env.NODE_ENV === "production";
 
-// Banner and footer
-const banner = `/*!
- * @obinexuscomputing/dom-asm v${pkg.version}
- * (c) ${new Date().getFullYear()} Obinexus Computing
- * Released under the ISC License
- */`;
-
-const footer = `/*!
- * End of bundle for @obinexuscomputing/dom-asm
- */`;
-
-// External dependencies
-const externalDeps = [
-  "@obinexuscomputing/css",
-  "@obinexuscomputing/html",
-  "@obinexuscomputing/js",
-  "@obinexuscomputing/xml",
-  "fs",
-  "path",
-  "commander",
-];
-
-const plugins = [
-  typescript({
-    tsconfig: "./tsconfig.json", // Process TypeScript before anything else
-    exclude: ["**/*.d.ts", "**/*.test.ts"],
-  }),
-  resolve({ extensions: [".ts", ".js", ".json"] }),
-  commonjs(),
-  json(),
-  production && terser(),
-];
-
-// Main Library Configuration
-const libraryConfig = {
-  input: "src/index.ts",
-  output: [
-    { file: "dist/index.cjs", format: "cjs", sourcemap: true, exports: "auto", banner, footer },
-    { file: "dist/index.js", format: "esm", sourcemap: true, banner, footer },
-  ],
-  external: externalDeps,
-  plugins,
-};
-
-// CLI Configuration
-const cliConfig = {
-  input: "src/cli/index.ts",
-  output: {
-    file: "dist/cli/index.js",
-    format: "cjs",
-    sourcemap: true,
-    banner,
-    footer,
+export default [
+  // Main build configuration for JavaScript
+  {
+    input: 'src/index.ts', // Entry point for your library
+    output: [
+      {
+        file: 'dist/index.cjs', // CommonJS output
+        format: 'cjs',
+        sourcemap: true,
+        exports: 'auto',
+      },
+      {
+        file: 'dist/index.js', // ES Module output
+        format: 'esm',
+        sourcemap: true,
+      },
+      {
+        file: 'dist/index.umd.js', // UMD output for browsers
+        format: 'umd',
+        name: 'DOMXML', 
+        globals: {
+          vue: 'Vue', // Ensure Vue is treated as a global in the UMD build
+        },
+        sourcemap: true,
+      },
+    ],
+    plugins: [
+      resolve(), // Resolves node_modules imports
+      commonjs(), // Converts CommonJS modules to ES Modules
+      typescript({ tsconfig: './tsconfig.json' }), // TypeScript support
+      terser(), // Minifies the output for production
+    ],
   },
-  external: externalDeps,
-  plugins,
-};
 
-// Export configs
-export default [libraryConfig, cliConfig];
+  // Configuration for TypeScript declarations
+  {
+    input: 'dist/index.d.ts',
+    output: {
+      file: 'dist/index.d.ts',
+      format: 'es',
+    },
+    plugins: [dts()],
+  },
+];
