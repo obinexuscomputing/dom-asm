@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "pipeline": {
+  "tasks": {
     "clean": {
       "cache": false
     },
@@ -19,8 +19,8 @@
       "cache": false
     },
     "lint": {
-      "cache": true,
-      "filter": ["!@obinexuscomputing/asm","!@obinexuscomputing/css","!@obinexuscomputing/js","!@obinexuscomputing/xml"]
+      "cache": false
+     
     },
     "lint:fix": {
       "cache": false
