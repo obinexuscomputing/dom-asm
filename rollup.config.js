@@ -75,7 +75,7 @@ const libraryConfig = {
 const cliConfig = {
   input: "src/cli/index.ts", // Entry point for the CLI
   output: {
-    file: "dist/cli/index.cjs", // Output in CommonJS format
+    file: "dist/cli/index.js", // Output in CommonJS format
     format: "cjs",
     sourcemap: true,
     banner,

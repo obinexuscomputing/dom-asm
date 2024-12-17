@@ -159,4 +159,4 @@ program.parse(process.argv);
 /*!
  * End of bundle for @obinexuscomputing/dom-asm
  */
-//# sourceMappingURL=index.cjs.map
+//# sourceMappingURL=index.js.map
