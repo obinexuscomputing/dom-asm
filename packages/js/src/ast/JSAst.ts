@@ -1,5 +1,5 @@
 import { JSToken, JSTokenType } from "src/types";
-import { JavaScriptAstNode, NodeType } from "./JavaScriptAstNode";
+import { JavaScriptAstNode, JavaScriptNodeType} from "./JavaScriptAstNode";
 
 // Define the JavaScriptAst class
 export class JavaScriptAst {
@@ -16,7 +16,7 @@ export class JavaScriptAst {
   }
 
   public static build(tokens: JSToken[]): JavaScriptAst {
-    const builder = new JavaScriptAst(new JavaScriptAstNode(NodeType.Program, undefined, []), tokens);
+    const builder = new JavaScriptAst(new JavaScriptAstNode(JavaScriptNodeType.Program, undefined, []), tokens);
     const root = builder.buildAST();
     return new JavaScriptAst(root, tokens);
   }
@@ -40,7 +40,7 @@ export class JavaScriptAst {
   }
 
   private parseProgram(): JavaScriptAstNode {
-    const program: JavaScriptAstNode = new JavaScriptAstNode(NodeType.Program, undefined, []);
+    const program: JavaScriptAstNode = new JavaScriptAstNode(JavaScriptNodeType.Program, undefined, []);
 
     while (this.position < this.tokens.length) {
       const statement = this.parseStatement();
@@ -87,9 +87,9 @@ export class JavaScriptAst {
       throw new Error("Expected ';' after value");
     }
 
-    return new JavaScriptAstNode(NodeType.VariableDeclaration, undefined, [
-      new JavaScriptAstNode(NodeType.Identifier, identifier.value, []),
-      new JavaScriptAstNode(NodeType.Literal, value.value, [])
+    return new JavaScriptAstNode(JavaScriptNodeType.VariableDeclaration, undefined, [
+      new JavaScriptAstNode(JavaScriptNodeType.Identifier, identifier.value, []),
+      new JavaScriptAstNode(JavaScriptNodeType.Literal, value.value, [])
     ]);
   }
 
