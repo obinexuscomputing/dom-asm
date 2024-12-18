@@ -1,16 +1,13 @@
 import { JSToken, JSTokenType } from "src/types";
-import { NodeType } from "./JSAstNode";
+import { NodeType, JavaScriptAstNode } from "./JSAstNode";
 
-interface JSASTNode extends JSAstNode {
-  minimize(): JSAstNode;
-}
-
-// Define the JSAst class
+// Define the JavaScriptAst class
 export class JavaScriptAst {
-  public root: JSAstNode;
+  public root: JavaScriptAstNode;
 
-  constructor(root: JSAstNode) {
+  constructor(root: JavaScriptAstNode, tokens: JSToken[]) {
     this.root = root;
+    this.tokens = tokens;
   }
 
   public minimize(): JavaScriptAst {
@@ -19,19 +16,13 @@ export class JavaScriptAst {
   }
 
   public static build(tokens: JSToken[]): JavaScriptAst {
-    const builder = new JSASTBuilder(tokens);
+    const builder = new JavaScriptAst(tokens);
     const root = builder.buildAST();
     return new JavaScriptAst(root);
   }
-}
 
-class JSASTBuilder {
-  private tokens: JSToken[];
+  private tokens: JSToken[] = [];
   private position: number = 0;
-
-  constructor(tokens: JSToken[]) {
-    this.tokens = tokens;
-  }
 
   private currentToken(): JSToken | null {
     return this.tokens[this.position] || null;
@@ -48,14 +39,8 @@ class JSASTBuilder {
     return this.tokens[this.position + 1] || null;
   }
 
-  private parseProgram(): JSAstNode {
-    const program: JSAstNode = {
-      type: NodeType.Program,
-      children: [],
-      minimize: function (): JSAstNode {
-        throw new Error("Function not implemented.");
-      }
-    };
+  private parseProgram(): JavaScriptAstNode {
+    const program: JavaScriptAstNode = new JavaScriptAstNode(NodeType.Program, undefined, []);
 
     while (this.position < this.tokens.length) {
       const statement = this.parseStatement();
@@ -67,7 +52,7 @@ class JSASTBuilder {
     return program;
   }
 
-  private parseStatement(): JSAstNode | null {
+  private parseStatement(): JavaScriptAstNode | null {
     const token = this.currentToken();
     if (!token) {
       return null;
@@ -80,7 +65,7 @@ class JSASTBuilder {
     return null;
   }
   
-  private parseVariableDeclaration(): JSASTNode {
+  private parseVariableDeclaration(): JavaScriptAstNode {
     this.consumeToken(); // consume 'const'
     const identifier = this.consumeToken();
     if (!identifier || identifier.type !== JSTokenType.Identifier) {
@@ -102,26 +87,13 @@ class JSASTBuilder {
       throw new Error("Expected ';' after value");
     }
 
-    return {
-      type: NodeType.VariableDeclaration,
-      children: [
-        {
-          type: NodeType.Identifier, value: identifier.value, children: [],
-          minimize: function (): JSAstNode {
-            throw new Error("Function not implemented.");
-          }
-        },
-        { 
-          type: NodeType.Literal, 
-          value: value.value, 
-          children: [], 
-          minimize() { return this; } 
-        },
-      ],
-    };
+    return new JavaScriptAstNode(NodeType.VariableDeclaration, undefined, [
+      new JavaScriptAstNode(NodeType.Identifier, identifier.value, []),
+      new JavaScriptAstNode(NodeType.Literal, value.value, [])
+    ]);
   }
 
-  public buildAST(): JSASTNode {
+  public buildAST(): JavaScriptAstNode {
     return this.parseProgram();
   }
 }
