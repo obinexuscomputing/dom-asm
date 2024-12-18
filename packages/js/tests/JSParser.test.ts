@@ -1,6 +1,6 @@
 import { Token } from "typescript";
 import { JSParser, TypedJSASTNode } from "../src";
-import { JSToken, JSTokenizer } from "../src/tokenizer/JSTokenizer";
+import { JSToken, JSTokenizer } from "../src/tokenizer/JavaScriptTokenizer";
 
 describe("JSParser", () => {
     let parser: JSParser;

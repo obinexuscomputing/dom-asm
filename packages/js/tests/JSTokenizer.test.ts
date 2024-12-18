@@ -1,4 +1,4 @@
-import { JSTokenizer, JSTokenType } from '../src/tokenizer/JSTokenizer';
+import { JSTokenizer, JSTokenType } from '../src/tokenizer/JavaScriptTokenizer';
 
 describe('JSTokenizer', () => {
   let tokenizer: JSTokenizer;

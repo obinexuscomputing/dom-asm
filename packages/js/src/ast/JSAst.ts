@@ -1,5 +1,31 @@
-import { JSToken, JSTokenType } from '../types';
-import { NodeType, JSASTNode } from '../types';
+
+
+// Define the JSAst class
+export class JSAst {
+  public root: JSAstNode;
+
+  constructor(root: JSAstNode) {
+      this.root = root;
+  }
+
+  public minimize(): JSAst {
+      this.root = this.root.minimize();
+      return this;
+  }
+}
+
+// Example usage
+const rootNode = new JSAstNode(NodeType.Program, undefined, [
+  new JSAstNode(NodeType.Keyword, 'const'),
+  new JSAstNode(NodeType.Identifier, 'x'),
+  new JSAstNode(NodeType.Operator, '='),
+  new JSAstNode(NodeType.Literal, '42'),
+  new JSAstNode(NodeType.Punctuator, ';')
+]);
+
+const ast = new JSAst(rootNode);
+const minimizedAst = ast.minimize();
+console.log(JSON.stringify(minimizedAst, null, 2));
 
 export class JSASTBuilder {
   private tokens: JSToken[];

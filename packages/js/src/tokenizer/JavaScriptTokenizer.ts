@@ -1,16 +1,24 @@
-import { JSToken, JSTokenType } from '../types';
+import { JavaScriptToken, JavaScriptTokenType, JavaScriptTokenValue } from './JavaScriptToken';
 
-export class JSTokenizer {
+export class JavaScriptTokenizerError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'JavaScriptTokenizerError';
+    super.stack = (<any>new Error()).stack;
+  }
+}
+
+export class JavaScriptTokenizer {
   private keywords = new Set(['const', 'let', 'var', 'if', 'else', 'function', 'return']);
   private operators = new Set(['=', '+', '-', '*', '/', '%', '===', '!==', '<', '>', '==', '!=']);
   private delimiters = new Set(['(', ')', '{', '}', '[', ']']);
 
-  public tokenize(input: string): JSToken[] {
-    const tokens: JSToken[] = [];
+  public tokenize(input: string): JavaScriptToken[] {
+    const tokens: JavaScriptToken[] = [];
     let current = 0;
 
-    const addToken = (type: JSTokenType, value: string) => {
-      tokens.push({ type, value });
+    const addToken = (type: JavaScriptTokenType, value: string) => {
+      tokens.push(new JavaScriptToken(type, new JavaScriptTokenValue(value)));
     };
 
     input = input.trim();
@@ -19,7 +27,7 @@ export class JSTokenizer {
       const char = input[current];
 
       if (this.delimiters.has(char)) {
-        addToken(JSTokenType.Delimiter, char);
+        addToken(JavaScriptTokenType.PUNCTUATOR, char);
         current++;
         continue;
       }
@@ -30,7 +38,7 @@ export class JSTokenizer {
       }
 
       if (char === ';') {
-        addToken(JSTokenType.Delimiter, char);
+        addToken(JavaScriptTokenType.PUNCTUATOR, char);
         current++;
         continue;
       }
@@ -41,9 +49,9 @@ export class JSTokenizer {
           value += input[current++];
         }
         if (this.keywords.has(value)) {
-          addToken(JSTokenType.Keyword, value);
+          addToken(JavaScriptTokenType.KEYWORD, value);
         } else {
-          addToken(JSTokenType.Identifier, value);
+          addToken(JavaScriptTokenType.IDENTIFIER, value);
         }
         continue;
       }
@@ -53,27 +61,27 @@ export class JSTokenizer {
         while (current < input.length && /[0-9.]/.test(input[current])) {
           value += input[current++];
         }
-        addToken(JSTokenType.Literal, value);
+        addToken(JavaScriptTokenType.LITERAL, value);
         continue;
       }
 
       const multiCharOp = this.matchMultiCharOperator(input.slice(current));
       if (multiCharOp) {
-        addToken(JSTokenType.Operator, multiCharOp);
+        addToken(JavaScriptTokenType.OPERATOR, multiCharOp);
         current += multiCharOp.length;
         continue;
       }
 
       if (this.operators.has(char)) {
-        addToken(JSTokenType.Operator, char);
+        addToken(JavaScriptTokenType.OPERATOR, char);
         current++;
         continue;
       }
 
-      throw new Error(`Unexpected character: ${char}`);
+      throw new JavaScriptTokenizerError(`Unexpected character: ${char}`);
     }
 
-    addToken(JSTokenType.EndOfStatement, 'EOF');
+    addToken(JavaScriptTokenType.PUNCTUATOR, 'EOF');
     return tokens;
   }
 
@@ -83,4 +91,4 @@ export class JSTokenizer {
   }
 }
 
-export { JSToken, JSTokenType };
+export { JavaScriptToken, JavaScriptTokenType, JavaScriptTokenValue };

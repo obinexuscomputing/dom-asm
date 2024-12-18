@@ -1,4 +1,4 @@
-import { JSTokenizer } from "../tokenizer/JSTokenizer";
+import { JSTokenizer } from "../tokenizer/JavaScriptTokenizer";
 import { JSParser } from "../parser/JSParser";
 import { NodeType, TypedJSASTNode, JSASTNode, ValidationError } from "../types";
 import { JSValidator } from "../validator/JSValidator";
