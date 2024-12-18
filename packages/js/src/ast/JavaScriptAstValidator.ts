@@ -6,10 +6,11 @@ interface ValidationError {
 }
 
 
-  export type JavaScriptAstNode =
-  keyof JavaScriptAstNode extends never
-    ? never
-    : JavaScriptAstNode[keyof JavaScriptAstNode];
+  export type JavaScriptAstNode = {
+    type: string;
+    value?: string;
+    children?: JavaScriptAstNode[];
+  };
 
 
 export class JavaScriptAstValidator {
@@ -30,7 +31,7 @@ export class JavaScriptAstValidator {
   };
 
   public traverse(node: JavaScriptAstNode): void {
-    const validNodeTypes: JavaScriptAstNode[] = [
+    const validNodeTypes: string[] = [
       "Program", "VariableDeclaration", "InlineConstant", "Identifier", 
       "ArrowFunction", "Literal", "BlockStatement", "TemplateLiteral",
       "TemplateLiteralExpression", "ClassDeclaration", "MethodDefinition",
