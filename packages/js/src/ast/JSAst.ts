@@ -1,23 +1,31 @@
-import { JSToken, JSASTNode, JSTokenType } from "src/types";
-import { JSAstNode } from "./JSAstNode";
+import { JSToken, JSTokenType } from "src/types";
+import { JSAstNode, NodeType } from "./JSAstNode";
+
+interface JSASTNode extends JSAstNode {
+  minimize(): JSAstNode;
+}
 
 // Define the JSAst class
-export class JSAst {
+export class JavaScriptAst {
   public root: JSAstNode;
 
   constructor(root: JSAstNode) {
     this.root = root;
   }
 
-  public minimize(): JSAst {
+  public minimize(): JavaScriptAst {
     this.root = this.root.minimize();
     return this;
   }
+
+  public static build(tokens: JSToken[]): JavaScriptAst {
+    const builder = new JSASTBuilder(tokens);
+    const root = builder.buildAST();
+    return new JavaScriptAst(root);
+  }
 }
 
-// Define the JSAstBuilder class
-
-export class JSASTBuilder {
+class JSASTBuilder {
   private tokens: JSToken[];
   private position: number = 0;
 
@@ -40,10 +48,13 @@ export class JSASTBuilder {
     return this.tokens[this.position + 1] || null;
   }
 
-  private parseProgram(): JSASTNode {
-    const program: JSASTNode = {
+  private parseProgram(): JSAstNode {
+    const program: JSAstNode = {
       type: NodeType.Program,
-      children: []
+      children: [],
+      minimize: function (): JSAstNode {
+        throw new Error("Function not implemented.");
+      }
     };
 
     while (this.position < this.tokens.length) {
@@ -56,7 +67,7 @@ export class JSASTBuilder {
     return program;
   }
 
-  private parseStatement(): JSASTNode | null {
+  private parseStatement(): JSAstNode | null {
     const token = this.currentToken();
     if (!token) {
       return null;
@@ -94,8 +105,18 @@ export class JSASTBuilder {
     return {
       type: NodeType.VariableDeclaration,
       children: [
-        { type: NodeType.Identifier, value: identifier.value, children: [] },
-        { type: NodeType.Literal, value: value.value, children: [] },
+        {
+          type: NodeType.Identifier, value: identifier.value, children: [],
+          minimize: function (): JSAstNode {
+            throw new Error("Function not implemented.");
+          }
+        },
+        { 
+          type: NodeType.Literal, 
+          value: value.value, 
+          children: [], 
+          minimize() { return this; } 
+        },
       ],
     };
   }
@@ -104,5 +125,3 @@ export class JSASTBuilder {
     return this.parseProgram();
   }
 }
-
-export { JSASTNode };
