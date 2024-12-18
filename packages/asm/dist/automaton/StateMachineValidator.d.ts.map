@@ -1,0 +1,1 @@
+{"version":3,"file":"StateMachineValidator.d.ts","sourceRoot":"","sources":["../../src/automaton/StateMachineValidator.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,kBAAkB,CAAC;AAC7C,OAAO,EAAE,OAAO,EAAE,MAAM,mBAAmB,CAAC;AAE5C,cAAM,qBAAqB;WACT,iBAAiB,CAAC,SAAS,EAAE,SAAS,GAAG,OAAO;WAOhD,WAAW,CAAC,IAAI,EAAE,OAAO,GAAG,OAAO;CAapD;AAED,OAAO,EAAE,qBAAqB,EAAE,CAAC"}
