@@ -23,6 +23,10 @@ export interface JSTokenType {
  * ```
  */
 export class JavaScriptTokenType implements JSTokenType {
+    toString(): string {
+        return this.type;
+    }
+
     private readonly type: string;
 
     private constructor(type: string) {
@@ -67,7 +71,7 @@ export class JavaScriptTokenValue {
 
 // Define the JavaScriptToken class that uses JavaScriptTokenType and JavaScriptTokenValue
 export class JavaScriptToken implements JSToken  {
-    private readonly type: JavaScriptTokenType;
+    private readonly type: JavaScriptTokenType | string;
     private readonly value: JavaScriptTokenValue;
 
     constructor(type: JavaScriptTokenType, value: JavaScriptTokenValue) {
