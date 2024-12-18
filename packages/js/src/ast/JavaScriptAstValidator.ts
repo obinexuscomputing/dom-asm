@@ -14,7 +14,7 @@ interface ValidationError {
 
 
 export class JavaScriptAstValidator {
-  private errors: ValidationError[];
+  public errors: ValidationError[];
 
   constructor() {
     this.errors = [];
@@ -26,7 +26,7 @@ export class JavaScriptAstValidator {
     return this.errors;
   }
 
-  private addError(code: string, message: string, node: JavaScriptAstNode): void {
+  public addError(code: string, message: string, node: JavaScriptAstNode): void {
     this.errors.push({ code, message, node });
   };
 
@@ -43,7 +43,7 @@ export class JavaScriptAstValidator {
     ];
 
 
-    if (!validNodeTypes.includes(node.type as JavaScriptAstNode)) {
+    if (!validNodeTypes.includes(node.type)) {
       this.addError("E001", `Unknown node type: ${node.type}`, node);
       return;
     }
@@ -89,13 +89,13 @@ export class JavaScriptAstValidator {
   }
 }
 
-  private validateProgram(node: JavaScriptAstNode): void {
+  public validateProgram(node: JavaScriptAstNode): void {
     // Program nodes can be empty, no validation needed
-    
+      
   }
 
 
-  private validateVariableDeclaration(node: JavaScriptAstNode): void {
+  public validateVariableDeclaration(node: JavaScriptAstNode): void {
     if (!node.children?.length) {
       this.addError("E004", "Invalid VariableDeclaration: insufficient children.", node);
     }
@@ -105,39 +105,39 @@ export class JavaScriptAstValidator {
     }
   }
 
-  private validateBlockStatement(node: JavaScriptAstNode): void {
+  public validateBlockStatement(node: JavaScriptAstNode): void {
     // Block statements can be empty, no validation needed
   }
 
-  private validateArrowFunction(node: JavaScriptAstNode): void {
+  public validateArrowFunction(node: JavaScriptAstNode): void {
     if (!node.children?.length) {
       this.addError("E006", "ArrowFunction must have a body.", node);
     }
   }
 
-  private validateTemplateLiteral(node: JavaScriptAstNode): void {
+  public validateTemplateLiteral(node: JavaScriptAstNode): void {
     // Template literals can be empty, no validation needed
   }
 
-  private validateClass(node: JavaScriptAstNode): void {
+  public validateClass(node: JavaScriptAstNode): void {
     if (!node.value) {
       this.addError("E015", "Class declaration must have a name.", node);
     }
   }
 
-  private validateMethodDefinition(node: JavaScriptAstNode): void {
+  public validateMethodDefinition(node: JavaScriptAstNode): void {
     if (!node.value) {
       this.addError("E016", "Class method must have a name.", node);
     }
   }
 
-  private validateAsyncFunction(node: JavaScriptAstNode): void {
+  public validateAsyncFunction(node: JavaScriptAstNode): void {
     if (!node.children?.length) {
       this.addError("E019", "Async function must have a body.", node);
     }
   }
 
-  private validateObjectExpression(node: JavaScriptAstNode): void {
+  public validateObjectExpression(node: JavaScriptAstNode): void {
     const properties = new Set<string>();
     
     node.children?.forEach((prop: JavaScriptAstNode) => {
@@ -150,31 +150,31 @@ export class JavaScriptAstValidator {
     });
   }
 
-  private validateProperty(node: JavaScriptAstNode): void {
+  public validateProperty(node: JavaScriptAstNode): void {
     if (!node.value) {
       this.addError("E011", "Property must have a name.", node);
     }
   }
 
-  private validateImport(node: JavaScriptAstNode): void {
+  public validateImport(node: JavaScriptAstNode): void {
     if (!node.children?.length) {
       this.addError("E021", "Import declaration must specify imported values.", node);
     }
   }
 
-  private validateExport(node: JavaScriptAstNode): void {
+  public validateExport(node: JavaScriptAstNode): void {
     if (!node.children?.length && !node.value) {
       this.addError("E022", "Export declaration must have exported values.", node);
     }
   }
 
-  private validateInlineConstant(node: JavaScriptAstNode): void {
+  public validateInlineConstant(node: JavaScriptAstNode): void {
     if (!node.value) {
       this.addError("E024", "InlineConstant must have a value.", node);
     }
   }
 
-  private validateIdentifier(node: JavaScriptAstNode): void {
+  public validateIdentifier(node: JavaScriptAstNode): void {
     if (!node.value || !/^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(node.value)) {
       this.addError("E025", `Invalid identifier name: ${node.value}`, node);
     }
@@ -182,7 +182,7 @@ export class JavaScriptAstValidator {
 
 
 
-private validateLiteral(node: JavaScriptAstNode): void {
+public validateLiteral(node: JavaScriptAstNode): void {
   if (node.value === undefined || node.value === null) {
     this.addError("E026", "Literal must have a value.", node);
   }
