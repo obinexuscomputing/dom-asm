@@ -16,9 +16,9 @@ export class JavaScriptAst {
   }
 
   public static build(tokens: JSToken[]): JavaScriptAst {
-    const builder = new JavaScriptAst(tokens);
+    const builder = new JavaScriptAst(new JavaScriptAstNode(NodeType.Program, undefined, []), tokens);
     const root = builder.buildAST();
-    return new JavaScriptAst(root);
+    return new JavaScriptAst(root, tokens);
   }
 
   private tokens: JSToken[] = [];
