@@ -59,7 +59,7 @@ export class JavaScriptAstNode {
         return this.traverse(this, true);
     }
 
-    private traverse(node: JavaScriptAstNode, optimize: boolean = false): JavaScriptAstNode {
+    public traverse(node: JavaScriptAstNode, optimize: boolean = false): JavaScriptAstNode {
         const key = `${node.type}:${node.value || ""}`;
         const uniqueNodes = new Map<string, JavaScriptAstNode>();
 
@@ -85,16 +85,13 @@ export class JavaScriptAstNode {
 
 
     
-    private performOptimization(node: JavaScriptAstNode): JavaScriptAstNode {
+    public performOptimization(node: JavaScriptAstNode): JavaScriptAstNode {
         if (node.type === NodeType.Program) {
             return {
                 ...node,
                 children: node.children?.map(child => this.simplifyNode(child)) || [],
                 minimize: node.minimize,
-                optimize: node.optimize,
-                traverse: node.traverse,
-                performOptimization: node.performOptimization,
-                simplifyNode: node.simplifyNode
+                optimize: node.optimize
             };
         }
 
@@ -115,10 +112,13 @@ export class JavaScriptAstNode {
         return node;
     }
 
-    private simplifyNode(node: JavaScriptAstNode): JavaScriptAstNode {
+    public simplifyNode(node: JavaScriptAstNode): JavaScriptAstNode {
         if (!Object.values(NodeType).includes(node.type)) {
             return node;
         }
         return node;
+    }
+    toString(): string {
+        return this.type;
     }
 }
