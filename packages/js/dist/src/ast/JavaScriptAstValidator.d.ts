@@ -1,10 +1,15 @@
-import { ValidationError, JSASTNode } from "../types";
-export declare class JSValidator {
+import { JavaScriptAstNode } from './JavaScriptAstNode';
+interface ValidationError {
+    code: string;
+    message: string;
+    node: JavaScriptAstNode;
+}
+export declare class JavaScriptAstValidator {
     private errors;
     constructor();
-    validate(ast: JSASTNode): ValidationError[];
+    validate(ast: JavaScriptAstNode): ValidationError[];
     private addError;
-    private traverse;
+    traverse(node: JavaScriptAstNode): void;
     private validateProgram;
     private validateVariableDeclaration;
     private validateBlockStatement;
@@ -21,4 +26,5 @@ export declare class JSValidator {
     private validateIdentifier;
     private validateLiteral;
 }
-//# sourceMappingURL=JSValidator.d.ts.map
+export {};
+//# sourceMappingURL=JavaScriptAstValidator.d.ts.map

@@ -35,4 +35,4 @@ export declare class JSAstGenerator {
     private formatCompact;
     private formatPretty;
 }
-//# sourceMappingURL=JSAstGenerator.d.ts.map
+//# sourceMappingURL=JavaScriptAstCodeGenerator.d.ts.map

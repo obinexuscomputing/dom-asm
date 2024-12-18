@@ -1,10 +1,16 @@
-import { JavaScriptAstNode, JavaScriptNodeType } from './JavaScriptAstNode';
 
 interface ValidationError {
   code: string;
   message: string;
   node: JavaScriptAstNode;
 }
+
+
+  export type JavaScriptAstNode =
+  keyof JavaScriptAstNode extends never
+    ? never
+    : JavaScriptAstNode[keyof JavaScriptAstNode];
+
 
 export class JavaScriptAstValidator {
   private errors: ValidationError[];
@@ -22,20 +28,21 @@ export class JavaScriptAstValidator {
   private addError(code: string, message: string, node: JavaScriptAstNode): void {
     this.errors.push({ code, message, node });
   };
-  
+
   public traverse(node: JavaScriptAstNode): void {
-    const validNodeTypes: JavaScriptNodeType[] = [
+    const validNodeTypes: JavaScriptAstNode[] = [
       "Program", "VariableDeclaration", "InlineConstant", "Identifier", 
       "ArrowFunction", "Literal", "BlockStatement", "TemplateLiteral",
       "TemplateLiteralExpression", "ClassDeclaration", "MethodDefinition",
       "PropertyDefinition", "FunctionExpression", "AsyncFunction",
-      "ObjectExpression", "Property", "SpreadElement", "ImportDeclaration",
+      "ObjectExpression", "Property", "SpreadElement", "ExportDeclaration",
       "ExportNamedDeclaration", "ReturnStatement", "IfStatement", "Expression",
-      "BinaryExpression", "FunctionDeclaration"
+      "BinaryExpression", "FunctionDeclaration", "Whitespace", "Comment",
+      "ImportDeclaration"
     ];
 
 
-    if (!validNodeTypes.includes(node.type as JavaScriptNodeType)) {
+    if (!validNodeTypes.includes(node.type as JavaScriptAstNode)) {
       this.addError("E001", `Unknown node type: ${node.type}`, node);
       return;
     }
@@ -132,7 +139,7 @@ export class JavaScriptAstValidator {
   private validateObjectExpression(node: JavaScriptAstNode): void {
     const properties = new Set<string>();
     
-    node.children?.forEach(prop => {
+    node.children?.forEach((prop: JavaScriptAstNode) => {
       if (prop.type === "Property" && prop.value) {
         if (properties.has(prop.value)) {
           this.addError("E010", `Duplicate key '${prop.value}' in object literal.`, prop);
