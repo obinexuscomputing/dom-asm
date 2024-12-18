@@ -1,5 +1,5 @@
-import { NodeType } from '../types';
-import { JSASTNode } from './JSAst';
+import { JSASTNode } from "src/types";
+import { NodeType } from ".";
 
 export class JSAstMinimizer {
   private uniqueNodes = new Map<string, JSASTNode>();

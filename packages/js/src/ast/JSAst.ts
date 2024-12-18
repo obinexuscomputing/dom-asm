@@ -1,43 +1,32 @@
-
+import { JSToken, JSASTNode, JSTokenType } from "src/types";
+import { JSAstNode } from "./JSAstNode";
 
 // Define the JSAst class
 export class JSAst {
   public root: JSAstNode;
 
   constructor(root: JSAstNode) {
-      this.root = root;
+    this.root = root;
   }
 
   public minimize(): JSAst {
-      this.root = this.root.minimize();
-      return this;
+    this.root = this.root.minimize();
+    return this;
   }
 }
 
-// Example usage
-const rootNode = new JSAstNode(NodeType.Program, undefined, [
-  new JSAstNode(NodeType.Keyword, 'const'),
-  new JSAstNode(NodeType.Identifier, 'x'),
-  new JSAstNode(NodeType.Operator, '='),
-  new JSAstNode(NodeType.Literal, '42'),
-  new JSAstNode(NodeType.Punctuator, ';')
-]);
-
-const ast = new JSAst(rootNode);
-const minimizedAst = ast.minimize();
-console.log(JSON.stringify(minimizedAst, null, 2));
+// Define the JSAstBuilder class
 
 export class JSASTBuilder {
   private tokens: JSToken[];
-  private position: number;
+  private position: number = 0;
 
   constructor(tokens: JSToken[]) {
     this.tokens = tokens;
-    this.position = 0;
   }
 
   private currentToken(): JSToken | null {
-    return this.position < this.tokens.length ? this.tokens[this.position] : null;
+    return this.tokens[this.position] || null;
   }
 
   private consumeToken(): JSToken {
@@ -47,8 +36,8 @@ export class JSASTBuilder {
     return this.tokens[this.position++];
   }
 
-  private peekToken(): JSToken | null {
-    return this.position + 1 < this.tokens.length ? this.tokens[this.position + 1] : null;
+  public peekToken(): JSToken | null {
+    return this.tokens[this.position + 1] || null;
   }
 
   private parseProgram(): JSASTNode {
@@ -57,18 +46,18 @@ export class JSASTBuilder {
       children: []
     };
 
-    while (this.position < this.tokens.length - 1) {
+    while (this.position < this.tokens.length) {
       const statement = this.parseStatement();
       if (statement) {
         program.children!.push(statement);
       }
     }
+
     return program;
   }
 
   private parseStatement(): JSASTNode | null {
     const token = this.currentToken();
-    
     if (!token) {
       return null;
     }
@@ -77,12 +66,11 @@ export class JSASTBuilder {
       return this.parseVariableDeclaration();
     }
 
-    throw new Error(`Unexpected token: ${token.value}`);
+    return null;
   }
 
   private parseVariableDeclaration(): JSASTNode {
-    this.consumeToken(); // Consume 'const'
-    
+    this.consumeToken(); // consume 'const'
     const identifier = this.consumeToken();
     if (!identifier || identifier.type !== JSTokenType.Identifier) {
       throw new Error("Expected identifier after 'const'");
