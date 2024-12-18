@@ -24,9 +24,7 @@ export enum NodeType {
     Expression = 'Expression',
     BinaryExpression = 'BinaryExpression',
     IfStatement = 'IfStatement',
-    FunctionDeclaration = 'FunctionDeclaration',
-    Whitespace = "Whitespace",
-    Comment = "Comment"
+    FunctionDeclaration = 'FunctionDeclaration'
 }
 
 export interface JSAstNode {
@@ -69,24 +67,7 @@ export class JavaScriptAstNode {
             return uniqueNodes.get(key)!;
         }
 
-        const processedNode: JavaScriptAstNode = {
-            ...node,
-            minimize: function (): JavaScriptAstNode {
-                throw new Error("Function not implemented.");
-            },
-            optimize: function (): JavaScriptAstNode {
-                throw new Error("Function not implemented.");
-            },
-            traverse: function (node: JavaScriptAstNode, optimize?: boolean): JavaScriptAstNode {
-                throw new Error("Function not implemented.");
-            },
-            performOptimization: function (node: JavaScriptAstNode): JavaScriptAstNode {
-                throw new Error("Function not implemented.");
-            },
-            simplifyNode: function (node: JavaScriptAstNode): JavaScriptAstNode {
-                throw new Error("Function not implemented.");
-            }
-        };
+        const processedNode: JavaScriptAstNode = new JavaScriptAstNode(node.type, node.value, node.children);
 
         if (node.children) {
             processedNode.children = node.children.map(child =>
@@ -102,11 +83,18 @@ export class JavaScriptAstNode {
         return processedNode;
     }
 
+
+    
     private performOptimization(node: JavaScriptAstNode): JavaScriptAstNode {
         if (node.type === NodeType.Program) {
             return {
                 ...node,
-                children: node.children?.map(child => this.simplifyNode(child)) || []
+                children: node.children?.map(child => this.simplifyNode(child)) || [],
+                minimize: node.minimize,
+                optimize: node.optimize,
+                traverse: node.traverse,
+                performOptimization: node.performOptimization,
+                simplifyNode: node.simplifyNode
             };
         }
 
@@ -114,9 +102,12 @@ export class JavaScriptAstNode {
             const [identifier, value] = node.children;
             if (value.type === NodeType.Literal) {
                 return {
-                    type: NodeType.InlineConstant,
-                    value: `${identifier.value}=${value.value}`,
-                    children: []
+                    ...node,
+                    minimize: node.minimize,
+                    optimize: node.optimize,
+                    traverse: node.traverse,
+                    performOptimization: node.performOptimization,
+                    simplifyNode: node.simplifyNode
                 };
             }
         }
