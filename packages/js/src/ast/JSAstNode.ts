@@ -27,6 +27,12 @@ export enum NodeType {
     FunctionDeclaration = 'FunctionDeclaration'
 }
 
+export interface JSAstNode {
+    type: NodeType;
+    value?: string;
+    children?: JSAstNode[];
+    minimize(): JSAstNode;
+}
 
 // Define the JSAstNode class
 export class JSAstNode {
