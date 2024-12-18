@@ -1,4 +1,13 @@
 // Define the JavaScriptTokenType class
+
+import { JSToken } from "src/types";
+
+// Define the JSTokenType interface
+export interface JSTokenType {
+    toString(): string;
+    equals(other: JSTokenType): boolean;
+}
+
 /**
  * Represents a type of JavaScript token.
  * This class is used to categorize different types of tokens that can be encountered
@@ -13,7 +22,7 @@
  * console.log(identifierToken.toString()); // Outputs: "IDENTIFIER"
  * ```
  */
-export class JavaScriptTokenType {
+export class JavaScriptTokenType implements JSTokenType {
     private readonly type: string;
 
     private constructor(type: string) {
@@ -57,7 +66,7 @@ export class JavaScriptTokenValue {
 }
 
 // Define the JavaScriptToken class that uses JavaScriptTokenType and JavaScriptTokenValue
-export class JavaScriptToken {
+export class JavaScriptToken implements JSToken  {
     private readonly type: JavaScriptTokenType;
     private readonly value: JavaScriptTokenValue;
 
