@@ -1,5 +1,5 @@
 import { JSToken, JSTokenType } from "src/types";
-import { JSAstNode, NodeType } from "./JSAstNode";
+import { NodeType } from "./JSAstNode";
 
 interface JSASTNode extends JSAstNode {
   minimize(): JSAstNode;
