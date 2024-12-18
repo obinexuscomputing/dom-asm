@@ -57,4 +57,4 @@ class StateMachineASTOptimizer {
     }
 }
 
-export { StateMachineAST, StateMachineASTOptimizer };
+export { StateMachineAST, StateMachineASTOptimizer, ASTNode };
