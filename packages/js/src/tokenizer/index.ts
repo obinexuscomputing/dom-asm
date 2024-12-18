@@ -1,1 +1,1 @@
-export {JavaScriptInvalidTokenError, JavaScriptToken,JavaScriptTokenValue,JavaScriptTokenType} from './JavaScriptToken';
+export {JavaScriptInvalidTokenError, JavaScriptToken,JavaScriptTokenValue,JavaScriptTokenType } from './JavaScriptToken';

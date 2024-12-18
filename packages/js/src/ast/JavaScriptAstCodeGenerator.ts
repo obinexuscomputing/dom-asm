@@ -1,3 +1,7 @@
+import { JSASTNode, TypedJSASTNode, ValidationError } from "src/types";
+import { JavaScriptValidator } from "src/validator";
+import { JavaScriptAstNode, JavaScriptNodeTypeMap } from "./JavaScriptAstNode";
+import { JavaScriptParser } from "./JavaScriptParser"; // Add this line to import JavaScriptParser
 
 
 export interface GenerationError {
@@ -24,25 +28,25 @@ export interface GeneratorOptions {
 }
 
 export class JavaScriptAstCodeGenerator {
-  private tokenizer: JSTokenizer;
-  private validator: JSValidator;
-  private parser: JSParser;
+  private tokenizer: JavaScriptTokenizer;
+  private validator: JavaScriptValidator;
+  private parser: JavaScriptParser;
 
   constructor() {
-    this.tokenizer = new JSTokenizer();
-    this.validator = new JSValidator();
-    this.parser = new JSParser();
+    this.tokenizer = new JavaScriptTokenizer();
+    this.validator = new JavaScriptValidator();
+    this.parser = new JavaScriptParser();
   }
 
   // Method to convert raw AST node to typed node
   private convertToTypedNode(node: JSASTNode): TypedJSASTNode {
-    const nodeType = NodeType[node.type as keyof typeof NodeType];
-    if (!nodeType) {
+    const nodeTypeValue = JavaScriptNodeTypeMap[node.type as keyof typeof JavaScriptNodeTypeMap];
+    if (!nodeTypeValue) {
       throw new Error(`Invalid node type: ${node.type}`);
     }
 
     return {
-      type: nodeType,
+      type: nodeTypeValue,
       value: node.value,
       children: node.children?.map((child: JSASTNode) => this.convertToTypedNode(child)),
       line: node.line,
@@ -64,7 +68,7 @@ export class JavaScriptAstCodeGenerator {
       const rawAst = this.parser.parse(tokens);
 
       // Ensure the AST conforms to TypedJSASTNode
-      const typedAst = this.convertToTypedNode(rawAst);
+      const typedAst = this.convertToTypedNode(rawAst) as JSASTNode
 
       return this.processAST(typedAst, options);
     } catch (err) {

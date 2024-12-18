@@ -23,9 +23,6 @@ export interface JSTokenType {
  * ```
  */
 export class JavaScriptTokenType implements JSTokenType {
-    toString(): string {
-        return this.type;
-    }
 
     private readonly type: string;
 
@@ -92,11 +89,11 @@ export class JavaScriptToken implements JSToken  {
     }
 
     public equals(other: JavaScriptToken): boolean {
-        return this.type.equals(other.type) && this.value.equals(other.value);
+        return this.type instanceof JavaScriptTokenType && other.type instanceof JavaScriptTokenType && this.type.equals(other.type) && this.value.equals(other.value);
     }
 
     public isType(type: JavaScriptTokenType): boolean {
-        return this.type.equals(type);
+        return this.type instanceof JavaScriptTokenType && this.type.equals(type);
     }
 }
 
