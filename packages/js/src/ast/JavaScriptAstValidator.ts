@@ -1,4 +1,4 @@
-import { JavaScriptAstNode, NodeType } from './JSASTNode';
+import { JavaScriptAstNode, JavaScriptNodeType } from './JavaScriptAstNode';
 
 interface ValidationError {
   code: string;
@@ -21,19 +21,21 @@ export class JavaScriptAstValidator {
 
   private addError(code: string, message: string, node: JavaScriptAstNode): void {
     this.errors.push({ code, message, node });
-  }
 
   private traverse(node: JavaScriptAstNode): void {
-    const validNodeTypes: NodeType[] = [
+    const validNodeTypes: JavaScriptNodeType[] = [
       "Program", "VariableDeclaration", "InlineConstant", "Identifier", 
-      "Literal", "BlockStatement", "ArrowFunction", "TemplateLiteral",
+      , "ArrowFunction"
+      "Literal", "BlockStatement", "TemplateLiteral",
       "TemplateLiteralExpression", "ClassDeclaration", "MethodDefinition",
       "PropertyDefinition", "FunctionExpression", "AsyncFunction",
       "ObjectExpression", "Property", "SpreadElement", "ImportDeclaration",
-      "ExportDeclaration"
+      "ExportDeclaration", "ReturnStatement", "IfStatement", "Expression",
+      "BinaryExpression", "IfStatement", "FunctionDeclaration",
+
     ];
 
-    if (!validNodeTypes.includes(node.type as NodeType)) {
+    if (!validNodeTypes.includes(node.type as JavaScriptNodeType)) {
       this.addError("E001", `Unknown node type: ${node.type}`, node);
       return;
     }
@@ -56,11 +58,12 @@ export class JavaScriptAstValidator {
         break;
       case "ClassDeclaration":
         this.validateClass(node);
-    if (node.children && node.children.length > 0) {
+    if (node.children?.length) {
       for (const child of node.children) {
         this.traverse(child);
       }
     }
+  }
     break;
         this.validateAsyncFunction(node);
         break;
@@ -79,11 +82,7 @@ export class JavaScriptAstValidator {
       case "InlineConstant":
         this.validateInlineConstant(node);
         break;
-    if (node.children && node.children.length > 0) {
-      for (const child of node.children) {
-        this.traverse(child);
-      }
-    }
+  
   }
 
   private validateProgram(node: JavaScriptAstNode): void {

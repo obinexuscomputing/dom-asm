@@ -1,5 +1,5 @@
 // Define the NodeType enum
-export enum NodeType {
+export enum JavaScriptNodeType {
     Program = 'Program',
     VariableDeclaration = 'VariableDeclaration',
     InlineConstant = 'InlineConstant',
@@ -24,11 +24,13 @@ export enum NodeType {
     Expression = 'Expression',
     BinaryExpression = 'BinaryExpression',
     IfStatement = 'IfStatement',
-    FunctionDeclaration = 'FunctionDeclaration'
+    FunctionDeclaration = 'FunctionDeclaration',
+    Whitespace = 'Whitespace',
+    Comment = 'Comment'
 }
 
 export interface JavaScriptAstNode {
-    type: NodeType;
+    type: JavaScriptNodeType;
     value?: string;
     children?: JavaScriptAstNode[];
     minimize(): JavaScriptAstNode;
@@ -38,11 +40,11 @@ export interface JavaScriptAstNode {
 
 // Define the JavaScriptAstNode class
 export class JavaScriptAstNode {
-    public type: NodeType;
+    public type: JavaScriptNodeType;
     public value?: string;
     public children?: JavaScriptAstNode[];
 
-    constructor(type: NodeType, value?: string, children?: JavaScriptAstNode[]) {
+    constructor(type: JavaScriptNodeType, value?: string, children?: JavaScriptAstNode[]) {
         this.type = type;
         this.value = value;
         this.children = children;
@@ -50,7 +52,7 @@ export class JavaScriptAstNode {
 
     public minimize(): JavaScriptAstNode {
         if (this.children) {
-            this.children = this.children.map(child => child.minimize()).filter(child => child.type !== NodeType.Whitespace && child.type !== NodeType.Comment);
+            this.children = this.children.map(child => child.minimize()).filter(child => child.type !== JavaScriptNodeType.Whitespace && child.type !== JavaScriptNodeType.Comment);
         }
         return this;
     }
@@ -86,7 +88,7 @@ export class JavaScriptAstNode {
 
     
     public performOptimization(node: JavaScriptAstNode): JavaScriptAstNode {
-        if (node.type === NodeType.Program) {
+        if (node.type === JavaScriptNodeType.Program) {
             return new JavaScriptAstNode(
                 node.type,
                 node.value,
@@ -94,9 +96,9 @@ export class JavaScriptAstNode {
             );
         }
 
-        if (node.type === NodeType.VariableDeclaration && node.children) {
+        if (node.type === JavaScriptNodeType.VariableDeclaration && node.children) {
             const [identifier, value] = node.children;
-            if (value.type === NodeType.Literal) {
+            if (value.type === JavaScriptNodeType.Literal) {
                 return {
                     ...node,
                     minimize: node.minimize,
@@ -112,7 +114,7 @@ export class JavaScriptAstNode {
     }
 
     public simplifyNode(node: JavaScriptAstNode): JavaScriptAstNode {
-        if (!Object.values(NodeType).includes(node.type)) {
+        if (!Object.values(JavaScriptNodeType).includes(node.type)) {
             return node;
         }
         return node;

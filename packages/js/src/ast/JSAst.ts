@@ -1,5 +1,5 @@
 import { JSToken, JSTokenType } from "src/types";
-import { JavaScriptAstNode, NodeType } from "./JSASTNode";
+import { JavaScriptAstNode, NodeType } from "./JavaScriptAstNode";
 
 // Define the JavaScriptAst class
 export class JavaScriptAst {
