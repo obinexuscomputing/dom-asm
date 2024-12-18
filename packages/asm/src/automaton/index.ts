@@ -1,1 +1,1 @@
-export * from './stateMinimizers'
+export * from './StateMinimizer'
