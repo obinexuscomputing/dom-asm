@@ -24,7 +24,9 @@ export enum NodeType {
     Expression = 'Expression',
     BinaryExpression = 'BinaryExpression',
     IfStatement = 'IfStatement',
-    FunctionDeclaration = 'FunctionDeclaration'
+    FunctionDeclaration = 'FunctionDeclaration',
+    Whitespace = "Whitespace",
+    Comment = "Comment"
 }
 
 export interface JSAstNode {
@@ -34,24 +36,98 @@ export interface JSAstNode {
     minimize(): JSAstNode;
 }
 
+
+
 // Define the JSAstNode class
-export class JSAstNode {
+export class JavaScriptAstNode {
     public type: NodeType;
     public value?: string;
-    public children?: JSAstNode[];
+    public children?: JavaScriptAstNode[];
 
-    constructor(type: NodeType, value?: string, children?: JSAstNode[]) {
+    constructor(type: NodeType, value?: string, children?: JavaScriptAstNode[]) {
         this.type = type;
         this.value = value;
         this.children = children;
     }
 
-    public minimize(): JSAstNode {
-        // Implement minimization logic here
-        // For example, remove unnecessary whitespace nodes, comments, etc.
+    public minimize(): JavaScriptAstNode {
         if (this.children) {
             this.children = this.children.map(child => child.minimize()).filter(child => child.type !== NodeType.Whitespace && child.type !== NodeType.Comment);
         }
         return this;
+    }
+
+    public optimize(): JavaScriptAstNode {
+        return this.traverse(this, true);
+    }
+
+    private traverse(node: JavaScriptAstNode, optimize: boolean = false): JavaScriptAstNode {
+        const key = `${node.type}:${node.value || ""}`;
+        const uniqueNodes = new Map<string, JavaScriptAstNode>();
+
+        if (uniqueNodes.has(key)) {
+            return uniqueNodes.get(key)!;
+        }
+
+        const processedNode: JavaScriptAstNode = {
+            ...node,
+            minimize: function (): JavaScriptAstNode {
+                throw new Error("Function not implemented.");
+            },
+            optimize: function (): JavaScriptAstNode {
+                throw new Error("Function not implemented.");
+            },
+            traverse: function (node: JavaScriptAstNode, optimize?: boolean): JavaScriptAstNode {
+                throw new Error("Function not implemented.");
+            },
+            performOptimization: function (node: JavaScriptAstNode): JavaScriptAstNode {
+                throw new Error("Function not implemented.");
+            },
+            simplifyNode: function (node: JavaScriptAstNode): JavaScriptAstNode {
+                throw new Error("Function not implemented.");
+            }
+        };
+
+        if (node.children) {
+            processedNode.children = node.children.map(child =>
+                this.traverse(child, optimize)
+            );
+        }
+
+        if (optimize) {
+            return this.performOptimization(processedNode);
+        }
+
+        uniqueNodes.set(key, processedNode);
+        return processedNode;
+    }
+
+    private performOptimization(node: JavaScriptAstNode): JavaScriptAstNode {
+        if (node.type === NodeType.Program) {
+            return {
+                ...node,
+                children: node.children?.map(child => this.simplifyNode(child)) || []
+            };
+        }
+
+        if (node.type === NodeType.VariableDeclaration && node.children) {
+            const [identifier, value] = node.children;
+            if (value.type === NodeType.Literal) {
+                return {
+                    type: NodeType.InlineConstant,
+                    value: `${identifier.value}=${value.value}`,
+                    children: []
+                };
+            }
+        }
+
+        return node;
+    }
+
+    private simplifyNode(node: JavaScriptAstNode): JavaScriptAstNode {
+        if (!Object.values(NodeType).includes(node.type)) {
+            return node;
+        }
+        return node;
     }
 }
