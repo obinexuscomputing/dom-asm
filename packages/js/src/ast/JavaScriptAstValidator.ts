@@ -21,7 +21,8 @@ export class JavaScriptAstValidator {
 
   private addError(code: string, message: string, node: JavaScriptAstNode): void {
     this.errors.push({ code, message, node });
-  }
+  };
+  
   public traverse(node: JavaScriptAstNode): void {
     const validNodeTypes: JavaScriptNodeType[] = [
       "Program", "VariableDeclaration", "InlineConstant", "Identifier", 
@@ -29,7 +30,7 @@ export class JavaScriptAstValidator {
       "TemplateLiteralExpression", "ClassDeclaration", "MethodDefinition",
       "PropertyDefinition", "FunctionExpression", "AsyncFunction",
       "ObjectExpression", "Property", "SpreadElement", "ImportDeclaration",
-      "ExportDeclaration", "ReturnStatement", "IfStatement", "Expression",
+      "ExportNamedDeclaration", "ReturnStatement", "IfStatement", "Expression",
       "BinaryExpression", "FunctionDeclaration"
     ];
 
