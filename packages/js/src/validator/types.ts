@@ -1,1 +1,1 @@
-export * from './JSValidator';
+export * from '../ast/JavaScriptAstValidator';

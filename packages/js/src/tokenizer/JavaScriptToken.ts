@@ -97,11 +97,3 @@ export class JavaScriptInvalidTokenError extends Error {
 
 
 }
-
-// // Example usage
-// const tokenType = JavaScriptTokenType.KEYWORD;
-// const tokenValue = new JavaScriptTokenValue("function");
-// const token = new JavaScriptToken(tokenType, tokenValue);
-// console.log(token.toString()); // Output: Type: KEYWORD, Value: function
-// console.log(token.isType(JavaScriptTokenType.KEYWORD)); // Output: true
-// console.log(token.equals(new JavaScriptToken(JavaScriptTokenType.KEYWORD, new JavaScriptTokenValue("function")))); // Output: true
