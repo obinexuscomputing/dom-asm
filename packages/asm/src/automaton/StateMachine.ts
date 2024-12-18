@@ -143,4 +143,4 @@ class StateMachine {
     }
 }
 
-export default StateMachine;
+export { StateMachine}

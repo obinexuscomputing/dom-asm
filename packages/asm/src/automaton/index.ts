@@ -1,1 +1,2 @@
-export * from './StateMinimizer'
+export { StateMachine } from "./StateMachine";
+export { StateMinimizer } from "./StateMinimizer";
