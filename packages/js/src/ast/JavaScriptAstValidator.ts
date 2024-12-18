@@ -1,14 +1,3 @@
-
-
-
-
-import { JavaScriptAstNode, NodeType } from './JSASTNode';
-
-interface ValidationError {
-  code: string;
-  message: string;
-  node: JavaScriptAstNode;
-}
 import { JavaScriptAstNode, NodeType } from './JSASTNode';
 
 interface ValidationError {
@@ -67,11 +56,12 @@ export class JavaScriptAstValidator {
         break;
       case "ClassDeclaration":
         this.validateClass(node);
-        break;
-      case "MethodDefinition":
-        this.validateMethodDefinition(node);
-        break;
-      case "AsyncFunction":
+    if (node.children && node.children.length > 0) {
+      for (const child of node.children) {
+        this.traverse(child);
+      }
+    }
+    break;
         this.validateAsyncFunction(node);
         break;
       case "ObjectExpression":
@@ -89,13 +79,18 @@ export class JavaScriptAstValidator {
       case "InlineConstant":
         this.validateInlineConstant(node);
         break;
-  private validateProgram(node: JavaScriptAstNode): void {
-    if (node.children) {
+    if (node.children && node.children.length > 0) {
       for (const child of node.children) {
         this.traverse(child);
       }
     }
   }
+
+  private validateProgram(node: JavaScriptAstNode): void {
+    // Program nodes can be empty, no validation needed
+    
+  }
+
 
   private validateVariableDeclaration(node: JavaScriptAstNode): void {
     if (!node.children?.length) {
@@ -182,16 +177,15 @@ export class JavaScriptAstValidator {
     }
   }
 
-  private validateLiteral(node: JavaScriptAstNode): void {
-    if (!node.value) {
-      this.addError("E026", "Literal must have a value.", node);
-    }
-  }
-} }
 
-  private validateLiteral(node: JSASTNode): void {
-    if (!node.value) {
-      this.addError("E026", "Literal must have a value.", node);
-    }
+
+private validateLiteral(node: JavaScriptAstNode): void {
+  if (node.value === undefined || node.value === null) {
+    this.addError("E026", "Literal must have a value.", node);
   }
+
 }
+
+
+
+    }
