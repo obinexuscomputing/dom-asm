@@ -1,6 +1,6 @@
 import { NodeType } from '../src/types';
 import { JSAstMinimizer } from '../src/ast';
-import { JSASTBuilder } from '../src/ast/JSAst';
+import { JSASTBuilder } from '../src/ast/JavaScriptAst';
 import { JSToken, JSTokenType } from '../src/tokenizer';
 import { JSASTNode } from '../src/types';
 

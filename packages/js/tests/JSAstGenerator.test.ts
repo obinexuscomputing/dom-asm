@@ -1,4 +1,4 @@
-import { JSAstGenerator } from "../src/generator/JSAstGenerator";
+import { JSAstGenerator } from "../src/ast/JavaScriptAstCodeGenerator";
 import { TypedJSASTNode, NodeType } from "../src/types";
 
 describe("JSAstGenerator", () => {

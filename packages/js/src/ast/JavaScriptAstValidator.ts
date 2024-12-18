@@ -21,19 +21,18 @@ export class JavaScriptAstValidator {
 
   private addError(code: string, message: string, node: JavaScriptAstNode): void {
     this.errors.push({ code, message, node });
-
-  private traverse(node: JavaScriptAstNode): void {
+  }
+  public traverse(node: JavaScriptAstNode): void {
     const validNodeTypes: JavaScriptNodeType[] = [
       "Program", "VariableDeclaration", "InlineConstant", "Identifier", 
-      , "ArrowFunction"
-      "Literal", "BlockStatement", "TemplateLiteral",
+      "ArrowFunction", "Literal", "BlockStatement", "TemplateLiteral",
       "TemplateLiteralExpression", "ClassDeclaration", "MethodDefinition",
       "PropertyDefinition", "FunctionExpression", "AsyncFunction",
       "ObjectExpression", "Property", "SpreadElement", "ImportDeclaration",
       "ExportDeclaration", "ReturnStatement", "IfStatement", "Expression",
-      "BinaryExpression", "IfStatement", "FunctionDeclaration",
-
+      "BinaryExpression", "FunctionDeclaration"
     ];
+
 
     if (!validNodeTypes.includes(node.type as JavaScriptNodeType)) {
       this.addError("E001", `Unknown node type: ${node.type}`, node);
@@ -56,20 +55,15 @@ export class JavaScriptAstValidator {
       case "TemplateLiteral":
         this.validateTemplateLiteral(node);
         break;
-      case "ClassDeclaration":
-        this.validateClass(node);
-    if (node.children?.length) {
-      for (const child of node.children) {
-        this.traverse(child);
-      }
-    }
-  }
+  case "ClassDeclaration":
+    this.validateClass(node);
     break;
-        this.validateAsyncFunction(node);
-        break;
-      case "ObjectExpression":
-        this.validateObjectExpression(node);
-        break;
+  case "AsyncFunction":
+    this.validateAsyncFunction(node);
+    break;
+  case "ObjectExpression":
+    this.validateObjectExpression(node);
+    break;
       case "Property":
         this.validateProperty(node);
         break;
@@ -84,6 +78,7 @@ export class JavaScriptAstValidator {
         break;
   
   }
+}
 
   private validateProgram(node: JavaScriptAstNode): void {
     // Program nodes can be empty, no validation needed
