@@ -27,16 +27,16 @@ export enum NodeType {
     FunctionDeclaration = 'FunctionDeclaration'
 }
 
-export interface JSAstNode {
+export interface JavaScriptAstNode {
     type: NodeType;
     value?: string;
-    children?: JSAstNode[];
-    minimize(): JSAstNode;
+    children?: JavaScriptAstNode[];
+    minimize(): JavaScriptAstNode;
 }
 
 
 
-// Define the JSAstNode class
+// Define the JavaScriptAstNode class
 export class JavaScriptAstNode {
     public type: NodeType;
     public value?: string;
@@ -87,12 +87,11 @@ export class JavaScriptAstNode {
     
     public performOptimization(node: JavaScriptAstNode): JavaScriptAstNode {
         if (node.type === NodeType.Program) {
-            return {
-                ...node,
-                children: node.children?.map(child => this.simplifyNode(child)) || [],
-                minimize: node.minimize,
-                optimize: node.optimize
-            };
+            return new JavaScriptAstNode(
+                node.type,
+                node.value,
+                node.children?.map(child => this.simplifyNode(child)) || []
+            );
         }
 
         if (node.type === NodeType.VariableDeclaration && node.children) {

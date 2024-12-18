@@ -79,7 +79,7 @@ class JSASTBuilder {
 
     return null;
   }
-
+  
   private parseVariableDeclaration(): JSASTNode {
     this.consumeToken(); // consume 'const'
     const identifier = this.consumeToken();
