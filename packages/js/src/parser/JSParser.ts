@@ -1,227 +1,65 @@
-import { JSToken, TypedJSASTNode, NodeType, JSTokenType } from "../types";
 
-export class JSParser {
-  private tokens: JSToken[];
-  private current: number;
-
-  constructor(tokens: JSToken[] = []) {
-    this.tokens = tokens;
-    this.current = 0;
+export class JavaScriptAstCodeGenerator {
+  public generate(ast: JavaScriptAstNode): string {
+    return this.generateNode(ast);
   }
 
-  public setTokens(tokens: JSToken[]): void {
-    this.tokens = tokens;
-    this.current = 0;
-  }
-
-  public parse(tokens?: JSToken[]): TypedJSASTNode {
-    if (tokens) {
-      this.setTokens(tokens);
-    }
-  
-    const children: TypedJSASTNode[] = [];
-  
-    while (this.current < this.tokens.length) {
-      try {
-        const node = this.walk();
-        if (node) {
-          children.push(node);
-        }
-      } catch (error) {
-        // Skip tokens that cause parsing errors
-        this.current++;
-      }
-    }
-  
-    return {
-      type: NodeType.Program,
-      children,
-      body: children, 
-    };
-  }
-
-  private walk(): TypedJSASTNode | null {
-    const token = this.tokens[this.current];
-
-    if (!token) {
-      return null; // Return null instead of throwing for EOF
-    }
-
-    switch (token.type) {
-      case JSTokenType.Keyword:
-        return this.parseKeyword();
-      case JSTokenType.Identifier:
-        this.current++;
-        return { type: NodeType.Identifier, value: token.value };
-      case JSTokenType.Literal:
-        this.current++;
-        return { type: NodeType.Literal, value: token.value };
-      case JSTokenType.EndOfStatement:
-        this.current++;
-        return null; // Ignore EOF or semicolon tokens
+  private generateNode(node: JavaScriptAstNode): string {
+    switch (node.type) {
+      case JavaScriptNodeTypeMap.Program:
+        return this.generateProgram(node);
+      case JavaScriptNodeTypeMap.VariableDeclaration:
+        return this.generateVariableDeclaration(node);
+      case JavaScriptNodeTypeMap.Identifier:
+        return this.generateIdentifier(node);
+      case JavaScriptNodeTypeMap.Literal:
+        return this.generateLiteral(node);
+      case JavaScriptNodeTypeMap.BlockStatement:
+        return this.generateBlockStatement(node);
+      case JavaScriptNodeTypeMap.IfStatement:
+        return this.generateIfStatement(node);
+      case JavaScriptNodeTypeMap.FunctionDeclaration:
+        return this.generateFunctionDeclaration(node);
       default:
-        // For unexpected tokens, throw with specific error
-        throw new Error(`Unexpected token: '${token.value}'`);
+        throw new Error(`Unknown node type: ${node.type}`);
     }
   }
 
-  private parseKeyword(): TypedJSASTNode {
-    const token = this.tokens[this.current];
-
-    switch (token.value) {
-      case "if":
-        return this.parseIfStatement();
-      case "function":
-        return this.parseFunctionDeclaration();
-      case "const":
-      case "let":
-      case "var":
-        return this.parseVariableDeclaration();
-      default:
-        throw new Error(`Unexpected keyword: ${token.value}`);
-    }
+  private generateProgram(node: JavaScriptAstNode): string {
+    return node.children?.map((child: JavaScriptAstNode) => this.generateNode(child)).join('\n') || '';
   }
 
-  private parseIfStatement(): TypedJSASTNode {
-    this.current++; // Skip 'if'
-
-    if (this.tokens[this.current]?.value !== "(") {
-      throw new Error("Expected '(' after 'if'");
-    }
-
-    this.current++; // Skip '('
-    const condition = this.walk();
-
-    if (!condition) {
-      throw new Error("Invalid condition");
-    }
-
-    if (this.tokens[this.current]?.value !== ")") {
-      throw new Error("Expected ')' after condition");
-    }
-
-    this.current++; // Skip ')'
-    const consequence = this.walk();
-
-    if (!consequence) {
-      throw new Error("Invalid consequence");
-    }
-
-    let alternate: TypedJSASTNode | undefined;
-    if (this.tokens[this.current]?.value === "else") {
-      this.current++; // Skip 'else'
-      alternate = this.walk()!; // Non-null assertion
-    }
-
-    return {
-      type: NodeType.IfStatement,
-      children: [condition, consequence, ...(alternate ? [alternate] : [])],
-    };
+  private generateVariableDeclaration(node: JavaScriptAstNode): string {
+    const [identifier, initializer] = node.children!;
+    return `${node.value} ${this.generateNode(identifier)} = ${this.generateNode(initializer)};`;
   }
 
-  private parseFunctionDeclaration(): TypedJSASTNode {
-    this.current++; // Skip 'function'
-
-    const identifier = this.tokens[this.current];
-    if (!identifier || identifier.type !== JSTokenType.Identifier) {
-      throw new Error("Expected function name");
-    }
-
-    this.current++;
-    if (this.tokens[this.current]?.value !== "(") {
-      throw new Error("Expected '(' after function name");
-    }
-
-    this.current++; // Skip '('
-
-    const parameters: TypedJSASTNode[] = [];
-    while (this.current < this.tokens.length && this.tokens[this.current]?.value !== ")") {
-      const param = this.tokens[this.current];
-      if (param.type !== JSTokenType.Identifier) {
-        throw new Error("Expected parameter identifier");
-      }
-
-      parameters.push({ type: NodeType.Identifier, value: param.value });
-      this.current++;
-
-      if (this.tokens[this.current]?.value === ",") {
-        this.current++; // Skip ','
-      }
-    }
-
-    if (this.tokens[this.current]?.value !== ")") {
-      throw new Error("Expected ')' after parameters");
-    }
-
-    this.current++; // Skip ')'
-    const body = this.parseBlockStatement();
-
-    return {
-      type: NodeType.FunctionDeclaration,
-      value: identifier.value,
-      children: [...parameters, body],
-    };
+  private generateIdentifier(node: JavaScriptAstNode): string {
+    return node.value!;
   }
 
-  private parseVariableDeclaration(): TypedJSASTNode {
-    const keyword = this.tokens[this.current];
-    this.current++; // Skip 'const', 'let', or 'var'
-
-    const identifier = this.tokens[this.current];
-    if (!identifier || identifier.type !== JSTokenType.Identifier) {
-      throw new Error("Expected variable name");
-    }
-
-    this.current++;
-    if (this.tokens[this.current]?.value !== "=") {
-      throw new Error("Expected '=' after variable name");
-    }
-
-    this.current++; // Skip '='
-    const initializer = this.walk();
-
-    if (!initializer) {
-      throw new Error("Invalid initializer");
-    }
-
-    // Optionally skip semicolon if present
-    if (this.tokens[this.current]?.value === ";") {
-      this.current++; // Skip ';'
-    }
-
-    return {
-      type: NodeType.VariableDeclaration,
-      value: keyword.value,
-      children: [
-        { type: NodeType.Identifier, value: identifier.value },
-        initializer,
-      ],
-    };
+  private generateLiteral(node: JavaScriptAstNode): string {
+    return node.value!;
   }
 
-  private parseBlockStatement(): TypedJSASTNode {
-    if (this.tokens[this.current]?.value !== "{") {
-      throw new Error("Expected '{' to start block statement");
+  private generateBlockStatement(node: JavaScriptAstNode): string {
+    const body = node.children?.map((child: JavaScriptAstNode) => this.generateNode(child)).join('\n') || '';
+    return `{${body}}`;
+  }
+
+  private generateIfStatement(node: JavaScriptAstNode): string {
+    const [condition, consequence, alternate] = node.children!;
+    let code = `if (${this.generateNode(condition)}) ${this.generateNode(consequence)}`;
+    if (alternate) {
+      code += ` else ${this.generateNode(alternate)}`;
     }
+    return code;
+  }
 
-    this.current++; // Skip '{'
-    const children: TypedJSASTNode[] = [];
-
-    while (this.tokens[this.current]?.value !== "}") {
-      if (this.current >= this.tokens.length) {
-        throw new Error("Expected '}' to close block statement");
-      }
-      const node = this.walk();
-      if (node) {
-        children.push(node);
-      }
-    }
-
-    this.current++; // Skip '}'
-
-    return {
-      type: NodeType.BlockStatement,
-      children,
-    };
+  private generateFunctionDeclaration(node: JavaScriptAstNode): string {
+    const [identifier, ...paramsAndBody] = node.children!;
+    const params: string = paramsAndBody.slice(0, -1).map((param: JavaScriptAstNode) => this.generateNode(param)).join(', ');
+    const body = this.generateNode(paramsAndBody[paramsAndBody.length - 1]);
+    return `function ${this.generateNode(identifier)}(${params}) ${body}`;
   }
 }
