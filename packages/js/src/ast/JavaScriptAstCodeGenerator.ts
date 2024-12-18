@@ -2,6 +2,7 @@ import { JSASTNode, TypedJSASTNode, ValidationError } from "src/types";
 import { JavaScriptValidator } from "src/validator";
 import { JavaScriptAstNode, JavaScriptNodeTypeMap } from "./JavaScriptAstNode";
 import { JavaScriptParser } from "./JavaScriptParser"; // Add this line to import JavaScriptParser
+import { JavaScriptTokenizer } from "src/tokenizer/JavaScriptTokenizer";
 
 
 export interface GenerationError {
