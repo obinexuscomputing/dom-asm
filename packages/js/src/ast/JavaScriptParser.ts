@@ -13,7 +13,7 @@ export class JavaScriptParser {
 
   public parse(source: string): JavaScriptAst {
     const tokens = this.tokenizer.tokenize(source);
-    const ast = JavaScriptAst.build(tokens);
+    const ast = JavaScriptAst.build(tokens );
     const errors = this.validator.validate(ast.root);
 
     if (errors.length > 0) {
