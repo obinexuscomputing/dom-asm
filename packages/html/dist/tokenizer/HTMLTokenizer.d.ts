@@ -53,7 +53,10 @@ export declare class HTMLTokenizer {
     private openTags;
     private options;
     constructor(input: string, options?: Partial<HTMLTokenizer['options']>);
-    private tokenize;
+    tokenize(): {
+        tokens: HTMLToken[];
+        errors: TokenizerError[];
+    };
     private readEndTag;
     private readTagName;
     private createTextToken;
