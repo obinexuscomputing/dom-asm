@@ -213,7 +213,6 @@ export class HTMLTokenizer {
     if (!token.value) return false;
     return this.options.preserveWhitespace || !token.isWhitespace;
   }
-
   private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
     const { line, column } = this.getCurrentLocation();
     this.consume(); // Skip '<'
@@ -227,56 +226,32 @@ export class HTMLTokenizer {
       while (this.position < this.input.length) {
         this.skipWhitespace();
         
-        // Check for tag endings
         if (this.match("/>")) {
           selfClosing = true;
-          this.advance(2); // Skip "/>"
+          this.advance(2);
           break;
         }
         
         if (this.match(">")) {
-          this.advance(); // Skip ">"
+          this.advance();
           break;
         }
         
-        // Read attribute if we haven't reached the end
-        if (this.position < this.input.length && !/[\s>]/.test(this.peek())) {
+        // Handle attributes
+        if (this.position < this.input.length && !/[\s>\/]/.test(this.peek())) {
           const attrName = this.readAttributeName();
           if (!attrName) continue;
           
           this.skipWhitespace();
-          let value = attrName; // Default value for boolean attributes
+          let value = attrName; // Default for boolean attributes
           
-          // Handle attribute value if present
           if (this.peek() === "=") {
             this.advance(); // Skip '='
             this.skipWhitespace();
-            
-            const quote = this.peek();
-            if (quote === '"' || quote === "'") {
-              // Quoted attribute value
-              this.advance(); // Skip opening quote
-              value = '';
-              
-              while (this.position < this.input.length) {
-                if (this.peek() === quote) {
-                  this.advance(); // Skip closing quote
-                  break;
-                }
-                value += this.advance();
-              }
-            } else {
-              // Unquoted attribute value
-              value = '';
-              while (this.position < this.input.length) {
-                const char = this.peek();
-                if (/[\s\/>]/.test(char)) break;
-                value += this.advance();
-              }
-            }
+            value = this.readAttributeValue();
           }
           
-          // Store the attribute, converting name to lowercase
+          // Check for duplicate attributes
           if (!attributes.has(attrName.toLowerCase())) {
             attributes.set(attrName.toLowerCase(), value);
           } else {
@@ -285,14 +260,13 @@ export class HTMLTokenizer {
         }
       }
       
-      // Handle end of input without proper tag closure
-      if (this.position >= this.input.length) {
-        this.addError(`Unexpected end of input in tag ${name}`);
-      }
-      
       // Auto-close void elements
       if (HTMLTokenizer.VOID_ELEMENTS.has(name.toLowerCase())) {
         selfClosing = true;
+      }
+      // Only add end of input error if it's not a void element and not self-closing
+      else if (this.position >= this.input.length && !selfClosing) {
+        this.addError(`Unexpected end of input in tag ${name}`);
       }
       
       return {
@@ -322,7 +296,6 @@ export class HTMLTokenizer {
       };
     }
   }
-
   private isValidUnquotedAttributeValue(char: string): boolean {
     return /[a-zA-Z0-9-]/.test(char);
   }
