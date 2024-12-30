@@ -59,7 +59,10 @@ export type HTMLToken =
       private lastTokenEnd: number;
       private errors: TokenizerError[];
       private openTags: string[];
-      
+      private static readonly VOID_ELEMENTS = new Set([
+        'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 
+        'link', 'meta', 'param', 'source', 'track', 'wbr'
+      ]);
       private options: {
         xmlMode: boolean;
         recognizeCDATA: boolean;
@@ -113,13 +116,14 @@ export type HTMLToken =
                 const endTag = this.readEndTag();
                 tokens.push(endTag);
                 // Remove tag from openTags if it matches
-                const lastOpenTag = this.openTags[this.openTags.length - 1];
-                if (lastOpenTag === endTag.name) {
-                  this.openTags.pop();
+                const lastOpenTagIndex = this.openTags.lastIndexOf(endTag.name);
+                if (lastOpenTagIndex !== -1) {
+                  this.openTags.splice(lastOpenTagIndex, 1);
                 }
               } else {
                 const startTag = this.readStartTag();
                 tokens.push(startTag);
+                // Only add to openTags if it's not self-closing and not a void element
                 if (!startTag.selfClosing) {
                   this.openTags.push(startTag.name);
                 }
@@ -143,16 +147,17 @@ export type HTMLToken =
           }
         }
     
-        // Check for unclosed tags
+        // Check for unclosed tags, excluding void elements
         if (this.openTags.length > 0) {
           this.openTags.forEach(tag => {
-            this.addError(`Unclosed tag: ${tag}`);
+            if (!HTMLTokenizer.VOID_ELEMENTS.has(tag.toLowerCase())) {
+              this.addError(`Unclosed tag: ${tag}`);
+            }
           });
         }
     
         return { tokens, errors: this.errors };
       }
-    
     
 
   private readEndTag(): Extract<HTMLToken, { type: "EndTag" }> {
@@ -237,9 +242,15 @@ export type HTMLToken =
     if (this.peek() === ">") {
       this.advance();
     }
+
+    // Consider void elements as self-closing
+    if (HTMLTokenizer.VOID_ELEMENTS.has(name.toLowerCase())) {
+      selfClosing = true;
+    }
     
     return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
   }
+
   private isValidUnquotedAttributeValue(char: string): boolean {
     return /[a-zA-Z0-9-]/.test(char);
   }

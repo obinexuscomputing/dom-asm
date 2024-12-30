@@ -49,8 +49,8 @@ export declare class HTMLTokenizer {
     private column;
     private lastTokenEnd;
     private errors;
+    private openTags;
     private options;
-    openTags: any;
     constructor(input: string, options?: Partial<HTMLTokenizer['options']>);
     tokenize(): {
         tokens: HTMLToken[];
