@@ -50,6 +50,7 @@ export declare class HTMLTokenizer {
     private lastTokenEnd;
     private errors;
     private options;
+    openTags: any;
     constructor(input: string, options?: Partial<HTMLTokenizer['options']>);
     tokenize(): {
         tokens: HTMLToken[];
@@ -60,6 +61,7 @@ export declare class HTMLTokenizer {
     private createTextToken;
     private shouldAddTextToken;
     private readStartTag;
+    private isValidUnquotedAttributeValue;
     private consume;
     private readAttributeName;
     private readAttributeValue;
