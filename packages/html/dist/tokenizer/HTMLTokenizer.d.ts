@@ -37,6 +37,11 @@ export type HTMLToken = {
     line: number;
     column: number;
 };
+export interface TokenizerError {
+    message: string;
+    line: number;
+    column: number;
+}
 export declare class HTMLTokenizer {
     private input;
     private position;
@@ -48,12 +53,11 @@ export declare class HTMLTokenizer {
     constructor(input: string, options?: Partial<HTMLTokenizer['options']>);
     tokenize(): {
         tokens: HTMLToken[];
-        errors: typeof this.errors;
+        errors: TokenizerError[];
     };
     private readEndTag;
     private readTagName;
     private createTextToken;
-    private reset;
     private shouldAddTextToken;
     private readStartTag;
     private consume;
@@ -65,6 +69,7 @@ export declare class HTMLTokenizer {
     private readQuotedString;
     private advance;
     private addError;
+    private reset;
     private peek;
     private match;
     private skipWhitespace;
