@@ -112,7 +112,7 @@ export class HTMLTokenizer {
   }
 
     
-      private tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
+      public tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
         this.reset();
         const tokens: HTMLToken[] = [];
         let textStart = 0;
