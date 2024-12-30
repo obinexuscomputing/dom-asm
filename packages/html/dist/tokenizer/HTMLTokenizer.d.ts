@@ -43,6 +43,7 @@ export interface TokenizerError {
     column: number;
 }
 export declare class HTMLTokenizer {
+    private static readonly VOID_ELEMENTS;
     private input;
     private position;
     private line;
