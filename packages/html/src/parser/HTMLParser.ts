@@ -182,60 +182,79 @@ export class HTMLParser {
       root,
       metadata: this.computeOptimizedMetadata(root)
     };
-  }
-
-  private processTokenWithOptimizedState(
+  }private processTokenWithOptimizedState(
     token: HTMLToken,
     currentNode: HTMLASTNode,
     stack: HTMLASTNode[]
-  ): HTMLASTNode {
-    // Use minimized states for processing
+): HTMLASTNode {
     const optimizedState = this.optimizedStateMap.get(this.currentState) || this.currentState;
     
     switch (token.type) {
-      case 'StartTag':
-        const element: HTMLASTNode = {
-          type: 'Element',
-          name: token.name,
-          attributes: new Map(Object.entries(token.attributes || {})),
-          children: [],
-          metadata: {
-            equivalenceClass: this.getEquivalenceClass(optimizedState),
-            isMinimized: true
-          }
-        };
-        
-        currentNode.children.push(element);
-        if (!token.selfClosing) {
-          stack.push(element);
-          currentNode = element;
+        case 'StartTag': {
+            const element: HTMLASTNode = {
+                type: 'Element',
+                name: token.name,
+                attributes: token.attributes, // Already a Map
+                children: [],
+                metadata: {
+                    equivalenceClass: this.getEquivalenceClass(optimizedState),
+                    isMinimized: true
+                }
+            };
+            
+            currentNode.children.push(element);
+            if (!token.selfClosing) {
+                stack.push(element);
+                currentNode = element;
+            }
+            break;
         }
-        break;
 
-      case 'EndTag':
-        if (stack.length > 1) {
-          stack.pop();
-          currentNode = stack[stack.length - 1];
+        case 'EndTag': {
+            if (stack.length > 1) {
+                const lastElement = stack[stack.length - 1];
+                if (lastElement.name === token.name) {
+                    stack.pop();
+                    currentNode = stack[stack.length - 1];
+                }
+            }
+            break;
         }
-        break;
 
-      case 'Text':
-      case 'Comment':
-        const node: HTMLASTNode = {
-          type: token.type,
-          value: token.value,
-          children: [],
-          metadata: {
-            equivalenceClass: this.getEquivalenceClass(optimizedState),
-            isMinimized: true
-          }
-        };
-        currentNode.children.push(node);
-        break;
+        case 'Text': {
+            // Only add non-empty text nodes
+            if (token.value.trim() || token.isWhitespace) {
+                const node: HTMLASTNode = {
+                    type: 'Text',
+                    value: token.value,
+                    children: [],
+                    metadata: {
+                        equivalenceClass: this.getEquivalenceClass(optimizedState),
+                        isMinimized: true
+                    }
+                };
+                currentNode.children.push(node);
+            }
+            break;
+        }
+
+        case 'Comment': {
+            const node: HTMLASTNode = {
+                type: 'Comment',
+                value: token.value,
+                children: [],
+                metadata: {
+                    equivalenceClass: this.getEquivalenceClass(optimizedState),
+                    isMinimized: true
+                }
+            };
+            currentNode.children.push(node);
+            break;
+        }
     }
 
     return currentNode;
-  }
+}
 
   private optimizeAST(ast: HTMLAST): HTMLAST {
     // Apply AST optimizations based on paper recommendations
@@ -252,28 +271,31 @@ export class HTMLParser {
     
     return ast;
   }
-
   private mergeTextNodes(node: HTMLASTNode): void {
     if (!node.children.length) return;
 
+    // First, merge text nodes in children
+    for (const child of node.children) {
+        if (child.type === 'Element') {
+            this.mergeTextNodes(child);
+        }
+    }
+
+    // Then merge consecutive text nodes at current level
     let i = 0;
     while (i < node.children.length - 1) {
-      const current = node.children[i];
-      const next = node.children[i + 1];
-      
-      if (current.type === 'Text' && next.type === 'Text') {
-        current.value = `${current.value || ''}${next.value || ''}`;
-        node.children.splice(i + 1, 1);
-      } else {
-        this.mergeTextNodes(node.children[i]);
-        i++;
-      }
+        const current = node.children[i];
+        const next = node.children[i + 1];
+        
+        if (current.type === 'Text' && next.type === 'Text') {
+            current.value = (current.value || '') + (next.value || '');
+            node.children.splice(i + 1, 1);
+        } else {
+            i++;
+        }
     }
-    
-    if (i === node.children.length - 1) {
-      this.mergeTextNodes(node.children[i]);
-    }
-  }
+}
+
 
   private removeRedundantNodes(node: HTMLASTNode): void {
     node.children = node.children.filter(child => {

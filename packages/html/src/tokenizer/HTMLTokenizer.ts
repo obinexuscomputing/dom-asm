@@ -51,7 +51,7 @@ export class HTMLTokenizer {
   private line: number = 1;
   private column: number = 1;
   private lastTokenEnd: number = 0;
-  private errors: Array<{message: string; line: number; column: number}> = [];
+  private errors: { message: string; line: number; column: number }[] = [];
 
   // Configuration options
   private options: {
@@ -124,24 +124,34 @@ export class HTMLTokenizer {
         }
       }
     } catch (error) {
-      this.addError(`Tokenization error: ${error.message}`);
+      if (error instanceof Error) {
+        this.addError(`Tokenization error: ${error.message}`);
+      } else {
+        this.addError('Tokenization error: Unknown error');
+      }
     }
 
     return { tokens, errors: this.errors };
   }
-  readEndTag(): HTMLToken {
+  private readEndTag(): Extract<HTMLToken, { type: "EndTag" }> {
     const { line, column } = this.getCurrentLocation();
-    this.consume(); // Skip '</'
+    this.advance(2); // Skip '</'
     
     const name = this.readTagName();
     this.skipWhitespace();
     
     if (this.peek() === '>') {
-      this.advance(); // Skip '>'
+        this.advance(); // Skip '>'
+    }
+    
+    // Add validation for malformed end tags
+    if (!name) {
+        this.addError("Missing tag name in end tag");
     }
     
     return { type: "EndTag", name, line, column };
-  }
+}
+
   private readTagName(): string {
     let name = '';
     while (this.position < this.input.length) {
@@ -175,6 +185,7 @@ export class HTMLTokenizer {
     return this.options.preserveWhitespace || !token.isWhitespace;
   }
 
+
   private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
     const { line, column } = this.getCurrentLocation();
     this.consume(); // Skip '<'
@@ -184,66 +195,53 @@ export class HTMLTokenizer {
     let selfClosing = false;
     let namespace: string | undefined;
     
-    // Handle XML namespaces
-    if (this.options.xmlMode && name.includes(':')) {
-      const [ns, localName] = name.split(':');
-      namespace = ns;
-    }
-    
     try {
-      while (this.position < this.input.length && !this.match(">")) {
-        this.skipWhitespace();
-        
-        if (this.match("/>")) {
-          selfClosing = true;
-          this.advance(2);
-          break;
+        while (this.position < this.input.length && !this.match(">")) {
+            this.skipWhitespace();
+            
+            if (this.match("/>")) {
+                selfClosing = true;
+                this.advance(2);
+                break;
+            }
+            
+            const attrName = this.readAttributeName();
+            if (!attrName) break;
+            
+            this.skipWhitespace();
+            let value = "";
+            
+            if (this.peek() === "=") {
+                this.advance(); // Skip '='
+                this.skipWhitespace();
+                value = this.readAttributeValue();
+                // Validate attribute value
+                if (!value && this.peek() === '"') {
+                    this.addError(`Invalid attribute value for ${attrName}`);
+                }
+            } else {
+                value = attrName; // Boolean attribute
+            }
+            
+            // Convert to lowercase for consistency
+            attributes.set(attrName.toLowerCase(), value);
+            this.skipWhitespace();
         }
-        
-        if (this.peek() === "/") {
-          selfClosing = true;
-          this.advance();
-          continue;
-        }
-        
-        const attrName = this.readAttributeName();
-        if (!attrName) break;
-        
-        this.skipWhitespace();
-        let value = "";
-        
-        if (this.peek() === "=") {
-          this.advance(); // Skip '='
-          this.skipWhitespace();
-          value = this.readAttributeValue();
-        } else {
-          value = attrName; // For boolean attributes
-        }
-        
-        attributes.set(attrName, value);
-        this.skipWhitespace();
-      }
     } catch (error) {
-      this.addError(`Error parsing attributes for tag <${name}>: ${error.message}`);
+        if (error instanceof Error) {
+          this.addError(`Error parsing attributes for tag <${name}>: ${error.message}`);
+        } else {
+          this.addError(`Error parsing attributes for tag <${name}>: Unknown error`);
+        }
     }
     
     if (this.peek() === ">") {
-      this.advance();
-    }
-    
-    // Handle void elements
-    if (!this.options.xmlMode) {
-      const voidElements = new Set([
-        'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-        'link', 'meta', 'param', 'source', 'track', 'wbr'
-      ]);
-      if (voidElements.has(name)) {
-        selfClosing = true;
-      }
+        this.advance();
     }
     
     return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
-  }
+}
+
   private consume(): void {
     this.advance();
   }
