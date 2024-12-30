@@ -48,7 +48,6 @@ export declare class HTMLTokenizer {
     private position;
     private line;
     private column;
-    private lastTokenEnd;
     private errors;
     private openTags;
     private options;
@@ -65,7 +64,7 @@ export declare class HTMLTokenizer {
     private isValidUnquotedAttributeValue;
     private consume;
     private readAttributeName;
-    private readAttributeValue;
+    readAttributeValue(): string;
     private readCDATA;
     private readComment;
     private readDoctype;

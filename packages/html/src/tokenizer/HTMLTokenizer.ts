@@ -83,7 +83,8 @@ export class HTMLTokenizer {
   private column: number;
   private errors: TokenizerError[];
   private openTags: string[];
-  
+ public  lastTokenEnd: number = 0;
+
   private options: {
     xmlMode: boolean;
     recognizeCDATA: boolean;
