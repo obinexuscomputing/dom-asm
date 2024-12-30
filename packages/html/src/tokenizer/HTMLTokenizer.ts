@@ -71,66 +71,66 @@ export type HTMLToken =
 // console.log(tokens);
 // console.log(errors);
     
-    export class HTMLTokenizer {
-      private static readonly VOID_ELEMENTS = new Set([
-        'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-        'link', 'meta', 'param', 'source', 'track', 'wbr'
-      ]);
-    
-      private input: string;
-      private position: number;
-      private line: number;
-      private column: number;
-      private lastTokenEnd: number;
-      private errors: TokenizerError[];
-      private openTags: string[];
-      
-      private options: {
-        xmlMode: boolean;
-        recognizeCDATA: boolean;
-        recognizeConditionalComments: boolean;
-        preserveWhitespace: boolean;
-        validateClosing: boolean;
-      };
-    
-      constructor(input: string, options: Partial<HTMLTokenizer['options']> = {}) {
-        this.input = input;
-        this.position = 0;
-        this.line = 1;
-        this.column = 1;
-        this.lastTokenEnd = 0;
-        this.errors = [];
-        this.openTags = [];
-        this.options = {
-          xmlMode: false,
-          recognizeCDATA: false,
-          recognizeConditionalComments: true,
-          preserveWhitespace: false,
-          validateClosing: true, // Now true by default
-          ...options
-        };
-      }
+export class HTMLTokenizer {
+  private static readonly VOID_ELEMENTS = new Set([
+    'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+    'link', 'meta', 'param', 'source', 'track', 'wbr'
+  ]);
 
-      public tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
+  private input: string;
+  private position: number;
+  private line: number;
+  private column: number;
+  private lastTokenEnd: number;
+  private errors: TokenizerError[];
+  private openTags: string[];
+  
+  private options: {
+    xmlMode: boolean;
+    recognizeCDATA: boolean;
+    recognizeConditionalComments: boolean;
+    preserveWhitespace: boolean;
+    validateClosing: boolean;
+  };
+
+  constructor(input: string, options: Partial<HTMLTokenizer['options']> = {}) {
+    this.input = input;
+    this.position = 0;
+    this.line = 1;
+    this.column = 1;
+    this.lastTokenEnd = 0;
+    this.errors = [];
+    this.openTags = [];
+    this.options = {
+      xmlMode: false,
+      recognizeCDATA: false,
+      recognizeConditionalComments: true,
+      preserveWhitespace: false,
+      validateClosing: true,
+      ...options
+    };
+  }
+
+    
+      private tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
         this.reset();
         const tokens: HTMLToken[] = [];
         let textStart = 0;
         
-        while (this.position < this.input.length) {
-          const char = this.peek();
-    
-          if (char === "<") {
-            // Handle text before tag
-            if (textStart < this.position) {
-              const text = this.input.slice(textStart, this.position);
-              const textToken = this.createTextToken(text, textStart);
-              if (this.shouldAddTextToken(textToken)) {
-                tokens.push(textToken);
+        try {
+          while (this.position < this.input.length) {
+            const char = this.peek();
+            
+            if (char === "<") {
+              // Handle text before tag
+              if (textStart < this.position) {
+                const text = this.input.slice(textStart, this.position);
+                const textToken = this.createTextToken(text, textStart);
+                if (this.shouldAddTextToken(textToken)) {
+                  tokens.push(textToken);
+                }
               }
-            }
-    
-            const tagStartPos = this.position;
-            try {
+              
               if (this.match("<!--")) {
                 tokens.push(this.readComment());
               } else if (this.match("<![CDATA[") && this.options.recognizeCDATA) {
@@ -140,46 +140,52 @@ export type HTMLToken =
               } else if (this.peek(1) === "/") {
                 const endTag = this.readEndTag();
                 tokens.push(endTag);
-                const lastOpenTagIndex = this.openTags.lastIndexOf(endTag.name);
-                if (lastOpenTagIndex !== -1) {
-                  this.openTags.splice(lastOpenTagIndex, 1);
+                if (this.options.validateClosing) {
+                  const lastOpenTagIndex = this.openTags.lastIndexOf(endTag.name);
+                  if (lastOpenTagIndex !== -1) {
+                    this.openTags.splice(lastOpenTagIndex, 1);
+                  }
                 }
               } else {
                 const startTag = this.readStartTag();
                 tokens.push(startTag);
-                if (!startTag.selfClosing && !HTMLTokenizer.VOID_ELEMENTS.has(startTag.name.toLowerCase())) {
+                if (!startTag.selfClosing) {
                   this.openTags.push(startTag.name);
                 }
               }
-            } catch (error) {
-              this.addError(`Tokenization error at position ${tagStartPos}: ${error instanceof Error ? error.message : String(error)}`);
+              
+              textStart = this.position;
+            } else {
+              this.advance();
             }
-            
-            textStart = this.position;
-          } else {
-            this.advance();
+          }
+          
+          // Handle remaining text
+          if (textStart < this.position) {
+            const text = this.input.slice(textStart, this.position);
+            const textToken = this.createTextToken(text, textStart);
+            if (this.shouldAddTextToken(textToken)) {
+              tokens.push(textToken);
+            }
+          }
+          
+          // Check for unclosed tags
+          if (this.options.validateClosing) {
+            this.openTags.forEach(tag => {
+              if (!HTMLTokenizer.VOID_ELEMENTS.has(tag.toLowerCase())) {
+                this.addError(`Unclosed tag: ${tag}`);
+              }
+            });
+          }
+          
+        } catch (error) {
+          if (error instanceof Error) {
+            this.addError(error.message);
           }
         }
-    
-        // Handle remaining text
-        if (textStart < this.position) {
-          const text = this.input.slice(textStart, this.position);
-          const textToken = this.createTextToken(text, textStart);
-          if (this.shouldAddTextToken(textToken)) {
-            tokens.push(textToken);
-          }
-        }
-    
-        // Always check for unclosed tags at the end of tokenization
-        this.openTags.forEach(tag => {
-          if (!HTMLTokenizer.VOID_ELEMENTS.has(tag.toLowerCase())) {
-            this.addError(`Unclosed tag: ${tag}`);
-          }
-        });
-    
+        
         return { tokens, errors: this.errors };
       }
-
 
   private readEndTag(): Extract<HTMLToken, { type: "EndTag" }> {
     const { line, column } = this.getCurrentLocation();
@@ -237,47 +243,51 @@ export type HTMLToken =
     let selfClosing = false;
     let namespace: string | undefined;
     
-    while (this.position < this.input.length && !this.match(">")) {
-      this.skipWhitespace();
-      
-      if (this.match("/>")) {
-        selfClosing = true;
-        this.advance(2);
-        break;
-      }
-      
-      const attrName = this.readAttributeName();
-      if (!attrName) continue;
-      
-      this.skipWhitespace();
-      let value = attrName; // Default for boolean attributes
-      
-      if (this.peek() === "=") {
-        this.advance(); // Skip '='
+    try {
+      while (this.position < this.input.length) {
         this.skipWhitespace();
-        const quoteChar = this.peek();
-        if (quoteChar !== '"' && quoteChar !== "'") {
-          this.addError(`Missing quotes in attribute value for "${attrName}"`);
+        
+        if (this.match("/>")) {
+          selfClosing = true;
+          this.advance(2);
+          break;
         }
-        value = this.readAttributeValue();
+        
+        if (this.match(">")) {
+          this.advance();
+          break;
+        }
+        
+        const attrName = this.readAttributeName();
+        if (!attrName) continue;
+        
+        this.skipWhitespace();
+        let value = attrName; // Default for boolean attributes
+        
+        if (this.peek() === "=") {
+          this.advance(); // Skip '='
+          this.skipWhitespace();
+          value = this.readAttributeValue();
+        }
+        
+        attributes.set(attrName.toLowerCase(), value);
       }
       
-      attributes.set(attrName.toLowerCase(), value);
+      // Handle void elements
+      if (HTMLTokenizer.VOID_ELEMENTS.has(name.toLowerCase())) {
+        selfClosing = true;
+      }
+      
+      return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
+      
+    } catch (error) {
+      if (error instanceof Error) {
+        this.addError(error.message);
+      }
+      return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
     }
-    
-    if (this.peek() === ">") {
-      this.advance();
-    } else if (this.position >= this.input.length) {
-      this.addError(`Unexpected end of input in tag ${name}`);
-    }
-
-    // Set self-closing for void elements
-    if (HTMLTokenizer.VOID_ELEMENTS.has(name.toLowerCase())) {
-      selfClosing = true;
-    }
-    
-    return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
   }
+
 
   private isValidUnquotedAttributeValue(char: string): boolean {
     return /[a-zA-Z0-9-]/.test(char);
@@ -296,44 +306,33 @@ export type HTMLToken =
     }
     return name.toLowerCase().trim();
   } 
-  
   private readAttributeValue(): string {
     const quote = this.peek();
     let value = '';
     
     if (quote === '"' || quote === "'") {
       this.advance(); // Skip opening quote
-      const startPos = this.position;
-      let foundClosingQuote = false;
-      
       while (this.position < this.input.length) {
         if (this.peek() === quote) {
           this.advance(); // Skip closing quote
-          foundClosingQuote = true;
           return value;
         }
         value += this.advance();
       }
-      
-      if (!foundClosingQuote) {
-        this.addError(`Unclosed attribute value starting at position ${startPos}`);
-      }
+      this.addError("Unclosed attribute value");
       return value;
     }
     
-    // Unquoted attribute value
+    // Handle unquoted attribute values
     while (this.position < this.input.length) {
       const char = this.peek();
       if (/[\s\/>]/.test(char)) break;
-      if (!this.isValidUnquotedAttributeValue(char)) {
-        this.addError(`Invalid character '${char}' in unquoted attribute value`);
-        break;
-      }
       value += this.advance();
     }
     
     return value;
   }
+
 
 
   private readCDATA(): Extract<HTMLToken, { type: "CDATA" }> {
