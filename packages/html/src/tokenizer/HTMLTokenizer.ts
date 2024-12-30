@@ -233,7 +233,9 @@ export class HTMLTokenizer {
   private shouldAddTextToken(token: Extract<HTMLToken, { type: "Text" }>): boolean {
     if (!token.value) return false;
     return this.options.preserveWhitespace || !token.isWhitespace;
-  } private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
+  }
+
+  private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
     const { line, column } = this.getCurrentLocation();
     this.consume(); // Skip '<'
     
