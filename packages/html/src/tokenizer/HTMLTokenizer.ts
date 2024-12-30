@@ -52,6 +52,7 @@ export type HTMLToken =
     }
     
     export class HTMLTokenizer {
+      
       private input: string;
       private position: number;
       private line: number;
@@ -59,10 +60,7 @@ export type HTMLToken =
       private lastTokenEnd: number;
       private errors: TokenizerError[];
       private openTags: string[];
-      private static readonly VOID_ELEMENTS = new Set([
-        'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 
-        'link', 'meta', 'param', 'source', 'track', 'wbr'
-      ]);
+      
       private options: {
         xmlMode: boolean;
         recognizeCDATA: boolean;
@@ -86,59 +84,17 @@ export type HTMLToken =
           ...options
         };
       }
-      public tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
-        this.reset();
-        const tokens: HTMLToken[] = [];
-        let textStart = 0;
-        
-        while (this.position < this.input.length) {
-          const char = this.peek();
+      
+  public tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
+    this.reset();
+    const tokens: HTMLToken[] = [];
+    let textStart = 0;
     
-          if (char === "<") {
-            // Handle text before tag
-            if (textStart < this.position) {
-              const text = this.input.slice(textStart, this.position);
-              const textToken = this.createTextToken(text, textStart);
-              if (this.shouldAddTextToken(textToken)) {
-                tokens.push(textToken);
-              }
-            }
-    
-            const tagStartPos = this.position;
-            try {
-              if (this.match("<!--")) {
-                tokens.push(this.readComment());
-              } else if (this.match("<![CDATA[") && this.options.recognizeCDATA) {
-                tokens.push(this.readCDATA());
-              } else if (this.match("<!DOCTYPE")) {
-                tokens.push(this.readDoctype());
-              } else if (this.peek(1) === "/") {
-                const endTag = this.readEndTag();
-                tokens.push(endTag);
-                // Remove tag from openTags if it matches
-                const lastOpenTagIndex = this.openTags.lastIndexOf(endTag.name);
-                if (lastOpenTagIndex !== -1) {
-                  this.openTags.splice(lastOpenTagIndex, 1);
-                }
-              } else {
-                const startTag = this.readStartTag();
-                tokens.push(startTag);
-                // Only add to openTags if it's not self-closing and not a void element
-                if (!startTag.selfClosing) {
-                  this.openTags.push(startTag.name);
-                }
-              }
-            } catch (error) {
-              this.addError(`Tokenization error at position ${tagStartPos}: ${error instanceof Error ? error.message : String(error)}`);
-            }
-            
-            textStart = this.position;
-          } else {
-            this.advance();
-          }
-        }
-    
-        // Handle any remaining text
+    while (this.position < this.input.length) {
+      const char = this.peek();
+
+      if (char === "<") {
+        // Handle text before tag
         if (textStart < this.position) {
           const text = this.input.slice(textStart, this.position);
           const textToken = this.createTextToken(text, textStart);
@@ -146,18 +102,58 @@ export type HTMLToken =
             tokens.push(textToken);
           }
         }
-    
-        // Check for unclosed tags, excluding void elements
-        if (this.openTags.length > 0) {
-          this.openTags.forEach(tag => {
-            if (!HTMLTokenizer.VOID_ELEMENTS.has(tag.toLowerCase())) {
-              this.addError(`Unclosed tag: ${tag}`);
+
+        const tagStartPos = this.position;
+        try {
+          if (this.match("<!--")) {
+            tokens.push(this.readComment());
+          } else if (this.match("<![CDATA[") && this.options.recognizeCDATA) {
+            tokens.push(this.readCDATA());
+          } else if (this.match("<!DOCTYPE")) {
+            tokens.push(this.readDoctype());
+          } else if (this.peek(1) === "/") {
+            const endTag = this.readEndTag();
+            tokens.push(endTag);
+            // Remove tag from openTags if it matches
+            const lastOpenTag = this.openTags[this.openTags.length - 1];
+            if (lastOpenTag === endTag.name) {
+              this.openTags.pop();
             }
-          });
+          } else {
+            const startTag = this.readStartTag();
+            tokens.push(startTag);
+            if (!startTag.selfClosing) {
+              this.openTags.push(startTag.name);
+            }
+          }
+        } catch (error) {
+          this.addError(`Tokenization error at position ${tagStartPos}: ${error instanceof Error ? error.message : String(error)}`);
         }
-    
-        return { tokens, errors: this.errors };
+        
+        textStart = this.position;
+      } else {
+        this.advance();
       }
+    }
+
+    // Handle any remaining text
+    if (textStart < this.position) {
+      const text = this.input.slice(textStart, this.position);
+      const textToken = this.createTextToken(text, textStart);
+      if (this.shouldAddTextToken(textToken)) {
+        tokens.push(textToken);
+      }
+    }
+
+    // Check for unclosed tags
+    if (this.openTags.length > 0) {
+      this.openTags.forEach(tag => {
+        this.addError(`Unclosed tag: ${tag}`);
+      });
+    }
+
+    return { tokens, errors: this.errors };
+  }
     
 
   private readEndTag(): Extract<HTMLToken, { type: "EndTag" }> {
@@ -206,7 +202,7 @@ export type HTMLToken =
   private shouldAddTextToken(token: Extract<HTMLToken, { type: "Text" }>): boolean {
     if (!token.value) return false;
     return this.options.preserveWhitespace || !token.isWhitespace;
-  }  private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
+  } private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
     const { line, column } = this.getCurrentLocation();
     this.consume(); // Skip '<'
     
@@ -241,11 +237,6 @@ export type HTMLToken =
     
     if (this.peek() === ">") {
       this.advance();
-    }
-
-    // Consider void elements as self-closing
-    if (HTMLTokenizer.VOID_ELEMENTS.has(name.toLowerCase())) {
-      selfClosing = true;
     }
     
     return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
@@ -437,7 +428,6 @@ export type HTMLToken =
     this.errors = [];
     this.openTags = [];
   }
-
   private peek(offset: number = 0): string {
     return this.input[this.position + offset] || '';
   }
