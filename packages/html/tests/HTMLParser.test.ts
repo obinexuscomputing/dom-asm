@@ -1,4 +1,5 @@
 import { HTMLParser } from "../src/parser/HTMLParser";
+import { HTMLASTNode } from "../src/parser/HTMLParser";
 
 describe('HTMLParser', () => {
   let parser: HTMLParser;
@@ -32,31 +33,29 @@ describe('HTMLParser', () => {
 
   describe('AST Optimization', () => {
     test('should merge adjacent text nodes', () => {
-        const html = '<div>Hello World</div>';
-        const ast = parser.parse(html);
-        
-        // After merging, there should be exactly one text node
-        expect(ast.root.children[0].children.filter(n => n.type === 'Text')).toHaveLength(1);
+      const html = '<div>Hello World</div>';
+      const ast = parser.parse(html);
+      
+      expect(ast.root.children[0].children.filter(n => n.type === 'Text')).toHaveLength(1);
     });
- 
+
     test('should remove empty text nodes', () => {
-        const html = '<div>  \n  <p>Text</p>  \n  </div>';
-        const ast = parser.parse(html);
-        
-        // After optimization, only non-empty text nodes should remain
-        const textNodes = ast.root.children[0].children.filter(n => n.type === 'Text');
-        expect(textNodes.length).toBe(0); // All whitespace should be removed
+      const html = '<div>  \n  <p>Text</p>  \n  </div>';
+      const ast = parser.parse(html);
+      
+      const textNodes = ast.root.children[0].children.filter(n => n.type === 'Text');
+      expect(textNodes.length).toBe(0);
     });
 
     test('should optimize attributes', () => {
-        const html = '<div Class="test" ID="main">Text</div>';
-        const ast = parser.parse(html);
-        
-        const divNode = ast.root.children[0];
-        // Attributes should be normalized to lowercase
-        expect(divNode.attributes?.get('class')).toBe('test');
-        expect(divNode.attributes?.get('id')).toBe('main');
+      const html = '<div Class="test" ID="main">Text</div>';
+      const ast = parser.parse(html);
+      
+      const divNode = ast.root.children[0];
+      expect(divNode.attributes?.get('class')).toBe('test');
+      expect(divNode.attributes?.get('id')).toBe('main');
     });
+  }); // Added missing closing brace
 
   describe('State Minimization', () => {
     test('should properly minimize states', () => {
@@ -88,7 +87,6 @@ describe('HTMLParser', () => {
       const html = '<div><p>Text</div></p>';
       const ast = parser.parse(html);
       
-      // Should still create a valid AST
       expect(ast.root).toBeDefined();
       expect(ast.root.children).toBeDefined();
     });
@@ -99,7 +97,7 @@ describe('HTMLParser', () => {
       const html = '<div>Text<!-- Comment --><p>More</p></div>';
       const ast = parser.parse(html);
       
-      expect(ast.metadata.elementCount).toBe(3); // root, div, p
+      expect(ast.metadata.elementCount).toBe(3);
       expect(ast.metadata.textCount).toBe(2);
       expect(ast.metadata.commentCount).toBe(1);
     });
