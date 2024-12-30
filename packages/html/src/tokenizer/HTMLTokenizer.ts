@@ -50,6 +50,26 @@ export type HTMLToken =
       line: number;
       column: number;
     }
+
+//     // Usage
+// const input = `
+// <!DOCTYPE html>
+// <html lang="en">
+// <head>
+//   <meta charset="UTF-8">
+//   <title>Document</title>
+// </head>
+// <body>
+//   <p>Hello, world!</p>
+// </body>
+// </html>
+// `;
+
+// const tokenizer = new HTMLTokenizer(input);
+// const { tokens, errors } = tokenizer.tokenize();
+
+// console.log(tokens);
+// console.log(errors);
     
     export class HTMLTokenizer {
       
@@ -446,3 +466,4 @@ export type HTMLToken =
     return { line: this.line, column: this.column };
   }
 }
+
