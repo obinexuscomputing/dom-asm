@@ -45,34 +45,41 @@ export type HTMLToken =
       column: number;
     };
 
-export class HTMLTokenizer {
-  private input: string;
-  private position: number = 0;
-  private line: number = 1;
-  private column: number = 1;
-  private lastTokenEnd: number = 0;
-  private errors: { message: string; line: number; column: number }[] = [];
+    export interface TokenizerError {
+      message: string;
+      line: number;
+      column: number;
+    }
+    
+    export class HTMLTokenizer {
+      private input: string;
+      private position: number = 0;
+      private line: number = 1;
+      private column: number = 1;
+      private lastTokenEnd: number = 0;
+      private errors: TokenizerError[] = [];
+    
+      // Configuration options
+      private options: {
+        xmlMode: boolean;
+        recognizeCDATA: boolean;
+        recognizeConditionalComments: boolean;
+        preserveWhitespace: boolean;
+      };
+    
+      constructor(input: string, options: Partial<HTMLTokenizer['options']> = {}) {
+        this.input = input;
+        this.options = {
+          xmlMode: false,
+          recognizeCDATA: false,
+          recognizeConditionalComments: true,
+          preserveWhitespace: false,
+          ...options
+        };
+      }
+    
 
-  // Configuration options
-  private options: {
-    xmlMode: boolean;
-    recognizeCDATA: boolean;
-    recognizeConditionalComments: boolean;
-    preserveWhitespace: boolean;
-  };
-
-  constructor(input: string, options: Partial<HTMLTokenizer['options']> = {}) {
-    this.input = input;
-    this.options = {
-      xmlMode: false,
-      recognizeCDATA: false,
-      recognizeConditionalComments: true,
-      preserveWhitespace: false,
-      ...options
-    };
-  }
-
-  public tokenize(): { tokens: HTMLToken[], errors: typeof this.errors } {
+  public tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
     this.reset();
     const tokens: HTMLToken[] = [];
     let textStart = 0;
@@ -124,15 +131,12 @@ export class HTMLTokenizer {
         }
       }
     } catch (error) {
-      if (error instanceof Error) {
-        this.addError(`Tokenization error: ${error.message}`);
-      } else {
-        this.addError('Tokenization error: Unknown error');
-      }
+      this.addError(`Tokenization error: ${error instanceof Error ? error.message : String(error)}`);
     }
 
     return { tokens, errors: this.errors };
   }
+
   private readEndTag(): Extract<HTMLToken, { type: "EndTag" }> {
     const { line, column } = this.getCurrentLocation();
     this.advance(2); // Skip '</'
@@ -172,13 +176,6 @@ export class HTMLTokenizer {
     };
   }
 
-  private reset(): void {
-    this.position = 0;
-    this.line = 1;
-    this.column = 1;
-    this.lastTokenEnd = 0;
-    this.errors = [];
-  }
 
   private shouldAddTextToken(token: Extract<HTMLToken, { type: "Text" }>): boolean {
     if (!token.value) return false;
@@ -401,13 +398,20 @@ export class HTMLTokenizer {
     }
     return result;
   }
-
   private addError(message: string): void {
     this.errors.push({
       message,
       line: this.line,
       column: this.column
     });
+  }
+
+  private reset(): void {
+    this.position = 0;
+    this.line = 1;
+    this.column = 1;
+    this.lastTokenEnd = 0;
+    this.errors = [];
   }
 
   private peek(offset: number = 0): string {
