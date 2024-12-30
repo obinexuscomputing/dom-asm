@@ -111,56 +111,17 @@ export class HTMLTokenizer {
     };
   }
 
+  public tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
+    this.reset();
+    const tokens: HTMLToken[] = [];
+    let textStart = 0;
     
-      public tokenize(): { tokens: HTMLToken[]; errors: TokenizerError[] } {
-        this.reset();
-        const tokens: HTMLToken[] = [];
-        let textStart = 0;
+    try {
+      while (this.position < this.input.length) {
+        const char = this.peek();
         
-        try {
-          while (this.position < this.input.length) {
-            const char = this.peek();
-            
-            if (char === "<") {
-              // Handle text before tag
-              if (textStart < this.position) {
-                const text = this.input.slice(textStart, this.position);
-                const textToken = this.createTextToken(text, textStart);
-                if (this.shouldAddTextToken(textToken)) {
-                  tokens.push(textToken);
-                }
-              }
-              
-              if (this.match("<!--")) {
-                tokens.push(this.readComment());
-              } else if (this.match("<![CDATA[") && this.options.recognizeCDATA) {
-                tokens.push(this.readCDATA());
-              } else if (this.match("<!DOCTYPE")) {
-                tokens.push(this.readDoctype());
-              } else if (this.peek(1) === "/") {
-                const endTag = this.readEndTag();
-                tokens.push(endTag);
-                if (this.options.validateClosing) {
-                  const lastOpenTagIndex = this.openTags.lastIndexOf(endTag.name);
-                  if (lastOpenTagIndex !== -1) {
-                    this.openTags.splice(lastOpenTagIndex, 1);
-                  }
-                }
-              } else {
-                const startTag = this.readStartTag();
-                tokens.push(startTag);
-                if (!startTag.selfClosing) {
-                  this.openTags.push(startTag.name);
-                }
-              }
-              
-              textStart = this.position;
-            } else {
-              this.advance();
-            }
-          }
-          
-          // Handle remaining text
+        if (char === "<") {
+          // Handle text before tag
           if (textStart < this.position) {
             const text = this.input.slice(textStart, this.position);
             const textToken = this.createTextToken(text, textStart);
@@ -169,23 +130,67 @@ export class HTMLTokenizer {
             }
           }
           
-          // Check for unclosed tags
-          if (this.options.validateClosing) {
-            this.openTags.forEach(tag => {
-              if (!HTMLTokenizer.VOID_ELEMENTS.has(tag.toLowerCase())) {
-                this.addError(`Unclosed tag: ${tag}`);
+          if (this.match("<!--")) {
+            tokens.push(this.readComment());
+          } else if (this.match("<![CDATA[") && this.options.recognizeCDATA) {
+            tokens.push(this.readCDATA());
+          } else if (this.match("<!DOCTYPE")) {
+            tokens.push(this.readDoctype());
+          } else if (this.peek(1) === "/") {
+            const endTag = this.readEndTag();
+            tokens.push(endTag);
+            if (this.options.validateClosing) {
+              const lastOpenTagIndex = this.openTags.lastIndexOf(endTag.name);
+              if (lastOpenTagIndex !== -1) {
+                this.openTags.splice(lastOpenTagIndex, 1);
               }
-            });
+            }
+          } else {
+            const startTag = this.readStartTag();
+            tokens.push(startTag);
+            // Only track non-void, non-self-closing tags
+            if (!startTag.selfClosing && !HTMLTokenizer.VOID_ELEMENTS.has(startTag.name.toLowerCase())) {
+              this.openTags.push(startTag.name);
+            }
           }
           
-        } catch (error) {
-          if (error instanceof Error) {
-            this.addError(error.message);
-          }
+          textStart = this.position;
+        } else {
+          this.advance();
         }
-        
-        return { tokens, errors: this.errors };
       }
+      
+      // Handle remaining text
+      if (textStart < this.position) {
+        const text = this.input.slice(textStart, this.position);
+        const textToken = this.createTextToken(text, textStart);
+        if (this.shouldAddTextToken(textToken)) {
+          tokens.push(textToken);
+        }
+      }
+      
+      // Only check for unclosed non-void tags when validateClosing is true
+      if (this.options.validateClosing) {
+        const nonVoidUnclosedTags = this.openTags.filter(tag => 
+          !HTMLTokenizer.VOID_ELEMENTS.has(tag.toLowerCase())
+        );
+        
+        // Only add errors if we actually found unclosed non-void tags
+        if (nonVoidUnclosedTags.length > 0) {
+          nonVoidUnclosedTags.forEach(tag => {
+            this.addError(`Unclosed tag: ${tag}`);
+          });
+        }
+      }
+      
+    } catch (error) {
+      if (error instanceof Error) {
+        this.addError(error.message);
+      }
+    }
+    
+    return { tokens, errors: this.errors };
+}
 
   private readEndTag(): Extract<HTMLToken, { type: "EndTag" }> {
     const { line, column } = this.getCurrentLocation();
