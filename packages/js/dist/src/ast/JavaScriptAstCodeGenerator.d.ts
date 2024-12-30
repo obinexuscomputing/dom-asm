@@ -1,4 +1,5 @@
-import { JSASTNode } from "../types";
+import { JSASTNode } from "src/types";
+import { JavaScriptAstNode } from "./JavaScriptAstNode";
 export interface GenerationError {
     code: string;
     message: string;
@@ -19,7 +20,7 @@ export interface GeneratorOptions {
     format?: "compact" | "pretty";
     indent?: string;
 }
-export declare class JSAstGenerator {
+export declare class JavaScriptAstCodeGenerator {
     private tokenizer;
     private validator;
     private parser;
@@ -29,9 +30,15 @@ export declare class JSAstGenerator {
     generateFromAST(ast: JSASTNode, options?: GeneratorOptions): GenerationResult;
     private processAST;
     private convertValidationErrors;
-    private generateCode;
-    private traverseAST;
-    private formatOutput;
+    generate(node: JavaScriptAstNode): string;
+    private generateProgram;
+    private generateVariableDeclaration;
+    private generateIdentifier;
+    private generateLiteral;
+    private generateBlockStatement;
+    private generateIfStatement;
+    private generateFunctionDeclaration;
+    formatCode(code: string, options?: GeneratorOptions): string;
     private formatCompact;
     private formatPretty;
 }

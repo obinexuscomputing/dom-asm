@@ -1,7 +1,3 @@
-export * from './tokenizer/index';
-export * from './parser/index';
-export * from './validator/index';
-export * from './generator/index';
-export * from './types';
-export * from './ast/index';
+export * from './ast';
+export * from './tokenizer';
 //# sourceMappingURL=index.d.ts.map

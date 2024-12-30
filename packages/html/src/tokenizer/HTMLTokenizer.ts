@@ -1,9 +1,49 @@
+// Enhanced token types with more specific information
 export type HTMLToken =
-  | { type: "Doctype"; value: string; line: number; column: number }
-  | { type: "StartTag"; name: string; attributes: Record<string, string>; selfClosing: boolean; line: number; column: number }
-  | { type: "EndTag"; name: string; line: number; column: number }
-  | { type: "Text"; value: string; line: number; column: number }
-  | { type: "Comment"; value: string; line: number; column: number };
+  | { 
+      type: "Doctype"; 
+      value: string; 
+      line: number; 
+      column: number;
+      publicId?: string;
+      systemId?: string;
+    }
+  | { 
+      type: "StartTag"; 
+      name: string; 
+      attributes: Map<string, string>; // Using Map for better attribute handling
+      selfClosing: boolean; 
+      line: number; 
+      column: number;
+      namespace?: string; // Added for XML/SVG support
+    }
+  | { 
+      type: "EndTag"; 
+      name: string; 
+      line: number; 
+      column: number;
+      namespace?: string;
+    }
+  | { 
+      type: "Text"; 
+      value: string; 
+      line: number; 
+      column: number;
+      isWhitespace: boolean; // Flag for pure whitespace text
+    }
+  | { 
+      type: "Comment"; 
+      value: string; 
+      line: number; 
+      column: number;
+      isConditional: boolean; // For conditional comments
+    }
+  | {
+      type: "CDATA";
+      value: string;
+      line: number;
+      column: number;
+    };
 
 export class HTMLTokenizer {
   private input: string;
@@ -11,238 +51,342 @@ export class HTMLTokenizer {
   private line: number = 1;
   private column: number = 1;
   private lastTokenEnd: number = 0;
+  private errors: Array<{message: string; line: number; column: number}> = [];
 
-  constructor(input: string) {
+  // Configuration options
+  private options: {
+    xmlMode: boolean;
+    recognizeCDATA: boolean;
+    recognizeConditionalComments: boolean;
+    preserveWhitespace: boolean;
+  };
+
+  constructor(input: string, options: Partial<HTMLTokenizer['options']> = {}) {
     this.input = input;
-  }
-
-  public tokenize(): HTMLToken[] {
-    this.position = 0;
-    this.line = 1;
-    this.column = 1;
-    this.lastTokenEnd = 0;
-    
-    const tokens: HTMLToken[] = [];
-    let textStart = 0;
-    
-    while (this.position < this.input.length) {
-      const char = this.peek();
-
-      if (char === "<") {
-        // Handle text before tag
-        if (textStart < this.position) {
-          const textContent = this.input.slice(textStart, this.position);
-          const textToken = this.createTextToken(textContent, textStart);
-          if (this.isTextToken(textToken) && textToken.value) {
-            tokens.push(textToken);
-          }
-        }
-
-        const tagStart = this.position;
-        if (this.match("<!--")) {
-          const commentToken = this.readComment();
-          if (this.isCommentToken(commentToken) && commentToken.value) {
-            tokens.push(commentToken);
-          }
-        } else if (this.match("<!DOCTYPE")) {
-          tokens.push(this.readDoctype());
-        } else if (this.peek(1) === "/") {
-          const endTag = this.readEndTag();
-          tokens.push({
-            ...endTag,
-            column: this.getColumnAtPosition(tagStart)
-          });
-        } else {
-          tokens.push(this.readStartTag());
-        }
-        
-        textStart = this.position;
-        this.lastTokenEnd = this.position;
-      } else {
-        this.position++;
-        if (char === '\n') {
-          this.line++;
-          this.column = 1;
-        } else {
-          this.column++;
-        }
-      }
-    }
-
-    // Handle any remaining text
-    if (textStart < this.position) {
-      const textContent = this.input.slice(textStart, this.position);
-      const textToken = this.createTextToken(textContent, textStart);
-      if (this.isTextToken(textToken) && textToken.value) {
-        tokens.push(textToken);
-      }
-    }
-
-    return tokens;
-  }
-
-  private isTextToken(token: HTMLToken): token is Extract<HTMLToken, { type: "Text" }> {
-    return token.type === "Text";
-  }
-
-  private isCommentToken(token: HTMLToken): token is Extract<HTMLToken, { type: "Comment" }> {
-    return token.type === "Comment";
-  }
-
-  private createTextToken(content: string, startPos: number): HTMLToken {
-    let line = 1;
-    let lastNewline = -1;
-    
-    for (let i = 0; i < startPos; i++) {
-      if (this.input[i] === '\n') {
-        line++;
-        lastNewline = i;
-      }
-    }
-    
-    const column = lastNewline === -1 ? startPos + 1 : startPos - lastNewline;
-    
-    return {
-      type: "Text" as const,
-      value: content.trim(),
-      line,
-      column
+    this.options = {
+      xmlMode: false,
+      recognizeCDATA: false,
+      recognizeConditionalComments: true,
+      preserveWhitespace: false,
+      ...options
     };
   }
 
-  private readStartTag(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(); // Skip '<'
+  public tokenize(): { tokens: HTMLToken[], errors: typeof this.errors } {
+    this.reset();
+    const tokens: HTMLToken[] = [];
+    let textStart = 0;
     
-    const name = this.readTagName();
-    const attributes: Record<string, string> = {};
-    let selfClosing = false;
-    
-    while (this.position < this.input.length && !this.match(">")) {
-      this.skipWhitespace();
-      
-      if (this.match("/>")) {
-        selfClosing = true;
-        this.position += 2;
-        this.column += 2;
-        break;
-      }
-      
-      if (this.peek() === "/") {
-        selfClosing = true;
-        this.consume();
-        continue;
-      }
-      
-      const attrName = this.readUntil(/[\s=\/>]/).trim();
-      if (!attrName) break;
-      
-      this.skipWhitespace();
-      
-      if (this.peek() === "=") {
-        this.consume(); // Skip '='
-        this.skipWhitespace();
-        
-        let value: string;
-        const quote = this.peek();
-        
-        if (quote === '"' || quote === "'") {
-          this.consume(); // Skip opening quote
-          value = this.readUntil(quote);
-          this.consume(); // Skip closing quote
-        } else {
-          value = this.readUntil(/[\s\/>]/);
-        }
-        
-        attributes[attrName] = value;
-      } else {
-        attributes[attrName] = "true";
-      }
-      
-      this.skipWhitespace();
-    }
-    
-    if (this.peek() === ">") {
-      this.consume();
-    }
-    
-    return { type: "StartTag", name, attributes, selfClosing, line, column };
-  }
+    try {
+      while (this.position < this.input.length) {
+        const char = this.peek();
 
-  private readEndTag(): HTMLToken {
+        if (char === "<") {
+          // Handle text before tag
+          if (textStart < this.position) {
+            const textToken = this.createTextToken(
+              this.input.slice(textStart, this.position), 
+              textStart
+            );
+            if (this.shouldAddTextToken(textToken)) {
+              tokens.push(textToken);
+            }
+          }
+
+          const tagStart = this.position;
+          if (this.match("<!--")) {
+            tokens.push(this.readComment());
+          } else if (this.match("<![CDATA[") && this.options.recognizeCDATA) {
+            tokens.push(this.readCDATA());
+          } else if (this.match("<!DOCTYPE")) {
+            tokens.push(this.readDoctype());
+          } else if (this.peek(1) === "/") {
+            tokens.push(this.readEndTag());
+          } else {
+            tokens.push(this.readStartTag());
+          }
+          
+          textStart = this.position;
+          this.lastTokenEnd = this.position;
+        } else {
+          this.advance();
+        }
+      }
+
+      // Handle any remaining text
+      if (textStart < this.position) {
+        const textToken = this.createTextToken(
+          this.input.slice(textStart, this.position),
+          textStart
+        );
+        if (this.shouldAddTextToken(textToken)) {
+          tokens.push(textToken);
+        }
+      }
+    } catch (error) {
+      this.addError(`Tokenization error: ${error.message}`);
+    }
+
+    return { tokens, errors: this.errors };
+  }
+  readEndTag(): HTMLToken {
     const { line, column } = this.getCurrentLocation();
-    this.consume(2); // Skip '</'
+    this.consume(); // Skip '</'
     
     const name = this.readTagName();
     this.skipWhitespace();
     
-    if (this.peek() === ">") {
-      this.consume();
+    if (this.peek() === '>') {
+      this.advance(); // Skip '>'
     }
     
     return { type: "EndTag", name, line, column };
   }
-
-  private readComment(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(4); // Skip '<!--'
-    
-    let value = '';
-    while (this.position < this.input.length) {
-      if (this.match("-->")) {
-        break;
-      }
-      value += this.consume();
-    }
-    
-    this.consume(3); // Skip '-->'
-    return { type: "Comment", value: value.trim(), line, column };
-  }
-
-  private readDoctype(): HTMLToken {
-    const { line, column } = this.getCurrentLocation();
-    this.consume(9); // Skip '<!DOCTYPE'
-    const value = this.readUntil(">").trim();
-    this.consume(); // Skip '>'
-    return { type: "Doctype", value, line, column };
-  }
-
   private readTagName(): string {
     let name = '';
-    while (this.position < this.input.length && !/[\s>\/]/.test(this.peek())) {
-      name += this.input[this.position];
-      this.position++;
-      this.column++;
+    while (this.position < this.input.length) {
+      const char = this.peek();
+      if (/[\s\/>]/.test(char)) break;
+      name += this.advance();
+    }
+    return name.toLowerCase().trim();
+  }
+  private createTextToken(value: string, start: number): Extract<HTMLToken, { type: "Text" }> {
+    const isWhitespace = /^\s*$/.test(value);
+    return {
+      type: "Text",
+      value,
+      line: this.line,
+      column: this.column,
+      isWhitespace
+    };
+  }
+
+  private reset(): void {
+    this.position = 0;
+    this.line = 1;
+    this.column = 1;
+    this.lastTokenEnd = 0;
+    this.errors = [];
+  }
+
+  private shouldAddTextToken(token: Extract<HTMLToken, { type: "Text" }>): boolean {
+    if (!token.value) return false;
+    return this.options.preserveWhitespace || !token.isWhitespace;
+  }
+
+  private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
+    const { line, column } = this.getCurrentLocation();
+    this.consume(); // Skip '<'
+    
+    const name = this.readTagName();
+    const attributes = new Map<string, string>();
+    let selfClosing = false;
+    let namespace: string | undefined;
+    
+    // Handle XML namespaces
+    if (this.options.xmlMode && name.includes(':')) {
+      const [ns, localName] = name.split(':');
+      namespace = ns;
+    }
+    
+    try {
+      while (this.position < this.input.length && !this.match(">")) {
+        this.skipWhitespace();
+        
+        if (this.match("/>")) {
+          selfClosing = true;
+          this.advance(2);
+          break;
+        }
+        
+        if (this.peek() === "/") {
+          selfClosing = true;
+          this.advance();
+          continue;
+        }
+        
+        const attrName = this.readAttributeName();
+        if (!attrName) break;
+        
+        this.skipWhitespace();
+        let value = "";
+        
+        if (this.peek() === "=") {
+          this.advance(); // Skip '='
+          this.skipWhitespace();
+          value = this.readAttributeValue();
+        } else {
+          value = attrName; // For boolean attributes
+        }
+        
+        attributes.set(attrName, value);
+        this.skipWhitespace();
+      }
+    } catch (error) {
+      this.addError(`Error parsing attributes for tag <${name}>: ${error.message}`);
+    }
+    
+    if (this.peek() === ">") {
+      this.advance();
+    }
+    
+    // Handle void elements
+    if (!this.options.xmlMode) {
+      const voidElements = new Set([
+        'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
+        'link', 'meta', 'param', 'source', 'track', 'wbr'
+      ]);
+      if (voidElements.has(name)) {
+        selfClosing = true;
+      }
+    }
+    
+    return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
+  }
+  private consume(): void {
+    this.advance();
+  }
+
+  private readAttributeName(): string {
+    let name = '';
+    while (this.position < this.input.length) {
+      const char = this.peek();
+      if (/[\s=\/>]/.test(char)) break;
+      name += this.advance();
     }
     return name.toLowerCase().trim();
   }
 
-  private getColumnAtPosition(pos: number): number {
-    let lastNewline = this.input.lastIndexOf('\n', pos - 1);
-    return lastNewline === -1 ? pos + 1 : pos - lastNewline;
+  private readAttributeValue(): string {
+    const quote = this.peek();
+    let value = '';
+    
+    if (quote === '"' || quote === "'") {
+      this.advance(); // Skip opening quote
+      while (this.position < this.input.length) {
+        if (this.peek() === quote) {
+          this.advance(); // Skip closing quote
+          break;
+        }
+        value += this.advance();
+      }
+    } else {
+      // Unquoted attribute value
+      while (this.position < this.input.length) {
+        const char = this.peek();
+        if (/[\s\/>]/.test(char)) break;
+        value += this.advance();
+      }
+    }
+    
+    return value;
   }
 
-  private peek(offset: number = 0): string {
-    return this.input[this.position + offset] || '';
-  }
-
-  private match(str: string): boolean {
-    return this.input.startsWith(str, this.position);
-  }
-
-  private readUntil(stop: string | RegExp): string {
-    const start = this.position;
+  private readCDATA(): Extract<HTMLToken, { type: "CDATA" }> {
+    const { line, column } = this.getCurrentLocation();
+    this.advance(9); // Skip '<![CDATA['
+    
+    let value = '';
     while (this.position < this.input.length) {
-      const char = this.peek();
-      if (typeof stop === 'string' ? char === stop : stop.test(char)) {
+      if (this.match("]]>")) {
+        this.advance(3);
         break;
       }
-      this.consume();
+      value += this.advance();
     }
-    return this.input.slice(start, this.position);
+    
+    return { type: "CDATA", value, line, column };
   }
 
-  private consume(count: number = 1): string {
+  private readComment(): Extract<HTMLToken, { type: "Comment" }> {
+    const { line, column } = this.getCurrentLocation();
+    this.advance(4); // Skip '<!--'
+    
+    let value = '';
+    let isConditional = false;
+    
+    // Check for conditional comments
+    if (this.options.recognizeConditionalComments && this.match("[if")) {
+      isConditional = true;
+    }
+    
+    while (this.position < this.input.length) {
+      if (this.match("-->")) {
+        this.advance(3);
+        break;
+      }
+      value += this.advance();
+    }
+    
+    return { type: "Comment", value: value.trim(), line, column, isConditional };
+  }
+
+  private readDoctype(): Extract<HTMLToken, { type: "Doctype" }> {
+    const { line, column } = this.getCurrentLocation();
+    this.advance(9); // Skip '<!DOCTYPE'
+    this.skipWhitespace();
+    
+    let value = '';
+    let publicId: string | undefined;
+    let systemId: string | undefined;
+    
+    // Read doctype name
+    while (this.position < this.input.length && !this.match(">")) {
+      const char = this.peek();
+      if (char === "P" && this.match("PUBLIC")) {
+        this.advance(6);
+        this.skipWhitespace();
+        publicId = this.readQuotedString();
+        this.skipWhitespace();
+        if (this.peek() !== ">") {
+          systemId = this.readQuotedString();
+        }
+        break;
+      } else if (char === "S" && this.match("SYSTEM")) {
+        this.advance(6);
+        this.skipWhitespace();
+        systemId = this.readQuotedString();
+        break;
+      } else {
+        value += this.advance();
+      }
+    }
+    
+    while (this.position < this.input.length && this.peek() !== ">") {
+      this.advance();
+    }
+    this.advance(); // Skip '>'
+    
+    return { 
+      type: "Doctype", 
+      value: value.trim(), 
+      publicId, 
+      systemId, 
+      line, 
+      column 
+    };
+  }
+
+  private readQuotedString(): string {
+    const quote = this.peek();
+    if (quote !== '"' && quote !== "'") {
+      this.addError("Expected quoted string");
+      return "";
+    }
+    
+    let value = "";
+    this.advance(); // Skip opening quote
+    
+    while (this.position < this.input.length && this.peek() !== quote) {
+      value += this.advance();
+    }
+    
+    this.advance(); // Skip closing quote
+    return value;
+  }
+
+  private advance(count: number = 1): string {
     let result = '';
     for (let i = 0; i < count && this.position < this.input.length; i++) {
       const char = this.input[this.position];
@@ -260,9 +404,25 @@ export class HTMLTokenizer {
     return result;
   }
 
+  private addError(message: string): void {
+    this.errors.push({
+      message,
+      line: this.line,
+      column: this.column
+    });
+  }
+
+  private peek(offset: number = 0): string {
+    return this.input[this.position + offset] || '';
+  }
+
+  private match(str: string): boolean {
+    return this.input.startsWith(str, this.position);
+  }
+
   private skipWhitespace(): void {
     while (this.position < this.input.length && /\s/.test(this.peek())) {
-      this.consume();
+      this.advance();
     }
   }
 

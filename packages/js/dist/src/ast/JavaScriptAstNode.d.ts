@@ -1,4 +1,4 @@
-export declare enum JavaScriptNodeType {
+export declare enum JavaScriptNodeTypeMap {
     Program = "Program",
     VariableDeclaration = "VariableDeclaration",
     InlineConstant = "InlineConstant",
@@ -29,16 +29,16 @@ export declare enum JavaScriptNodeType {
     ExportNamedDeclaration = "ExportNamedDeclaration"
 }
 export interface JavaScriptAstNode {
-    type: JavaScriptNodeType;
+    type: JavaScriptNodeTypeMap;
     value?: string;
     children?: JavaScriptAstNode[];
     minimize(): JavaScriptAstNode;
 }
 export declare class JavaScriptAstNode {
-    type: JavaScriptNodeType;
+    type: JavaScriptNodeTypeMap;
     value?: string;
     children?: JavaScriptAstNode[];
-    constructor(type: JavaScriptNodeType, value?: string, children?: JavaScriptAstNode[]);
+    constructor(type: JavaScriptNodeTypeMap, value?: string, children?: JavaScriptAstNode[]);
     optimize(): JavaScriptAstNode;
     traverse(node: JavaScriptAstNode, optimize?: boolean): JavaScriptAstNode;
     performOptimization(node: JavaScriptAstNode): JavaScriptAstNode;

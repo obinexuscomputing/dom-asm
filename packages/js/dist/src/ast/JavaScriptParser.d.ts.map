@@ -1,0 +1,1 @@
+{"version":3,"file":"JavaScriptParser.d.ts","sourceRoot":"","sources":["../../../src/ast/JavaScriptParser.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,aAAa,EAAE,MAAM,iBAAiB,CAAC;AAGhD,qBAAa,gBAAgB;IAC3B,OAAO,CAAC,SAAS,CAAsB;IACvC,OAAO,CAAC,SAAS,CAAyB;;IAOnC,KAAK,CAAC,MAAM,EAAE,MAAM,GAAG,aAAa;CAW5C"}
