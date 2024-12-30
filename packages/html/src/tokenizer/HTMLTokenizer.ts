@@ -136,25 +136,27 @@ export type HTMLToken =
 
     return { tokens, errors: this.errors };
   }
-
   private readEndTag(): Extract<HTMLToken, { type: "EndTag" }> {
     const { line, column } = this.getCurrentLocation();
     this.advance(2); // Skip '</'
     
     const name = this.readTagName();
-    this.skipWhitespace();
-    
-    if (this.peek() === '>') {
-        this.advance(); // Skip '>'
+    if (!name) {
+      this.addError("Missing tag name in end tag");
     }
     
-    // Add validation for malformed end tags
-    if (!name) {
-        this.addError("Missing tag name in end tag");
+    this.skipWhitespace();
+    
+    // Check for proper closing of end tag
+    if (this.peek() !== '>') {
+      this.addError(`Malformed end tag: ${name}`);
+    } else {
+      this.advance(); // Skip '>'
     }
     
     return { type: "EndTag", name, line, column };
-}
+  }
+
 
   private readTagName(): string {
     let name = '';
@@ -182,62 +184,71 @@ export type HTMLToken =
     return this.options.preserveWhitespace || !token.isWhitespace;
   }
 
-
   private readStartTag(): Extract<HTMLToken, { type: "StartTag" }> {
     const { line, column } = this.getCurrentLocation();
     this.consume(); // Skip '<'
     
     const name = this.readTagName();
+    if (!name) {
+      this.addError("Missing tag name in start tag");
+    }
+    
     const attributes = new Map<string, string>();
     let selfClosing = false;
     let namespace: string | undefined;
     
-    try {
-        while (this.position < this.input.length && !this.match(">")) {
-            this.skipWhitespace();
-            
-            if (this.match("/>")) {
-                selfClosing = true;
-                this.advance(2);
-                break;
-            }
-            
-            const attrName = this.readAttributeName();
-            if (!attrName) break;
-            
-            this.skipWhitespace();
-            let value = "";
-            
-            if (this.peek() === "=") {
-                this.advance(); // Skip '='
-                this.skipWhitespace();
-                value = this.readAttributeValue();
-                // Validate attribute value
-                if (!value && this.peek() === '"') {
-                    this.addError(`Invalid attribute value for ${attrName}`);
-                }
-            } else {
-                value = attrName; // Boolean attribute
-            }
-            
-            // Convert to lowercase for consistency
-            attributes.set(attrName.toLowerCase(), value);
-            this.skipWhitespace();
+    while (this.position < this.input.length && !this.match(">")) {
+      this.skipWhitespace();
+      
+      if (this.match("/>")) {
+        selfClosing = true;
+        this.advance(2);
+        break;
+      }
+      
+      // Check for unclosed tag
+      if (this.position >= this.input.length) {
+        this.addError(`Unclosed tag: ${name}`);
+        break;
+      }
+      
+      const attrName = this.readAttributeName();
+      if (!attrName) break;
+      
+      this.skipWhitespace();
+      let value = "";
+      
+      if (this.peek() === "=") {
+        this.advance(); // Skip '='
+        this.skipWhitespace();
+        
+        // Check for missing attribute value
+        if (!/['"]/.test(this.peek())) {
+          this.addError(`Missing quotes in attribute value for "${attrName}"`);
         }
-    } catch (error) {
-        if (error instanceof Error) {
-          this.addError(`Error parsing attributes for tag <${name}>: ${error.message}`);
-        } else {
-          this.addError(`Error parsing attributes for tag <${name}>: Unknown error`);
+        
+        value = this.readAttributeValue();
+        if (!value && this.peek() === '"') {
+          this.addError(`Invalid attribute value for ${attrName}`);
         }
+      }
+      
+      attributes.set(attrName.toLowerCase(), value || attrName);
+      this.skipWhitespace();
+    }
+    
+    // Check if tag was properly closed
+    if (this.position >= this.input.length) {
+      this.addError(`Unclosed tag: ${name}`);
     }
     
     if (this.peek() === ">") {
-        this.advance();
+      this.advance();
     }
     
     return { type: "StartTag", name, attributes, selfClosing, line, column, namespace };
-}
+  }
+
 
   private consume(): void {
     this.advance();
@@ -252,31 +263,37 @@ export type HTMLToken =
     }
     return name.toLowerCase().trim();
   }
-
   private readAttributeValue(): string {
     const quote = this.peek();
     let value = '';
     
     if (quote === '"' || quote === "'") {
       this.advance(); // Skip opening quote
+      const startPos = this.position;
+      
       while (this.position < this.input.length) {
         if (this.peek() === quote) {
           this.advance(); // Skip closing quote
-          break;
+          return value;
         }
         value += this.advance();
       }
-    } else {
-      // Unquoted attribute value
-      while (this.position < this.input.length) {
-        const char = this.peek();
-        if (/[\s\/>]/.test(char)) break;
-        value += this.advance();
-      }
+      
+      // If we reach here, the attribute value wasn't properly closed
+      this.addError(`Unclosed attribute value starting at position ${startPos}`);
+      return value;
+    }
+    
+    // Unquoted attribute value
+    while (this.position < this.input.length) {
+      const char = this.peek();
+      if (/[\s\/>]/.test(char)) break;
+      value += this.advance();
     }
     
     return value;
   }
+
 
   private readCDATA(): Extract<HTMLToken, { type: "CDATA" }> {
     const { line, column } = this.getCurrentLocation();
