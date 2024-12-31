@@ -1,4 +1,3 @@
-// HTMLToken.ts
 export type TokenType = 
   | 'StartTag'
   | 'EndTag'
@@ -39,7 +38,7 @@ export interface TextToken extends BaseToken {
 
 export interface CommentToken extends BaseToken {
   type: 'Comment';
-  data: string;  // Changed from content to data to match test expectations
+  data: string;
   isConditional?: boolean;
 }
 
@@ -90,9 +89,8 @@ export interface TokenizerOptions {
   recognizeConditionalComments?: boolean;
   preserveWhitespace?: boolean;
   allowUnclosedTags?: boolean;
+  advanced?: boolean;
 }
-
-// HTMLTokenizer.ts
 export class HTMLTokenizer {
   private input: string;
   private position: number;
@@ -115,11 +113,15 @@ export class HTMLTokenizer {
       recognizeConditionalComments: true,
       preserveWhitespace: false,
       allowUnclosedTags: true,
+      advanced: false,
       ...options
     };
   }
 
   tokenize(): { tokens: HTMLToken[], errors: TokenizerError[] } {
+    this.tokens = [];
+    this.errors = [];
+    
     while (this.position < this.input.length) {
       const char = this.peek();
 
@@ -140,20 +142,26 @@ export class HTMLTokenizer {
       }
     }
 
-    // Only append EOF token for certain cases
-    if (this.tokens.length === 0 || this.hasUnclosedTags()) {
-      this.addToken({
-        type: 'EOF',
-        start: this.position,
-        end: this.position,
-        line: this.line,
-        column: this.column
-      });
+    // Handle unclosed tags and EOF
+    if (this.hasUnclosedTags()) {
+      const lastToken = this.tokens[this.tokens.length - 1];
+      if (lastToken.type === 'StartTag') {
+        this.reportError('Unexpected end of input in tag ' + lastToken.name, lastToken.start, lastToken.end);
+      }
     }
 
-    return { tokens: this.tokens, errors: this.errors };
-  }
+    // Add EOF token
+    this.addToken({
+      type: 'EOF',
+      start: this.position,
+      end: this.position,
+      line: this.line,
+      column: this.column
+    });
 
+    return { tokens: this.options.advanced ? this.processAdvancedTokens() : this.tokens, errors: this.errors };
+  }
+  
   private handleStartTag(): void {
     const start = this.position;
     const startLine = this.line;
@@ -170,7 +178,6 @@ export class HTMLTokenizer {
     const attributes = this.readAttributes();
     let selfClosing = false;
 
-    // Check for self-closing tag
     this.skipWhitespace();
     if (this.peek() === '/') {
       selfClosing = true;
@@ -190,18 +197,17 @@ export class HTMLTokenizer {
         column: startColumn
       });
     } else {
-      // Always report the unclosed tag error with the specific error message
-      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
       this.addToken({
         type: 'StartTag',
         name: name.toLowerCase(),
         attributes,
-        selfClosing: true,
+        selfClosing: false,
         start,
         end: this.position,
         line: startLine,
         column: startColumn
       });
+      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
     }
   }
 
@@ -229,21 +235,22 @@ export class HTMLTokenizer {
         line: startLine,
         column: startColumn
       });
-    } else if (this.options.allowUnclosedTags) {
-      this.addToken({
-        type: 'EndTag',
-        name: name.toLowerCase(),
-        start,
-        end: this.position,
-        line: startLine,
-        column: startColumn
-      });
-      this.reportError('Unclosed end tag', start, this.position, 'warning');
     } else {
       this.reportError('Expected ">" at end of end tag', start, this.position);
     }
   }
-
+  private processAdvancedTokens(): HTMLToken[] {
+    return this.tokens.map(token => {
+      if (token.type === 'Text') {
+        return {
+          ...token,
+          content: token.content.trim(),
+          isWhitespace: /^\s*$/.test(token.content)
+        };
+      }
+      return token;
+    });
+  }
   private handleText(): void {
     const start = this.position;
     const startLine = this.line;

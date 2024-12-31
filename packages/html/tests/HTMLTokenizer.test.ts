@@ -58,12 +58,12 @@ describe('HTMLTokenizer', () => {
         it('should handle unclosed tags', () => {
             const input = '<div class="test">'; // Missing closing </div>
             const tokenizer = new HTMLTokenizer(input);
-
+        
             const { tokens, errors } = tokenizer.tokenize();
-
+        
             expect(errors).toHaveLength(1); // Expecting one error for unclosed tag
             expect(errors[0].message).toBe('Unexpected end of input in tag div'); // Verify error message
-
+        
             expect(tokens).toHaveLength(2); // StartTag + EOF
             expect(tokens[1].type).toBe('EOF'); // Ensure EOF token is emitted
         });
