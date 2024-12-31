@@ -91,6 +91,12 @@ export interface TokenizerOptions {
   allowUnclosedTags?: boolean;
   advanced?: boolean;
 }
+
+export interface TokenizerResult {
+  tokens: HTMLToken[];
+  errors: { message: string; line: number; column: number }[];
+}
+
 export class HTMLTokenizer {
   private input: string;
   private position: number;
@@ -118,52 +124,106 @@ export class HTMLTokenizer {
     };
   }
 
-  tokenize(): { tokens: HTMLToken[], errors: TokenizerError[] } {
-    this.tokens = [];
-    this.errors = [];
-    
+  tokenize(): TokenizerResult {
     while (this.position < this.input.length) {
-      const char = this.peek();
+      const char = this.input[this.position];
 
       if (char === '<') {
-        if (this.match('<!--')) {
-          this.handleComment();
-        } else if (this.match('<![CDATA[') && this.options.recognizeCDATA) {
-          this.handleCDATA();
-        } else if (this.match('<!DOCTYPE')) {
-          this.handleDoctype();
-        } else if (this.peek(1) === '/') {
-          this.handleEndTag();
-        } else {
-          const tagStart = this.position;
-          this.handleStartTag();
-          // Check for unclosed tag
-          if (this.position < this.input.length && this.peek() !== '>') {
-            const lastToken = this.tokens[this.tokens.length - 1];
-            if (lastToken?.type === 'StartTag') {
-              this.reportError('Unexpected end of input in tag ' + lastToken.name, tagStart, this.position);
-            }
-          }
-        }
+        this.processTag();
       } else {
-        this.handleText();
+        this.processText();
       }
     }
 
-    // Only add EOF token for HTML content (not for single comments)
-    const isOnlyComment = this.tokens.length === 1 && this.tokens[0].type === 'Comment';
-    if (!isOnlyComment) {
-      this.addToken({
-        type: 'EOF',
-        start: this.position,
-        end: this.position,
-        line: this.line,
-        column: this.column
-      });
-    }
+    // Push EOF token
+    this.tokens.push({
+      type: 'EOF',
+      line: this.line,
+      column: this.column,
+      start: this.position,
+      end: this.position,
+    });
 
     return { tokens: this.tokens, errors: this.errors };
   }
+  private skipUntil(char: string) {
+    while (this.position < this.input.length && this.input[this.position] !== char) {
+      this.advance();
+    }
+    this.advance(); // Skip target char
+  }
+  
+  private processTag() {
+    const start = this.position;
+    this.advance(); // Skip '<'
+
+    if (this.input[this.position] === '/') {
+      this.advance(); // Skip '/'
+      const tagName = this.readTagName();
+
+      if (tagName) {
+        this.tokens.push({
+          type: 'EndTag',
+          name: tagName,
+          line: this.line,
+          column: this.column,
+          start,
+          end: this.position,
+        });
+      } else {
+        this.addError('Malformed end tag', start);
+      }
+
+      this.skipUntil('>');
+    } else {
+      const tagName = this.readTagName();
+
+      if (tagName) {
+        const attributes = this.readAttributes();
+        const selfClosing = this.input[this.position] === '/';
+        if (selfClosing) this.advance(); // Skip '/'
+
+        this.tokens.push({
+          type: 'StartTag',
+          name: tagName,
+          attributes,
+          selfClosing,
+          line: this.line,
+          column: this.column,
+          start,
+          end: this.position,
+        });
+      } else {
+        this.addError('Malformed start tag', start);
+      }
+
+      this.skipUntil('>');
+    }
+  }
+
+  private processText() {
+    const start = this.position;
+    let content = '';
+
+    while (this.position < this.input.length && this.input[this.position] !== '<') {
+      content += this.input[this.position];
+      this.advance();
+    }
+
+    if (content.trim() || this.position === start) {
+      this.tokens.push({
+        type: 'Text',
+        content,
+        isWhitespace: !content.trim(),
+        line: this.line,
+        column: this.column,
+        start,
+        end: this.position,
+      });
+    }
+  }
+
+
   private readAttributes(): Map<string, string> {
     const attributes = new Map<string, string>();
     
@@ -250,7 +310,7 @@ export class HTMLTokenizer {
     const startLine = this.line;
     const startColumn = this.column;
     
-    this.advance(2); // Skip '</'
+    this.advance(); // Skip '</'
     const name = this.readTagName();
 
     if (!name) {
@@ -294,12 +354,12 @@ export class HTMLTokenizer {
     const startLine = this.line;
     const startColumn = this.column;
     
-    this.advance(4); // Skip '<!--'
+    this.advance(); // Skip '<!--'
     let content = '';
 
     while (this.position < this.input.length) {
       if (this.match('-->')) {
-        this.advance(3);
+        this.advance();
         break;
       }
       content += this.advance();
@@ -321,7 +381,7 @@ export class HTMLTokenizer {
     const startLine = this.line;
     const startColumn = this.column;
     
-    this.advance(9); // Skip '<!DOCTYPE'
+    this.advance(); // Skip '<!DOCTYPE'
     this.skipWhitespace();
     
     const name = this.readTagName() || '';
@@ -331,7 +391,7 @@ export class HTMLTokenizer {
     this.skipWhitespace();
     
     if (this.match('PUBLIC')) {
-      this.advance(6);
+      this.advance();
       this.skipWhitespace();
       publicId = this.readQuotedString();
       
@@ -340,7 +400,7 @@ export class HTMLTokenizer {
         systemId = this.readQuotedString();
       }
     } else if (this.match('SYSTEM')) {
-      this.advance(6);
+      this.advance();
       this.skipWhitespace();
       systemId = this.readQuotedString();
     }
@@ -367,12 +427,12 @@ export class HTMLTokenizer {
     const startLine = this.line;
     const startColumn = this.column;
     
-    this.advance(9); // Skip '<![CDATA['
+    this.advance(); // Skip '<![CDATA['
     let content = '';
 
     while (this.position < this.input.length) {
       if (this.match(']]>')) {
-        this.advance(3);
+        this.advance();
         break;
       }
       content += this.advance();
@@ -493,35 +553,48 @@ export class HTMLTokenizer {
     return this.input.startsWith(str, this.position);
   }
 
-  private advance(count: number = 1): string {
-    let result = '';
-    
-    for (let i = 0; i < count && this.position < this.input.length; i++) {
-      const char = this.input[this.position++];
-      result += char;
-      
-      if (char === '\n') {
-        this.line++;
-        this.column = 1;
-      } else {
-        this.column++;
-      }
-    }
-    
-    return result;
-  }
-
-  private skipWhitespace(): void {
-    while (this.position < this.input.length && /\s/.test(this.peek())) {
-      this.advance();
-    }
-  }
+ 
 
   private addToken(token: HTMLToken): void {
     this.tokens.push(token);
   }
 
+private skipWhitespace() {
+    while (this.isWhitespace(this.input[this.position])) {
+      this.advance();
+    }
+  }
 
+  private isAlphaNumeric(char: string): boolean {
+    return /[a-zA-Z0-9]/.test(char);
+  }
+
+  private isWhitespace(char: string): boolean {
+    return /\s/.test(char);
+  }
+
+  private advance(): string {
+    const char = this.input[this.position];
+    if (char === '\n') {
+      this.line++;
+      this.column = 1;
+    } else {
+      this.column++;
+    }
+    this.position++;
+    return char;
+  }
+
+  private addError(message: string, start: number) {
+    this.errors.push({
+      message,
+      line: this.line,
+      column: this.column,
+      severity: "warning",
+      start: 0,
+      end: 0
+    });
+  }
   private reportError(
     message: string,
     start: number,

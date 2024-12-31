@@ -63,6 +63,14 @@ export interface TokenizerOptions {
     allowUnclosedTags?: boolean;
     advanced?: boolean;
 }
+export interface TokenizerResult {
+    tokens: HTMLToken[];
+    errors: {
+        message: string;
+        line: number;
+        column: number;
+    }[];
+}
 export declare class HTMLTokenizer {
     private input;
     private position;
@@ -72,10 +80,10 @@ export declare class HTMLTokenizer {
     private errors;
     private options;
     constructor(input: string, options?: TokenizerOptions);
-    tokenize(): {
-        tokens: HTMLToken[];
-        errors: TokenizerError[];
-    };
+    tokenize(): TokenizerResult;
+    private skipUntil;
+    private processTag;
+    private processText;
     private readAttributes;
     private readAttributeName;
     private handleStartTag;
@@ -91,8 +99,11 @@ export declare class HTMLTokenizer {
     private hasUnclosedTags;
     private peek;
     private match;
-    private advance;
-    private skipWhitespace;
     private addToken;
+    private skipWhitespace;
+    private isAlphaNumeric;
+    private isWhitespace;
+    private advance;
+    private addError;
     private reportError;
 }
