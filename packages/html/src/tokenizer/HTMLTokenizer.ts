@@ -117,6 +117,7 @@ export class HTMLTokenizer {
       advanced: false,
       ...options
     };
+
   }
   tokenize(): { tokens: HTMLToken[], errors: TokenizerError[] } {
     this.tokens = [];
@@ -142,18 +143,20 @@ export class HTMLTokenizer {
       }
     }
 
-    // Always add EOF token at the end
-    this.addToken({
-      type: 'EOF',
-      start: this.position,
-      end: this.position,
-      line: this.line,
-      column: this.column
-    });
+    // Only add EOF token for HTML content (not for single comments)
+    const isOnlyComment = this.tokens.length === 1 && this.tokens[0].type === 'Comment';
+    if (!isOnlyComment) {
+      this.addToken({
+        type: 'EOF',
+        start: this.position,
+        end: this.position,
+        line: this.line,
+        column: this.column
+      });
+    }
 
     return { tokens: this.options.advanced ? this.processAdvancedTokens() : this.tokens, errors: this.errors };
   }
-
   private handleStartTag(): void {
     const start = this.position;
     const startLine = this.line;
@@ -183,33 +186,25 @@ export class HTMLTokenizer {
       this.advance();
     }
 
+    const token: StartTagToken = {
+      type: 'StartTag',
+      name: name.toLowerCase(),
+      attributes,
+      selfClosing,
+      namespace,
+      start,
+      end: this.position,
+      line: startLine,
+      column: startColumn
+    };
+
     if (this.peek() === '>') {
       this.advance();
-      this.addToken({
-        type: 'StartTag',
-        name: name.toLowerCase(),
-        attributes,
-        selfClosing,
-        namespace,
-        start,
-        end: this.position,
-        line: startLine,
-        column: startColumn
-      });
+      token.end = this.position;
+      this.addToken(token);
     } else {
-      // Report error but still add the token
+      this.addToken(token);
       this.reportError('Unexpected end of input in tag ' + name, start, this.position);
-      this.addToken({
-        type: 'StartTag',
-        name: name.toLowerCase(),
-        attributes,
-        selfClosing: false,
-        namespace,
-        start,
-        end: this.position,
-        line: startLine,
-        column: startColumn
-      });
     }
   }
 
