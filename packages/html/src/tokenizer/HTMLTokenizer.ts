@@ -115,7 +115,7 @@ export class HTMLTokenizer {
     this.errors = [];
     this.options = {
       xmlMode: false,
-      recognizeCDATA: false,
+      recognizeCDATA: true,
       recognizeConditionalComments: true,
       preserveWhitespace: false,
       allowUnclosedTags: true,
@@ -152,7 +152,6 @@ export class HTMLTokenizer {
     }
     this.advance(); // Skip target char
   }
-  
   private processTag() {
     const start = this.position;
     this.advance(); // Skip '<'
@@ -200,7 +199,6 @@ export class HTMLTokenizer {
       this.skipUntil('>');
     }
   }
-
   private processText() {
     const start = this.position;
     let content = '';
@@ -210,7 +208,7 @@ export class HTMLTokenizer {
       this.advance();
     }
 
-    if (content.trim() || this.position === start) {
+    if (content.trim() || this.options.preserveWhitespace) {
       this.tokens.push({
         type: 'Text',
         content,
@@ -222,22 +220,20 @@ export class HTMLTokenizer {
       });
     }
   }
-
-
   private readAttributes(): Map<string, string> {
     const attributes = new Map<string, string>();
-    
+
     while (this.position < this.input.length) {
       this.skipWhitespace();
-      
+
       if (this.peek() === '>' || this.peek() === '/' || this.peek() === '<') break;
-      
+
       const name = this.readAttributeName();
       if (!name) break;
 
       let value = '';
       this.skipWhitespace();
-      
+
       if (this.peek() === '=') {
         this.advance();
         this.skipWhitespace();
@@ -347,106 +343,62 @@ export class HTMLTokenizer {
     });
   }
   
-  
-
-  private handleComment(): void {
+  private handleComment() {
     const start = this.position;
-    const startLine = this.line;
-    const startColumn = this.column;
-    
+    this.advance(); // Skip '<!'
+    let content = '';
+
+    while (this.position < this.input.length && !this.match('-->')) {
+      content += this.advance();
+    }
+    this.advance(); // Skip '-->'
+
+    this.tokens.push({
+      type: 'Comment',
+      data: content.trim(),
+      line: this.line,
+      column: this.column,
+      start,
+      end: this.position,
+    });
+  }
+
+  private handleConditionalComment() {
+    const start = this.position;
     this.advance(); // Skip '<!--'
     let content = '';
 
-    while (this.position < this.input.length) {
-      if (this.match('-->')) {
-        this.advance();
-        break;
-      }
+    while (this.position < this.input.length && !this.match('-->')) {
       content += this.advance();
     }
+    this.advance(); // Skip '-->'
 
-    // Always use Comment type with data field, even for conditional comments
-    this.addToken({
-      type: 'Comment',
-      data: content.trim(),
+    this.tokens.push({
+      type: 'ConditionalComment',
+      condition: '',
+      content,
+      line: this.line,
+      column: this.column,
       start,
       end: this.position,
-      line: startLine,
-      column: startColumn
     });
   }
-
-  private handleDoctype(): void {
+  private handleDoctype() {
     const start = this.position;
-    const startLine = this.line;
-    const startColumn = this.column;
-    
     this.advance(); // Skip '<!DOCTYPE'
     this.skipWhitespace();
-    
-    const name = this.readTagName() || '';
-    let publicId: string | undefined;
-    let systemId: string | undefined;
 
-    this.skipWhitespace();
-    
-    if (this.match('PUBLIC')) {
-      this.advance();
-      this.skipWhitespace();
-      publicId = this.readQuotedString();
-      
-      this.skipWhitespace();
-      if (this.peek() !== '>') {
-        systemId = this.readQuotedString();
-      }
-    } else if (this.match('SYSTEM')) {
-      this.advance();
-      this.skipWhitespace();
-      systemId = this.readQuotedString();
-    }
-
-    this.skipWhitespace();
-    if (this.peek() === '>') {
-      this.advance();
-    }
-
-    this.addToken({
+    const name = this.readTagName();
+    this.tokens.push({
       type: 'Doctype',
-      name: name.toLowerCase(), // Changed to lowercase to match test expectations
-      publicId,
-      systemId,
+      name,
+      line: this.line,
+      column: this.column,
       start,
       end: this.position,
-      line: startLine,
-      column: startColumn
     });
   }
 
-  private handleCDATA(): void {
-    const start = this.position;
-    const startLine = this.line;
-    const startColumn = this.column;
-    
-    this.advance(); // Skip '<![CDATA['
-    let content = '';
-
-    while (this.position < this.input.length) {
-      if (this.match(']]>')) {
-        this.advance();
-        break;
-      }
-      content += this.advance();
-    }
-
-    this.addToken({
-      type: 'CDATA',
-      content,
-      start,
-      end: this.position,
-      line: startLine,
-      column: startColumn
-    });
-  }
   private readTagName(): string {
     let name = '';
     while (this.position < this.input.length) {
@@ -545,12 +497,24 @@ export class HTMLTokenizer {
     return stack.length > 0;
   }
 
-  private peek(offset: number = 0): string {
-    return this.input[this.position + offset] || '';
-  }
+  private handleCDATA() {
+    const start = this.position;
+    this.advance(); // Skip '<![CDATA['
+    let content = '';
 
-  private match(str: string): boolean {
-    return this.input.startsWith(str, this.position);
+    while (this.position < this.input.length && !this.match(']]>')) {
+      content += this.advance();
+    }
+    this.advance(); // Skip ']]>'
+
+    this.tokens.push({
+      type: 'CDATA',
+      content,
+      line: this.line,
+      column: this.column,
+      start,
+      end: this.position,
+    });
   }
 
  
@@ -559,20 +523,31 @@ export class HTMLTokenizer {
     this.tokens.push(token);
   }
 
-private skipWhitespace() {
-    while (this.isWhitespace(this.input[this.position])) {
-      this.advance();
-    }
-  }
+
 
   private isAlphaNumeric(char: string): boolean {
     return /[a-zA-Z0-9]/.test(char);
+  }
+
+  private peek(offset: number = 0): string {
+    return this.input[this.position + offset] || '';
+  }
+
+  private match(str: string): boolean {
+    return this.input.startsWith(str, this.position);
+  }
+
+  private skipWhitespace() {
+    while (this.isWhitespace(this.input[this.position])) {
+      this.advance();
+    }
   }
 
   private isWhitespace(char: string): boolean {
     return /\s/.test(char);
   }
 
+  
   private advance(): string {
     const char = this.input[this.position];
     if (char === '\n') {
@@ -590,9 +565,9 @@ private skipWhitespace() {
       message,
       line: this.line,
       column: this.column,
-      severity: "warning",
-      start: 0,
-      end: 0
+      severity: "error",
+      start,
+      end: this.position
     });
   }
   private reportError(
