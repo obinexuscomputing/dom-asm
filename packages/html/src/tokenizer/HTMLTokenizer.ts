@@ -118,8 +118,6 @@ export class HTMLTokenizer {
       ...options
     };
   }
-
-
   tokenize(): { tokens: HTMLToken[], errors: TokenizerError[] } {
     this.tokens = [];
     this.errors = [];
@@ -144,16 +142,14 @@ export class HTMLTokenizer {
       }
     }
 
-    // Only add EOF token if no tokens or unclosed tags
-    if (this.tokens.length === 0 || this.hasUnclosedTags()) {
-      this.addToken({
-        type: 'EOF',
-        start: this.position,
-        end: this.position,
-        line: this.line,
-        column: this.column
-      });
-    }
+    // Always add EOF token at the end
+    this.addToken({
+      type: 'EOF',
+      start: this.position,
+      end: this.position,
+      line: this.line,
+      column: this.column
+    });
 
     return { tokens: this.options.advanced ? this.processAdvancedTokens() : this.tokens, errors: this.errors };
   }
@@ -201,6 +197,8 @@ export class HTMLTokenizer {
         column: startColumn
       });
     } else {
+      // Report error but still add the token
+      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
       this.addToken({
         type: 'StartTag',
         name: name.toLowerCase(),
@@ -212,9 +210,9 @@ export class HTMLTokenizer {
         line: startLine,
         column: startColumn
       });
-      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
     }
   }
+
   private handleEndTag(): void {
     const start = this.position;
     const startLine = this.line;
@@ -255,7 +253,6 @@ export class HTMLTokenizer {
       return token;
     });
   }
-
   private handleText(): void {
     const start = this.position;
     const startLine = this.line;
@@ -270,18 +267,17 @@ export class HTMLTokenizer {
 
     const isWhitespace = /^\s*$/.test(content);
     
-    // Always add text tokens when preserveWhitespace is true or when content is not whitespace
-    if (this.options.preserveWhitespace || !isWhitespace) {
-      this.addToken({
-        type: 'Text',
-        content,
-        isWhitespace,
-        start,
-        end: this.position,
-        line: startLine,
-        column: startColumn
-      });
-    }
+    // Always create text tokens, but mark whitespace appropriately
+    this.addToken({
+      type: 'Text',
+      content,
+      isWhitespace,
+      start,
+      end: this.position,
+      line: startLine,
+      column: startColumn
+    });
+  
   }
 
   private handleComment(): void {
