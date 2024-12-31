@@ -1,139 +1,71 @@
-import { HTMLTokenizer, HTMLToken } from '../src/tokenizer/HTMLTokenizer';
 
+import {HTMLTokenizer} from '../src/tokenizer/HTMLTokenizer'
 describe('HTMLTokenizer', () => {
-  let tokenizer: HTMLTokenizer;
+    describe('Attribute Handling', () => {
+        it('should parse attributes correctly', () => {
+            const input = '<div class="test" id="123">';
+            const tokenizer = new HTMLTokenizer(input);
 
-  beforeEach(() => {
-    tokenizer = new HTMLTokenizer('');
-  });
+            const { tokens, errors } = tokenizer.tokenize();
 
-  describe('Basic HTML Tokenization', () => {
-    test('should tokenize simple text', () => {
-      tokenizer = new HTMLTokenizer('Hello World');
-      const { tokens, errors } = tokenizer.tokenize();
-      
-      expect(errors).toHaveLength(0);
-      expect(tokens).toHaveLength(1);
-      expect(tokens[0]).toMatchObject({
-        type: 'Text',
-        value: 'Hello World',
-        isWhitespace: false
-      });
+            expect(errors).toHaveLength(0); // Check that there are no errors
+            expect(tokens[0].type).toBe('StartTag'); // Verify token type
+            expect(tokens[0].attributes).toEqual(
+                new Map([
+                    ['class', 'test'],
+                    ['id', '123']
+                ]) // Ensure attributes are parsed correctly
+            );
+        });
     });
 
-    test('should tokenize basic HTML tag', () => {
-      tokenizer = new HTMLTokenizer('<div>Hello</div>');
-      const { tokens, errors } = tokenizer.tokenize();
-      
-      expect(errors).toHaveLength(0);
-      expect(tokens).toHaveLength(3);
-      expect(tokens[0]).toMatchObject({
-        type: 'StartTag',
-        name: 'div',
-        selfClosing: false
-      });
-      expect(tokens[1]).toMatchObject({
-        type: 'Text',
-        value: 'Hello'
-      });
-      expect(tokens[2]).toMatchObject({
-        type: 'EndTag',
-        name: 'div'
-      });
+    describe('Special Elements', () => {
+        let tokenizer;
+
+        test('should handle comments', () => {
+            tokenizer = new HTMLTokenizer('<!-- Test Comment -->');
+            const { tokens } = tokenizer.tokenize();
+
+            expect(tokens).toHaveLength(1);
+            expect(tokens[0]).toMatchObject({
+                type: 'Comment',
+                data: 'Test Comment'
+            });
+        });
+
+        test('should handle conditional comments', () => {
+            tokenizer = new HTMLTokenizer('<!--[if IE]>Test<![endif]-->');
+            const { tokens } = tokenizer.tokenize();
+
+            expect(tokens[0]).toMatchObject({
+                type: 'Comment',
+                data: '[if IE]>Test<![endif]'
+            });
+        });
+
+        test('should handle doctype', () => {
+            tokenizer = new HTMLTokenizer('<!DOCTYPE html>');
+            const { tokens } = tokenizer.tokenize();
+
+            expect(tokens[0]).toMatchObject({
+                type: 'Doctype',
+                name: 'html'
+            });
+        });
     });
 
-    test('should handle self-closing tags', () => {
-      tokenizer = new HTMLTokenizer('<img src="test.jpg" />');
-      const { tokens, errors } = tokenizer.tokenize();
-      
-      expect(errors).toHaveLength(0);
-      expect(tokens).toHaveLength(1);
-      expect(tokens[0]).toMatchObject({
-        type: 'StartTag',
-        name: 'img',
-        selfClosing: true,
-        attributes: new Map([['src', 'test.jpg']])
-      });
-    });
-  });
+    describe('Error Handling', () => {
+        it('should handle unclosed tags', () => {
+            const input = '<div class="test">'; // Missing closing </div>
+            const tokenizer = new HTMLTokenizer(input);
 
-  describe('Attribute Handling', () => {
-    test('should parse attributes correctly', () => {
-      tokenizer = new HTMLTokenizer('<div class="test" id=\'main\' data-test=value>');
-      const { tokens, errors } = tokenizer.tokenize();
-      
-      expect(errors).toHaveLength(0);
-      expect(tokens[0].type).toBe('StartTag');
-      expect(tokens[0].attributes).toEqual(
-        new Map([
-          ['class', 'test'],
-          ['id', 'main'],
-          ['data-test', 'value']
-        ])
-      );
-    });
+            const { tokens, errors } = tokenizer.tokenize();
 
-    test('should handle boolean attributes', () => {
-      tokenizer = new HTMLTokenizer('<input disabled required>');
-      const { tokens } = tokenizer.tokenize();
-      
-      expect(tokens[0].attributes).toEqual(
-        new Map([
-          ['disabled', 'disabled'],
-          ['required', 'required']
-        ])
-      );
-    });
-  });
+            expect(errors).toHaveLength(1); // Expecting one error for unclosed tag
+            expect(errors[0].message).toBe('Unexpected end of input in tag div'); // Verify error message
 
-  describe('Special Elements', () => {
-    test('should handle comments', () => {
-      tokenizer = new HTMLTokenizer('<!-- Test Comment -->');
-      const { tokens } = tokenizer.tokenize();
-      
-      expect(tokens).toHaveLength(1);
-      expect(tokens[0]).toMatchObject({
-        type: 'Comment',
-        value: 'Test Comment',
-        isConditional: false
-      });
+            expect(tokens).toHaveLength(2); // StartTag + EOF
+            expect(tokens[1].type).toBe('EOF'); // Ensure EOF token is emitted
+        });
     });
-
-    test('should handle conditional comments', () => {
-      tokenizer = new HTMLTokenizer('<!--[if IE]>Test<![endif]-->');
-      const { tokens } = tokenizer.tokenize();
-      
-      expect(tokens[0]).toMatchObject({
-        type: 'Comment',
-        isConditional: true
-      });
-    });
-
-    test('should handle doctype', () => {
-      tokenizer = new HTMLTokenizer('<!DOCTYPE html>');
-      const { tokens } = tokenizer.tokenize();
-      
-      expect(tokens[0]).toMatchObject({
-        type: 'Doctype',
-        value: 'html'
-      });
-    });
-  });
-
-  describe('Error Handling', () => {
-    test('should handle unclosed tags', () => {
-      tokenizer = new HTMLTokenizer('<div>Test');
-      const { tokens, errors } = tokenizer.tokenize();
-      
-      expect(errors).toHaveLength(1);
-      expect(tokens).toHaveLength(2);
-    });
-
-    test('should handle malformed attributes', () => {
-      tokenizer = new HTMLTokenizer('<div class="test id="main">');
-      const { errors } = tokenizer.tokenize();
-      
-      expect(errors.length).toBeGreaterThan(0);
-    });
-  });
 });

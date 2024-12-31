@@ -50,6 +50,7 @@ export declare class HTMLTokenizer {
     private column;
     private errors;
     private openTags;
+    lastTokenEnd: number;
     private options;
     constructor(input: string, options?: Partial<HTMLTokenizer['options']>);
     tokenize(): {
