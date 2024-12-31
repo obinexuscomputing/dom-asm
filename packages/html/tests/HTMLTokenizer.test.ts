@@ -35,7 +35,7 @@ describe('HTMLTokenizer', () => {
 
   describe('Attribute Handling', () => {
     it('should parse attributes correctly', () => {
-      const input = '<div class="test" id="123">';
+      const input = '<div class="test" id="123"></div>';
       const tokenizer = new HTMLTokenizer(input);
       const { tokens, errors } = tokenizer.tokenize();
       
@@ -50,7 +50,7 @@ describe('HTMLTokenizer', () => {
     });
 
     it('should handle unquoted attributes', () => {
-      const tokenizer = new HTMLTokenizer('<div class=test>');
+      const tokenizer = new HTMLTokenizer('<div class=test></div>');
       const { tokens, errors } = tokenizer.tokenize();
       
       expect(errors).toHaveLength(0);

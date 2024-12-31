@@ -91,6 +91,7 @@ export interface TokenizerOptions {
   allowUnclosedTags?: boolean;
   advanced?: boolean;
 }
+
 export class HTMLTokenizer {
   private input: string;
   private position: number;
@@ -117,6 +118,7 @@ export class HTMLTokenizer {
       ...options
     };
   }
+
 
   tokenize(): { tokens: HTMLToken[], errors: TokenizerError[] } {
     this.tokens = [];
@@ -161,16 +163,15 @@ export class HTMLTokenizer {
 
     return { tokens: this.options.advanced ? this.processAdvancedTokens() : this.tokens, errors: this.errors };
   }
-  
   private handleStartTag(): void {
     const start = this.position;
     const startLine = this.line;
     const startColumn = this.column;
     
     this.advance(); // Skip '<'
-    const name = this.readTagName();
+    const tagName = this.readTagName();
     
-    if (!name) {
+    if (!tagName) {
       this.reportError('Invalid start tag name', start, this.position);
       return;
     }
@@ -188,7 +189,7 @@ export class HTMLTokenizer {
       this.advance();
       this.addToken({
         type: 'StartTag',
-        name: name.toLowerCase(),
+        name: tagName.toLowerCase(),
         attributes,
         selfClosing,
         start,
@@ -199,7 +200,7 @@ export class HTMLTokenizer {
     } else {
       this.addToken({
         type: 'StartTag',
-        name: name.toLowerCase(),
+        name: tagName.toLowerCase(),
         attributes,
         selfClosing: false,
         start,
@@ -207,10 +208,9 @@ export class HTMLTokenizer {
         line: startLine,
         column: startColumn
       });
-      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
+      this.reportError('Unexpected end of input in tag ' + tagName, start, this.position);
     }
   }
-
   private handleEndTag(): void {
     const start = this.position;
     const startLine = this.line;
