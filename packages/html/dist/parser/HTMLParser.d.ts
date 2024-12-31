@@ -42,10 +42,10 @@ export declare class HTMLParser {
     private optimizedStateMap;
     constructor();
     private initializeStates;
+    parse(input: string): HTMLAST;
     private minimizeStates;
     private splitBlock;
     private getStateSignature;
-    parse(input: string): HTMLAST;
     private buildOptimizedAST;
     private processTokenWithOptimizedState;
     private optimizeAST;

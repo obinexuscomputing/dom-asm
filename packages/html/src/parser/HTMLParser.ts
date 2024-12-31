@@ -77,6 +77,18 @@ export class HTMLParser {
       transitions: new Map()
     };
 
+    const inCommentState: ParserState = {
+      type: 'InComment',
+      isAccepting: false,
+      transitions: new Map()
+    };
+
+    const inDoctypeState: ParserState = {
+      type: 'InDoctype',
+      isAccepting: false,
+      transitions: new Map()
+    };
+
     const finalState: ParserState = {
       type: 'Final',
       isAccepting: true,
@@ -87,14 +99,20 @@ export class HTMLParser {
     initialState.transitions.set('<', inTagState);
     initialState.transitions.set('text', inContentState);
     inTagState.transitions.set('>', inContentState);
+    inTagState.transitions.set('!', inDoctypeState);
+    inTagState.transitions.set('<!--', inCommentState);
     inContentState.transitions.set('<', inTagState);
     inContentState.transitions.set('EOF', finalState);
+    inCommentState.transitions.set('-->', inContentState);
+    inDoctypeState.transitions.set('>', inContentState);
     
     // Initialize state collections
     this.states.clear();
     this.states.add(initialState);
     this.states.add(inTagState);
     this.states.add(inContentState);
+    this.states.add(inCommentState);
+    this.states.add(inDoctypeState);
     this.states.add(finalState);
     
     // Set initial state
@@ -205,7 +223,7 @@ export class HTMLParser {
         const element: HTMLASTNode = {
           type: 'Element',
           name: token.name,
-          attributes: token.attributes,
+          attributes: token.attributes ?? new Map(),
           children: [],
           metadata: {
             equivalenceClass: this.getEquivalenceClass(optimizedState),
@@ -223,18 +241,17 @@ export class HTMLParser {
 
       case 'EndTag': {
         if (stack.length > 1) {
-          let found = false;
           // Look for matching start tag in stack
-          for (let i = stack.length - 1; i >= 0; i--) {
+          for (let i = stack.length - 1; i >= 1; i--) {
             if (stack[i].name === token.name) {
-              stack.splice(i + 1);
+              // Pop nodes up to and including the matching tag
               currentNode = stack[i];
-              found = true;
-              break;
+              stack.length = i + 1;
+              return stack[i - 1]; // Return parent of matched tag
             }
           }
-          if (!found && stack.length > 1) {
-            // Mismatched tag - try to recover
+          // If no match found, just pop current node
+          if (stack.length > 1) {
             stack.pop();
             currentNode = stack[stack.length - 1];
           }
