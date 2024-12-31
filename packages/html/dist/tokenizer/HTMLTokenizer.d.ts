@@ -61,6 +61,7 @@ export interface TokenizerOptions {
     recognizeConditionalComments?: boolean;
     preserveWhitespace?: boolean;
     allowUnclosedTags?: boolean;
+    advanced?: boolean;
 }
 export declare class HTMLTokenizer {
     private input;
@@ -77,6 +78,7 @@ export declare class HTMLTokenizer {
     };
     private handleStartTag;
     private handleEndTag;
+    private processAdvancedTokens;
     private handleText;
     private handleComment;
     private handleDoctype;
