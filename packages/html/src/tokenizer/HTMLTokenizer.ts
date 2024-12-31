@@ -189,8 +189,9 @@ export class HTMLTokenizer {
         line: startLine,
         column: startColumn
       });
-    } else if (this.options.allowUnclosedTags) {
-      // Handle unclosed tag gracefully
+    } else {
+      // Always report the unclosed tag error with the specific error message
+      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
       this.addToken({
         type: 'StartTag',
         name: name.toLowerCase(),
@@ -201,9 +202,6 @@ export class HTMLTokenizer {
         line: startLine,
         column: startColumn
       });
-      this.reportError('Unclosed start tag', start, this.position, 'warning');
-    } else {
-      this.reportError('Expected ">" at end of start tag', start, this.position);
     }
   }
 
