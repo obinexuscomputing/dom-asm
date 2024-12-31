@@ -91,7 +91,6 @@ export interface TokenizerOptions {
   allowUnclosedTags?: boolean;
   advanced?: boolean;
 }
-
 export class HTMLTokenizer {
   private input: string;
   private position: number;
@@ -117,8 +116,8 @@ export class HTMLTokenizer {
       advanced: false,
       ...options
     };
-
   }
+
   tokenize(): { tokens: HTMLToken[], errors: TokenizerError[] } {
     this.tokens = [];
     this.errors = [];
@@ -136,7 +135,15 @@ export class HTMLTokenizer {
         } else if (this.peek(1) === '/') {
           this.handleEndTag();
         } else {
+          const tagStart = this.position;
           this.handleStartTag();
+          // Check for unclosed tag
+          if (this.position < this.input.length && this.peek() !== '>') {
+            const lastToken = this.tokens[this.tokens.length - 1];
+            if (lastToken?.type === 'StartTag') {
+              this.reportError('Unexpected end of input in tag ' + lastToken.name, tagStart, this.position);
+            }
+          }
         }
       } else {
         this.handleText();
@@ -155,8 +162,44 @@ export class HTMLTokenizer {
       });
     }
 
-    return { tokens: this.options.advanced ? this.processAdvancedTokens() : this.tokens, errors: this.errors };
+    return { tokens: this.tokens, errors: this.errors };
   }
+  private readAttributes(): Map<string, string> {
+    const attributes = new Map<string, string>();
+    
+    while (this.position < this.input.length) {
+      this.skipWhitespace();
+      
+      if (this.peek() === '>' || this.peek() === '/' || this.peek() === '<') break;
+      
+      const name = this.readAttributeName();
+      if (!name) break;
+
+      let value = '';
+      this.skipWhitespace();
+      
+      if (this.peek() === '=') {
+        this.advance();
+        this.skipWhitespace();
+        value = this.readAttributeValue();
+      }
+
+      attributes.set(name.toLowerCase(), value);
+    }
+
+    return attributes;
+  }
+
+  private readAttributeName(): string {
+    let name = '';
+    while (this.position < this.input.length) {
+      const char = this.peek();
+      if (/[\s=>\/]/.test(char)) break;
+      name += this.advance();
+    }
+    return name;
+  }
+  
   private handleStartTag(): void {
     const start = this.position;
     const startLine = this.line;
@@ -198,15 +241,9 @@ export class HTMLTokenizer {
       column: startColumn
     };
 
-    if (this.peek() === '>') {
-      this.advance();
-      token.end = this.position;
-      this.addToken(token);
-    } else {
-      this.addToken(token);
-      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
-    }
+    this.addToken(token);
   }
+
 
   private handleEndTag(): void {
     const start = this.position;
@@ -236,6 +273,7 @@ export class HTMLTokenizer {
       this.reportError('Expected ">" at end of end tag', start, this.position);
     }
   }
+
   private processAdvancedTokens(): HTMLToken[] {
     return this.tokens.map(token => {
       if (token.type === 'Text') {
@@ -248,32 +286,8 @@ export class HTMLTokenizer {
       return token;
     });
   }
-  private handleText(): void {
-    const start = this.position;
-    const startLine = this.line;
-    const startColumn = this.column;
-    let content = '';
-
-    while (this.position < this.input.length) {
-      const char = this.peek();
-      if (char === '<') break;
-      content += this.advance();
-    }
-
-    const isWhitespace = /^\s*$/.test(content);
-    
-    // Always create text tokens, but mark whitespace appropriately
-    this.addToken({
-      type: 'Text',
-      content,
-      isWhitespace,
-      start,
-      end: this.position,
-      line: startLine,
-      column: startColumn
-    });
   
-  }
+  
 
   private handleComment(): void {
     const start = this.position;
@@ -373,7 +387,6 @@ export class HTMLTokenizer {
       column: startColumn
     });
   }
-
   private readTagName(): string {
     let name = '';
     while (this.position < this.input.length) {
@@ -384,42 +397,31 @@ export class HTMLTokenizer {
     return name;
   }
 
-  private readAttributes(): Map<string, string> {
-    const attributes = new Map<string, string>();
-    
-    while (this.position < this.input.length) {
-      this.skipWhitespace();
-      
-      if (this.peek() === '>' || this.peek() === '/' || this.peek() === '<') break;
-      
-      const name = this.readAttributeName();
-      if (!name) break;
+  private handleText(): void {
+    const start = this.position;
+    const startLine = this.line;
+    const startColumn = this.column;
+    let content = '';
 
-      let value = '';
-      this.skipWhitespace();
-      
-      if (this.peek() === '=') {
-        this.advance();
-        this.skipWhitespace();
-        value = this.readAttributeValue();
-      }
-
-      attributes.set(name.toLowerCase(), value);
-    }
-
-    return attributes;
-  }
-
-  private readAttributeName(): string {
-    let name = '';
     while (this.position < this.input.length) {
       const char = this.peek();
-      if (/[\s=>\/]/.test(char)) break;
-      name += this.advance();
+      if (char === '<') break;
+      content += this.advance();
     }
-    return name;
-  }
 
+    const isWhitespace = /^\s*$/.test(content);
+    
+    // Always create text tokens, but mark whitespace appropriately
+    this.addToken({
+      type: 'Text',
+      content,
+      isWhitespace,
+      start,
+      end: this.position,
+      line: startLine,
+      column: startColumn
+    });
+  }
   private readAttributeValue(): string {
     const quote = this.peek();
     if (quote === '"' || quote === "'") {
@@ -518,6 +520,7 @@ export class HTMLTokenizer {
   private addToken(token: HTMLToken): void {
     this.tokens.push(token);
   }
+
 
   private reportError(
     message: string,
