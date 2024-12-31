@@ -1,80 +1,96 @@
-export type HTMLToken = {
-    type: "Doctype";
-    value: string;
-    line: number;
-    column: number;
-    publicId?: string;
-    systemId?: string;
-} | {
-    type: "StartTag";
-    name: string;
-    attributes: Map<string, string>;
-    selfClosing: boolean;
-    line: number;
-    column: number;
-    namespace?: string;
-} | {
-    type: "EndTag";
-    name: string;
-    line: number;
-    column: number;
-    namespace?: string;
-} | {
-    type: "Text";
-    value: string;
-    line: number;
-    column: number;
-    isWhitespace: boolean;
-} | {
-    type: "Comment";
-    value: string;
-    line: number;
-    column: number;
-    isConditional: boolean;
-} | {
-    type: "CDATA";
-    value: string;
-    line: number;
-    column: number;
-};
-export interface TokenizerError {
-    message: string;
+export type TokenType = 'StartTag' | 'EndTag' | 'Text' | 'Comment' | 'ConditionalComment' | 'Doctype' | 'CDATA' | 'EOF';
+export interface BaseToken {
+    type: TokenType;
+    start: number;
+    end: number;
     line: number;
     column: number;
 }
+export interface StartTagToken extends BaseToken {
+    type: 'StartTag';
+    name: string;
+    attributes: Map<string, string>;
+    selfClosing: boolean;
+    namespace?: string;
+}
+export interface EndTagToken extends BaseToken {
+    type: 'EndTag';
+    name: string;
+    namespace?: string;
+}
+export interface TextToken extends BaseToken {
+    type: 'Text';
+    content: string;
+    isWhitespace: boolean;
+}
+export interface CommentToken extends BaseToken {
+    type: 'Comment';
+    data: string;
+    isConditional?: boolean;
+}
+export interface ConditionalCommentToken extends BaseToken {
+    type: 'ConditionalComment';
+    condition: string;
+    content: string;
+}
+export interface DoctypeToken extends BaseToken {
+    type: 'Doctype';
+    name: string;
+    publicId?: string;
+    systemId?: string;
+}
+export interface CDATAToken extends BaseToken {
+    type: 'CDATA';
+    content: string;
+}
+export interface EOFToken extends BaseToken {
+    type: 'EOF';
+}
+export type HTMLToken = StartTagToken | EndTagToken | TextToken | CommentToken | ConditionalCommentToken | DoctypeToken | CDATAToken | EOFToken;
+export interface TokenizerError {
+    message: string;
+    severity: 'warning' | 'error';
+    line: number;
+    column: number;
+    start: number;
+    end: number;
+}
+export interface TokenizerOptions {
+    xmlMode?: boolean;
+    recognizeCDATA?: boolean;
+    recognizeConditionalComments?: boolean;
+    preserveWhitespace?: boolean;
+    allowUnclosedTags?: boolean;
+}
 export declare class HTMLTokenizer {
-    private static readonly VOID_ELEMENTS;
     private input;
     private position;
     private line;
     private column;
+    private tokens;
     private errors;
-    private openTags;
-    lastTokenEnd: number;
     private options;
-    constructor(input: string, options?: Partial<HTMLTokenizer['options']>);
+    constructor(input: string, options?: TokenizerOptions);
     tokenize(): {
         tokens: HTMLToken[];
         errors: TokenizerError[];
     };
-    private readEndTag;
+    private handleStartTag;
+    private handleEndTag;
+    private handleText;
+    private handleComment;
+    private handleDoctype;
+    private handleCDATA;
     private readTagName;
-    private createTextToken;
-    private shouldAddTextToken;
-    private readStartTag;
-    private isValidUnquotedAttributeValue;
-    private consume;
+    private readAttributes;
     private readAttributeName;
-    readAttributeValue(): string;
-    private readCDATA;
-    private readComment;
-    private readDoctype;
+    private readAttributeValue;
     private readQuotedString;
-    private advance;
-    private addError;
-    private reset;
+    private hasUnclosedTags;
     private peek;
     private match;
+    private advance;
     private skipWhitespace;
-    private getCurrentLocation;
+    private addToken;
+    private reportError;
 }

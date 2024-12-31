@@ -1,4 +1,3 @@
-// Enhanced HTML Parser incorporating state minimization and AST optimization
 import { HTMLToken, HTMLTokenizer } from '../tokenizer/HTMLTokenizer';
 
 // State representation following the 5-tuple automaton definition (Q, Σ, δ, q0, F)
@@ -50,7 +49,7 @@ export class HTMLParserError extends Error {
 
 export class HTMLParser {
   private states: Set<ParserState> = new Set();
-  private currentState: ParserState = {} as ParserState;
+  private currentState!: ParserState;
   private equivalenceClasses: Map<number, Set<ParserState>> = new Map();
   private optimizedStateMap: Map<ParserState, ParserState> = new Map();
 
@@ -59,7 +58,7 @@ export class HTMLParser {
   }
 
   private initializeStates(): void {
-    // Initialize state machine following automaton definition
+    // Create initial states
     const initialState: ParserState = {
       type: 'Initial',
       isAccepting: false,
@@ -78,19 +77,44 @@ export class HTMLParser {
       transitions: new Map()
     };
 
-    // Set up transitions according to HTML parsing rules
+    const finalState: ParserState = {
+      type: 'Final',
+      isAccepting: true,
+      transitions: new Map()
+    };
+
+    // Set up transitions
     initialState.transitions.set('<', inTagState);
     initialState.transitions.set('text', inContentState);
+    inTagState.transitions.set('>', inContentState);
+    inContentState.transitions.set('<', inTagState);
+    inContentState.transitions.set('EOF', finalState);
     
-    this.states = new Set([initialState, inTagState, inContentState]);
+    // Initialize state collections
+    this.states.clear();
+    this.states.add(initialState);
+    this.states.add(inTagState);
+    this.states.add(inContentState);
+    this.states.add(finalState);
+    
+    // Set initial state
     this.currentState = initialState;
-    this.equivalenceClasses = new Map();
-    this.optimizedStateMap = new Map();
+    
+    // Clear and initialize maps
+    this.equivalenceClasses.clear();
+    this.optimizedStateMap.clear();
   }
 
-  // State minimization following Hopcroft's algorithm as described in papers
+  public parse(input: string): HTMLAST {
+    const tokenizer = new HTMLTokenizer(input);
+    const { tokens } = tokenizer.tokenize();
+    
+    this.minimizeStates();
+    const ast = this.buildOptimizedAST(tokens);
+    return this.optimizeAST(ast);
+  }
+
   private minimizeStates(): void {
-    // Initial partition: accepting vs non-accepting states
     const accepting = new Set([...this.states].filter(s => s.isAccepting));
     const nonAccepting = new Set([...this.states].filter(s => !s.isAccepting));
     
@@ -107,7 +131,6 @@ export class HTMLParser {
       }
     } while (newPartition.length !== partition.length);
     
-    // Update equivalence classes
     partition.forEach((block, index) => {
       this.equivalenceClasses.set(index, block);
     });
@@ -140,18 +163,6 @@ export class HTMLParser {
     return transitions.sort().join('|');
   }
 
-  // Main parsing method incorporating optimizations
-  public parse(input: string): HTMLAST {
-    const tokenizer = new HTMLTokenizer(input);
-    const { tokens } = tokenizer.tokenize();
-    
-    // Minimize states before parsing
-    this.minimizeStates();
-    
-    const ast = this.buildOptimizedAST(tokens);
-    return this.optimizeAST(ast);
-  }
-
   private buildOptimizedAST(tokens: HTMLToken[]): HTMLAST {
     const root: HTMLASTNode = {
       type: 'Element',
@@ -171,10 +182,8 @@ export class HTMLParser {
         currentNode = this.processTokenWithOptimizedState(token, currentNode, stack);
       } catch (error) {
         if (error instanceof HTMLParserError) {
-          // Handle error according to current state
           this.handleParserError(error, currentNode);
         }
-        throw error;
       }
     }
 
@@ -182,87 +191,96 @@ export class HTMLParser {
       root,
       metadata: this.computeOptimizedMetadata(root)
     };
-  }private processTokenWithOptimizedState(
+  }
+
+  private processTokenWithOptimizedState(
     token: HTMLToken,
     currentNode: HTMLASTNode,
     stack: HTMLASTNode[]
-): HTMLASTNode {
+  ): HTMLASTNode {
     const optimizedState = this.optimizedStateMap.get(this.currentState) || this.currentState;
     
     switch (token.type) {
-        case 'StartTag': {
-            const element: HTMLASTNode = {
-                type: 'Element',
-                name: token.name,
-                attributes: token.attributes, // Already a Map
-                children: [],
-                metadata: {
-                    equivalenceClass: this.getEquivalenceClass(optimizedState),
-                    isMinimized: true
-                }
-            };
-            
-            currentNode.children.push(element);
-            if (!token.selfClosing) {
-                stack.push(element);
-                currentNode = element;
-            }
-            break;
+      case 'StartTag': {
+        const element: HTMLASTNode = {
+          type: 'Element',
+          name: token.name,
+          attributes: token.attributes,
+          children: [],
+          metadata: {
+            equivalenceClass: this.getEquivalenceClass(optimizedState),
+            isMinimized: true
+          }
+        };
+        
+        currentNode.children.push(element);
+        if (!token.selfClosing) {
+          stack.push(element);
+          currentNode = element;
         }
+        break;
+      }
 
-        case 'EndTag': {
-            if (stack.length > 1) {
-                const lastElement = stack[stack.length - 1];
-                if (lastElement.name === token.name) {
-                    stack.pop();
-                    currentNode = stack[stack.length - 1];
-                }
+      case 'EndTag': {
+        if (stack.length > 1) {
+          let found = false;
+          // Look for matching start tag in stack
+          for (let i = stack.length - 1; i >= 0; i--) {
+            if (stack[i].name === token.name) {
+              stack.splice(i + 1);
+              currentNode = stack[i];
+              found = true;
+              break;
             }
-            break;
+          }
+          if (!found && stack.length > 1) {
+            // Mismatched tag - try to recover
+            stack.pop();
+            currentNode = stack[stack.length - 1];
+          }
         }
+        break;
+      }
 
-        case 'Text': {
-            // Only add non-empty text nodes
-            if (token.value.trim() || token.isWhitespace) {
-                const node: HTMLASTNode = {
-                    type: 'Text',
-                    value: token.value,
-                    children: [],
-                    metadata: {
-                        equivalenceClass: this.getEquivalenceClass(optimizedState),
-                        isMinimized: true
-                    }
-                };
-                currentNode.children.push(node);
+      case 'Text': {
+        if (token.content.trim() || token.isWhitespace) {
+          const node: HTMLASTNode = {
+            type: 'Text',
+            value: token.content,
+            children: [],
+            metadata: {
+              equivalenceClass: this.getEquivalenceClass(optimizedState),
+              isMinimized: true
             }
-            break;
+          };
+          currentNode.children.push(node);
         }
+        break;
+      }
 
-        case 'Comment': {
-            const node: HTMLASTNode = {
-                type: 'Comment',
-                value: token.value,
-                children: [],
-                metadata: {
-                    equivalenceClass: this.getEquivalenceClass(optimizedState),
-                    isMinimized: true
-                }
-            };
-            currentNode.children.push(node);
-            break;
-        }
+      case 'Comment': {
+        const node: HTMLASTNode = {
+          type: 'Comment',
+          value: token.data,
+          children: [],
+          metadata: {
+            equivalenceClass: this.getEquivalenceClass(optimizedState),
+            isMinimized: true
+          }
+        };
+        currentNode.children.push(node);
+        break;
+      }
     }
 
     return currentNode;
-}
+  }
 
   private optimizeAST(ast: HTMLAST): HTMLAST {
-    // Apply AST optimizations based on paper recommendations
     this.mergeTextNodes(ast.root);
     this.removeRedundantNodes(ast.root);
     this.optimizeAttributes(ast.root);
     
-    // Update metadata with optimization metrics
     ast.metadata.minimizationMetrics = {
       originalStateCount: this.states.size,
       minimizedStateCount: this.equivalenceClasses.size,
@@ -271,31 +289,29 @@ export class HTMLParser {
     
     return ast;
   }
+
   private mergeTextNodes(node: HTMLASTNode): void {
     if (!node.children.length) return;
 
-    // First, merge text nodes in children
     for (const child of node.children) {
-        if (child.type === 'Element') {
-            this.mergeTextNodes(child);
-        }
+      if (child.type === 'Element') {
+        this.mergeTextNodes(child);
+      }
     }
 
-    // Then merge consecutive text nodes at current level
     let i = 0;
     while (i < node.children.length - 1) {
-        const current = node.children[i];
-        const next = node.children[i + 1];
-        
-        if (current.type === 'Text' && next.type === 'Text') {
-            current.value = (current.value || '') + (next.value || '');
-            node.children.splice(i + 1, 1);
-        } else {
-            i++;
-        }
+      const current = node.children[i];
+      const next = node.children[i + 1];
+      
+      if (current.type === 'Text' && next.type === 'Text') {
+        current.value = (current.value || '') + (next.value || '');
+        node.children.splice(i + 1, 1);
+      } else {
+        i++;
+      }
     }
-}
-
+  }
 
   private removeRedundantNodes(node: HTMLASTNode): void {
     node.children = node.children.filter(child => {
@@ -309,10 +325,8 @@ export class HTMLParser {
 
   private optimizeAttributes(node: HTMLASTNode): void {
     if (node.attributes) {
-      // Convert attributes to Map for efficient lookup and modification
       const optimizedAttributes = new Map();
       for (const [key, value] of node.attributes.entries()) {
-        // Normalize attribute names and values
         const normalizedKey = key.toLowerCase();
         optimizedAttributes.set(normalizedKey, value);
       }
@@ -330,9 +344,7 @@ export class HTMLParser {
   }
 
   private handleParserError(error: HTMLParserError, currentNode: HTMLASTNode): void {
-    // Implement error recovery based on current state and node context
     console.error(`Parser error in state ${error.state.type}:`, error.message);
-    // Additional error handling logic can be added here
   }
 
   private computeOptimizedMetadata(root: HTMLASTNode): HTMLAST['metadata'] {
