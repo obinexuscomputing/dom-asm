@@ -144,34 +144,36 @@ export class HTMLTokenizer {
       }
     }
 
-    // Handle unclosed tags and EOF
-    if (this.hasUnclosedTags()) {
-      const lastToken = this.tokens[this.tokens.length - 1];
-      if (lastToken.type === 'StartTag') {
-        this.reportError('Unexpected end of input in tag ' + lastToken.name, lastToken.start, lastToken.end);
-      }
+    // Only add EOF token if no tokens or unclosed tags
+    if (this.tokens.length === 0 || this.hasUnclosedTags()) {
+      this.addToken({
+        type: 'EOF',
+        start: this.position,
+        end: this.position,
+        line: this.line,
+        column: this.column
+      });
     }
-
-    // Add EOF token
-    this.addToken({
-      type: 'EOF',
-      start: this.position,
-      end: this.position,
-      line: this.line,
-      column: this.column
-    });
 
     return { tokens: this.options.advanced ? this.processAdvancedTokens() : this.tokens, errors: this.errors };
   }
+
   private handleStartTag(): void {
     const start = this.position;
     const startLine = this.line;
     const startColumn = this.column;
     
     this.advance(); // Skip '<'
-    const tagName = this.readTagName();
+    const name = this.readTagName();
+    let namespace: string | undefined;
     
-    if (!tagName) {
+    // Handle XML namespace
+    if (this.options.xmlMode && name.includes(':')) {
+      const [ns, localName] = name.split(':');
+      namespace = ns;
+    }
+    
+    if (!name) {
       this.reportError('Invalid start tag name', start, this.position);
       return;
     }
@@ -189,9 +191,10 @@ export class HTMLTokenizer {
       this.advance();
       this.addToken({
         type: 'StartTag',
-        name: tagName.toLowerCase(),
+        name: name.toLowerCase(),
         attributes,
         selfClosing,
+        namespace,
         start,
         end: this.position,
         line: startLine,
@@ -200,15 +203,16 @@ export class HTMLTokenizer {
     } else {
       this.addToken({
         type: 'StartTag',
-        name: tagName.toLowerCase(),
+        name: name.toLowerCase(),
         attributes,
         selfClosing: false,
+        namespace,
         start,
         end: this.position,
         line: startLine,
         column: startColumn
       });
-      this.reportError('Unexpected end of input in tag ' + tagName, start, this.position);
+      this.reportError('Unexpected end of input in tag ' + name, start, this.position);
     }
   }
   private handleEndTag(): void {
@@ -251,6 +255,7 @@ export class HTMLTokenizer {
       return token;
     });
   }
+
   private handleText(): void {
     const start = this.position;
     const startLine = this.line;
@@ -264,6 +269,8 @@ export class HTMLTokenizer {
     }
 
     const isWhitespace = /^\s*$/.test(content);
+    
+    // Always add text tokens when preserveWhitespace is true or when content is not whitespace
     if (this.options.preserveWhitespace || !isWhitespace) {
       this.addToken({
         type: 'Text',
