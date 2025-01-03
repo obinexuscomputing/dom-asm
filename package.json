@@ -37,7 +37,7 @@
   "scripts": {
     "link:local": "cd packages/asm && npm link cd ../css && npm link && cd ../html && npm link && cd ../js && npm link && cd ../xml && npm link && cd ../../",
     "setup": "npm link @obinexuscomputing/css @obinexuscomputing/html @obinexuscomputing/js @obinexuscomputing/xml @obinexuscomputing/asm",
-    "local:clean": "rm -rf dist && rm -rf build",
+    "local:clean": "rimraf dist build",
     "postinstall": "npm run setup",
     "clean": "npm run local:clean",
     "preinstall": "npm run link:local",
